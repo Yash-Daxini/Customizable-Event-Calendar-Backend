@@ -1,5 +1,8 @@
-﻿namespace Infrastructure.DataModels
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Infrastructure.DataModels
 {
+    [Table("Event")]
     public class Event
     {
         public int Id { get; set; }
@@ -31,5 +34,7 @@
         public int? ByMonthDay { get; set; }
 
         public int? ByMonth { get; set; }
+
+        public virtual List<EventCollaborator> Collaborators { get; set; } = new List<EventCollaborator>();
     }
 }

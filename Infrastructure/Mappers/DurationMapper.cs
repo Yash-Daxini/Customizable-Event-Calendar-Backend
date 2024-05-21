@@ -1,4 +1,4 @@
-﻿using Infrastructure.DomainEntities;
+﻿using Core.Domain;
 
 namespace Infrastructure.Mappers;
 

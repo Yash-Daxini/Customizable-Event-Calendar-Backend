@@ -1,11 +1,11 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
+using Core.Domain;
 
 namespace Infrastructure.Mappers;
 
 public class UserMapper
 {
-    public UserModel MapUserEntityToModel(User user)
+    public UserModel MapUserEntityToModel(UserDataModel user)
     {
         return new UserModel
         {
@@ -16,9 +16,9 @@ public class UserMapper
         };
     }
 
-    public User MapUserModelToEntity(UserModel user)
+    public UserDataModel MapUserModelToEntity(UserModel user)
     {
-        return new User
+        return new UserDataModel
         {
             Id = user.Id,
             Name = user.Name,

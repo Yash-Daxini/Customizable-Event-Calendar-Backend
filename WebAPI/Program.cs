@@ -1,4 +1,7 @@
+using Core.Interfaces;
+using Core.Services;
 using Infrastructure;
+using Infrastructure.Mappers;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +14,16 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IEventRepository, EventRepository>();
 builder.Services.AddTransient<IEventCollaboratorRepository, EventCollaboratorRepository>();
 builder.Services.AddTransient<ISharedCalendarRepository, SharedCalendarRepository>();
-builder.Services.AddDbContext<DbContextEvent>(
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IEventService, EventService>();
+builder.Services.AddTransient<IParticipantService, ParticipantService>();
+builder.Services.AddTransient<ISharedCalendarService, SharedCalendarService>();
+builder.Services.AddTransient<RecurrenceService>();
+builder.Services.AddTransient<SharedCalendarMapper>();
+builder.Services.AddTransient<EventMapper>();
+builder.Services.AddTransient<ParticipantMapper>();
+builder.Services.AddTransient<UserMapper>();
+builder.Services.AddDbContext<DbContextEventCalendar>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("connectionString")));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

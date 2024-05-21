@@ -1,5 +1,5 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
+using Core.Domain;
 using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,25 +7,19 @@ namespace Infrastructure.Repositories
 {
     public class EventCollaboratorRepository : IEventCollaboratorRepository
     {
-        private readonly DbContextEvent _dbContextEvent;
+        private readonly DbContextEventCalendar _dbContextEvent;
 
-        private readonly ParticipantMapper _participantMapper = new();
+        private readonly ParticipantMapper _participantMapper;
 
-        public EventCollaboratorRepository(DbContextEvent dbContextEvent)
+        public EventCollaboratorRepository(DbContextEventCalendar dbContextEvent,ParticipantMapper participantMapper)
         {
             _dbContextEvent = dbContextEvent;
+            _participantMapper = participantMapper;
         }
 
         public async Task<List<ParticipantModel>> GetAllParticipants()
         {
             return await _dbContextEvent.EventCollaborators.Select(eventCollaborator => _participantMapper.MapEventCollaboratorToParticipantModel(eventCollaborator))
-                                                           .ToListAsync();
-        }
-
-        public async Task<List<EventCollaborator>> GetAllEventCollaboratorsByEventId(int eventId)
-        {
-            return await _dbContextEvent.EventCollaborators.Select(eventCollaborator => eventCollaborator)
-                                                           .Where(eventCollaborator => eventCollaborator.EventId == eventId)
                                                            .ToListAsync();
         }
 
@@ -40,16 +34,18 @@ namespace Infrastructure.Repositories
         {
             EventCollaborator eventCollaborator = _participantMapper.MapParticipantModelToEventCollaborator(participantModel, eventId);
 
-            _dbContextEvent.EventCollaborators.Add(eventCollaborator);
+            await _dbContextEvent.EventCollaborators.AddAsync(eventCollaborator);
 
             await _dbContextEvent.SaveChangesAsync();
 
             return eventCollaborator.Id;
         }
 
-        public async Task<int> UpdateParticipant(ParticipantModel participantModel, int eventId)
+        public async Task<int> UpdateParticipant(int participantId, ParticipantModel participantModel, int eventId)
         {
             EventCollaborator eventCollaborator = _participantMapper.MapParticipantModelToEventCollaborator(participantModel, eventId);
+
+            eventCollaborator.Id = participantId;
 
             _dbContextEvent.EventCollaborators.Update(eventCollaborator);
 

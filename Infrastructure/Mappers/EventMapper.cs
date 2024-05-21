@@ -1,10 +1,17 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
+using Core.Domain;
 
 namespace Infrastructure.Mappers;
 
 public class EventMapper
 {
+    private readonly ParticipantMapper _participantMapper;
+
+    public EventMapper(ParticipantMapper participantMapper)
+    {
+        _participantMapper = participantMapper;
+    }
+
     public EventModel MapEventEntityToModel(Event eventObj, List<EventCollaborator> eventCollaborators)
     {
         return new EventModel
@@ -19,15 +26,13 @@ public class EventMapper
         };
     }
 
-    private static List<ParticipantsByDate> GetEventParticipantsByDate(List<EventCollaborator> eventCollaborators)
+    private List<ParticipantsByDate> GetEventParticipantsByDate(List<EventCollaborator> eventCollaborators)
     {
-        ParticipantMapper participantMapper = new();
-
         return eventCollaborators.GroupBy(eventCollaborator => eventCollaborator.EventDate).Select(eventCollaborator =>
                     new ParticipantsByDate
                     {
                         EventDate = eventCollaborator.Key,
-                        Participants = eventCollaborator.Select(eventCollaborator => participantMapper.MapEventCollaboratorToParticipantModel(eventCollaborator))
+                        Participants = eventCollaborator.Select(eventCollaborator => _participantMapper.MapEventCollaboratorToParticipantModel(eventCollaborator))
                                         .ToList()
                     })
                     .ToList();

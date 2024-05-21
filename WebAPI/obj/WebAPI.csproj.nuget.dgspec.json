@@ -1,44 +1,57 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj": {}
+    "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj": {
+    "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\YashDaxini\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\YashDaxini\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
-            "projectReferences": {}
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj": {
+                "projectPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -61,33 +74,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj": {
+    "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj",
+        "projectUniqueName": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Service\\obj\\",
+        "projectPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj",
+        "packagesPath": "C:\\Users\\YashDaxini\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\YashDaxini\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -95,11 +112,16 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "imports": [
             "net461",
             "net462",
@@ -116,39 +138,43 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj": {
+    "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\WebAPI\\obj\\",
+        "projectPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj",
+        "packagesPath": "C:\\Users\\YashDaxini\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\YashDaxini\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj"
+              "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj"
               },
-              "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj": {
-                "projectPath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj"
+              "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj": {
+                "projectPath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj"
               }
             }
           }
@@ -157,11 +183,16 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -203,7 +234,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,6 +1,6 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
-using Infrastructure.Enums;
+using Core.Domain;
+using Core.Domain.Enums;
 
 namespace Infrastructure.Mappers;
 

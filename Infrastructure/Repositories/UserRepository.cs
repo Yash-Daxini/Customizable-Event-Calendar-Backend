@@ -1,5 +1,5 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
+using Core.Domain;
 using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,11 +7,11 @@ namespace Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DbContextEvent _dbContextEvent;
+        private readonly DbContextEventCalendar _dbContextEvent;
 
         private readonly UserMapper _userMapper = new();
 
-        public UserRepository(DbContextEvent dbContextEvent)
+        public UserRepository(DbContextEventCalendar dbContextEvent)
         {
             _dbContextEvent = dbContextEvent;
         }
@@ -22,18 +22,18 @@ namespace Infrastructure.Repositories
                                               .ToListAsync();
         }
 
-        public async Task<UserModel?> GetUserById(int bookId)
+        public UserModel? GetUserById(int userId)
         {
-            return await _dbContextEvent.Users.Where(book => book.Id == bookId)
+            return _dbContextEvent.Users.Where(user => user.Id == userId)
                                                 .Select(user => _userMapper.MapUserEntityToModel(user))
-                                                .FirstOrDefaultAsync();
+                                                .FirstOrDefault();
         }
 
         public async Task<int> AddUser(UserModel userModel)
         {
-            User user = _userMapper.MapUserModelToEntity(userModel);
+            UserDataModel user = _userMapper.MapUserModelToEntity(userModel);
 
-            _dbContextEvent.Users.Add(_userMapper.MapUserModelToEntity(userModel));
+            _dbContextEvent.Users.Add(user);
 
             await _dbContextEvent.SaveChangesAsync();
 
@@ -42,7 +42,9 @@ namespace Infrastructure.Repositories
 
         public async Task<int> UpdateUser(int userId, UserModel userModel)
         {
-            User user = _userMapper.MapUserModelToEntity(userModel);
+            UserDataModel user = _userMapper.MapUserModelToEntity(userModel);
+
+            user.Id = userId;
 
             _dbContextEvent.Users.Update(user);
 
@@ -53,7 +55,7 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteUser(int userId)
         {
-            User user = new()
+            UserDataModel user = new()
             {
                 Id = userId,
             };

@@ -1,5 +1,8 @@
-﻿namespace Infrastructure.DataModels
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Infrastructure.DataModels
 {
+    [Table("EventCollaborator")]
     public class EventCollaborator
     {
         public int Id { get; set; }
@@ -17,5 +20,7 @@
         public int? ProposedEndHour { get; set; }
 
         public DateOnly EventDate { get; set; }
+
+        public virtual UserDataModel? User { get; set; }
     }
 }

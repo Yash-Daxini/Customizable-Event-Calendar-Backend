@@ -1,5 +1,5 @@
-﻿using Infrastructure.DomainEntities;
-using Infrastructure.Repositories;
+﻿using Core.Interfaces;
+using Core.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -8,23 +8,23 @@ namespace WebAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            return Ok(await _userRepository.GetAllUsers());
+            return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet("{userId}")]
         public async Task<ActionResult> GetUserById([FromRoute] int userId)
         {
-            UserModel? user = await _userRepository.GetUserById(userId);
+            UserModel? user = _userService.GetUserById(userId);
 
             if (user is null) return NotFound();
 
@@ -34,21 +34,21 @@ namespace WebAPI.Controllers
         [HttpPost("")]
         public async Task<ActionResult> AddUser([FromBody] UserModel userModel)
         {
-            int addedUserId = await _userRepository.AddUser(userModel);
+            int addedUserId = await _userService.AddUser(userModel);
             return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);
         }
 
-        [HttpPut("{bookId}")]
+        [HttpPut("{userId}")]
         public async Task<ActionResult> UpdateUser([FromRoute] int userId, [FromBody] UserModel userModel)
         {
-            int addedUserId = await _userRepository.UpdateUser(userId, userModel);
+            int addedUserId = await _userService.UpdateUser(userId, userModel);
             return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);
         }
 
-        [HttpDelete("{bookId}")]
+        [HttpDelete("{userId}")]
         public async Task<ActionResult> DeleteUser([FromRoute] int userId)
         {
-            await _userRepository.DeleteUser(userId);
+            await _userService.DeleteUser(userId);
             return Ok();
         }
 

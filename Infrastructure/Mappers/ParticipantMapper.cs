@@ -1,12 +1,18 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
-using Infrastructure.Enums;
-using Infrastructure.Repositories;
+using Core.Domain;
+using Core.Domain.Enums;
 
 namespace Infrastructure.Mappers;
 
 public class ParticipantMapper
 {
+    private readonly UserMapper _userMapper;
+
+    public ParticipantMapper(UserMapper userMapper)
+    {
+        _userMapper = userMapper;
+    }
+
     public ParticipantModel MapEventCollaboratorToParticipantModel(EventCollaborator eventCollaborator)
     {
         return new ParticipantModel
@@ -16,7 +22,7 @@ public class ParticipantMapper
             ConfirmationStatus = MapConfirmationStatusToEnum(eventCollaborator.ConfirmationStatus),
             ProposedDuration = GetProposedDuration(eventCollaborator),
             EventDate = eventCollaborator.EventDate,
-            User = MapUserIdToUserModel(eventCollaborator.UserId)
+            User = _userMapper.MapUserEntityToModel(eventCollaborator.User)
         };
     }
 
@@ -46,10 +52,10 @@ public class ParticipantMapper
         };
     }
 
-    private UserModel MapUserIdToUserModel(int userId)
-    {
-        return new UserMapper().MapUserEntityToModel(new UserRepository().GetById(data => new User(data), userId));
-    }
+    //private UserModel MapUserIdToUserModel(int userId)
+    //{
+    //    return _userService.GetUserById(userId);
+    //}
 
     private ParticipantRole MapParticipantRoleToEnum(string participantRole)
     {

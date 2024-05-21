@@ -1,31 +1,32 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
-using Infrastructure.Repositories;
+using Core.Domain;
 
 namespace Infrastructure.Mappers;
 
 public class SharedCalendarMapper
 {
-    public SharedCalendarModel MapSharedCalendarEntityToModel(SharedCalendar sharedCalendar)
+    private readonly UserMapper _userMapper;
+
+    public SharedCalendarMapper(UserMapper userMapper)
+    {
+        _userMapper = userMapper;
+    }
+
+    public SharedCalendarModel MapSharedCalendarEntityToModel(SharedCalendarDataModel sharedCalendar)
     {
         return new SharedCalendarModel()
         {
             Id = sharedCalendar.Id,
-            SenderUser = MapUserIdToUserModel(sharedCalendar.SenderUserId),
-            ReceiverUser = MapUserIdToUserModel(sharedCalendar.ReceiverUserId),
+            SenderUser = _userMapper.MapUserEntityToModel(sharedCalendar.SenderUser),
+            ReceiverUser = _userMapper.MapUserEntityToModel(sharedCalendar.ReceiverUser),
             FromDate = sharedCalendar.FromDate,
             ToDate = sharedCalendar.ToDate
         };
     }
 
-    private UserModel MapUserIdToUserModel(int userId)
+    public SharedCalendarDataModel MapSharedCalendarModelToEntity(SharedCalendarModel sharedCalendarModel)
     {
-        return new UserMapper().MapUserEntityToModel(new UserRepository().GetById(data => new User(data), userId));
-    }
-
-    public SharedCalendar MapSharedCalendarModelToEntity(SharedCalendarModel sharedCalendarModel)
-    {
-        return new SharedCalendar
+        return new SharedCalendarDataModel
         {
             Id = sharedCalendarModel.Id,
             ReceiverUserId = sharedCalendarModel.ReceiverUser.Id,

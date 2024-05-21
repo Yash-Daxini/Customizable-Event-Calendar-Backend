@@ -69,3 +69,14 @@ C:\Users\admin\Desktop\.NETWebAPI\CustomizableEventCalendarWebAPI\WebAPI\obj\Deb
 C:\Users\admin\Desktop\.NETWebAPI\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.pdb
 C:\Users\admin\Desktop\.NETWebAPI\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.genruntimeconfig.cache
 C:\Users\admin\Desktop\.NETWebAPI\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\ref\WebAPI.dll
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.csproj.AssemblyReference.cache
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.AssemblyInfoInputs.cache
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.AssemblyInfo.cs
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.csproj.CoreCompileInputs.cache
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.sourcelink.json
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.dll
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\refint\WebAPI.dll
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net6.0\WebAPI.pdb

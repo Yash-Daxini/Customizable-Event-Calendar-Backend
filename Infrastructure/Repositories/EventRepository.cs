@@ -1,5 +1,5 @@
-﻿using Infrastructure.DataModels;
-using Infrastructure.DomainEntities;
+﻿using Core.Domain;
+using Infrastructure.DataModels;
 using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,60 +7,71 @@ namespace Infrastructure.Repositories
 {
     public class EventRepository : IEventRepository
     {
-        private readonly DbContextEvent _dbContextEvent;
+        private readonly DbContextEventCalendar _dbContextEventCalendar;
+        private readonly EventMapper _eventMapper;
 
-        private readonly EventMapper _eventMapper = new();
-
-        public EventRepository(DbContextEvent dbContextEvent)
+        public EventRepository(DbContextEventCalendar dbContextEvent,EventMapper eventMapper)
         {
-            _dbContextEvent = dbContextEvent;
+            _dbContextEventCalendar = dbContextEvent;
+            _eventMapper = eventMapper;
         }
 
-        public async Task<List<Event>> GetAllEvents()
+        public async Task<List<EventModel>> GetAllEvents()
         {
-            return await _dbContextEvent.Events.Select(eventObj => _eventMapper.MapEventEntityToModel(eventObj,))
+            return await _dbContextEventCalendar
+                        .Events
+                        .Include(eventObj => eventObj.Collaborators)
+                            .ThenInclude(eventCollaborator => eventCollaborator.User)
+                        .Select(eventObj => _eventMapper.MapEventEntityToModel(eventObj, eventObj.Collaborators))
                                                .ToListAsync();
+
         }
 
         public async Task<EventModel?> GetEventsById(int eventId)
         {
-            return await _dbContextEvent.Events.Where(book => book.Id == eventId)
-                                                .Select(eventObj => _eventMapper.MapEventModelToEntity(eventObj,))
+            return await _dbContextEventCalendar
+                          .Events
+                          .Where(book => book.Id == eventId)
+                          .Include(eventObj => eventObj.Collaborators)
+                            .ThenInclude(eventCollaborator => eventCollaborator.User)
+                          .Select(eventObj => _eventMapper.MapEventEntityToModel(eventObj, eventObj.Collaborators))
                                                 .FirstOrDefaultAsync();
         }
 
-        public async Task<int> AddEvents(EventModel eventModel)
+        public async Task<int> AddEvent(EventModel eventModel)
         {
             Event eventObj = _eventMapper.MapEventModelToEntity(eventModel);
 
-            _dbContextEvent.Events.Add(eventObj);
+            _dbContextEventCalendar.Events.Add(eventObj);
 
-            await _dbContextEvent.SaveChangesAsync();
+            await _dbContextEventCalendar.SaveChangesAsync();
 
             return eventObj.Id;
         }
 
-        public async Task<int> UpdateEvents(int bookId, EventModel eventModel)
+        public async Task<int> UpdateEvent(int eventId, EventModel eventModel)
         {
             Event eventObj = _eventMapper.MapEventModelToEntity(eventModel);
 
-            _dbContextEvent.Events.Update(eventObj);
+            eventObj.Id = eventId;
 
-            await _dbContextEvent.SaveChangesAsync();
+            _dbContextEventCalendar.Events.Update(eventObj);
+
+            await _dbContextEventCalendar.SaveChangesAsync();
 
             return eventObj.Id;
         }
 
-        public async Task DeleteEvents(int eventId)
+        public async Task DeleteEvent(int eventId)
         {
             Event eventObj = new()
             {
                 Id = eventId,
             };
 
-            _dbContextEvent.Remove(eventObj);
+            _dbContextEventCalendar.Remove(eventObj);
 
-            await _dbContextEvent.SaveChangesAsync();
+            await _dbContextEventCalendar.SaveChangesAsync();
         }
     }
 }
