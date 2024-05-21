@@ -2,6 +2,7 @@ using Core.Interfaces;
 using Core.Services;
 using Infrastructure;
 using Infrastructure.Mappers;
+using Infrastructure.Profiles;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(Program), typeof(EventProfile),typeof(ParticipantProfile));
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IEventRepository, EventRepository>();
 builder.Services.AddTransient<IEventCollaboratorRepository, EventCollaboratorRepository>();

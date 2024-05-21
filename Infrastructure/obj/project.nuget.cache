@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "xYYKkS0N1aYMeGRUiOtISo9qgwUvjtIbkHMb50XphQCcKKiieMvSI+5E2FKZu/NA7s4xcGqaPrOGWyP4jP2g+A==",
+  "dgSpecHash": "8o8W3gJL0YHwAaAO39Jr1kuayBnbQPI3qMH55HGzscclxZuIyg+jn3d6qZl6NfxKpTQqS0cf248Isaeqb4mflA==",
   "success": true,
   "projectFilePath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\YashDaxini\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.30\\microsoft.entityframeworkcore.6.0.30.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.30\\microsoft.entityframeworkcore.abstractions.6.0.30.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\6.0.30\\microsoft.entityframeworkcore.analyzers.6.0.30.nupkg.sha512",

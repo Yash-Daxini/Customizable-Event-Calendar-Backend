@@ -68,3 +68,4 @@ C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\ob
 C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net8.0\WebAPI.genruntimeconfig.cache
 C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net8.0\ref\WebAPI.dll
 C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\obj\Debug\net8.0\WebAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\WebAPI\bin\Debug\net8.0\AutoMapper.dll

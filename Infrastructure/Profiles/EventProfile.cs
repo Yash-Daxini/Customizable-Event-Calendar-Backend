@@ -1,0 +1,78 @@
+﻿using AutoMapper;
+using Core.Domain.Enums;
+using Core.Domain;
+using Infrastructure.DataModels;
+
+namespace Infrastructure.Profiles;
+
+public class EventProfile : Profile
+{
+    public EventProfile()
+    {
+        CreateMap<Event, EventModel>()
+                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => new DurationModel()
+                {
+                    StartHour = src.EventStartHour,
+                    EndHour = src.EventEndHour,
+                }))
+                .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom(src => new RecurrencePatternModel()
+                {
+                    StartDate = src.EventStartDate,
+                    EndDate = src.EventEndDate,
+                    Frequency = MapFrequencyToEnum(src.Frequency),
+                    Interval = src.Interval,
+                    ByWeekDay = MapWeekDayIntoList(src.ByWeekDay),
+                    WeekOrder = src.WeekOrder,
+                    ByMonth = src.ByMonth,
+                    ByMonthDay = src.ByMonthDay,
+                }))
+                .ForMember(dest => dest.DateWiseParticipants, opt => opt.MapFrom<DateWiseParticipantsResolver>());
+
+        CreateMap<EventModel, Event>()
+                .ForMember(dest => dest.EventStartHour, opt => opt.MapFrom(src => src.Duration.StartHour))
+                .ForMember(dest => dest.EventEndHour, opt => opt.MapFrom(src => src.Duration.EndHour))
+                .ForMember(dest => dest.EventStartDate, opt => opt.MapFrom(src => src.RecurrencePattern.StartDate))
+                .ForMember(dest => dest.EventEndDate, opt => opt.MapFrom(src => src.RecurrencePattern.EndDate))
+                .ForMember(dest => dest.Frequency, opt => opt.MapFrom(src => MapEnumToFrequency(src.RecurrencePattern.Frequency)))
+                .ForMember(dest => dest.Interval, opt => opt.MapFrom(src => src.RecurrencePattern.Interval))
+                .ForMember(dest => dest.ByWeekDay, opt => opt.MapFrom(src => MapWeekDayListToString(src.RecurrencePattern)))
+                .ForMember(dest => dest.ByMonthDay, opt => opt.MapFrom(src => src.RecurrencePattern.ByMonthDay))
+                .ForMember(dest => dest.ByMonth, opt => opt.MapFrom(src => src.RecurrencePattern.ByMonth));
+    }
+
+    private static string? MapWeekDayListToString(RecurrencePatternModel recurrencePattern)
+    {
+        return recurrencePattern.ByWeekDay == null ? null : string.Join(",", recurrencePattern.ByWeekDay);
+    }
+
+    private Frequency MapFrequencyToEnum(string? frequency)
+    {
+        return frequency switch
+        {
+            "daily" => Frequency.Daily,
+            "weekly" => Frequency.Weekly,
+            "Monthly" => Frequency.Monthly,
+            "Yearly" => Frequency.Yearly,
+            _ => Frequency.None,
+        };
+    }
+
+    private string? MapEnumToFrequency(Frequency frequency)
+    {
+        return frequency switch
+        {
+            Frequency.Daily => "daily",
+            Frequency.Weekly => "weekly",
+            Frequency.Monthly => "Monthly",
+            Frequency.Yearly => "Yearly",
+            Frequency.None => null,
+            _ => null,
+        };
+    }
+
+    private List<int>? MapWeekDayIntoList(string? weekDay)
+    {
+        if (weekDay == null) return null;
+        return [.. weekDay.Split(",").Select(int.Parse)];
+    }
+}

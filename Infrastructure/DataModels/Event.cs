@@ -35,6 +35,6 @@ namespace Infrastructure.DataModels
 
         public int? ByMonth { get; set; }
 
-        public virtual List<EventCollaborator> Collaborators { get; set; } = new List<EventCollaborator>();
+        public virtual List<EventCollaborator> EventCollaborators { get; set; } = new List<EventCollaborator>();
     }
 }

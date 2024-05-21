@@ -1,4 +1,5 @@
-﻿using Core.Domain;
+﻿using AutoMapper;
+using Core.Domain;
 using Infrastructure.DataModels;
 using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -9,20 +10,22 @@ namespace Infrastructure.Repositories
     {
         private readonly DbContextEventCalendar _dbContextEventCalendar;
         private readonly EventMapper _eventMapper;
+        private readonly IMapper _mapper;
 
-        public EventRepository(DbContextEventCalendar dbContextEvent,EventMapper eventMapper)
+        public EventRepository(DbContextEventCalendar dbContextEvent, EventMapper eventMapper, IMapper mapper)
         {
             _dbContextEventCalendar = dbContextEvent;
             _eventMapper = eventMapper;
+            _mapper = mapper;
         }
 
         public async Task<List<EventModel>> GetAllEvents()
         {
             return await _dbContextEventCalendar
                         .Events
-                        .Include(eventObj => eventObj.Collaborators)
+                        .Include(eventObj => eventObj.EventCollaborators)
                             .ThenInclude(eventCollaborator => eventCollaborator.User)
-                        .Select(eventObj => _eventMapper.MapEventEntityToModel(eventObj, eventObj.Collaborators))
+                        .Select(eventObj => _mapper.Map<EventModel>(eventObj))
                                                .ToListAsync();
 
         }
@@ -32,9 +35,9 @@ namespace Infrastructure.Repositories
             return await _dbContextEventCalendar
                           .Events
                           .Where(book => book.Id == eventId)
-                          .Include(eventObj => eventObj.Collaborators)
+                          .Include(eventObj => eventObj.EventCollaborators)
                             .ThenInclude(eventCollaborator => eventCollaborator.User)
-                          .Select(eventObj => _eventMapper.MapEventEntityToModel(eventObj, eventObj.Collaborators))
+                          .Select(eventObj => _mapper.Map<EventModel>(eventObj))
                                                 .FirstOrDefaultAsync();
         }
 
