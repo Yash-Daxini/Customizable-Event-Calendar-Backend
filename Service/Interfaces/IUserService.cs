@@ -4,13 +4,13 @@ namespace Core.Interfaces;
 
 public interface IUserService
 {
-    public Task<List<UserModel>> GetAllUsers();
+    public Task<List<User>> GetAllUsers();
 
-    public UserModel? GetUserById(int userId);
+    public Task<User?> GetUserById(int userId);
 
-    public Task<int> AddUser(UserModel userModel);
+    public Task<int> AddUser(User userModel);
 
-    public Task<int> UpdateUser(int userId, UserModel userModel);
+    public Task<int> UpdateUser(int userId, User userModel);
 
     public Task DeleteUser(int userId);
 }

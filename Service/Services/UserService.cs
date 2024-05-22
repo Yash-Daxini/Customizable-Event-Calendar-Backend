@@ -8,32 +8,27 @@ namespace Core.Services
     {
         private readonly IUserRepository _userRepository;
 
-        public UserService()
-        {
-            
-        }
-
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public Task<List<UserModel>> GetAllUsers()
+        public async Task<List<User>> GetAllUsers()
         {
-            return _userRepository.GetAllUsers();
+            return await _userRepository.GetAllUsers();
         }
 
-        public UserModel? GetUserById(int userId)
+        public async Task<User?> GetUserById(int userId)
         {
-            return _userRepository.GetUserById(userId);
+            return await _userRepository.GetUserById(userId);
         }
 
-        public Task<int> AddUser(UserModel userModel)
+        public Task<int> AddUser(User userModel)
         {
             return _userRepository.AddUser(userModel);
         }
 
-        public Task<int> UpdateUser(int userId, UserModel userModel)
+        public Task<int> UpdateUser(int userId, User userModel)
         {
             return _userRepository.UpdateUser(userId, userModel);
         }

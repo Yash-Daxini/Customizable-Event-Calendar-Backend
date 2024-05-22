@@ -1,7 +1,7 @@
 ﻿using Infrastructure.DataModels;
 using Core.Domain;
-using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Infrastructure.Repositories
 {
@@ -9,29 +9,34 @@ namespace Infrastructure.Repositories
     {
         private readonly DbContextEventCalendar _dbContextEvent;
 
-        private readonly UserMapper _userMapper = new();
+        private readonly IMapper _mapper;
 
-        public UserRepository(DbContextEventCalendar dbContextEvent)
+        public UserRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
         {
             _dbContextEvent = dbContextEvent;
+            _mapper = mapper;
         }
 
-        public async Task<List<UserModel>> GetAllUsers()
+        public async Task<List<User>> GetAllUsers()
         {
-            return await _dbContextEvent.Users.Select(user => _userMapper.MapUserEntityToModel(user))
-                                              .ToListAsync();
+            return await _dbContextEvent
+                        .Users
+                        .Select(user => _mapper.Map<User>(user))
+                        .ToListAsync();
         }
 
-        public UserModel? GetUserById(int userId)
+        public async Task<User?> GetUserById(int userId)
         {
-            return _dbContextEvent.Users.Where(user => user.Id == userId)
-                                                .Select(user => _userMapper.MapUserEntityToModel(user))
-                                                .FirstOrDefault();
+            return await _dbContextEvent
+                   .Users
+                   .Where(user => user.Id == userId)
+                   .Select(user => _mapper.Map<User>(user))
+                   .FirstOrDefaultAsync();
         }
 
-        public async Task<int> AddUser(UserModel userModel)
+        public async Task<int> AddUser(User userModel)
         {
-            UserDataModel user = _userMapper.MapUserModelToEntity(userModel);
+            UserDataModel user = _mapper.Map<UserDataModel>(userModel);
 
             _dbContextEvent.Users.Add(user);
 
@@ -40,9 +45,9 @@ namespace Infrastructure.Repositories
             return user.Id;
         }
 
-        public async Task<int> UpdateUser(int userId, UserModel userModel)
+        public async Task<int> UpdateUser(int userId, User userModel)
         {
-            UserDataModel user = _userMapper.MapUserModelToEntity(userModel);
+            UserDataModel user = _mapper.Map<UserDataModel>(userModel);
 
             user.Id = userId;
 

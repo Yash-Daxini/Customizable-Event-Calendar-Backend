@@ -4,13 +4,17 @@ namespace Infrastructure.Repositories;
 
 public interface IEventCollaboratorRepository
 {
-    public Task<List<ParticipantModel>> GetAllParticipants();
+    public Task<List<Participant>> GetAllParticipants();
 
-    public Task<ParticipantModel?> GetParticipantById(int bookId);
+    public Task<Participant?> GetParticipantById(int bookId);
 
-    public Task<int> AddParticipant(ParticipantModel participantModel, int eventId);
+    public Task<int> AddParticipant(Participant participantModel, int eventId);
 
-    public Task<int> UpdateParticipant(int participantId, ParticipantModel participantModel, int eventId);
+    public Task AddParticipants(List<Participant> participants, int eventId);
+
+    public Task<int> UpdateParticipant(int participantId, Participant participantModel, int eventId);
 
     public Task DeleteParticipant(int participantId);
+
+    public Task DeleteParticipantsByEventId(int eventId);
 }

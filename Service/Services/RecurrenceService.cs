@@ -3,7 +3,7 @@ using Core.Interfaces;
 
 namespace Core.Services;
 
-public class RecurrenceService
+public class RecurrenceService : IRecurrenceService
 {
     private readonly IParticipantService _participantService;
 
@@ -12,7 +12,7 @@ public class RecurrenceService
         _participantService = participantService;
     }
 
-    public void ScheduleEvents(EventModel eventModel, List<ParticipantModel> participants)
+    public void ScheduleEvents(Event eventModel, List<Participant> participants)
     {
         List<DateOnly> occurrences = GetOccurrencesOfEvent(eventModel);
 
@@ -22,14 +22,14 @@ public class RecurrenceService
         }
     }
 
-    public List<DateOnly> GetOccurrencesOfEvent(EventModel eventModel)
+    private List<DateOnly> GetOccurrencesOfEvent(Event eventModel)
     {
         return eventModel.RecurrencePattern.IsNonRecurrenceEvent()
                ? [eventModel.RecurrencePattern.StartDate]
                : GetOccurrencesOfEventUsingFrequency(eventModel);
     }
 
-    private List<DateOnly> GetOccurrencesOfEventUsingFrequency(EventModel eventModel)
+    private List<DateOnly> GetOccurrencesOfEventUsingFrequency(Event eventModel)
     {
         if (eventModel.RecurrencePattern.IsDailyEvent())
             return GetOccurrenceOfDailyEvents(eventModel);
@@ -41,19 +41,21 @@ public class RecurrenceService
             return GetOccurrencesOfYearlyEvents(eventModel);
     }
 
-    private void ScheduleEventsForEachParticipant(EventModel eventModel,
+    private void ScheduleEventsForEachParticipant(Event eventModel,
                                                   DateOnly occurrence,
-                                                  List<ParticipantModel> participants)
+                                                  List<Participant> participants)
     {
-        foreach (ParticipantModel participant in participants)
+        foreach (Participant participant in participants)
         {
             participant.EventDate = occurrence;
-            _participantService.AddParticipant(participant, eventModel.Id);
+            //_participantService.AddParticipant(participant, eventModel.Id);
         }
+
+        _participantService.AddParticipants(participants, eventModel.Id);
 
     }
 
-    private List<DateOnly> GetOccurrenceOfDailyEvents(EventModel eventModel)
+    private List<DateOnly> GetOccurrenceOfDailyEvents(Event eventModel)
     {
         List<int> days = [.. eventModel.RecurrencePattern.ByWeekDay ?? ([])];
 
@@ -80,13 +82,13 @@ public class RecurrenceService
                && (days.Count == 0 || days.Contains(GetDayNumberFromWeekDay(date)));
     }
 
-    public static int GetDayNumberFromWeekDay(DateOnly date)
+    private static int GetDayNumberFromWeekDay(DateOnly date)
     {
         int dayNumber = Convert.ToInt32(date.DayOfWeek.ToString("d"));
         return dayNumber == 0 ? 7 : dayNumber;
     }
 
-    private List<DateOnly> GetOccurrencesOfWeeklyEvents(EventModel eventModel)
+    private List<DateOnly> GetOccurrencesOfWeeklyEvents(Event eventModel)
     {
         List<DateOnly> occurrences = [];
 
@@ -104,12 +106,12 @@ public class RecurrenceService
         return occurrences;
     }
 
-    public static DateOnly GetStartDateOfWeek(DateOnly todayDate)
+    private static DateOnly GetStartDateOfWeek(DateOnly todayDate)
     {
         return todayDate.AddDays(-(int)(todayDate.DayOfWeek - 1));
     }
 
-    private List<DateOnly> GetOccurrencesOfWeekDay(EventModel eventModel, DateOnly startDateOfWeek, int item)
+    private List<DateOnly> GetOccurrencesOfWeekDay(Event eventModel, DateOnly startDateOfWeek, int item)
     {
         DateOnly startDateOfEvent = eventModel.RecurrencePattern.StartDate;
         DateOnly endDateOfEvent = eventModel.RecurrencePattern.EndDate;
@@ -133,21 +135,21 @@ public class RecurrenceService
         return dateToCheck >= startDate && dateToCheck <= endDate;
     }
 
-    private List<DateOnly> GetOccurrencesOfMonthlyEvents(EventModel eventModel)
+    private List<DateOnly> GetOccurrencesOfMonthlyEvents(Event eventModel)
     {
         return eventModel.RecurrencePattern.ByMonthDay is null
                ? GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(eventModel, true)
                : GetOccurrencesOfEventsUsingMonthDay(eventModel, true);
     }
 
-    private List<DateOnly> GetOccurrencesOfYearlyEvents(EventModel eventModel)
+    private List<DateOnly> GetOccurrencesOfYearlyEvents(Event eventModel)
     {
         return eventModel.RecurrencePattern.ByMonthDay is null
                ? GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(eventModel, false)
                : GetOccurrencesOfEventsUsingMonthDay(eventModel, false);
     }
 
-    public List<DateOnly> GetOccurrencesOfEventsUsingMonthDay(EventModel eventModel, bool isMonthly)
+    private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay(Event eventModel, bool isMonthly)
     {
         int monthDay = (int)eventModel.RecurrencePattern.ByMonthDay;
 
@@ -200,7 +202,7 @@ public class RecurrenceService
         return Math.Min(day, daysInMonth);
     }
 
-    private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(EventModel eventModel, bool isMonthly)
+    private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(Event eventModel, bool isMonthly)
     {
         int weekOrder = (int)eventModel.RecurrencePattern.WeekOrder;
 
@@ -243,7 +245,7 @@ public class RecurrenceService
                                 } )];
     }
 
-    public static DateOnly GetNthWeekDayDate(int year, int month, DayOfWeek dayOfWeek, int weekOrder)
+    private static DateOnly GetNthWeekDayDate(int year, int month, DayOfWeek dayOfWeek, int weekOrder)
     {
         DateOnly firstDayOfMonth = new(year, month, 1);
 

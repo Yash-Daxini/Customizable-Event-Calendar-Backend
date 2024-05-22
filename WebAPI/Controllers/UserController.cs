@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult> GetUserById([FromRoute] int userId)
         {
-            UserModel? user = _userService.GetUserById(userId);
+            User? user = _userService.GetUserById(userId).Result;
 
             if (user is null) return NotFound();
 
@@ -32,14 +32,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("")]
-        public async Task<ActionResult> AddUser([FromBody] UserModel userModel)
+        public async Task<ActionResult> AddUser([FromBody] User userModel)
         {
             int addedUserId = await _userService.AddUser(userModel);
             return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);
         }
 
         [HttpPut("{userId}")]
-        public async Task<ActionResult> UpdateUser([FromRoute] int userId, [FromBody] UserModel userModel)
+        public async Task<ActionResult> UpdateUser([FromRoute] int userId, [FromBody] User userModel)
         {
             int addedUserId = await _userService.UpdateUser(userId, userModel);
             return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);

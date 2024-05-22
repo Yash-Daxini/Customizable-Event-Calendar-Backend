@@ -1,69 +1,111 @@
 ﻿using Infrastructure.DataModels;
 using Core.Domain;
-using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Infrastructure.Repositories
 {
     public class EventCollaboratorRepository : IEventCollaboratorRepository
     {
-        private readonly DbContextEventCalendar _dbContextEvent;
+        private readonly DbContextEventCalendar _dbContextEventCalendar;
 
-        private readonly ParticipantMapper _participantMapper;
+        private readonly IMapper _mapper;
 
-        public EventCollaboratorRepository(DbContextEventCalendar dbContextEvent,ParticipantMapper participantMapper)
+        public EventCollaboratorRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
         {
-            _dbContextEvent = dbContextEvent;
-            _participantMapper = participantMapper;
+            _dbContextEventCalendar = dbContextEvent;
+            _mapper = mapper;
         }
 
-        public async Task<List<ParticipantModel>> GetAllParticipants()
+        public async Task<List<Participant>> GetAllParticipants()
         {
-            return await _dbContextEvent.EventCollaborators.Select(eventCollaborator => _participantMapper.MapEventCollaboratorToParticipantModel(eventCollaborator))
-                                                           .ToListAsync();
+            return await _dbContextEventCalendar
+                        .EventCollaborators
+                        .Select(eventCollaborator => _mapper.Map<Participant>(eventCollaborator))
+                        .ToListAsync();
         }
 
-        public async Task<ParticipantModel?> GetParticipantById(int bookId)
+        public async Task<Participant?> GetParticipantById(int participantId)
         {
-            return await _dbContextEvent.EventCollaborators.Where(book => book.Id == bookId)
-                                                .Select(eventCollaborator => _participantMapper.MapEventCollaboratorToParticipantModel(eventCollaborator))
-                                                .FirstOrDefaultAsync();
+            return await _dbContextEventCalendar
+                        .EventCollaborators
+                        .Where(participant => participant.Id == participantId)
+                        .Select(eventCollaborator => _mapper.Map<Participant>(eventCollaborator))
+                        .FirstOrDefaultAsync();
         }
 
-        public async Task<int> AddParticipant(ParticipantModel participantModel, int eventId)
+        public async Task<int> AddParticipant(Participant participantModel, int eventId)
         {
-            EventCollaborator eventCollaborator = _participantMapper.MapParticipantModelToEventCollaborator(participantModel, eventId);
+            EventCollaboratorDataModel eventCollaborator = _mapper.Map<EventCollaboratorDataModel>(participantModel, opt =>
+            {
+                opt.Items["EventId"] = eventId;
+            });
 
-            await _dbContextEvent.EventCollaborators.AddAsync(eventCollaborator);
+            _dbContextEventCalendar.Attach(eventCollaborator.User);
 
-            await _dbContextEvent.SaveChangesAsync();
+            _dbContextEventCalendar.EventCollaborators.Add(eventCollaborator);
+
+            await _dbContextEventCalendar.SaveChangesAsync();
 
             return eventCollaborator.Id;
         }
 
-        public async Task<int> UpdateParticipant(int participantId, ParticipantModel participantModel, int eventId)
+        public async Task AddParticipants(List<Participant> participants, int eventId) //TODO :- Batch add issue
         {
-            EventCollaborator eventCollaborator = _participantMapper.MapParticipantModelToEventCollaborator(participantModel, eventId);
+            List<EventCollaboratorDataModel> eventCollaboratorsToAdd = [..participants
+                                                                       .Select(participant => _mapper.Map<EventCollaboratorDataModel>(participant, opt =>
+                                                                        {
+                                                                                    opt.Items["EventId"] = eventId;
+                                                                        }))];
+
+            foreach (var eventCollaborator in eventCollaboratorsToAdd)
+            {
+                _dbContextEventCalendar.Attach(eventCollaborator.User);
+            }
+
+            _dbContextEventCalendar.EventCollaborators.AddRange(eventCollaboratorsToAdd);
+
+            await _dbContextEventCalendar.SaveChangesAsync();
+
+        }
+
+        public async Task<int> UpdateParticipant(int participantId, Participant participantModel, int eventId)
+        {
+            EventCollaboratorDataModel eventCollaborator = _mapper.Map<EventCollaboratorDataModel>(participantModel, opt =>
+            {
+                opt.Items["EventId"] = eventId;
+            });
 
             eventCollaborator.Id = participantId;
 
-            _dbContextEvent.EventCollaborators.Update(eventCollaborator);
+            _dbContextEventCalendar.EventCollaborators.Update(eventCollaborator);
 
-            await _dbContextEvent.SaveChangesAsync();
+            await _dbContextEventCalendar.SaveChangesAsync();
 
             return eventCollaborator.Id;
         }
 
         public async Task DeleteParticipant(int participantId)
         {
-            EventCollaborator eventCollaborator = new()
+            EventCollaboratorDataModel eventCollaborator = new()
             {
                 Id = participantId,
             };
 
-            _dbContextEvent.Remove(eventCollaborator);
+            _dbContextEventCalendar.Remove(eventCollaborator);
 
-            await _dbContextEvent.SaveChangesAsync();
+            await _dbContextEventCalendar.SaveChangesAsync();
+        }
+
+        public async Task DeleteParticipantsByEventId(int eventId)
+        {
+            List<EventCollaboratorDataModel> eventCollaboratorsToDelete = [.._dbContextEventCalendar
+                                                                          .EventCollaborators
+                                                                          .Where(eventcollaborator => eventcollaborator.EventId == eventId)];
+
+            _dbContextEventCalendar.RemoveRange(eventCollaboratorsToDelete);
+
+            await _dbContextEventCalendar.SaveChangesAsync();
         }
     }
 }

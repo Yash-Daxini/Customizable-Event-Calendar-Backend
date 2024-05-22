@@ -14,3 +14,5 @@ C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\Infrastru
 C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\Infrastructure\obj\Debug\net8.0\refint\Infrastructure.dll
 C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\Infrastructure\obj\Debug\net8.0\Infrastructure.pdb
 C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\Infrastructure\obj\Debug\net8.0\ref\Infrastructure.dll
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\Infrastructure\bin\Debug\net8.0\Infrastructure.runtimeconfig.json
+C:\Users\YashDaxini\Desktop\C#Practice\CustomizableEventCalendarWebAPI\Infrastructure\obj\Debug\net8.0\Infrastructure.genruntimeconfig.cache

@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
         [HttpGet("{sharedCalendarId}")]
         public async Task<ActionResult> GetSharedCalendarById([FromRoute] int sharedCalendarId)
         {
-            SharedCalendarModel? sharedCalendarModel = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
+            SharedCalendar? sharedCalendarModel = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
 
             if (sharedCalendarModel is null) return NotFound();
 
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult> AddUser([FromBody] SharedCalendarModel sharedCalendarModel)
+        public async Task<ActionResult> AddUser([FromBody] SharedCalendar sharedCalendarModel)
         {
             int addedSharedCalendarId = await _sharedCalendarService.AddSharedCalendar(sharedCalendarModel);
             return CreatedAtAction(nameof(GetSharedCalendarById), new { sharedCalendarId = addedSharedCalendarId, controller = "sharedcalendar" }, addedSharedCalendarId);

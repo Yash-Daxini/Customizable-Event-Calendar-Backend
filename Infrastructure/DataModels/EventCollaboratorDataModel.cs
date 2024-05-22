@@ -3,7 +3,7 @@
 namespace Infrastructure.DataModels
 {
     [Table("EventCollaborator")]
-    public class EventCollaborator
+    public class EventCollaboratorDataModel
     {
         public int Id { get; set; }
 
@@ -22,5 +22,7 @@ namespace Infrastructure.DataModels
         public DateOnly EventDate { get; set; }
 
         public virtual UserDataModel? User { get; set; }
+
+        public virtual EventDataModel Event { get; set; }
     }
 }

@@ -4,5 +4,5 @@ public class ParticipantsByDate
 {
     public DateOnly EventDate { get; set; }
 
-    public List<ParticipantModel> Participants { get; set; }
+    public List<Participant> Participants { get; set; }
 }

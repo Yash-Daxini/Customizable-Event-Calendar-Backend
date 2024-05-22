@@ -4,13 +4,13 @@ namespace Infrastructure.Repositories;
 
 public interface ISharedCalendarRepository
 {
-    public Task<List<SharedCalendarModel>> GetAllSharedCalendars();
+    public Task<List<SharedCalendar>> GetAllSharedCalendars();
 
-    public Task<SharedCalendarModel?> GetSharedCalendarById(int sharedCalendarId);
+    public Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId);
 
-    public Task<int> AddSharedCalendar(SharedCalendarModel sharedCalendarModel);
+    public Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel);
 
-    public Task<int> UpdateSharedCalendar(int sharedCalendarId, SharedCalendarModel sharedCalendarModel);
+    public Task<int> UpdateSharedCalendar(int sharedCalendarId, SharedCalendar sharedCalendarModel);
 
     public Task DeleteSharedCalendar(int sharedCalendarId);
 }

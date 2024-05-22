@@ -3,7 +3,7 @@
 namespace Infrastructure.DataModels
 {
     [Table("Event")]
-    public class Event
+    public class EventDataModel
     {
         public int Id { get; set; }
 
@@ -35,6 +35,6 @@ namespace Infrastructure.DataModels
 
         public int? ByMonth { get; set; }
 
-        public virtual List<EventCollaborator> EventCollaborators { get; set; } = new List<EventCollaborator>();
+        public virtual List<EventCollaboratorDataModel> EventCollaborators { get; set; } = new List<EventCollaboratorDataModel>();
     }
 }

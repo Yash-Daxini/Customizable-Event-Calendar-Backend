@@ -2,7 +2,7 @@
 
 namespace Core.Domain;
 
-public class RecurrencePatternModel
+public class RecurrencePattern
 {
     public DateOnly StartDate { get; set; }
 

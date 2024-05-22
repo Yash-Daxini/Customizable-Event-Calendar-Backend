@@ -9,13 +9,13 @@ public class EventProfile : Profile
 {
     public EventProfile()
     {
-        CreateMap<Event, EventModel>()
-                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => new DurationModel()
+        CreateMap<EventDataModel, Event>()
+                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => new Duration()
                 {
                     StartHour = src.EventStartHour,
                     EndHour = src.EventEndHour,
                 }))
-                .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom(src => new RecurrencePatternModel()
+                .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom(src => new RecurrencePattern()
                 {
                     StartDate = src.EventStartDate,
                     EndDate = src.EventEndDate,
@@ -28,7 +28,7 @@ public class EventProfile : Profile
                 }))
                 .ForMember(dest => dest.DateWiseParticipants, opt => opt.MapFrom<DateWiseParticipantsResolver>());
 
-        CreateMap<EventModel, Event>()
+        CreateMap<Event, EventDataModel>()
                 .ForMember(dest => dest.EventStartHour, opt => opt.MapFrom(src => src.Duration.StartHour))
                 .ForMember(dest => dest.EventEndHour, opt => opt.MapFrom(src => src.Duration.EndHour))
                 .ForMember(dest => dest.EventStartDate, opt => opt.MapFrom(src => src.RecurrencePattern.StartDate))
@@ -40,7 +40,7 @@ public class EventProfile : Profile
                 .ForMember(dest => dest.ByMonth, opt => opt.MapFrom(src => src.RecurrencePattern.ByMonth));
     }
 
-    private static string? MapWeekDayListToString(RecurrencePatternModel recurrencePattern)
+    private static string? MapWeekDayListToString(RecurrencePattern recurrencePattern)
     {
         return recurrencePattern.ByWeekDay == null ? null : string.Join(",", recurrencePattern.ByWeekDay);
     }

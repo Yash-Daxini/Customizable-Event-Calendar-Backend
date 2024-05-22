@@ -13,24 +13,19 @@ namespace Core.Services
             _sharedCalendarRepository = sharedCalendarRepository;
         }
 
-        public Task<List<SharedCalendarModel>> GetAllSharedCalendars()
+        public async Task<List<SharedCalendar>> GetAllSharedCalendars()
         {
-            return _sharedCalendarRepository.GetAllSharedCalendars();
+            return await _sharedCalendarRepository.GetAllSharedCalendars();
         }
 
-        public Task<SharedCalendarModel?> GetSharedCalendarById(int sharedCalendarId)
+        public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
         {
-            return _sharedCalendarRepository.GetSharedCalendarById(sharedCalendarId);
+            return await _sharedCalendarRepository.GetSharedCalendarById(sharedCalendarId);
         }
 
-        public Task<int> AddSharedCalendar(SharedCalendarModel sharedCalendarModel)
+        public async Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel)
         {
-            return _sharedCalendarRepository.AddSharedCalendar(sharedCalendarModel);
-        }
-
-        public Task<EventModel> GetSharedEventsFromSharedCalendarId(int sharedCalendarId)
-        {
-            throw new NotImplementedException();
+            return await _sharedCalendarRepository.AddSharedCalendar(sharedCalendarModel);
         }
     }
 }

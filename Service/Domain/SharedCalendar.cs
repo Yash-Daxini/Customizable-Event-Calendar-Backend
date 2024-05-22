@@ -1,12 +1,12 @@
 ﻿namespace Core.Domain;
 
-public class SharedCalendarModel
+public class SharedCalendar
 {
     public int Id { get; set; }
 
-    public UserModel SenderUser { get; set; }
+    public User SenderUser { get; set; }
 
-    public UserModel ReceiverUser { get; set; }
+    public User ReceiverUser { get; set; }
 
     public DateOnly FromDate { get; set; }
 

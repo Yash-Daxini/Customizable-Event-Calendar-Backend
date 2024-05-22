@@ -1,6 +1,6 @@
 ﻿namespace Core.Domain;
 
-public class UserModel
+public class User
 {
     public int Id { get; set; }
 

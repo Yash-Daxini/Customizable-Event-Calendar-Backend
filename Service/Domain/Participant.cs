@@ -2,7 +2,7 @@
 
 namespace Core.Domain;
 
-public class ParticipantModel
+public class Participant
 {
     public int Id { get; set; }
 
@@ -10,9 +10,9 @@ public class ParticipantModel
 
     public ConfirmationStatus ConfirmationStatus { get; set; }
 
-    public DurationModel? ProposedDuration { get; set; }
+    public Duration? ProposedDuration { get; set; }
 
     public DateOnly EventDate { get; set; }
 
-    public UserModel User { get; set; }
+    public User User { get; set; }
 }

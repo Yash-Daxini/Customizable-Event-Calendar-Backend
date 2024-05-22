@@ -10,35 +10,37 @@ public class ParticipantProfile : Profile
 
     public ParticipantProfile()
     {
-        CreateMap<EventCollaborator, ParticipantModel>()
+        CreateMap<EventCollaboratorDataModel, Participant>()
             .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => MapParticipantRoleToEnum(src.ParticipantRole)))
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => MapConfirmationStatusToEnum(src.ConfirmationStatus)))
             .ForMember(dest => dest.ProposedDuration, opt => opt.MapFrom(src => MapDuration(src.ProposedStartHour, src.ProposedEndHour)))
             .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate));
 
-        CreateMap<ParticipantModel, EventCollaborator>()
+        CreateMap<Participant, EventCollaboratorDataModel>()
             .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => MapEnumToParticipantRole(src.ParticipantRole)))
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => MapEnumToConfirmationStatus(src.ConfirmationStatus)))
             .ForMember(dest => dest.ProposedStartHour, opt => opt.MapFrom(src => MapProposedStartHour(src.ProposedDuration)))
             .ForMember(dest => dest.ProposedEndHour, opt => opt.MapFrom(src => MapProposedEndHour(src.ProposedDuration)))
-            .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate));
+            .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
+            .ForMember(dest => dest.EventId, opt => opt.MapFrom<EventIdValueResolverWithContext>());
     }
 
-    private static object? MapProposedStartHour(DurationModel proposedDuration)
+    private static object? MapProposedStartHour(Duration proposedDuration)
     {
         return proposedDuration?.StartHour;
     }
 
-    private static object? MapProposedEndHour(DurationModel proposedDuration)
+    private static object? MapProposedEndHour(Duration proposedDuration)
     {
         return proposedDuration?.EndHour;
     }
 
-    private static DurationModel? MapDuration(int? startHour, int? endHour)
+    private static Duration? MapDuration(int? startHour, int? endHour)
     {
         if (startHour is null || endHour is null) return null;
 
-        return new DurationModel
+        return new Duration
         {
             StartHour = (int)startHour,
             EndHour = (int)endHour

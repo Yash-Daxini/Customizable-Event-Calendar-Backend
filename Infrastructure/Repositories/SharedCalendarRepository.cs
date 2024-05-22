@@ -1,48 +1,50 @@
 ﻿using Infrastructure.DataModels;
 using Core.Domain;
-using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Infrastructure.Repositories;
 
 public class SharedCalendarRepository : ISharedCalendarRepository
 {
     private readonly DbContextEventCalendar _dbContextEventCalendar;
+    private readonly IMapper _mapper;
 
-    private readonly SharedCalendarMapper _sharedCalendarMapper;
-
-    public SharedCalendarRepository(DbContextEventCalendar dbContextEventCalendar, SharedCalendarMapper sharedCalendarMapper)
+    public SharedCalendarRepository(DbContextEventCalendar dbContextEventCalendar, IMapper mapper)
     {
         _dbContextEventCalendar = dbContextEventCalendar;
-        _sharedCalendarMapper = sharedCalendarMapper;
+        _mapper = mapper;
     }
 
-    public async Task<List<SharedCalendarModel>> GetAllSharedCalendars()
+    public async Task<List<SharedCalendar>> GetAllSharedCalendars()
     {
         return await _dbContextEventCalendar
                       .SharedCalendars
                       .Include(sharedCalendar => sharedCalendar.SenderUser)
                       .Include(sharedCalendar => sharedCalendar.ReceiverUser)
-                      .Select(sharedCalendar => _sharedCalendarMapper.MapSharedCalendarEntityToModel(sharedCalendar))
+                      .Select(sharedCalendar => _mapper.Map<SharedCalendar>(sharedCalendar))
                       .ToListAsync();
     }
 
-    public async Task<SharedCalendarModel?> GetSharedCalendarById(int sharedCalendarId)
+    public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
     {
         return await _dbContextEventCalendar
                       .SharedCalendars
                       .Where(sharedCalendar => sharedCalendar.Id == sharedCalendarId)
                       .Include(sharedCalendar => sharedCalendar.SenderUser)
                       .Include(sharedCalendar => sharedCalendar.ReceiverUser)
-                      .Select(sharedCalendar => _sharedCalendarMapper.MapSharedCalendarEntityToModel(sharedCalendar))
+                      .Select(sharedCalendar => _mapper.Map<SharedCalendar>(sharedCalendar))
                       .FirstOrDefaultAsync();
 
 
     }
 
-    public async Task<int> AddSharedCalendar(SharedCalendarModel sharedCalendarModel)
+    public async Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel)
     {
-        SharedCalendarDataModel sharedCalendar = _sharedCalendarMapper.MapSharedCalendarModelToEntity(sharedCalendarModel);
+        SharedCalendarDataModel sharedCalendar = _mapper.Map<SharedCalendarDataModel>(sharedCalendarModel);
+
+        _dbContextEventCalendar.Attach(sharedCalendar.SenderUser);
+        _dbContextEventCalendar.Attach(sharedCalendar.ReceiverUser);
 
         await _dbContextEventCalendar.SharedCalendars.AddAsync(sharedCalendar);
 
@@ -51,9 +53,9 @@ public class SharedCalendarRepository : ISharedCalendarRepository
         return sharedCalendar.Id;
     }
 
-    public async Task<int> UpdateSharedCalendar(int sharedCalendarId, SharedCalendarModel sharedCalendarModel)
+    public async Task<int> UpdateSharedCalendar(int sharedCalendarId, SharedCalendar sharedCalendarModel)
     {
-        SharedCalendarDataModel sharedCalendar = _sharedCalendarMapper.MapSharedCalendarModelToEntity(sharedCalendarModel);
+        SharedCalendarDataModel sharedCalendar = _mapper.Map<SharedCalendarDataModel>(sharedCalendarModel);
 
         _dbContextEventCalendar.SharedCalendars.Update(sharedCalendar);
 

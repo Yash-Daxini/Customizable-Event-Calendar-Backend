@@ -8,6 +8,7 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<UserDataModel, UserModel>();
+        CreateMap<UserDataModel, User>();
+        CreateMap<User, UserDataModel>();
     }
 }

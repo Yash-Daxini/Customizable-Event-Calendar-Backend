@@ -4,13 +4,15 @@ namespace Infrastructure.Repositories;
 
 public interface IEventRepository
 {
-    public Task<List<EventModel>> GetAllEvents();
+    public Task<List<Event>> GetAllEvents();
 
-    public Task<EventModel?> GetEventsById(int eventId);
+    public Task<Event?> GetEventsById(int eventId);
 
-    public Task<int> AddEvent(EventModel eventModel);
+    public Task<int> AddEvent(Event eventModel);
 
-    public Task<int> UpdateEvent(int eventId, EventModel eventModel);
+    public Task<int> UpdateEvent(int eventId, Event eventModel);
 
     public Task DeleteEvent(int eventId);
+
+    public Task<List<Event>> GetEventsWithinGivenDate(DateOnly startDate, DateOnly endDate);
 }
