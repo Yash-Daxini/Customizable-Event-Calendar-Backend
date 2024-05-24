@@ -2,6 +2,7 @@
 using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Infrastructure.Repositories
 {
@@ -19,9 +20,8 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Participant>> GetAllParticipants()
         {
-            return await _dbContextEventCalendar
-                        .EventCollaborators
-                        .Select(eventCollaborator => _mapper.Map<Participant>(eventCollaborator))
+            return await _dbContextEventCalendar.EventCollaborators
+                        .ProjectTo<Participant>(_mapper.ConfigurationProvider)
                         .ToListAsync();
         }
 

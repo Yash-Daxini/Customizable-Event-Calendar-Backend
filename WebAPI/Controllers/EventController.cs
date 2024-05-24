@@ -1,11 +1,13 @@
 ﻿using Core.Domain;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     [Route("api/events")]
     [ApiController]
+    //[Authorize]
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
