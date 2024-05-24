@@ -77,13 +77,47 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Event>> GetEventsWithinGivenDate(DateOnly startDate, DateOnly endDate)
         {
-            return [.._dbContextEventCalendar
+            return await _dbContextEventCalendar
                    .Events
+                   .Include(eventObj=>eventObj.EventCollaborators)
                    .Where(eventObj => eventObj
                                       .EventCollaborators
-                                      .Where(eventCollaborator=>eventCollaborator.EventDate >= startDate && eventCollaborator.EventDate <= endDate)
-                                      .Select(eventCollaborator=>eventCollaborator.EventId).Contains(eventObj.Id))
-                   .Select(eventObj => _mapper.Map<Event>(eventObj))];
+                                      .Where(eventCollaborator => eventCollaborator.EventDate >= startDate && eventCollaborator.EventDate <= endDate)
+                                      .Select(eventCollaborator => eventCollaborator.EventId).Contains(eventObj.Id))
+                   .Select(eventObj => _mapper.Map<Event>(eventObj))
+                   .ToListAsync();
+        }
+
+        public async Task<List<Event>> GetProposedEvents()
+        {
+            return await _dbContextEventCalendar
+                         .Events
+                         .Select(eventObj => _mapper.Map<Event>(eventObj))
+                         .ToListAsync();
+        }
+
+        public async Task<List<Event>> GetEventsByUserId(int userId)
+        {
+            return await _dbContextEventCalendar
+                         .Events
+                         .Where(eventObj => eventObj.UserId == userId)
+                         .Select(eventObj => _mapper.Map<Event>(eventObj))
+                         .ToListAsync();
+        }
+
+        public async Task<List<Event>> GetSharedEventsFromSharedCalendarId(SharedCalendar? sharedCalendar)
+        {
+            if (sharedCalendar is null) return [];
+
+            return await GetSharedEvents(sharedCalendar);
+        }
+
+        public async Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar)
+        {
+            List<Event> events = await GetEventsWithinGivenDate(sharedCalendar.FromDate, sharedCalendar.ToDate);
+            return events
+                   .Where(eventModel => eventModel.GetEventOrganizer().Id == sharedCalendar.SenderUser.Id)
+                   .ToList();
         }
     }
 }

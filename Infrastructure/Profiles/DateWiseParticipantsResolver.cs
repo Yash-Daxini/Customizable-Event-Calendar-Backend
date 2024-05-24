@@ -2,6 +2,8 @@
 using Core.Domain;
 using Infrastructure.DataModels;
 
+namespace Infrastructure.Profiles;
+
 public class DateWiseParticipantsResolver : IValueResolver<EventDataModel, Event, List<ParticipantsByDate>>
 {
     private readonly IMapper _mapper;

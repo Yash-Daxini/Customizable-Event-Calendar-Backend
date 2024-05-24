@@ -57,11 +57,41 @@ namespace WebAPI.Controllers
         {
             return Ok(await _eventService.GetEventsWithinGivenDates(startDate, endDate));
         }
-        
+
         [HttpGet("/proposedEvents")]
         public async Task<ActionResult> GetProposedEvents()
         {
             return Ok(await _eventService.GetProposedEvents());
+        }
+
+        [HttpGet("/eventsByUser")]
+        public async Task<ActionResult> GetEventsByUser([FromQuery] int userId)
+        {
+            return Ok(await _eventService.GetEventsByUserId(userId));
+        }
+
+        [HttpGet("/dailyEvents")]
+        public async Task<ActionResult> GetEventsForDailyView()
+        {
+            return Ok(await _eventService.GetEventsForDailyView());
+        }
+
+        [HttpGet("/weeklyEvents")]
+        public async Task<ActionResult> GetEventsForWeeklyView()
+        {
+            return Ok(await _eventService.GetEventsForWeeklyView());
+        }
+
+        [HttpGet("/monthlyEvents")]
+        public async Task<ActionResult> GetEventsForMonthlyView()
+        {
+            return Ok(await _eventService.GetEventsForMonthlyView());
+        }
+
+        [HttpGet("/sharedEvents/{sharedCaledarId}")]
+        public async Task<ActionResult> GetSharedEventsFromSharedCalendarId([FromRoute] int sharedCaledarId)
+        {
+            return Ok(await _eventService.GetSharedEvents(sharedCaledarId));
         }
 
     }

@@ -25,6 +25,7 @@ builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<IParticipantService, ParticipantService>();
 builder.Services.AddTransient<ISharedCalendarService, SharedCalendarService>();
 builder.Services.AddTransient<IRecurrenceService, RecurrenceService>();
+builder.Services.AddTransient<IOverlappingEventService, OverlapEventService>();
 
 builder.Services.AddDbContext<DbContextEventCalendar>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("connectionString")));

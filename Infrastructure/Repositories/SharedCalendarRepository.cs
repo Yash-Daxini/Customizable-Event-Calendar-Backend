@@ -2,6 +2,7 @@
 using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Core.Services;
 
 namespace Infrastructure.Repositories;
 

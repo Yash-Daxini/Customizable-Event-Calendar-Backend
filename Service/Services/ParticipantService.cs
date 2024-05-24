@@ -13,9 +13,9 @@ namespace Core.Services
             _eventCollaboratorRepository = eventCollaboratorRepository;
         }
 
-        public async Task<int> AddParticipant(Participant participantModel, int eventId)
+        public Task<int> AddParticipant(Participant participantModel, int eventId)
         {
-            return await _eventCollaboratorRepository.AddParticipant(participantModel, eventId);
+            return _eventCollaboratorRepository.AddParticipant(participantModel, eventId);
         }
 
         public async Task AddParticipants(List<Participant> participants, int eventId)
@@ -23,19 +23,19 @@ namespace Core.Services
             await _eventCollaboratorRepository.AddParticipants(participants, eventId);
         }
 
-        public async Task DeleteParticipant(int participantId)
+        public Task DeleteParticipant(int participantId)
         {
-            await _eventCollaboratorRepository.DeleteParticipant(participantId);
+            return _eventCollaboratorRepository.DeleteParticipant(participantId);
         }
 
-        public async Task<int> UpdateParticipant(int participantId, Participant participantModel, int eventId)
+        public Task<int> UpdateParticipant(int participantId, Participant participantModel, int eventId)
         {
-            return await _eventCollaboratorRepository.UpdateParticipant(participantId, participantModel, eventId);
+            return _eventCollaboratorRepository.UpdateParticipant(participantId, participantModel, eventId);
         }
 
-        public async Task DeleteParticipantsByEventId(int eventId)
+        public Task DeleteParticipantsByEventId(int eventId)
         {
-            await _eventCollaboratorRepository.DeleteParticipantsByEventId(eventId);
+            return _eventCollaboratorRepository.DeleteParticipantsByEventId(eventId);
         }
     }
 }

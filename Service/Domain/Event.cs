@@ -16,7 +16,7 @@ public class Event
 
     public RecurrencePattern RecurrencePattern { get; set; }
 
-    public List<ParticipantsByDate> DateWiseParticipants { get; set; } = [];
+    public List<ParticipantsByDate> DateWiseParticipants { get; set; }
 
     public User GetEventOrganizer()
     {

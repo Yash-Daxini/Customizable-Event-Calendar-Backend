@@ -15,4 +15,10 @@ public interface IEventRepository
     public Task DeleteEvent(int eventId);
 
     public Task<List<Event>> GetEventsWithinGivenDate(DateOnly startDate, DateOnly endDate);
+
+    public Task<List<Event>> GetProposedEvents();
+
+    public Task<List<Event>> GetEventsByUserId(int userId);
+
+    public Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar);
 }

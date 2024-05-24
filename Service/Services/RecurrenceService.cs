@@ -12,17 +12,17 @@ public class RecurrenceService : IRecurrenceService
         _participantService = participantService;
     }
 
-    public void ScheduleEvents(Event eventModel, List<Participant> participants)
+    public async Task ScheduleEvents(Event eventModel, List<Participant> participants)
     {
         List<DateOnly> occurrences = GetOccurrencesOfEvent(eventModel);
 
         foreach (var occurrence in occurrences)
         {
-            ScheduleEventsForEachParticipant(eventModel, occurrence, participants);
+            await ScheduleEventsForEachParticipant(eventModel, occurrence, participants);
         }
     }
 
-    private List<DateOnly> GetOccurrencesOfEvent(Event eventModel)
+    public List<DateOnly> GetOccurrencesOfEvent(Event eventModel)
     {
         return eventModel.RecurrencePattern.IsNonRecurrenceEvent()
                ? [eventModel.RecurrencePattern.StartDate]
@@ -41,17 +41,16 @@ public class RecurrenceService : IRecurrenceService
             return GetOccurrencesOfYearlyEvents(eventModel);
     }
 
-    private void ScheduleEventsForEachParticipant(Event eventModel,
+    private async Task ScheduleEventsForEachParticipant(Event eventModel,
                                                   DateOnly occurrence,
                                                   List<Participant> participants)
     {
         foreach (Participant participant in participants)
         {
             participant.EventDate = occurrence;
-            //_participantService.AddParticipant(participant, eventModel.Id);
         }
 
-        _participantService.AddParticipants(participants, eventModel.Id);
+        await _participantService.AddParticipants(participants, eventModel.Id);
 
     }
 

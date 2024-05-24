@@ -50,7 +50,7 @@ namespace Infrastructure.Repositories
             return eventCollaborator.Id;
         }
 
-        public async Task AddParticipants(List<Participant> participants, int eventId) //TODO :- Batch add issue
+        public async Task AddParticipants(List<Participant> participants, int eventId)
         {
             List<EventCollaboratorDataModel> eventCollaboratorsToAdd = [..participants
                                                                        .Select(participant => _mapper.Map<EventCollaboratorDataModel>(participant, opt =>
