@@ -69,5 +69,16 @@ namespace Infrastructure.Repositories
 
             await _dbContextEvent.SaveChangesAsync();
         }
+
+        public async Task<User?> AuthenticateUser(User user)
+        {
+            UserDataModel? userDataModel = await _dbContextEvent
+                                          .Users
+                                          .FirstOrDefaultAsync(userObj => userObj.Name == user.Name
+                                                                       && userObj.Password == user.Password);
+
+            if (userDataModel is null) return null;
+            return _mapper.Map<User>(userDataModel);
+        }
     }
 }

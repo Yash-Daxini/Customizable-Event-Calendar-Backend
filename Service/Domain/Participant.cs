@@ -15,4 +15,18 @@ public class Participant
     public DateOnly EventDate { get; set; }
 
     public User User { get; set; }
+
+    public bool IsParticipantWithPendingStatus() => this.ConfirmationStatus == ConfirmationStatus.Pending;
+
+    public bool IsParticipantWithProposedStatus() => this.ConfirmationStatus == ConfirmationStatus.Proposed;
+
+    public bool IsParticipantWithAcceptStatus() => this.ConfirmationStatus == ConfirmationStatus.Accept;
+
+    public bool IsParticipantWithMaybeStatus() => this.ConfirmationStatus == ConfirmationStatus.Maybe;
+
+    public bool IsOrganizerOfEvent() => this.ParticipantRole == ParticipantRole.Organizer;
+
+    public bool IsParticipantOfEvent() => this.ParticipantRole == ParticipantRole.Participant;
+
+    public bool IsNullProposedDuration() => this.ProposedDuration == null;
 }

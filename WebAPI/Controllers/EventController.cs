@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/events")]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -52,46 +52,46 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("/eventsByDate")]
+        [HttpGet("eventsBetweenDates")]
         public async Task<ActionResult> GetEventsWithInGivenDates([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
         {
             return Ok(await _eventService.GetEventsWithinGivenDates(startDate, endDate));
         }
 
-        [HttpGet("/proposedEvents")]
+        [HttpGet("proposed")]
         public async Task<ActionResult> GetProposedEvents()
         {
             return Ok(await _eventService.GetProposedEvents());
         }
 
-        [HttpGet("/eventsByUser")]
-        public async Task<ActionResult> GetEventsByUser([FromQuery] int userId)
+        [HttpGet("~/api/users/{userId}/events")]
+        public async Task<ActionResult> GetEventsByUser([FromRoute] int userId)
         {
             return Ok(await _eventService.GetEventsByUserId(userId));
         }
 
-        [HttpGet("/dailyEvents")]
+        [HttpGet("daily")]
         public async Task<ActionResult> GetEventsForDailyView()
         {
             return Ok(await _eventService.GetEventsForDailyView());
         }
 
-        [HttpGet("/weeklyEvents")]
+        [HttpGet("weekly")]
         public async Task<ActionResult> GetEventsForWeeklyView()
         {
             return Ok(await _eventService.GetEventsForWeeklyView());
         }
 
-        [HttpGet("/monthlyEvents")]
+        [HttpGet("monthly")]
         public async Task<ActionResult> GetEventsForMonthlyView()
         {
             return Ok(await _eventService.GetEventsForMonthlyView());
         }
 
-        [HttpGet("/sharedEvents/{sharedCaledarId}")]
-        public async Task<ActionResult> GetSharedEventsFromSharedCalendarId([FromRoute] int sharedCaledarId)
+        [HttpGet("~/api/sharedCalendars/{sharedCalendarId}/events")]
+        public async Task<ActionResult> GetSharedEventsFromSharedCalendarId([FromRoute] int sharedCalendarId)
         {
-            return Ok(await _eventService.GetSharedEvents(sharedCaledarId));
+            return Ok(await _eventService.GetSharedEvents(sharedCalendarId));
         }
 
     }

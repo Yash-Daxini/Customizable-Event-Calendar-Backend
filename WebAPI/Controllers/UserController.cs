@@ -4,15 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUserAuthenticationService _userAuthenticationService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService,IUserAuthenticationService userAuthenticationService)
         {
             _userService = userService;
+            _userAuthenticationService = userAuthenticationService;
         }
 
         [HttpGet]
@@ -52,5 +54,13 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [HttpPost("~/api/auth/login")]
+        public async Task<ActionResult> AuthenticateUser([FromBody] User user)
+        {
+            bool isAuthenticate = await _userAuthenticationService.Authenticate(user);
+
+            if (!isAuthenticate) return BadRequest(new { message = "Invalid username or password" });
+            return Ok(new { message = "Login successfully" });
+        }
     }
 }

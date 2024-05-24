@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(typeof(Program), typeof(EventProfile), typeof(ParticipantProfile));
+builder.Services.AddAutoMapper(typeof(Program), typeof(EventProfile), typeof(ParticipantProfile),typeof(SharedCalendarProfile),typeof(UserProfile));
 
 //Repositories
 builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -26,6 +26,9 @@ builder.Services.AddTransient<IParticipantService, ParticipantService>();
 builder.Services.AddTransient<ISharedCalendarService, SharedCalendarService>();
 builder.Services.AddTransient<IRecurrenceService, RecurrenceService>();
 builder.Services.AddTransient<IOverlappingEventService, OverlapEventService>();
+builder.Services.AddTransient<IMultipleInviteesEventService, MultipleInviteesEventService>();
+builder.Services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
+builder.Services.AddTransient<ISharedEventCollaborationService, SharedEventCollaborationService>();
 
 builder.Services.AddDbContext<DbContextEventCalendar>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("connectionString")));

@@ -37,4 +37,11 @@ public class Event
                                             )
                                        );
     }
+
+    public List<Participant> GetInviteesOfEvent()
+    {
+        return [.. this.DateWiseParticipants[0].Participants
+                                      .Where(participant => participant.IsOrganizerOfEvent()
+                                                            || participant.IsParticipantOfEvent())];
+    }
 }

@@ -92,6 +92,7 @@ namespace Infrastructure.Repositories
         {
             return await _dbContextEventCalendar
                          .Events
+                         .Include(eventObj => eventObj.EventCollaborators)
                          .Select(eventObj => _mapper.Map<Event>(eventObj))
                          .ToListAsync();
         }
@@ -101,6 +102,7 @@ namespace Infrastructure.Repositories
             return await _dbContextEventCalendar
                          .Events
                          .Where(eventObj => eventObj.UserId == userId)
+                         .Include(eventObj => eventObj.EventCollaborators)
                          .Select(eventObj => _mapper.Map<Event>(eventObj))
                          .ToListAsync();
         }
@@ -115,7 +117,8 @@ namespace Infrastructure.Repositories
         public async Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar)
         {
             List<Event> events = await GetEventsWithinGivenDate(sharedCalendar.FromDate, sharedCalendar.ToDate);
-            return events
+
+            return  events
                    .Where(eventModel => eventModel.GetEventOrganizer().Id == sharedCalendar.SenderUser.Id)
                    .ToList();
         }
