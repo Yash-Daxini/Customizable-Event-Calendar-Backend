@@ -35,6 +35,6 @@ namespace Infrastructure.DataModels
 
         public int UserId { get; set; }
 
-        public virtual List<EventCollaboratorDataModel> EventCollaborators { get; set; } = new List<EventCollaboratorDataModel>();
+        public virtual List<EventCollaboratorDataModel> EventCollaborators { get; set; } = [];
     }
 }

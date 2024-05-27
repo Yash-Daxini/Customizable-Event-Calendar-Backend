@@ -35,22 +35,18 @@ namespace Core.Services
         {
             List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
 
-            OverlapEventData? overlapEventData = _overlappingEventService
-                                                 .GetOverlappedEventInformation(eventModel,
-                                                                                GetEventsByUserId(eventModel.Id).Result,
-                                                                                occurrences,
-                                                                                true,
-                                                                                eventModel.GetEventOrganizer().Id);
-
-            if (overlapEventData is not null) return 0;
-
             MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
 
-            int eventId = await _eventRepository.AddEvent(eventModel);
+            OverlapEventData? overlapEventData = _overlappingEventService
+                                                 .GetOverlappedEventInformation(eventModel,
+                                                                                GetEventsByUserId(eventModel.Id).Result);
 
-            eventModel.Id = eventId;
+            if (overlapEventData is not null)
+                throw new Exception($"{overlapEventData.GetOverlapMessage()}");
 
-            return eventId;
+            eventModel.Id = await _eventRepository.AddEvent(eventModel);
+
+            return eventModel.Id;
         }
 
         private void MakeDateWiseParticipantListFromOccurrences(Event eventModel, List<DateOnly> occurrences)
@@ -75,18 +71,16 @@ namespace Core.Services
         {
             List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
 
+            MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
+
             OverlapEventData? overlapEventData = _overlappingEventService
                                                  .GetOverlappedEventInformation(eventModel,
-                                                                                GetEventsByUserId(eventModel.Id).Result,
-                                                                                occurrences,
-                                                                                false,
-                                                                                eventModel.GetEventOrganizer().Id);
+                                                                                GetEventsByUserId(eventModel.Id).Result);
 
-            if (overlapEventData is not null) return 0;
+            if (overlapEventData is not null)
+                throw new Exception($"{overlapEventData.GetOverlapMessage()}");
 
             await _participantService.DeleteEventCollaboratorsByEventId(eventModel.Id);
-
-            MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
 
             int updatedEventId = await _eventRepository.UpdateEvent(eventModel);
 
@@ -95,8 +89,6 @@ namespace Core.Services
 
         public async Task DeleteEvent(int eventId)
         {
-            await _participantService.DeleteEventCollaboratorsByEventId(eventId);
-
             await _eventRepository.DeleteEvent(eventId);
         }
 

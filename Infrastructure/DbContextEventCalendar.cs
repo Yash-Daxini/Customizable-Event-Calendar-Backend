@@ -31,6 +31,7 @@ namespace Infrastructure
             .HasOne(ec => ec.Event)
             .WithMany(e => e.EventCollaborators)
             .HasForeignKey(ec => ec.EventId)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_EventCollaborator_Event");
 
             // Configure column names if needed

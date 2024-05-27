@@ -137,3 +137,7 @@ _NCrunch*
 **/obj
 **/.vs
 
+.vs
+bin
+obj
+

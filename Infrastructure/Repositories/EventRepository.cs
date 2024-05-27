@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories
             return _mapper.Map<Event>(
                            await _dbContext
                           .Events
-                          .Where(book => book.Id == eventId)
+                          .Where(eventObj => eventObj.Id == eventId)
                           .Include(eventObj => eventObj.EventCollaborators)
                             .ThenInclude(eventCollaborator => eventCollaborator.User)
                           .FirstOrDefaultAsync());
@@ -70,10 +70,10 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteEvent(int eventId)
         {
-            EventDataModel eventObj = new()
-            {
-                Id = eventId,
-            };
+            EventDataModel eventObj = _dbContext.Events
+                                     .Where(eventObj => eventObj.Id == eventId)
+                                     .Include(eventObj => eventObj.EventCollaborators)
+                                     .First();
 
             _dbContext.Remove(eventObj);
 

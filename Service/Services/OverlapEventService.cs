@@ -5,27 +5,19 @@ namespace Core.Services;
 
 public class OverlapEventService : IOverlappingEventService
 {
-    private readonly IRecurrenceService _recurrenceService;
-
-    public OverlapEventService(IRecurrenceService recurrenceService)
+    public OverlapEventData? GetOverlappedEventInformation(Event eventForVerify, List<Event> events)
     {
-        _recurrenceService = recurrenceService;
-    }
-
-    public OverlapEventData? GetOverlappedEventInformation(Event eventForVerify, //TODO: Reduce parameters
-                                                           List<Event> events,
-                                                           List<DateOnly> occurrencesOfEventForVerify,
-                                                           bool isInsert,
-                                                           int userId)
-    {
-
         foreach (var existingEvent in events)
         {
-            if (!isInsert && existingEvent.Id == eventForVerify.Id) continue;
+            if (existingEvent.Id == eventForVerify.Id) continue;
 
-            List<DateOnly> occurrencesOfEventToCheckOverlap = _recurrenceService.GetOccurrencesOfEvent(existingEvent);
+            List<DateOnly> occurrencesOfExistingEvent = [..existingEvent.DateWiseParticipants
+                                                          .Select(participantByDate => participantByDate.EventDate)];
 
-            DateOnly matchedDate = occurrencesOfEventToCheckOverlap.Intersect(occurrencesOfEventForVerify).FirstOrDefault();
+            List<DateOnly> occurrencesOfEventForVerify = [..eventForVerify.DateWiseParticipants
+                                                            .Select(participantByDate => participantByDate.EventDate)];
+
+            DateOnly matchedDate = occurrencesOfExistingEvent.Intersect(occurrencesOfEventForVerify).FirstOrDefault();
 
             if (IsEventOverlapps(eventForVerify, existingEvent, matchedDate))
                 return new OverlapEventData(eventForVerify, existingEvent, matchedDate);
