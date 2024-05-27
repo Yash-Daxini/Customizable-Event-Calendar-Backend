@@ -1,6 +1,7 @@
 ﻿using Core.Domain;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
+using Core.Services.Extensions;
 
 namespace Core.Services
 {
@@ -9,13 +10,13 @@ namespace Core.Services
         private readonly IEventRepository _eventRepository;
 
         private readonly IRecurrenceService _recurrenceService;
-        private readonly IParticipantService _participantService;
+        private readonly IEventCollaboratorService _participantService;
         private readonly IOverlappingEventService _overlappingEventService;
         private readonly ISharedCalendarService _sharedCalendarService;
 
         public EventService(IEventRepository eventRepository,
                             IRecurrenceService recurrenceService,
-                            IParticipantService participantService,
+                            IEventCollaboratorService participantService,
                             IOverlappingEventService overlappingEventService,
                             ISharedCalendarService sharedCalendarService)
         {
@@ -54,27 +55,25 @@ namespace Core.Services
 
         private void MakeDateWiseParticipantListFromOccurrences(Event eventModel, List<DateOnly> occurrences)
         {
-            List<Participant> participants = eventModel.DateWiseParticipants.First().Participants;
+            List<EventCollaborator> participants = eventModel.DateWiseParticipants.First().EventCollaborators;
 
-            List<ParticipantsByDate> participantsByDates = [];
+            List<EventCollaboratorsByDate> participantsByDates = [];
 
             foreach (DateOnly occurrence in occurrences)
             {
-                participantsByDates.Add(new ParticipantsByDate()
+                participantsByDates.Add(new EventCollaboratorsByDate()
                 {
                     EventDate = occurrence,
-                    Participants = participants
+                    EventCollaborators = participants
                 });
             }
 
             eventModel.DateWiseParticipants = participantsByDates;
         }
 
-        public async Task<int> UpdateEvent(int eventId, Event eventModel)
+        public async Task<int> UpdateEvent(Event eventModel)
         {
             List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
-
-            eventModel.Id = eventId;
 
             OverlapEventData? overlapEventData = _overlappingEventService
                                                  .GetOverlappedEventInformation(eventModel,
@@ -85,18 +84,18 @@ namespace Core.Services
 
             if (overlapEventData is not null) return 0;
 
-            await _participantService.DeleteParticipantsByEventId(eventId);
+            await _participantService.DeleteEventCollaboratorsByEventId(eventModel.Id);
 
             MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
 
-            int updatedEventId = await _eventRepository.UpdateEvent(eventId, eventModel);
+            int updatedEventId = await _eventRepository.UpdateEvent(eventModel);
 
             return updatedEventId;
         }
 
         public async Task DeleteEvent(int eventId)
         {
-            await _participantService.DeleteParticipantsByEventId(eventId);
+            await _participantService.DeleteEventCollaboratorsByEventId(eventId);
 
             await _eventRepository.DeleteEvent(eventId);
         }
@@ -124,22 +123,22 @@ namespace Core.Services
 
         public async Task<List<Event>> GetEventsForDailyView()
         {
-            DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+            DateOnly today = DateTime.Today.ConvertToDateOnly();
             return await GetEventsWithinGivenDates(today, today);
         }
 
         public async Task<List<Event>> GetEventsForWeeklyView()
         {
-            DateOnly startDateOfWeek = DateTimeService.GetStartDateOfWeek(DateTime.Today);
-            DateOnly endDateOfWeek = DateTimeService.GetEndDateOfWeek(DateTime.Today);
+            DateOnly startDateOfWeek = DateTime.Today.GetStartDateOfWeek();
+            DateOnly endDateOfWeek = DateTime.Today.GetEndDateOfWeek();
 
             return await GetEventsWithinGivenDates(startDateOfWeek, endDateOfWeek);
         }
 
         public async Task<List<Event>> GetEventsForMonthlyView()
         {
-            DateOnly startDateOfMonth = DateTimeService.GetStartDateOfMonth(DateTime.Today);
-            DateOnly endDateOfMonth = DateTimeService.GetEndDateOfMonth(DateTime.Today);
+            DateOnly startDateOfMonth = DateTime.Today.GetStartDateOfMonth();
+            DateOnly endDateOfMonth = DateTime.Today.GetEndDateOfMonth();
 
             return await GetEventsWithinGivenDates(startDateOfMonth, endDateOfMonth);
         }

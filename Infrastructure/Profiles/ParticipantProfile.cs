@@ -10,13 +10,13 @@ public class ParticipantProfile : Profile
 
     public ParticipantProfile()
     {
-        CreateMap<EventCollaboratorDataModel, Participant>()
+        CreateMap<EventCollaboratorDataModel, EventCollaborator>()
             .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => MapParticipantRoleToEnum(src.ParticipantRole)))
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => MapConfirmationStatusToEnum(src.ConfirmationStatus)))
             .ForMember(dest => dest.ProposedDuration, opt => opt.MapFrom(src => MapDuration(src.ProposedStartHour, src.ProposedEndHour)))
             .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate));
 
-        CreateMap<Participant, EventCollaboratorDataModel>()
+        CreateMap<EventCollaborator, EventCollaboratorDataModel>()
             .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => MapEnumToParticipantRole(src.ParticipantRole)))
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => MapEnumToConfirmationStatus(src.ConfirmationStatus)))
             .ForMember(dest => dest.ProposedStartHour, opt => opt.MapFrom(src => MapProposedStartHour(src.ProposedDuration)))

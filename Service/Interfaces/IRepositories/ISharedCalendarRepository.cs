@@ -10,7 +10,7 @@ public interface ISharedCalendarRepository
 
     public Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel);
 
-    public Task<int> UpdateSharedCalendar(int sharedCalendarId, SharedCalendar sharedCalendarModel);
+    public Task<int> UpdateSharedCalendar(SharedCalendar sharedCalendarModel);
 
     public Task DeleteSharedCalendar(int sharedCalendarId);
 }

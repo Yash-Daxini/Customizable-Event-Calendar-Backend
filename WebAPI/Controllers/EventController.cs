@@ -60,8 +60,8 @@ namespace WebAPI.Controllers
             try
             {
                 Event eventObj = _mapper.Map<Event>(eventRequestDto);
-
-                int addedEventId = await _eventService.UpdateEvent(eventId, eventObj);
+                eventObj.Id = eventId;
+                int addedEventId = await _eventService.UpdateEvent(eventObj);
                 return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, addedEventId);
             }
             catch (Exception ex)

@@ -19,68 +19,51 @@ namespace Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<List<Participant>> GetAllParticipants()
+        public async Task<List<EventCollaborator>> GetAllEventCollaborators()
         {
             return await _dbContext.EventCollaborators
-                        .ProjectTo<Participant>(_mapper.ConfigurationProvider)
+                        .ProjectTo<EventCollaborator>(_mapper.ConfigurationProvider)
                         .ToListAsync();
         }
 
-        public async Task<Participant?> GetParticipantById(int participantId)
+        public async Task<EventCollaborator?> GetEventCollaboratorById(int eventCollaboratorId)
         {
             return await _dbContext
                         .EventCollaborators
-                        .Where(participant => participant.Id == participantId)
-                        .ProjectTo<Participant>(_mapper.ConfigurationProvider)
+                        .Where(collabprator => collabprator.Id == eventCollaboratorId)
+                        .ProjectTo<EventCollaborator>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
         }
 
-        public async Task<int> AddParticipant(Participant participantModel)
+        public async Task<int> AddEventCollaborator(EventCollaborator eventCollaborator)
         {
-            EventCollaboratorDataModel eventCollaborator = _mapper.Map<EventCollaboratorDataModel>(participantModel);
+            EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
 
             _dbContext.Attach(eventCollaborator.User);
 
-            _dbContext.EventCollaborators.Add(eventCollaborator);
+            _dbContext.EventCollaborators.Add(eventCollaboratorDataModel);
 
             await _dbContext.SaveChangesAsync();
 
             return eventCollaborator.Id;
         }
 
-        public async Task AddParticipants(List<Participant> participants)
+        public async Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator)
         {
-            List<EventCollaboratorDataModel> eventCollaboratorsToAdd = _mapper.Map<List<EventCollaboratorDataModel>>(participants);
+            EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
 
-            foreach (var eventCollaborator in eventCollaboratorsToAdd)
-            {
-                _dbContext.Attach(eventCollaborator.User);
-            }
-
-            _dbContext.EventCollaborators.AddRange(eventCollaboratorsToAdd);
+            _dbContext.EventCollaborators.Update(eventCollaboratorDataModel);
 
             await _dbContext.SaveChangesAsync();
 
+            return eventCollaboratorDataModel.Id;
         }
 
-        public async Task<int> UpdateParticipant(int participantId, Participant participantModel)
-        {
-            EventCollaboratorDataModel eventCollaborator = _mapper.Map<EventCollaboratorDataModel>(participantModel);
-
-            eventCollaborator.Id = participantId;
-
-            _dbContext.EventCollaborators.Update(eventCollaborator);
-
-            await _dbContext.SaveChangesAsync();
-
-            return eventCollaborator.Id;
-        }
-
-        public async Task DeleteParticipant(int participantId)
+        public async Task DeleteEventCollaborator(int eventCollaboratorId)
         {
             EventCollaboratorDataModel eventCollaborator = new()
             {
-                Id = participantId,
+                Id = eventCollaboratorId,
             };
 
             _dbContext.Remove(eventCollaborator);
@@ -88,7 +71,7 @@ namespace Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteParticipantsByEventId(int eventId)
+        public async Task DeleteEventCollaboratorsByEventId(int eventId)
         {
             List<EventCollaboratorDataModel> eventCollaboratorsToDelete = [.._dbContext
                                                                           .EventCollaborators

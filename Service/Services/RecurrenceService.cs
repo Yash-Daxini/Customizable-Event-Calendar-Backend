@@ -5,9 +5,9 @@ namespace Core.Services;
 
 public class RecurrenceService : IRecurrenceService
 {
-    private readonly IParticipantService _participantService;
+    private readonly IEventCollaboratorService _participantService;
 
-    public RecurrenceService(IParticipantService participantService)
+    public RecurrenceService(IEventCollaboratorService participantService)
     {
         _participantService = participantService;
     }

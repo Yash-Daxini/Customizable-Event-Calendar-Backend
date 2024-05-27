@@ -2,7 +2,7 @@
 
 namespace Core.Domain;
 
-public class Participant
+public class EventCollaborator
 {
     public int Id { get; set; }
 
@@ -18,13 +18,13 @@ public class Participant
 
     public DateOnly EventDate { get; set; }
 
-    public bool IsParticipantWithPendingStatus() => this.ConfirmationStatus == ConfirmationStatus.Pending;
+    public bool IsEventCollaboratorWithPendingStatus() => this.ConfirmationStatus == ConfirmationStatus.Pending;
 
-    public bool IsParticipantWithProposedStatus() => this.ConfirmationStatus == ConfirmationStatus.Proposed;
+    public bool IsEventCollaboratorWithProposedStatus() => this.ConfirmationStatus == ConfirmationStatus.Proposed;
 
-    public bool IsParticipantWithAcceptStatus() => this.ConfirmationStatus == ConfirmationStatus.Accept;
+    public bool IsEventCollaboratorWithAcceptStatus() => this.ConfirmationStatus == ConfirmationStatus.Accept;
 
-    public bool IsParticipantWithMaybeStatus() => this.ConfirmationStatus == ConfirmationStatus.Maybe;
+    public bool IsEventCollaboratorWithMaybeStatus() => this.ConfirmationStatus == ConfirmationStatus.Maybe;
 
     public bool IsOrganizerOfEvent() => this.ParticipantRole == ParticipantRole.Organizer;
 

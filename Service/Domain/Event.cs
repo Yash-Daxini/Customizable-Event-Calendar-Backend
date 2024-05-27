@@ -16,32 +16,32 @@ public class Event
 
     public RecurrencePattern RecurrencePattern { get; set; }
 
-    public List<ParticipantsByDate> DateWiseParticipants { get; set; }
+    public List<EventCollaboratorsByDate> DateWiseParticipants { get; set; }
 
     public User GetEventOrganizer()
     {
         return this.DateWiseParticipants
-                   .SelectMany(participantsByDate => participantsByDate.Participants)
-                   .First(participant => participant.ParticipantRole == ParticipantRole.Organizer).User;
+                   .SelectMany(participantsByDate => participantsByDate.EventCollaborators)
+                   .First(eventCollaborator => eventCollaborator.ParticipantRole == ParticipantRole.Organizer).User;
     }
 
     public bool IsProposedEventToGiveResponse()
     {
         return this.DateWiseParticipants
-                   .SelectMany(participantsByDate => participantsByDate.Participants)
+                   .SelectMany(participantsByDate => participantsByDate.EventCollaborators)
                    .ToList()
-                   .Exists(participant => participant.ParticipantRole == ParticipantRole.Participant
+                   .Exists(eventCollaborator => eventCollaborator.ParticipantRole == ParticipantRole.Participant
                                         && (
-                                                participant.ConfirmationStatus == ConfirmationStatus.Pending
-                                                || participant.ConfirmationStatus == ConfirmationStatus.Proposed
+                                                eventCollaborator.ConfirmationStatus == ConfirmationStatus.Pending
+                                                || eventCollaborator.ConfirmationStatus == ConfirmationStatus.Proposed
                                             )
                                        );
     }
 
-    public List<Participant> GetInviteesOfEvent()
+    public List<EventCollaborator> GetInviteesOfEvent()
     {
-        return [.. this.DateWiseParticipants[0].Participants
-                                      .Where(participant => participant.IsOrganizerOfEvent()
-                                                            || participant.IsParticipantOfEvent())];
+        return [.. this.DateWiseParticipants[0].EventCollaborators
+                                      .Where(eventCollaborator => eventCollaborator.IsOrganizerOfEvent()
+                                                            || eventCollaborator.IsParticipantOfEvent())];
     }
 }

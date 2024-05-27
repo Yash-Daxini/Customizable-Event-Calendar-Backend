@@ -5,16 +5,16 @@ namespace Core.Services;
 
 public class SharedEventCollaborationService : ISharedEventCollaborationService
 {
-    private readonly IParticipantService _participantService;
+    private readonly IEventCollaboratorService _participantService;
     private readonly IEventService _eventService;
 
-    public SharedEventCollaborationService(IParticipantService participantService, IEventService eventService)
+    public SharedEventCollaborationService(IEventCollaboratorService participantService, IEventService eventService)
     {
         _participantService = participantService;
         _eventService = eventService;
     }
 
-    public async Task AddCollaborator(Participant participant)
+    public async Task AddCollaborator(EventCollaborator participant)
     {
         bool isAlreadyCollaborated = await IsEventAlreadyCollaborated(participant);
 
@@ -28,10 +28,10 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
                                 $"{participant.EventDate} from " +
                                 $"{overlapEvent.Duration.GetDurationInFormat()}");
 
-        await _participantService.AddParticipant(participant);
+        await _participantService.AddEventCollaborator(participant);
     }
 
-    private async Task<Event?> GetCollaborationOverlap(Participant participant) //TODO : What if multiple events overlap
+    private async Task<Event?> GetCollaborationOverlap(EventCollaborator participant) //TODO : What if multiple events overlap
     {
 
         Event? eventToCollaborate = await _eventService.GetEventById(participant.EventId);
@@ -45,7 +45,7 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
                .Find(eventModel => eventModel
                                    .DateWiseParticipants
                                    .Exists(participantByDate => participantByDate.EventDate == selectedEventDate
-                                           && participantByDate.Participants
+                                           && participantByDate.EventCollaborators
                                                                .Exists(participant => participant.User.Id == participant.User.Id))
                                     && IsHourOvelapps(eventModel.Duration.StartHour,
                                                      eventModel.Duration.EndHour,
@@ -53,7 +53,7 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
                                                      eventToCollaborate.Duration.EndHour));
     }
 
-    private async Task<bool> IsEventAlreadyCollaborated(Participant participant)
+    private async Task<bool> IsEventAlreadyCollaborated(EventCollaborator participant)
     {
 
         Event? eventModelToCheckOverlap = await _eventService.GetEventById(participant.EventId);
@@ -62,13 +62,13 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
 
         DateOnly selectedEventDate = participant.EventDate;
 
-        ParticipantsByDate? participantByDate = eventModelToCheckOverlap
+        EventCollaboratorsByDate? participantByDate = eventModelToCheckOverlap
                                                 .DateWiseParticipants
                                                 .Find(participantByDate => participantByDate.EventDate == selectedEventDate);
 
         if (participantByDate is null) return false;
 
-        return participantByDate.Participants.Exists(participantOfEvent => participantOfEvent.User.Id == participant.User.Id);
+        return participantByDate.EventCollaborators.Exists(participantOfEvent => participantOfEvent.User.Id == participant.User.Id);
     }
 
     private static bool IsHourOvelapps(int startHourOfFirstEvent, int endHourOfFirstEvent, int startHourOfSecondEvent, int endHourOfSecondEvent)

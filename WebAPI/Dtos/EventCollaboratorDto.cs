@@ -1,6 +1,6 @@
 ﻿namespace WebAPI.Dtos;
 
-public class ParticipantDto
+public class EventCollaboratorDto
 {
     public int Id { get; set; }
 

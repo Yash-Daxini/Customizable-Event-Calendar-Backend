@@ -55,7 +55,7 @@ public class SharedCalendarRepository : ISharedCalendarRepository
         return sharedCalendar.Id;
     }
 
-    public async Task<int> UpdateSharedCalendar(int sharedCalendarId, SharedCalendar sharedCalendarModel)
+    public async Task<int> UpdateSharedCalendar(SharedCalendar sharedCalendarModel)
     {
         SharedCalendarDataModel sharedCalendar = _mapper.Map<SharedCalendarDataModel>(sharedCalendarModel);
 

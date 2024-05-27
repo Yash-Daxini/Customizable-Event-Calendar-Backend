@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Core.Domain;
 using Core.Interfaces.IRepositories;
 using Infrastructure.DataModels;
@@ -58,11 +57,9 @@ namespace Infrastructure.Repositories
             return eventObj.Id;
         }
 
-        public async Task<int> UpdateEvent(int eventId, Event eventModel)
+        public async Task<int> UpdateEvent(Event eventModel)
         {
             EventDataModel eventObj = _mapper.Map<EventDataModel>(eventModel);
-
-            eventObj.Id = eventId;
 
             _dbContext.Events.Update(eventObj);
 

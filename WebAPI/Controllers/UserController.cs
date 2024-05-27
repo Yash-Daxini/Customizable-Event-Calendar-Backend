@@ -59,7 +59,8 @@ namespace WebAPI.Controllers
             try
             {
                 User user = _mapper.Map<User>(userDto);
-                int addedUserId = await _userService.UpdateUser(userId, user);
+                user.Id = userId;
+                int addedUserId = await _userService.UpdateUser(user);
                 return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);
             }
             catch (Exception ex)

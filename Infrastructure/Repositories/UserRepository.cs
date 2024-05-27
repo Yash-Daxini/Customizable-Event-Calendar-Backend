@@ -47,11 +47,9 @@ namespace Infrastructure.Repositories
             return user.Id;
         }
 
-        public async Task<int> UpdateUser(int userId, User userModel)
+        public async Task<int> UpdateUser(User userModel)
         {
             UserDataModel user = _mapper.Map<UserDataModel>(userModel);
-
-            user.Id = userId;
 
             _dbContext.Users.Update(user);
 

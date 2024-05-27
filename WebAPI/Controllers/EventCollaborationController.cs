@@ -20,11 +20,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> AddEventCollaboration([FromBody] ParticipantDto participant)
+        public async Task<IActionResult> AddEventCollaboration([FromBody] EventCollaboratorDto eventCollaborator)
         {
             try
             {
-                await _sharedEventCollaborationService.AddCollaborator(_mapper.Map<Participant>(participant));
+                await _sharedEventCollaborationService.AddCollaborator(_mapper.Map<EventCollaborator>(eventCollaborator));
 
                 return Ok(new { message = "Successfully collaborated !" });
             }

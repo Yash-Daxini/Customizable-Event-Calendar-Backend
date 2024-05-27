@@ -1,13 +1,9 @@
 ﻿using Core.Domain;
 
-namespace Core.Interfaces.IRepositories;
+namespace Core.Interfaces.IServices;
 
-public interface IEventCollaboratorRepository
+public interface IEventCollaboratorService
 {
-    public Task<List<EventCollaborator>> GetAllEventCollaborators();
-
-    public Task<EventCollaborator?> GetEventCollaboratorById(int eventCollaboratorId);
-
     public Task<int> AddEventCollaborator(EventCollaborator eventCollaborator);
 
     public Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator);

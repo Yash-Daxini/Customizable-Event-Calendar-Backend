@@ -28,9 +28,9 @@ namespace Core.Services
             return _userRepository.AddUser(userModel);
         }
 
-        public Task<int> UpdateUser(int userId, User userModel)
+        public Task<int> UpdateUser(User userModel)
         {
-            return _userRepository.UpdateUser(userId, userModel);
+            return _userRepository.UpdateUser(userModel);
         }
 
         public Task DeleteUser(int userId)

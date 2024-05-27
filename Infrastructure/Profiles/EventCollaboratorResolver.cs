@@ -19,9 +19,9 @@ public class EventCollaboratorResolver : IValueResolver<Event, EventDataModel, L
 
         foreach (var participantByDate in source.DateWiseParticipants)
         {
-            foreach (var participant in participantByDate.Participants)
+            foreach (var eventCollaborator in participantByDate.EventCollaborators)
             {
-                EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(participant);
+                EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
                 eventCollaboratorDataModel.EventDate = participantByDate.EventDate;
                 eventCollaboratorDataModels.Add(eventCollaboratorDataModel);
             }

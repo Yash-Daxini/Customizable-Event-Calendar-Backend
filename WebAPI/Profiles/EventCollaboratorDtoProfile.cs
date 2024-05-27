@@ -5,15 +5,15 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Profiles;
 
-public class ParticipantDtoProfile : Profile
+public class EventCollaboratorDtoProfile : Profile
 {
-    public ParticipantDtoProfile()
+    public EventCollaboratorDtoProfile()
     {
-        CreateMap<Participant, ParticipantDto>()
+        CreateMap<EventCollaborator, EventCollaboratorDto>()
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => MapEnumToConfirmationStatus(src.ConfirmationStatus)))
             .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => MapEnumToParticipantRole(src.ParticipantRole)));
 
-        CreateMap<ParticipantDto, Participant>()
+        CreateMap<EventCollaboratorDto, EventCollaborator>()
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => MapConfirmationStatusToEnum(src.ConfirmationStatus)))
             .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => MapParticipantRoleToEnum(src.ParticipantRole)));
     }

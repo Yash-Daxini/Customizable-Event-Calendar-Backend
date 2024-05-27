@@ -4,7 +4,7 @@ using Infrastructure.DataModels;
 
 namespace Infrastructure.Profiles;
 
-public class DateWiseParticipantsResolver : IValueResolver<EventDataModel, Event, List<ParticipantsByDate>>
+public class DateWiseParticipantsResolver : IValueResolver<EventDataModel, Event, List<EventCollaboratorsByDate>>
 {
     private readonly IMapper _mapper;
 
@@ -13,14 +13,14 @@ public class DateWiseParticipantsResolver : IValueResolver<EventDataModel, Event
         _mapper = mapper;
     }
 
-    public List<ParticipantsByDate> Resolve(EventDataModel source, Event destination, List<ParticipantsByDate> destMember, ResolutionContext context)
+    public List<EventCollaboratorsByDate> Resolve(EventDataModel source, Event destination, List<EventCollaboratorsByDate> destMember, ResolutionContext context)
     {
         return source.EventCollaborators
                      .GroupBy(eventCollaborator => eventCollaborator.EventDate)
-                     .Select(group => new ParticipantsByDate
+                     .Select(group => new EventCollaboratorsByDate
                      {
                          EventDate = group.Key,
-                         Participants = group.Select(eventCollaborator => _mapper.Map<Participant>(eventCollaborator)).ToList()
+                         EventCollaborators = group.Select(eventCollaborator => _mapper.Map<EventCollaborator>(eventCollaborator)).ToList()
                      })
                      .ToList();
     }

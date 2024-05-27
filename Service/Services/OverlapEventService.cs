@@ -12,7 +12,7 @@ public class OverlapEventService : IOverlappingEventService
         _recurrenceService = recurrenceService;
     }
 
-    public OverlapEventData? GetOverlappedEventInformation(Event eventForVerify,
+    public OverlapEventData? GetOverlappedEventInformation(Event eventForVerify, //TODO: Reduce parameters
                                                            List<Event> events,
                                                            List<DateOnly> occurrencesOfEventForVerify,
                                                            bool isInsert,
