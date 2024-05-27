@@ -1,5 +1,5 @@
 ﻿using Core.Domain;
-using Core.Interfaces;
+using Core.Interfaces.IServices;
 
 namespace Core.Services;
 
@@ -14,15 +14,27 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
         _eventService = eventService;
     }
 
-    public async Task AddCollaborator(Participant participant, int eventId)
+    public async Task AddCollaborator(Participant participant)
     {
-        await _participantService.AddParticipant(participant, eventId);
+        bool isAlreadyCollaborated = await IsEventAlreadyCollaborated(participant);
+
+        if (isAlreadyCollaborated)
+            throw new Exception("Already collaborated in this event");
+
+        Event? overlapEvent = await GetCollaborationOverlap(participant);
+
+        if (overlapEvent is not null)
+            throw new Exception($"Overlaps with {overlapEvent.Title} at " +
+                                $"{participant.EventDate} from " +
+                                $"{overlapEvent.Duration.GetDurationInFormat()}");
+
+        await _participantService.AddParticipant(participant);
     }
 
-    public async Task<Event?> GetCollaborationOverlap(Participant participant, int eventId)
+    private async Task<Event?> GetCollaborationOverlap(Participant participant) //TODO : What if multiple events overlap
     {
 
-        Event? eventToCollaborate = await _eventService.GetEventById(eventId);
+        Event? eventToCollaborate = await _eventService.GetEventById(participant.EventId);
 
         DateOnly selectedEventDate = participant.EventDate;
 
@@ -41,10 +53,10 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
                                                      eventToCollaborate.Duration.EndHour));
     }
 
-    public async Task<bool> IsEventAlreadyCollaborated(Participant participant, int eventId)
+    private async Task<bool> IsEventAlreadyCollaborated(Participant participant)
     {
 
-        Event? eventModelToCheckOverlap = await _eventService.GetEventById(eventId);
+        Event? eventModelToCheckOverlap = await _eventService.GetEventById(participant.EventId);
 
         if (eventModelToCheckOverlap is null) return false;
 

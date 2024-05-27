@@ -29,6 +29,7 @@ public class EventProfile : Profile
                 .ForMember(dest => dest.DateWiseParticipants, opt => opt.MapFrom<DateWiseParticipantsResolver>());
 
         CreateMap<Event, EventDataModel>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.GetEventOrganizer().Id))
                 .ForMember(dest => dest.EventStartHour, opt => opt.MapFrom(src => src.Duration.StartHour))
                 .ForMember(dest => dest.EventEndHour, opt => opt.MapFrom(src => src.Duration.EndHour))
                 .ForMember(dest => dest.EventStartDate, opt => opt.MapFrom(src => src.RecurrencePattern.StartDate))
@@ -37,12 +38,13 @@ public class EventProfile : Profile
                 .ForMember(dest => dest.Interval, opt => opt.MapFrom(src => src.RecurrencePattern.Interval))
                 .ForMember(dest => dest.ByWeekDay, opt => opt.MapFrom(src => MapWeekDayListToString(src.RecurrencePattern)))
                 .ForMember(dest => dest.ByMonthDay, opt => opt.MapFrom(src => src.RecurrencePattern.ByMonthDay))
-                .ForMember(dest => dest.ByMonth, opt => opt.MapFrom(src => src.RecurrencePattern.ByMonth));
+                .ForMember(dest => dest.ByMonth, opt => opt.MapFrom(src => src.RecurrencePattern.ByMonth))
+                .ForMember(dest => dest.EventCollaborators, opt => opt.MapFrom<EventCollaboratorResolver>());
     }
 
     private static string? MapWeekDayListToString(RecurrencePattern recurrencePattern)
     {
-        return recurrencePattern.ByWeekDay == null ? null : string.Join(",", recurrencePattern.ByWeekDay);
+        return recurrencePattern.ByWeekDay == null || recurrencePattern.ByWeekDay.Count == 0 ? null : string.Join(",", recurrencePattern.ByWeekDay);
     }
 
     private Frequency MapFrequencyToEnum(string? frequency)

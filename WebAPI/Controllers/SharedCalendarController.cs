@@ -1,6 +1,8 @@
-﻿using Core.Domain;
-using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Domain;
+using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Dtos;
 
 namespace WebAPI.Controllers
 {
@@ -9,16 +11,20 @@ namespace WebAPI.Controllers
     public class SharedCalendarController : ControllerBase
     {
         private readonly ISharedCalendarService _sharedCalendarService;
+        private readonly IMapper _mapper;
 
-        public SharedCalendarController(ISharedCalendarService sharedCalendarService)
+        public SharedCalendarController(ISharedCalendarService sharedCalendarService, IMapper mapper)
         {
             _sharedCalendarService = sharedCalendarService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllSharedCalendars()
         {
-            return Ok(await _sharedCalendarService.GetAllSharedCalendars());
+            List<SharedCalendar> sharedCalendars = await _sharedCalendarService.GetAllSharedCalendars();
+
+            return Ok(_mapper.Map<List<SharedCalendarDto>>(sharedCalendars));
         }
 
         [HttpGet("{sharedCalendarId}")]
@@ -28,14 +34,23 @@ namespace WebAPI.Controllers
 
             if (sharedCalendarModel is null) return NotFound();
 
-            return Ok(sharedCalendarModel);
+            return Ok(_mapper.Map<SharedCalendarDto>(sharedCalendarModel));
         }
 
         [HttpPost()]
-        public async Task<ActionResult> AddUser([FromBody] SharedCalendar sharedCalendarModel)
+        public async Task<ActionResult> AddUser([FromBody] SharedCalendarDto sharedCalendarDto)
         {
-            int addedSharedCalendarId = await _sharedCalendarService.AddSharedCalendar(sharedCalendarModel);
-            return CreatedAtAction(nameof(GetSharedCalendarById), new { sharedCalendarId = addedSharedCalendarId, controller = "sharedcalendar" }, addedSharedCalendarId);
+            try
+            {
+                SharedCalendar sharedCalendar = _mapper.Map<SharedCalendar>(sharedCalendarDto);
+
+                int addedSharedCalendarId = await _sharedCalendarService.AddSharedCalendar(sharedCalendar);
+                return CreatedAtAction(nameof(GetSharedCalendarById), new { sharedCalendarId = addedSharedCalendarId, controller = "sharedcalendar" }, addedSharedCalendarId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

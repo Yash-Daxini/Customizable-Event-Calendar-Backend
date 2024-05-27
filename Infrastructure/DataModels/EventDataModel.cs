@@ -13,8 +13,6 @@ namespace Infrastructure.DataModels
 
         public string Description { get; set; }
 
-        public int UserId { get; set; }
-
         public int EventStartHour { get; set; }
 
         public int EventEndHour { get; set; }
@@ -34,6 +32,8 @@ namespace Infrastructure.DataModels
         public int? ByMonthDay { get; set; }
 
         public int? ByMonth { get; set; }
+
+        public int UserId { get; set; }
 
         public virtual List<EventCollaboratorDataModel> EventCollaborators { get; set; } = new List<EventCollaboratorDataModel>();
     }

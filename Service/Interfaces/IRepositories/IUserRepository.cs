@@ -1,6 +1,6 @@
 ﻿using Core.Domain;
 
-namespace Infrastructure.Repositories
+namespace Core.Interfaces.IRepositories
 {
     public interface IUserRepository
     {

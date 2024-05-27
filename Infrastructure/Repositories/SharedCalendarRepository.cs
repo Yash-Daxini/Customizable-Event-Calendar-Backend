@@ -2,39 +2,40 @@
 using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using Core.Services;
+using Core.Interfaces.IRepositories;
+using AutoMapper.QueryableExtensions;
 
 namespace Infrastructure.Repositories;
 
 public class SharedCalendarRepository : ISharedCalendarRepository
 {
-    private readonly DbContextEventCalendar _dbContextEventCalendar;
+    private readonly DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
     public SharedCalendarRepository(DbContextEventCalendar dbContextEventCalendar, IMapper mapper)
     {
-        _dbContextEventCalendar = dbContextEventCalendar;
+        _dbContext = dbContextEventCalendar;
         _mapper = mapper;
     }
 
     public async Task<List<SharedCalendar>> GetAllSharedCalendars()
     {
-        return await _dbContextEventCalendar
+        return await _dbContext
                       .SharedCalendars
                       .Include(sharedCalendar => sharedCalendar.SenderUser)
                       .Include(sharedCalendar => sharedCalendar.ReceiverUser)
-                      .Select(sharedCalendar => _mapper.Map<SharedCalendar>(sharedCalendar))
+                      .ProjectTo<SharedCalendar>(_mapper.ConfigurationProvider)
                       .ToListAsync();
     }
 
     public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
     {
-        return await _dbContextEventCalendar
+        return await _dbContext
                       .SharedCalendars
                       .Where(sharedCalendar => sharedCalendar.Id == sharedCalendarId)
                       .Include(sharedCalendar => sharedCalendar.SenderUser)
                       .Include(sharedCalendar => sharedCalendar.ReceiverUser)
-                      .Select(sharedCalendar => _mapper.Map<SharedCalendar>(sharedCalendar))
+                      .ProjectTo<SharedCalendar>(_mapper.ConfigurationProvider)
                       .FirstOrDefaultAsync();
 
 
@@ -44,12 +45,12 @@ public class SharedCalendarRepository : ISharedCalendarRepository
     {
         SharedCalendarDataModel sharedCalendar = _mapper.Map<SharedCalendarDataModel>(sharedCalendarModel);
 
-        _dbContextEventCalendar.Attach(sharedCalendar.SenderUser);
-        _dbContextEventCalendar.Attach(sharedCalendar.ReceiverUser);
+        _dbContext.Attach(sharedCalendar.SenderUser);
+        _dbContext.Attach(sharedCalendar.ReceiverUser);
 
-        await _dbContextEventCalendar.SharedCalendars.AddAsync(sharedCalendar);
+        await _dbContext.SharedCalendars.AddAsync(sharedCalendar);
 
-        await _dbContextEventCalendar.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
 
         return sharedCalendar.Id;
     }
@@ -58,9 +59,9 @@ public class SharedCalendarRepository : ISharedCalendarRepository
     {
         SharedCalendarDataModel sharedCalendar = _mapper.Map<SharedCalendarDataModel>(sharedCalendarModel);
 
-        _dbContextEventCalendar.SharedCalendars.Update(sharedCalendar);
+        _dbContext.SharedCalendars.Update(sharedCalendar);
 
-        await _dbContextEventCalendar.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
 
         return sharedCalendar.Id;
     }
@@ -72,8 +73,8 @@ public class SharedCalendarRepository : ISharedCalendarRepository
             Id = sharedCalendarId
         };
 
-        _dbContextEventCalendar.SharedCalendars.Remove(sharedCalendar);
+        _dbContext.SharedCalendars.Remove(sharedCalendar);
 
-        await _dbContextEventCalendar.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 }

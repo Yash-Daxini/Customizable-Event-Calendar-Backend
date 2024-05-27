@@ -1,5 +1,6 @@
 using System.Text;
-using Core.Interfaces;
+using Core.Interfaces.IRepositories;
+using Core.Interfaces.IServices;
 using Core.Services;
 using Infrastructure;
 using Infrastructure.Profiles;
@@ -7,6 +8,7 @@ using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(typeof(Program), typeof(EventProfile), typeof(ParticipantProfile),typeof(SharedCalendarProfile),typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(Program),
+                               typeof(EventProfile),
+                               typeof(ParticipantProfile),
+                               typeof(SharedCalendarProfile),
+                               typeof(UserProfile),
+                               typeof(UserDtoProfile),
+                               typeof(EventRequestDtoProfile),
+                               typeof(EventResponseDtoProfile),
+                               typeof(ParticipantDtoProfile),
+                               typeof(RecurrencePatternDtoProfile),
+                               typeof(DurationDtoProfile),
+                               typeof(SharedCalendarDtoProfile));
 
 //Repositories
 builder.Services.AddTransient<IUserRepository, UserRepository>();

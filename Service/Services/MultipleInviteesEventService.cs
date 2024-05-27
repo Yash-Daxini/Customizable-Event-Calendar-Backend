@@ -1,6 +1,6 @@
 ﻿using Core.Domain;
 using Core.Domain.Enums;
-using Core.Interfaces;
+using Core.Interfaces.IServices;
 
 namespace Core.Services;
 
@@ -124,7 +124,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
             participant.ProposedDuration = null;
             participant.EventDate = eventDate;
-            _participantService.UpdateParticipant(participant.Id,participant, Event.Id);
+            _participantService.UpdateParticipant(participant.Id,participant);
         }
     }
 
@@ -162,7 +162,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
                 participant.ProposedDuration = null;
                 participant.ConfirmationStatus = ConfirmationStatus.Pending;
             }
-            _participantService.UpdateParticipant(participant.Id,participant, Event.Id);
+            _participantService.UpdateParticipant(participant.Id,participant);
         }
     }
 
@@ -172,8 +172,6 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
         eventObj.Duration.EndHour = newEndHour;
 
         _eventService.UpdateEvent(eventObj.Id,eventObj);
-
-        _recurrenceService.ScheduleEvents(eventObj, eventObj.GetInviteesOfEvent());
     }
 
 }

@@ -1,6 +1,6 @@
-﻿using Core.Interfaces;
-using Core.Domain;
-using Infrastructure.Repositories;
+﻿using Core.Domain;
+using Core.Interfaces.IRepositories;
+using Core.Interfaces.IServices;
 
 namespace Core.Services
 {
@@ -13,14 +13,14 @@ namespace Core.Services
             _eventCollaboratorRepository = eventCollaboratorRepository;
         }
 
-        public Task<int> AddParticipant(Participant participantModel, int eventId)
+        public Task<int> AddParticipant(Participant participantModel)
         {
-            return _eventCollaboratorRepository.AddParticipant(participantModel, eventId);
+            return _eventCollaboratorRepository.AddParticipant(participantModel);
         }
 
-        public async Task AddParticipants(List<Participant> participants, int eventId)
+        public async Task AddParticipants(List<Participant> participants)
         {
-            await _eventCollaboratorRepository.AddParticipants(participants, eventId);
+            await _eventCollaboratorRepository.AddParticipants(participants);
         }
 
         public Task DeleteParticipant(int participantId)
@@ -28,9 +28,9 @@ namespace Core.Services
             return _eventCollaboratorRepository.DeleteParticipant(participantId);
         }
 
-        public Task<int> UpdateParticipant(int participantId, Participant participantModel, int eventId)
+        public Task<int> UpdateParticipant(int participantId, Participant participantModel)
         {
-            return _eventCollaboratorRepository.UpdateParticipant(participantId, participantModel, eventId);
+            return _eventCollaboratorRepository.UpdateParticipant(participantId, participantModel);
         }
 
         public Task DeleteParticipantsByEventId(int eventId)

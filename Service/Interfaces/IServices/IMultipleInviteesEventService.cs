@@ -1,4 +1,4 @@
-﻿namespace Core.Interfaces;
+﻿namespace Core.Interfaces.IServices;
 
 public interface IMultipleInviteesEventService
 {

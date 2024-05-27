@@ -22,8 +22,7 @@ public class ParticipantProfile : Profile
             .ForMember(dest => dest.ProposedStartHour, opt => opt.MapFrom(src => MapProposedStartHour(src.ProposedDuration)))
             .ForMember(dest => dest.ProposedEndHour, opt => opt.MapFrom(src => MapProposedEndHour(src.ProposedDuration)))
             .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate))
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
-            .ForMember(dest => dest.EventId, opt => opt.MapFrom<EventIdValueResolverWithContext>());
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id));
     }
 
     private static object? MapProposedStartHour(Duration proposedDuration)

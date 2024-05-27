@@ -2,35 +2,37 @@
 using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Core.Interfaces.IRepositories;
+using AutoMapper.QueryableExtensions;
 
 namespace Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DbContextEventCalendar _dbContextEvent;
+        private readonly DbContextEventCalendar _dbContext;
 
         private readonly IMapper _mapper;
 
         public UserRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
         {
-            _dbContextEvent = dbContextEvent;
+            _dbContext = dbContextEvent;
             _mapper = mapper;
         }
 
         public async Task<List<User>> GetAllUsers()
         {
-            return await _dbContextEvent
+            return await _dbContext
                         .Users
-                        .Select(user => _mapper.Map<User>(user))
+                        .ProjectTo<User>(_mapper.ConfigurationProvider)
                         .ToListAsync();
         }
 
         public async Task<User?> GetUserById(int userId)
         {
-            return await _dbContextEvent
+            return await _dbContext
                    .Users
                    .Where(user => user.Id == userId)
-                   .Select(user => _mapper.Map<User>(user))
+                   .ProjectTo<User>(_mapper.ConfigurationProvider)
                    .FirstOrDefaultAsync();
         }
 
@@ -38,9 +40,9 @@ namespace Infrastructure.Repositories
         {
             UserDataModel user = _mapper.Map<UserDataModel>(userModel);
 
-            _dbContextEvent.Users.Add(user);
+            _dbContext.Users.Add(user);
 
-            await _dbContextEvent.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
 
             return user.Id;
         }
@@ -51,9 +53,9 @@ namespace Infrastructure.Repositories
 
             user.Id = userId;
 
-            _dbContextEvent.Users.Update(user);
+            _dbContext.Users.Update(user);
 
-            await _dbContextEvent.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
 
             return user.Id;
         }
@@ -65,14 +67,14 @@ namespace Infrastructure.Repositories
                 Id = userId,
             };
 
-            _dbContextEvent.Remove(user);
+            _dbContext.Remove(user);
 
-            await _dbContextEvent.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<User?> AuthenticateUser(User user)
         {
-            UserDataModel? userDataModel = await _dbContextEvent
+            UserDataModel? userDataModel = await _dbContext
                                           .Users
                                           .FirstOrDefaultAsync(userObj => userObj.Name == user.Name
                                                                        && userObj.Password == user.Password);

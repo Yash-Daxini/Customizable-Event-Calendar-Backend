@@ -8,8 +8,10 @@ namespace Infrastructure.DataModels
         public int Id { get; set; }
 
         public int EventId { get; set; }
+        public virtual EventDataModel Event { get; set; }
 
         public int UserId { get; set; }
+        public virtual UserDataModel User { get; set; }
 
         public string ParticipantRole { get; set; }
 
@@ -20,9 +22,5 @@ namespace Infrastructure.DataModels
         public int? ProposedEndHour { get; set; }
 
         public DateOnly EventDate { get; set; }
-
-        public virtual UserDataModel? User { get; set; }
-
-        public virtual EventDataModel Event { get; set; }
     }
 }

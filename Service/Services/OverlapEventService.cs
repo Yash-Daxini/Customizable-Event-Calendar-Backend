@@ -1,5 +1,5 @@
 ﻿using Core.Domain;
-using Core.Interfaces;
+using Core.Interfaces.IServices;
 
 namespace Core.Services;
 

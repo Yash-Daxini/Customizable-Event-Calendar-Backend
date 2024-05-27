@@ -1,12 +1,13 @@
 ﻿using Core.Domain;
-using Core.Interfaces;
-using Infrastructure.Repositories;
+using Core.Interfaces.IRepositories;
+using Core.Interfaces.IServices;
 
 namespace Core.Services
 {
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
+
         private readonly IRecurrenceService _recurrenceService;
         private readonly IParticipantService _participantService;
         private readonly IOverlappingEventService _overlappingEventService;
@@ -42,15 +43,31 @@ namespace Core.Services
 
             if (overlapEventData is not null) return 0;
 
+            MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
+
             int eventId = await _eventRepository.AddEvent(eventModel);
 
             eventModel.Id = eventId;
 
+            return eventId;
+        }
+
+        private void MakeDateWiseParticipantListFromOccurrences(Event eventModel, List<DateOnly> occurrences)
+        {
             List<Participant> participants = eventModel.DateWiseParticipants.First().Participants;
 
-            await _recurrenceService.ScheduleEvents(eventModel, participants);
+            List<ParticipantsByDate> participantsByDates = [];
 
-            return eventId;
+            foreach (DateOnly occurrence in occurrences)
+            {
+                participantsByDates.Add(new ParticipantsByDate()
+                {
+                    EventDate = occurrence,
+                    Participants = participants
+                });
+            }
+
+            eventModel.DateWiseParticipants = participantsByDates;
         }
 
         public async Task<int> UpdateEvent(int eventId, Event eventModel)
@@ -68,15 +85,11 @@ namespace Core.Services
 
             if (overlapEventData is not null) return 0;
 
-            int updatedEventId = await _eventRepository.UpdateEvent(eventId, eventModel);
-
-            eventModel.Id = updatedEventId;
-
             await _participantService.DeleteParticipantsByEventId(eventId);
 
-            List<Participant> participants = eventModel.DateWiseParticipants.First().Participants;
+            MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
 
-            await _recurrenceService.ScheduleEvents(eventModel, participants);
+            int updatedEventId = await _eventRepository.UpdateEvent(eventId, eventModel);
 
             return updatedEventId;
         }

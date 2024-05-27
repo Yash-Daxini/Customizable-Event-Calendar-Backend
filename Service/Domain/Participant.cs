@@ -6,6 +6,10 @@ public class Participant
 {
     public int Id { get; set; }
 
+    public int EventId {  get; set; }   
+
+    public User User { get; set; }
+
     public ParticipantRole ParticipantRole { get; set; }
 
     public ConfirmationStatus ConfirmationStatus { get; set; }
@@ -13,8 +17,6 @@ public class Participant
     public Duration? ProposedDuration { get; set; }
 
     public DateOnly EventDate { get; set; }
-
-    public User User { get; set; }
 
     public bool IsParticipantWithPendingStatus() => this.ConfirmationStatus == ConfirmationStatus.Pending;
 

@@ -1,5 +1,5 @@
 ﻿using Core.Domain;
-using Core.Interfaces;
+using Core.Interfaces.IServices;
 
 namespace Core.Services;
 
@@ -11,17 +11,6 @@ public class RecurrenceService : IRecurrenceService
     {
         _participantService = participantService;
     }
-
-    public async Task ScheduleEvents(Event eventModel, List<Participant> participants)
-    {
-        List<DateOnly> occurrences = GetOccurrencesOfEvent(eventModel);
-
-        foreach (var occurrence in occurrences)
-        {
-            await ScheduleEventsForEachParticipant(eventModel, occurrence, participants);
-        }
-    }
-
     public List<DateOnly> GetOccurrencesOfEvent(Event eventModel)
     {
         return eventModel.RecurrencePattern.IsNonRecurrenceEvent()
@@ -39,19 +28,6 @@ public class RecurrenceService : IRecurrenceService
             return GetOccurrencesOfMonthlyEvents(eventModel);
         else
             return GetOccurrencesOfYearlyEvents(eventModel);
-    }
-
-    private async Task ScheduleEventsForEachParticipant(Event eventModel,
-                                                  DateOnly occurrence,
-                                                  List<Participant> participants)
-    {
-        foreach (Participant participant in participants)
-        {
-            participant.EventDate = occurrence;
-        }
-
-        await _participantService.AddParticipants(participants, eventModel.Id);
-
     }
 
     private List<DateOnly> GetOccurrenceOfDailyEvents(Event eventModel)

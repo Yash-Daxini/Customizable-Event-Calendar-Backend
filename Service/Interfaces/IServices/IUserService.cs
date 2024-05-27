@@ -1,6 +1,6 @@
 ﻿using Core.Domain;
 
-namespace Core.Interfaces;
+namespace Core.Interfaces.IServices;
 
 public interface IUserService
 {
