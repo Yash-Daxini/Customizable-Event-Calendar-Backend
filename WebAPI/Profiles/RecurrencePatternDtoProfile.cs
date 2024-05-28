@@ -23,28 +23,13 @@ public class RecurrencePatternDtoProfile : Profile
         return byWeekDay == null || byWeekDay.Count == 0 ? null : byWeekDay;
     }
 
-    private Frequency MapFrequencyToEnum(string? frequency)
+    private Frequency MapFrequencyToEnum(string frequency)
     {
-        return frequency switch
-        {
-            "daily" => Frequency.Daily,
-            "weekly" => Frequency.Weekly,
-            "Monthly" => Frequency.Monthly,
-            "Yearly" => Frequency.Yearly,
-            _ => Frequency.None,
-        };
+        return Enum.Parse<Frequency>(frequency);
     }
 
     private string? MapEnumToFrequency(Frequency frequency)
     {
-        return frequency switch
-        {
-            Frequency.Daily => "daily",
-            Frequency.Weekly => "weekly",
-            Frequency.Monthly => "Monthly",
-            Frequency.Yearly => "Yearly",
-            Frequency.None => null,
-            _ => null,
-        };
+        return frequency.ToString();
     }
 }

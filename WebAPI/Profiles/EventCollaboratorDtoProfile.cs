@@ -20,47 +20,21 @@ public class EventCollaboratorDtoProfile : Profile
 
     private ParticipantRole MapParticipantRoleToEnum(string participantRole)
     {
-        return participantRole switch
-        {
-            "organizer" => ParticipantRole.Organizer,
-            "participant" => ParticipantRole.Participant,
-            "collaborator" => ParticipantRole.Collaborator,
-        };
+        return Enum.Parse<ParticipantRole>(participantRole);
     }
 
     private string MapEnumToParticipantRole(ParticipantRole participantRole)
     {
-        return participantRole switch
-        {
-            ParticipantRole.Organizer => "organizer",
-            ParticipantRole.Participant => "participant",
-            ParticipantRole.Collaborator => "collaborator",
-        };
+        return participantRole.ToString();
     }
 
     private ConfirmationStatus MapConfirmationStatusToEnum(string confirmationStatus)
     {
-        return confirmationStatus switch
-        {
-            "accept" => ConfirmationStatus.Accept,
-            "reject" => ConfirmationStatus.Reject,
-            "pending" => ConfirmationStatus.Pending,
-            "maybe" => ConfirmationStatus.Maybe,
-            "proposed" => ConfirmationStatus.Proposed,
-            _ => ConfirmationStatus.Pending,
-        };
+        return Enum.Parse<ConfirmationStatus>(confirmationStatus);
     }
 
     private string MapEnumToConfirmationStatus(ConfirmationStatus confirmationStatus)
     {
-        return confirmationStatus switch
-        {
-            ConfirmationStatus.Accept => "accept",
-            ConfirmationStatus.Reject => "reject",
-            ConfirmationStatus.Pending => "pending",
-            ConfirmationStatus.Maybe => "maybe",
-            ConfirmationStatus.Proposed => "proposed",
-            _ => "pending",
-        };
+        return confirmationStatus.ToString();
     }
 }
