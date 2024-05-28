@@ -6,10 +6,10 @@ using Infrastructure.Extensions;
 
 namespace Infrastructure.Profiles;
 
-public class ParticipantProfile : Profile
+public class EventCollaboratorProfile : Profile
 {
 
-    public ParticipantProfile()
+    public EventCollaboratorProfile()
     {
         CreateMap<EventCollaboratorDataModel, EventCollaborator>()
             .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => src.ParticipantRole.ToEnum<ParticipantRole>()))
@@ -23,7 +23,8 @@ public class ParticipantProfile : Profile
             .ForMember(dest => dest.ProposedStartHour, opt => opt.MapFrom(src => MapProposedStartHour(src.ProposedDuration)))
             .ForMember(dest => dest.ProposedEndHour, opt => opt.MapFrom(src => MapProposedEndHour(src.ProposedDuration)))
             .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate))
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id));
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
+            .ForMember(dest => dest.User, opt => opt.Ignore());
     }
 
     private static object? MapProposedStartHour(Duration proposedDuration)

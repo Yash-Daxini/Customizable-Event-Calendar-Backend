@@ -72,7 +72,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
+                List<Event> events = await _eventService.GetEventsForDailyViewByUserId(userId);
 
                 return Ok(_mapper.Map<List<EventResponseDto>>(events));
             }
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
+                List<Event> events = await _eventService.GetEventsForWeeklyViewByUserId(userId);
 
                 return Ok(_mapper.Map<List<EventResponseDto>>(events));
             }
@@ -102,7 +102,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
+                List<Event> events = await _eventService.GetEventsForMonthlyViewByUserId(userId);
 
                 return Ok(_mapper.Map<List<EventResponseDto>>(events));
             }

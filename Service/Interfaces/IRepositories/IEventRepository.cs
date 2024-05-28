@@ -12,7 +12,7 @@ public interface IEventRepository
 
     public Task UpdateEvent(Event eventModel);
 
-    public Task DeleteEvent(int eventId);
+    public Task DeleteEvent(Event eventObj);
 
     public Task<List<Event>> GetEventsWithinGivenDateByUserId(int userId, DateOnly startDate, DateOnly endDate);
 

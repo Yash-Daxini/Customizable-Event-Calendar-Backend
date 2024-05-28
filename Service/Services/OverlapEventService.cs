@@ -7,6 +7,8 @@ public class OverlapEventService : IOverlappingEventService
 {
     public OverlapEventData? GetOverlappedEventInformation(Event eventForVerify, List<Event> events)
     {
+        Dictionary<Event, DateOnly> overlapEventByDate = [];
+
         foreach (var existingEvent in events)
         {
             if (existingEvent.Id == eventForVerify.Id) continue;
@@ -20,10 +22,13 @@ public class OverlapEventService : IOverlappingEventService
             DateOnly matchedDate = occurrencesOfExistingEvent.Intersect(occurrencesOfEventForVerify).FirstOrDefault();
 
             if (IsEventOverlapps(eventForVerify, existingEvent, matchedDate))
-                return new OverlapEventData(eventForVerify, existingEvent, matchedDate);
+                overlapEventByDate.Add(existingEvent, matchedDate);
         }
 
-        return null;
+
+        return overlapEventByDate.Count == 0
+               ? null
+               : new OverlapEventData(eventForVerify, overlapEventByDate);
     }
 
     private static bool IsEventOverlapps(Event eventForVerify, Event existingEvent, DateOnly matchedDate)

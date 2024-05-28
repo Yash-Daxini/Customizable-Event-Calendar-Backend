@@ -1,4 +1,5 @@
-﻿using Core.Domain;
+﻿using System.Text;
+using Core.Domain;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
 
@@ -22,17 +23,27 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
         if (isAlreadyCollaborated)
             throw new UserAlreadyCollaboratedException("Already collaborated in this event");
 
-        Event? overlapEvent = await GetCollaborationOverlap(participant);
+        List<Event> overlapEvents = await GetCollaborationOverlaps(participant);
 
-        if (overlapEvent is not null)
-            throw new CollaborationOverlapException($"Overlaps with {overlapEvent.Title} at " +
-                                $"{participant.EventDate} from " +
-                                $"{overlapEvent.Duration.GetDurationInFormat()}");
+        if (overlapEvents.Count > 0)
+            throw new CollaborationOverlapException(GetOverlapMessage(participant.EventDate, overlapEvents));
 
         await _participantService.AddEventCollaborator(participant);
     }
 
-    private async Task<Event?> GetCollaborationOverlap(EventCollaborator participant) //TODO : What if multiple events overlap
+    private static string GetOverlapMessage(DateOnly date, List<Event> overlapEvents)
+    {
+        StringBuilder overlapMessage = new($"Collaboration overlaps with following events on {date} :- ");
+
+        foreach (var eventObj in overlapEvents)
+        {
+            overlapMessage.AppendLine($"Event Name :- {eventObj.Title} Time :- {eventObj.Duration.GetDurationInFormat()}");
+        }
+
+        return overlapMessage.ToString();
+    }
+
+    private async Task<List<Event>> GetCollaborationOverlaps(EventCollaborator participant)
     {
 
         Event? eventToCollaborate = await _eventService.GetEventById(participant.EventId);
@@ -42,8 +53,8 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
         List<Event> events = await _eventService
                                    .GetNonProposedEventsByUserId(participant.User.Id);
 
-        return events
-               .Find(eventModel => eventModel
+        return [..events
+               .Where(eventModel => eventModel
                                    .DateWiseParticipants
                                    .Exists(participantByDate => participantByDate.EventDate == selectedEventDate
                                            && participantByDate.EventCollaborators
@@ -51,7 +62,7 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
                                     && IsHourOvelapps(eventModel.Duration.StartHour,
                                                      eventModel.Duration.EndHour,
                                                      eventToCollaborate.Duration.StartHour,
-                                                     eventToCollaborate.Duration.EndHour));
+                                                     eventToCollaborate.Duration.EndHour))];
     }
 
     private async Task<bool> IsEventAlreadyCollaborated(EventCollaborator participant)

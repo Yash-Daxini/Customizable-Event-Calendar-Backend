@@ -8,7 +8,5 @@ public interface IEventCollaboratorService
 
     public Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator);
 
-    public Task DeleteEventCollaborator(int eventCollaboratorId);
-
     public Task DeleteEventCollaboratorsByEventId(int eventId);
 }

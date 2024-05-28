@@ -41,7 +41,8 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private static bool IsAnyInviteeWithPendingStatus(Event eventObj)
     {
-        return eventObj.GetInviteesOfEvent().Exists(participant => participant.IsEventCollaboratorWithPendingStatus());
+        return eventObj.GetInviteesOfEvent()
+            .Exists(participant => participant.IsEventCollaboratorWithPendingStatus());
     }
 
     private static int CalculateDayDifference(DateTime firstDate, DateTime secondDate)

@@ -26,7 +26,7 @@ public class UserAuthenticationService : IUserAuthenticationService
         if (loggedInUser is null)
             throw new AuthenticationFailedException("Invalid user name or password!");
 
-        //ScheduleProposedEventsForLoggedInUser();
+        ScheduleProposedEventsForLoggedInUser(loggedInUser.Id);
     }
 
     private async void ScheduleProposedEventsForLoggedInUser(int userId) //Work on this service

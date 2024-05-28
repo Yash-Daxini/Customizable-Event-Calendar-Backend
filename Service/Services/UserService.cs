@@ -14,14 +14,10 @@ namespace Core.Services
             _userRepository = userRepository;
         }
 
-        public async Task<List<User>> GetAllUsers()
-        {
-            return await _userRepository.GetAllUsers();
-        }
-
-        public async Task<User?> GetUserById(int userId)
+        public async Task<User> GetUserById(int userId)
         {
             User? user = await _userRepository.GetUserById(userId);
+
             return user == null
                    ? throw new NotFoundException($"User with id {userId} not found.")
                    : user;
@@ -40,8 +36,8 @@ namespace Core.Services
 
         public async Task DeleteUser(int userId)
         {
-            await GetUserById(userId);
-            await _userRepository.DeleteUser(userId);
+            User user = await GetUserById(userId);
+            await _userRepository.DeleteUser(user);
         }
 
         public async Task<User?> AuthenticateUser(User user)

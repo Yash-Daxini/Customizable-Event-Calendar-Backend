@@ -21,19 +21,17 @@ namespace Infrastructure.Repositories
 
         public async Task<List<User>> GetAllUsers()
         {
-            return await _dbContext
-                        .Users
-                        .ProjectTo<User>(_mapper.ConfigurationProvider)
-                        .ToListAsync();
+            return await _dbContext.Users
+                                   .ProjectTo<User>(_mapper.ConfigurationProvider)
+                                   .ToListAsync();
         }
 
         public async Task<User?> GetUserById(int userId)
         {
-            return await _dbContext
-                   .Users
-                   .Where(user => user.Id == userId)
-                   .ProjectTo<User>(_mapper.ConfigurationProvider)
-                   .FirstOrDefaultAsync();
+            return await _dbContext.Users
+                                   .Where(user => user.Id == userId)
+                                   .ProjectTo<User>(_mapper.ConfigurationProvider)
+                                   .FirstOrDefaultAsync();
         }
 
         public async Task<int> AddUser(User userModel)
@@ -56,14 +54,9 @@ namespace Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteUser(int userId)
+        public async Task DeleteUser(User user)
         {
-            UserDataModel user = new()
-            {
-                Id = userId,
-            };
-
-            _dbContext.Remove(user);
+            _dbContext.Remove(_mapper.Map<UserDataModel>(user));
 
             await _dbContext.SaveChangesAsync();
         }

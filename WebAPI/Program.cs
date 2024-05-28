@@ -18,7 +18,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(Program),
                                typeof(EventProfile),
-                               typeof(ParticipantProfile),
+                               typeof(EventCollaboratorProfile),
                                typeof(SharedCalendarProfile),
                                typeof(UserProfile),
                                typeof(UserDtoProfile),

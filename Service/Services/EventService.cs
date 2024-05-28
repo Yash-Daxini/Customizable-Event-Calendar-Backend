@@ -30,7 +30,7 @@ namespace Core.Services
 
         public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
 
-        public async Task<Event?> GetEventById(int eventId)
+        public async Task<Event> GetEventById(int eventId)
         {
             Event? eventObj = await _eventRepository.GetEventsById(eventId);
 
@@ -97,9 +97,9 @@ namespace Core.Services
 
         public async Task DeleteEvent(int eventId)
         {
-            await GetEventById(eventId);
+            Event eventObj = await GetEventById(eventId);
 
-            await _eventRepository.DeleteEvent(eventId);
+            await _eventRepository.DeleteEvent(eventObj);
         }
 
         public async Task<List<Event>> GetProposedEventsByUserId(int userId)

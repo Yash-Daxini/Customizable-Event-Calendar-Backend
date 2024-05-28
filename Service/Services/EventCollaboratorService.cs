@@ -18,11 +18,6 @@ namespace Core.Services
             return _eventCollaboratorRepository.AddEventCollaborator(eventCollaborator);
         }
 
-        public Task DeleteEventCollaborator(int eventCollaboratorId)
-        {
-            return _eventCollaboratorRepository.DeleteEventCollaborator(eventCollaboratorId);
-        }
-
         public Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator)
         {
             return _eventCollaboratorRepository.UpdateEventCollaborator(eventCollaborator);

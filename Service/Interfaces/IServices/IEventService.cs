@@ -6,7 +6,7 @@ public interface IEventService
 {
     public Task<List<Event>> GetAllEventsByUserId(int userId);
 
-    public Task<Event?> GetEventById(int eventId);
+    public Task<Event> GetEventById(int eventId);
 
     public Task<int> AddEvent(Event eventModel);
 

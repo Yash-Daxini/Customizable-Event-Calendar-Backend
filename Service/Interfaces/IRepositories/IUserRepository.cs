@@ -12,7 +12,7 @@ namespace Core.Interfaces.IRepositories
 
         public Task UpdateUser(User userModel);
 
-        public Task DeleteUser(int userId);
+        public Task DeleteUser(User user);
 
         public Task<User?> AuthenticateUser(User user);
     }

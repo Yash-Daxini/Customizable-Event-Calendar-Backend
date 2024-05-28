@@ -1,18 +1,24 @@
-﻿namespace Core.Domain;
+﻿using System.Text;
 
-public class OverlapEventData(Event eventToVerifyOverlap, Event overlappedEvent, DateOnly matchedDate)
+namespace Core.Domain;
+
+public class OverlapEventData(Event eventToVerifyOverlap, Dictionary<Event,DateOnly> overlappedEventsByDate)
 {
     public Event CheckingEvent { get; set; } = eventToVerifyOverlap;
 
-    public Event OverlappingEvent { get; set; } = overlappedEvent;
-
-    public DateOnly OverlappedDate { get; set; } = matchedDate;
+    public Dictionary<Event,DateOnly> OverlappingEventsByDate { get; set; } = overlappedEventsByDate;
 
     public string GetOverlapMessage()
     {
-        return $"\"{CheckingEvent.Title}\" overlaps with \"{OverlappingEvent.Title}\" at {OverlappedDate} on following duration\n" +
-               $"1. {CheckingEvent.Duration.GetDurationInFormat()} \n" +
-               $"overlaps with " +
-               $"\n2. {OverlappingEvent.Duration.GetDurationInFormat()} \n";
+        StringBuilder overlapMessage = new ($"\"{CheckingEvent.Title}\" overlaps with following events at " +
+                                                $"{CheckingEvent.Duration.GetDurationInFormat()} :-");
+
+        foreach (var (overlapEvent,matchedDate) in OverlappingEventsByDate.Select(e => (e.Key,e.Value)))
+        {
+            overlapMessage.AppendLine($"Event Name : {overlapEvent.Title} Date : {matchedDate} " +
+                                      $"Duration : {overlapEvent.Duration.GetDurationInFormat()}");
+        }
+
+        return overlapMessage.ToString();
     }
 }

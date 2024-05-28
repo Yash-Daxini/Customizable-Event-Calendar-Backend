@@ -11,6 +11,8 @@ public class SharedCalendarProfile : Profile
         CreateMap<SharedCalendarDataModel, SharedCalendar>();
         CreateMap<SharedCalendar, SharedCalendarDataModel>()
             .ForMember(dest => dest.SenderUserId, opt => opt.MapFrom(src => src.SenderUser.Id))
-            .ForMember(dest => dest.ReceiverUserId, opt => opt.MapFrom(src => src.ReceiverUser.Id));
+            .ForMember(dest => dest.ReceiverUserId, opt => opt.MapFrom(src => src.ReceiverUser.Id))
+            .ForMember(dest => dest.SenderUser, opt => opt.Ignore())
+            .ForMember(dest => dest.ReceiverUser, opt => opt.Ignore());
     }
 }
