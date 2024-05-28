@@ -75,7 +75,7 @@ namespace Core.Services
             eventModel.DateWiseParticipants = participantsByDates;
         }
 
-        public async Task<int> UpdateEvent(Event eventModel)
+        public async Task UpdateEvent(Event eventModel)
         {
             await GetEventById(eventModel.Id);
 
@@ -92,9 +92,7 @@ namespace Core.Services
 
             await _participantService.DeleteEventCollaboratorsByEventId(eventModel.Id);
 
-            int updatedEventId = await _eventRepository.UpdateEvent(eventModel);
-
-            return updatedEventId;
+            await _eventRepository.UpdateEvent(eventModel);
         }
 
         public async Task DeleteEvent(int eventId)

@@ -32,10 +32,10 @@ namespace Core.Services
             return await _userRepository.AddUser(userModel);
         }
 
-        public async Task<int> UpdateUser(User userModel)
+        public async Task UpdateUser(User userModel)
         {
             await GetUserById(userModel.Id);
-            return await _userRepository.UpdateUser(userModel);
+            await _userRepository.UpdateUser(userModel);
         }
 
         public async Task DeleteUser(int userId)

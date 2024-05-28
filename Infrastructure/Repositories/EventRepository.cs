@@ -58,15 +58,13 @@ public class EventRepository : IEventRepository
         return eventObj.Id;
     }
 
-    public async Task<int> UpdateEvent(Event eventModel)
+    public async Task UpdateEvent(Event eventModel)
     {
         EventDataModel eventObj = _mapper.Map<EventDataModel>(eventModel);
 
         _dbContext.Events.Update(eventObj);
 
         await _dbContext.SaveChangesAsync();
-
-        return eventObj.Id;
     }
 
     public async Task DeleteEvent(int eventId)

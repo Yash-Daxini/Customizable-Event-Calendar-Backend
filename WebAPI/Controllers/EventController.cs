@@ -36,81 +36,6 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("~/api/events/{eventId}")]
-        public async Task<ActionResult> GetEventById([FromRoute] int eventId)
-        {
-            try
-            {
-                Event? eventModel = await _eventService.GetEventById(eventId);
-
-                if (eventModel is null) return NotFound();
-
-                return Ok(_mapper.Map<EventResponseDto>(eventModel));
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPost("~/api/events")]
-        public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto)
-        {
-            try
-            {
-                Event eventObj = _mapper.Map<Event>(eventRequestDto);
-
-                int addedEventId = await _eventService.AddEvent(eventObj);
-                return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, addedEventId);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPut("~/api/events/{eventId}")]
-        public async Task<ActionResult> UpdateEvent([FromRoute] int eventId, [FromBody] EventRequestDto eventRequestDto)
-        {
-            try
-            {
-                Event eventObj = _mapper.Map<Event>(eventRequestDto);
-                eventObj.Id = eventId;
-                int addedEventId = await _eventService.UpdateEvent(eventObj);
-                return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, addedEventId);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-
-        }
-
-        [HttpDelete("~/api/events/{eventId}")]
-        public async Task<ActionResult> DeleteUser([FromRoute] int eventId)
-        {
-            try
-            {
-                await _eventService.DeleteEvent(eventId);
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
 
         [HttpGet("eventsBetweenDates")]
         public async Task<ActionResult> GetEventsWithInGivenDates([FromRoute] int userId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
@@ -180,6 +105,81 @@ namespace WebAPI.Controllers
                 List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
                 return Ok(_mapper.Map<List<EventResponseDto>>(events));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("~/api/events/{eventId}")]
+        public async Task<ActionResult> GetEventById([FromRoute] int eventId)
+        {
+            try
+            {
+                Event? eventModel = await _eventService.GetEventById(eventId);
+
+                if (eventModel is null) return NotFound();
+
+                return Ok(_mapper.Map<EventResponseDto>(eventModel));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("~/api/events")]
+        public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto)
+        {
+            try
+            {
+                Event eventObj = _mapper.Map<Event>(eventRequestDto);
+
+                int addedEventId = await _eventService.AddEvent(eventObj);
+                return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, addedEventId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("~/api/events")]
+        public async Task<ActionResult> UpdateEvent([FromBody] EventRequestDto eventRequestDto)
+        {
+            try
+            {
+                Event eventObj = _mapper.Map<Event>(eventRequestDto);
+                await _eventService.UpdateEvent(eventObj);
+                return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, eventObj.Id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+        [HttpDelete("~/api/events/{eventId}")]
+        public async Task<ActionResult> DeleteEvent([FromRoute] int eventId)
+        {
+            try
+            {
+                await _eventService.DeleteEvent(eventId);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

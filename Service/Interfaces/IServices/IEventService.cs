@@ -10,7 +10,7 @@ public interface IEventService
 
     public Task<int> AddEvent(Event eventModel);
 
-    public Task<int> UpdateEvent(Event eventModel);
+    public Task UpdateEvent(Event eventModel);
 
     public Task DeleteEvent(int eventId);
 

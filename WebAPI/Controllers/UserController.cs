@@ -22,26 +22,25 @@ namespace WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            try
-            {
-                List<User> users = await _userService.GetAllUsers();
-                return Ok(_mapper.Map<List<UserDto>>(users));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllUsers()
+        //{
+        //    try
+        //    {
+        //        List<User> users = await _userService.GetAllUsers();
+        //        return Ok(_mapper.Map<List<UserDto>>(users));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
 
         [HttpGet("{userId}")]
         public async Task<ActionResult> GetUserById([FromRoute] int userId)
         {
             try
             {
-
                 User? user = _userService.GetUserById(userId).Result;
 
                 if (user is null) return NotFound();
@@ -73,15 +72,14 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut("{userId}")]
-        public async Task<ActionResult> UpdateUser([FromRoute] int userId, [FromBody] UserDto userDto)
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser([FromBody] UserDto userDto)
         {
             try
             {
                 User user = _mapper.Map<User>(userDto);
-                user.Id = userId;
-                int addedUserId = await _userService.UpdateUser(user);
-                return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);
+                await _userService.UpdateUser(user);
+                return CreatedAtAction(nameof(GetUserById), new { userId = user.Id, controller = "user" }, user.Id);
             }
             catch (NotFoundException ex)
             {

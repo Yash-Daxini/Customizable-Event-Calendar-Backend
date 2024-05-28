@@ -47,15 +47,13 @@ namespace Infrastructure.Repositories
             return user.Id;
         }
 
-        public async Task<int> UpdateUser(User userModel)
+        public async Task UpdateUser(User userModel)
         {
             UserDataModel user = _mapper.Map<UserDataModel>(userModel);
 
             _dbContext.Users.Update(user);
 
             await _dbContext.SaveChangesAsync();
-
-            return user.Id;
         }
 
         public async Task DeleteUser(int userId)
@@ -70,7 +68,7 @@ namespace Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User?> AuthenticateUser(User user)
+        public async Task<User?> AuthenticateUser(User user) //Extra
         {
             UserDataModel? userDataModel = await _dbContext
                                           .Users

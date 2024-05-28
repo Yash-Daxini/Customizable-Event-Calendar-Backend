@@ -8,9 +8,6 @@ public class EventRequestDtoProfile : Profile
 {
     public EventRequestDtoProfile()
     {
-        CreateMap<Event, EventRequestDto>()
-            .ForMember(dest => dest.Participants,opt => opt.MapFrom(src => src.GetInviteesOfEvent()));
-
         CreateMap<EventRequestDto, Event>()
             .ForMember(dest => dest.DateWiseParticipants, opt => opt.MapFrom<DateWiseParticipantsResolver>());
     }

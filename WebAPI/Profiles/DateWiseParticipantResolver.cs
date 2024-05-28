@@ -18,7 +18,7 @@ public class DateWiseParticipantsResolver : IValueResolver<EventRequestDto, Even
         return [new EventCollaboratorsByDate()
                 {
                     EventDate = new DateOnly(),
-                    EventCollaborators = _mapper.Map<List<EventCollaborator>>(source.Participants)
+                    EventCollaborators = _mapper.Map<List<EventCollaborator>>(source.EventCollaborators)
                 }
                ];
     }

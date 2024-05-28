@@ -2,6 +2,7 @@
 using Core.Domain.Enums;
 using Core.Domain;
 using Infrastructure.DataModels;
+using Infrastructure.Extensions;
 
 namespace Infrastructure.Profiles;
 
@@ -49,18 +50,22 @@ public class EventProfile : Profile
 
     private Frequency MapFrequencyToEnum(string? frequency)
     {
-        if(frequency is null) return Frequency.None;
-        return Enum.Parse<Frequency>(frequency);
+        return frequency is null
+               ? Frequency.None
+               : frequency.ToEnum<Frequency>();
     }
 
     private string? MapEnumToFrequency(Frequency frequency)
     {
-        return frequency == Frequency.None ? null : frequency.ToString();
+        return frequency == Frequency.None
+               ? null
+               : frequency.ToString();
     }
 
     private List<int>? MapWeekDayIntoList(string? weekDay)
     {
-        if (weekDay == null) return null;
-        return [.. weekDay.Split(",").Select(int.Parse)];
+        return weekDay == null
+               ? null
+               : [.. weekDay.Split(",").Select(int.Parse)];
     }
 }
