@@ -28,8 +28,8 @@ public class UserAuthenticationService : IUserAuthenticationService
         return loggedInUser != null;
     }
 
-    private async void ScheduleProposedEventsForLoggedInUser()
+    private async void ScheduleProposedEventsForLoggedInUser(int userId)
     {
-        await _multipleInviteesEventService.StartSchedulingProcessOfProposedEvent();
+        await _multipleInviteesEventService.StartSchedulingProcessOfProposedEvent(userId);
     }
 }

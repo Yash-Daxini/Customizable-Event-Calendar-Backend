@@ -4,131 +4,125 @@ using Core.Interfaces.IRepositories;
 using Infrastructure.DataModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories;
+
+public class EventRepository : IEventRepository
 {
-    public class EventRepository : IEventRepository
+    private readonly DbContextEventCalendar _dbContext;
+
+    private readonly IMapper _mapper;
+
+    public EventRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
     {
-        private readonly DbContextEventCalendar _dbContext;
+        _dbContext = dbContextEvent;
+        _mapper = mapper;
+    }
 
-        private readonly IMapper _mapper;
+    public async Task<List<Event>> GetAllEventsByUserId(int userId)
+    {
+        return
+                    await _dbContext
+                    .Events
+                    .Where(eventObj => eventObj.UserId == userId)
+                    .Include(eventObj => eventObj.EventCollaborators)
+                        .ThenInclude(eventCollaborator => eventCollaborator.User)
+                        .Select(eventObj => _mapper.Map<Event>(eventObj))
+                    .ToListAsync();
 
-        public EventRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
+    }
+
+    public async Task<Event?> GetEventsById(int eventId)
+    {
+        return _mapper.Map<Event>(
+                       await _dbContext
+                      .Events
+                      .Where(eventObj => eventObj.Id == eventId)
+                      .Include(eventObj => eventObj.EventCollaborators)
+                        .ThenInclude(eventCollaborator => eventCollaborator.User)
+                      .FirstOrDefaultAsync());
+    }
+
+    public async Task<int> AddEvent(Event eventModel)
+    {
+        EventDataModel eventObj = _mapper.Map<EventDataModel>(eventModel);
+
+        foreach (var eventCollaborator in eventObj.EventCollaborators)
         {
-            _dbContext = dbContextEvent;
-            _mapper = mapper;
+            _dbContext.Attach(eventCollaborator.User);
         }
 
-        public async Task<List<Event>> GetAllEvents()
-        {
-            return
-                        await _dbContext
-                        .Events
-                        .Include(eventObj => eventObj.EventCollaborators)
-                            .ThenInclude(eventCollaborator => eventCollaborator.User)
-                            .Select(eventObj => _mapper.Map<Event>(eventObj))
-                        .ToListAsync();
+        _dbContext.Events.Add(eventObj);
 
-        }
+        await _dbContext.SaveChangesAsync();
 
-        public async Task<Event?> GetEventsById(int eventId)
-        {
-            return _mapper.Map<Event>(
-                           await _dbContext
-                          .Events
-                          .Where(eventObj => eventObj.Id == eventId)
-                          .Include(eventObj => eventObj.EventCollaborators)
-                            .ThenInclude(eventCollaborator => eventCollaborator.User)
-                          .FirstOrDefaultAsync());
-        }
+        return eventObj.Id;
+    }
 
-        public async Task<int> AddEvent(Event eventModel)
-        {
-            EventDataModel eventObj = _mapper.Map<EventDataModel>(eventModel);
+    public async Task<int> UpdateEvent(Event eventModel)
+    {
+        EventDataModel eventObj = _mapper.Map<EventDataModel>(eventModel);
 
-            foreach (var eventCollaborator in eventObj.EventCollaborators)
-            {
-                _dbContext.Attach(eventCollaborator.User);
-            }
+        _dbContext.Events.Update(eventObj);
 
-            _dbContext.Events.Add(eventObj);
+        await _dbContext.SaveChangesAsync();
 
-            await _dbContext.SaveChangesAsync();
+        return eventObj.Id;
+    }
 
-            return eventObj.Id;
-        }
+    public async Task DeleteEvent(int eventId)
+    {
+        EventDataModel eventObj = _dbContext.Events
+                                 .Where(eventObj => eventObj.Id == eventId)
+                                 .Include(eventObj => eventObj.EventCollaborators)
+                                 .First();
 
-        public async Task<int> UpdateEvent(Event eventModel)
-        {
-            EventDataModel eventObj = _mapper.Map<EventDataModel>(eventModel);
+        _dbContext.Remove(eventObj);
 
-            _dbContext.Events.Update(eventObj);
+        await _dbContext.SaveChangesAsync();
+    }
 
-            await _dbContext.SaveChangesAsync();
+    public async Task<List<Event>> GetEventsWithinGivenDateByUserId(int userId, DateOnly startDate, DateOnly endDate)
+    {
+        return await _dbContext
+                      .Events
+                      .Where(eventObj => eventObj.UserId == userId)
+                      .Include(eventObj => eventObj.EventCollaborators)
+                        .ThenInclude(eventCollaborator => eventCollaborator.User)
+                      .Where(eventObj => eventObj
+                                          .EventCollaborators
+                                          .Where(eventCollaborator => eventCollaborator.EventDate >= startDate && eventCollaborator.EventDate <= endDate)
+                                          .Select(eventCollaborator => eventCollaborator.EventId).Contains(eventObj.Id))
+                      .Select(eventObj => _mapper.Map<Event>(eventObj))
+                      .ToListAsync();
+    }
 
-            return eventObj.Id;
-        }
+    public async Task<List<Event>> GetProposedEventsByUserId(int userId)
+    {
+        return 
+                       await _dbContext
+                      .Events
+                      .Include(eventObj => eventObj.EventCollaborators)
+                        .ThenInclude(eventCollaborator => eventCollaborator.User)
+                      .Where(eventObj => eventObj
+                                        .EventCollaborators
+                                        .Select(eventCollaborator => eventCollaborator.UserId).Contains(userId))
+                      .Select(eventObj => _mapper.Map<Event>(eventObj))
+                      .ToListAsync();
+    }
 
-        public async Task DeleteEvent(int eventId)
-        {
-            EventDataModel eventObj = _dbContext.Events
-                                     .Where(eventObj => eventObj.Id == eventId)
-                                     .Include(eventObj => eventObj.EventCollaborators)
-                                     .First();
+    public async Task<List<Event>> GetSharedEventsFromSharedCalendarId(SharedCalendar? sharedCalendar)
+    {
+        if (sharedCalendar is null) return [];
 
-            _dbContext.Remove(eventObj);
+        return await GetSharedEvents(sharedCalendar);
+    }
 
-            await _dbContext.SaveChangesAsync();
-        }
+    public async Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar)
+    {
+        List<Event> events = await GetEventsWithinGivenDateByUserId(sharedCalendar.SenderUser.Id, sharedCalendar.FromDate, sharedCalendar.ToDate);
 
-        public async Task<List<Event>> GetEventsWithinGivenDate(DateOnly startDate, DateOnly endDate)
-        {
-            return await _dbContext
-                          .Events
-                          .Include(eventObj => eventObj.EventCollaborators)
-                            .ThenInclude(eventCollaborator => eventCollaborator.User)
-                          .Where(eventObj => eventObj
-                                              .EventCollaborators
-                                              .Where(eventCollaborator => eventCollaborator.EventDate >= startDate && eventCollaborator.EventDate <= endDate)
-                                              .Select(eventCollaborator => eventCollaborator.EventId).Contains(eventObj.Id))
-                          .Select(eventObj => _mapper.Map<Event>(eventObj))
-                          .ToListAsync();
-        }
-
-        public async Task<List<Event>> GetProposedEvents()
-        {
-            return _mapper.Map<List<Event>>(
-                           await _dbContext
-                          .Events
-                          .Include(eventObj => eventObj.EventCollaborators)
-                            .ThenInclude(eventCollaborator => eventCollaborator.User)
-                          .ToListAsync());
-        }
-
-        public async Task<List<Event>> GetEventsByUserId(int userId)
-        {
-            return _mapper.Map<List<Event>>(
-                           await _dbContext
-                          .Events
-                          .Where(eventObj => eventObj.UserId == userId)
-                          .Include(eventObj => eventObj.EventCollaborators)
-                            .ThenInclude(eventCollaborator => eventCollaborator.User)
-                          .ToListAsync());
-        }
-
-        public async Task<List<Event>> GetSharedEventsFromSharedCalendarId(SharedCalendar? sharedCalendar)
-        {
-            if (sharedCalendar is null) return [];
-
-            return await GetSharedEvents(sharedCalendar);
-        }
-
-        public async Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar)
-        {
-            List<Event> events = await GetEventsWithinGivenDate(sharedCalendar.FromDate, sharedCalendar.ToDate);
-
-            return events
-                   .Where(eventModel => eventModel.GetEventOrganizer().Id == sharedCalendar.SenderUser.Id)
-                   .ToList();
-        }
+        return events
+               .Where(eventModel => eventModel.GetEventOrganizer().Id == sharedCalendar.SenderUser.Id)
+               .ToList();
     }
 }

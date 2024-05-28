@@ -27,7 +27,7 @@ namespace Core.Services
             _sharedCalendarService = sharedCalendarService;
         }
 
-        public async Task<List<Event>> GetAllEvents() => await _eventRepository.GetAllEvents();
+        public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
 
         public async Task<Event?> GetEventById(int eventId) => await _eventRepository.GetEventsById(eventId);
 
@@ -39,7 +39,7 @@ namespace Core.Services
 
             OverlapEventData? overlapEventData = _overlappingEventService
                                                  .GetOverlappedEventInformation(eventModel,
-                                                                                GetEventsByUserId(eventModel.Id).Result);
+                                                                                GetAllEventsByUserId(eventModel.Id).Result);
 
             if (overlapEventData is not null)
                 throw new Exception($"{overlapEventData.GetOverlapMessage()}");
@@ -75,7 +75,7 @@ namespace Core.Services
 
             OverlapEventData? overlapEventData = _overlappingEventService
                                                  .GetOverlappedEventInformation(eventModel,
-                                                                                GetEventsByUserId(eventModel.Id).Result);
+                                                                                GetAllEventsByUserId(eventModel.Id).Result);
 
             if (overlapEventData is not null)
                 throw new Exception($"{overlapEventData.GetOverlapMessage()}");
@@ -92,47 +92,45 @@ namespace Core.Services
             await _eventRepository.DeleteEvent(eventId);
         }
 
-        public async Task<List<Event>> GetProposedEvents()
+        public async Task<List<Event>> GetProposedEventsByUserId(int userId)
         {
-            List<Event> events = await _eventRepository.GetProposedEvents();
+            List<Event> events = await _eventRepository.GetProposedEventsByUserId(userId);
 
             return events.Where(eventObj => eventObj.IsProposedEventToGiveResponse())
                          .ToList();
         }
 
-        public async Task<List<Event>> GetEventsByUserId(int userId) => await _eventRepository.GetEventsByUserId(userId);
-
         public async Task<List<Event>> GetNonProposedEventsByUserId(int userId)
         {
-            List<Event> events = await GetEventsByUserId(userId);
+            List<Event> events = await GetAllEventsByUserId(userId);
 
             return events.Where(eventObj => !eventObj.IsProposedEventToGiveResponse())
                          .ToList();
         }
 
-        public async Task<List<Event>> GetEventsWithinGivenDates(DateOnly startDate, DateOnly endDate) =>
-               await _eventRepository.GetEventsWithinGivenDate(startDate, endDate);
+        public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate) =>
+               await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDate, endDate);
 
-        public async Task<List<Event>> GetEventsForDailyView()
+        public async Task<List<Event>> GetEventsForDailyViewByUserId(int userId)
         {
             DateOnly today = DateTime.Today.ConvertToDateOnly();
-            return await GetEventsWithinGivenDates(today, today);
+            return await GetEventsWithinGivenDatesByUserId(userId, today, today);
         }
 
-        public async Task<List<Event>> GetEventsForWeeklyView()
+        public async Task<List<Event>> GetEventsForWeeklyViewByUserId(int userId)
         {
             DateOnly startDateOfWeek = DateTime.Today.GetStartDateOfWeek();
             DateOnly endDateOfWeek = DateTime.Today.GetEndDateOfWeek();
 
-            return await GetEventsWithinGivenDates(startDateOfWeek, endDateOfWeek);
+            return await GetEventsWithinGivenDatesByUserId(userId, startDateOfWeek, endDateOfWeek);
         }
 
-        public async Task<List<Event>> GetEventsForMonthlyView()
+        public async Task<List<Event>> GetEventsForMonthlyViewByUserId(int userId)
         {
             DateOnly startDateOfMonth = DateTime.Today.GetStartDateOfMonth();
             DateOnly endDateOfMonth = DateTime.Today.GetEndDateOfMonth();
 
-            return await GetEventsWithinGivenDates(startDateOfMonth, endDateOfMonth);
+            return await GetEventsWithinGivenDatesByUserId(userId, startDateOfMonth, endDateOfMonth);
         }
 
         public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)

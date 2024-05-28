@@ -8,7 +8,9 @@ public class EventResponseDtoProfile : Profile
 {
     public EventResponseDtoProfile()
     {
-        CreateMap<Event, EventResponseDto>();
-        CreateMap<EventResponseDto, Event>();
+        CreateMap<Event, EventResponseDto>()
+            .ForMember(dest => dest.Occurrences,
+                       opt => opt.MapFrom(src => src.DateWiseParticipants
+                                                    .Select(participantByDate=>participantByDate.EventDate)));
     }
 }

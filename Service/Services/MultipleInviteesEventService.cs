@@ -16,9 +16,9 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
         _participantService = participantService;
     }
 
-    public async Task StartSchedulingProcessOfProposedEvent()
+    public async Task StartSchedulingProcessOfProposedEvent(int userId)
     {
-        List<Event> events = await _eventService.GetProposedEvents();
+        List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
         foreach (var eventObj in events)
         {

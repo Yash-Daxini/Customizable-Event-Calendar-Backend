@@ -4,7 +4,7 @@ namespace Core.Interfaces.IServices;
 
 public interface IEventService
 {
-    public Task<List<Event>> GetAllEvents();
+    public Task<List<Event>> GetAllEventsByUserId(int userId);
 
     public Task<Event?> GetEventById(int eventId);
 
@@ -14,19 +14,17 @@ public interface IEventService
 
     public Task DeleteEvent(int eventId);
 
-    public Task<List<Event>> GetEventsWithinGivenDates(DateOnly startDate, DateOnly endDate);
+    public Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate);
 
-    public Task<List<Event>> GetProposedEvents();
-
-    public Task<List<Event>> GetEventsByUserId(int userId);
+    public Task<List<Event>> GetProposedEventsByUserId(int userId);
 
     public Task<List<Event>> GetNonProposedEventsByUserId(int userId);
 
-    public Task<List<Event>> GetEventsForDailyView();
+    public Task<List<Event>> GetEventsForDailyViewByUserId(int userId);
 
-    public Task<List<Event>> GetEventsForWeeklyView();
+    public Task<List<Event>> GetEventsForWeeklyViewByUserId(int userId);
 
-    public Task<List<Event>> GetEventsForMonthlyView();
+    public Task<List<Event>> GetEventsForMonthlyViewByUserId(int userId);
 
     public Task<List<Event>> GetSharedEvents(int sharedCalendarId);
 }

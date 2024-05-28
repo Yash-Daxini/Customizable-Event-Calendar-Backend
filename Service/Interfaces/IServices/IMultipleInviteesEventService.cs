@@ -2,5 +2,5 @@
 
 public interface IMultipleInviteesEventService
 {
-    public Task StartSchedulingProcessOfProposedEvent();
+    public Task StartSchedulingProcessOfProposedEvent(int userId);
 }

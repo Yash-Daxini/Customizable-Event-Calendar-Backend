@@ -6,7 +6,7 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/events")]
+    [Route("api/users/{userId}/events")]
     [ApiController]
     //[Authorize]
     public class EventController : ControllerBase
@@ -21,14 +21,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllEvents()
+        public async Task<IActionResult> GetAllEvents([FromRoute] int userId)
         {
-            List<Event> events = await _eventService.GetAllEvents();
+            List<Event> events = await _eventService.GetAllEventsByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
 
-        [HttpGet("{eventId}")]
+        [HttpGet("~/api/events/{eventId}")]
         public async Task<ActionResult> GetEventById([FromRoute] int eventId)
         {
             Event? eventModel = await _eventService.GetEventById(eventId);
@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
             return Ok(_mapper.Map<EventResponseDto>(eventModel));
         }
 
-        [HttpPost("")]
+        [HttpPost("~/api/events")]
         public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto)
         {
             try
@@ -54,7 +54,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut("{eventId}")]
+        [HttpPut("~/api/events/{eventId}")]
         public async Task<ActionResult> UpdateEvent([FromRoute] int eventId, [FromBody] EventRequestDto eventRequestDto)
         {
             try
@@ -71,7 +71,7 @@ namespace WebAPI.Controllers
 
         }
 
-        [HttpDelete("{eventId}")]
+        [HttpDelete("~/api/events/{eventId}")]
         public async Task<ActionResult> DeleteUser([FromRoute] int eventId)
         {
             try
@@ -86,49 +86,41 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("eventsBetweenDates")]
-        public async Task<ActionResult> GetEventsWithInGivenDates([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+        public async Task<ActionResult> GetEventsWithInGivenDates([FromRoute] int userId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
         {
-            List<Event> events = await _eventService.GetEventsWithinGivenDates(startDate, endDate);
+            List<Event> events = await _eventService.GetEventsWithinGivenDatesByUserId(userId, startDate, endDate);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
 
         [HttpGet("proposed")]
-        public async Task<ActionResult> GetProposedEvents()
+        public async Task<ActionResult> GetProposedEvents([FromRoute] int userId)
         {
-            List<Event> events = await _eventService.GetProposedEvents();
-
-            return Ok(_mapper.Map<List<EventResponseDto>>(events));
-        }
-
-        [HttpGet("~/api/users/{userId}/events")]
-        public async Task<ActionResult> GetEventsByUser([FromRoute] int userId)
-        {
-            List<Event> events = await _eventService.GetEventsByUserId(userId);
+            List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
 
         [HttpGet("daily")]
-        public async Task<ActionResult> GetEventsForDailyView()
+        public async Task<ActionResult> GetEventsForDailyView([FromRoute] int userId)
         {
-            List<Event> events = await _eventService.GetEventsForDailyView();
+            List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
 
         [HttpGet("weekly")]
-        public async Task<ActionResult> GetEventsForWeeklyView()
+        public async Task<ActionResult> GetEventsForWeeklyView([FromRoute] int userId)
         {
-            List<Event> events = await _eventService.GetEventsForWeeklyView();
+            List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
 
         [HttpGet("monthly")]
-        public async Task<ActionResult> GetEventsForMonthlyView()
+        public async Task<ActionResult> GetEventsForMonthlyView([FromRoute] int userId)
         {
-            List<Event> events = await _eventService.GetEventsForMonthlyView();
+            List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }

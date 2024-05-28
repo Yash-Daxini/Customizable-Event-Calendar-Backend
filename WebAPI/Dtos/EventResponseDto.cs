@@ -13,4 +13,6 @@ public class EventResponseDto
     public DurationDto Duration { get; set; }
 
     public RecurrencePatternDto RecurrencePattern { get; set; }
+
+    public List<DateOnly> Occurrences { get; set; }    
 }
