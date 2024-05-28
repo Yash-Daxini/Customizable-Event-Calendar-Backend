@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Domain;
+using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
@@ -28,9 +29,17 @@ namespace WebAPI.Controllers
 
                 return Ok(new { message = "Successfully collaborated !" });
             }
-            catch (Exception ex)
+            catch (CollaborationOverlapException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (UserAlreadyCollaboratedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

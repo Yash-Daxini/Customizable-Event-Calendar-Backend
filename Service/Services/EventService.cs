@@ -1,7 +1,8 @@
 ﻿using Core.Domain;
+using Core.Exceptions;
+using Core.Extensions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
-using Core.Services.Extensions;
 
 namespace Core.Services
 {
@@ -29,7 +30,14 @@ namespace Core.Services
 
         public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
 
-        public async Task<Event?> GetEventById(int eventId) => await _eventRepository.GetEventsById(eventId);
+        public async Task<Event?> GetEventById(int eventId)
+        {
+            Event? eventObj = await _eventRepository.GetEventsById(eventId);
+
+            return eventObj is null 
+                   ? throw new NotFoundException($"Event with id {eventId} not found.") 
+                   : eventObj;
+        }
 
         public async Task<int> AddEvent(Event eventModel)
         {
@@ -42,7 +50,7 @@ namespace Core.Services
                                                                                 GetAllEventsByUserId(eventModel.Id).Result);
 
             if (overlapEventData is not null)
-                throw new Exception($"{overlapEventData.GetOverlapMessage()}");
+                throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
 
             eventModel.Id = await _eventRepository.AddEvent(eventModel);
 
@@ -69,6 +77,8 @@ namespace Core.Services
 
         public async Task<int> UpdateEvent(Event eventModel)
         {
+            await GetEventById(eventModel.Id);
+
             List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
 
             MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
@@ -78,7 +88,7 @@ namespace Core.Services
                                                                                 GetAllEventsByUserId(eventModel.Id).Result);
 
             if (overlapEventData is not null)
-                throw new Exception($"{overlapEventData.GetOverlapMessage()}");
+                throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
 
             await _participantService.DeleteEventCollaboratorsByEventId(eventModel.Id);
 
@@ -89,6 +99,8 @@ namespace Core.Services
 
         public async Task DeleteEvent(int eventId)
         {
+            await GetEventById(eventId);
+
             await _eventRepository.DeleteEvent(eventId);
         }
 

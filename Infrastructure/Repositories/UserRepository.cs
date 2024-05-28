@@ -77,7 +77,6 @@ namespace Infrastructure.Repositories
                                           .FirstOrDefaultAsync(userObj => userObj.Name == user.Name
                                                                        && userObj.Password == user.Password);
 
-            if (userDataModel is null) return null;
             return _mapper.Map<User>(userDataModel);
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace Core.Services.Extensions;
+﻿namespace Core.Extensions;
 
 public static class DateTimeUtills
 {
@@ -10,7 +10,7 @@ public static class DateTimeUtills
 
     public static DateOnly GetEndDateOfWeek(this DateTime todayDate)
     {
-        return GetStartDateOfWeek(todayDate).AddDays(6);
+        return todayDate.GetStartDateOfWeek().AddDays(6);
     }
 
     public static DateOnly GetStartDateOfMonth(this DateTime todayDate)

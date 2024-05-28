@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 
@@ -20,7 +21,11 @@ namespace Core.Services
 
         public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
         {
-            return await _sharedCalendarRepository.GetSharedCalendarById(sharedCalendarId);
+            SharedCalendar? sharedCalendar = await _sharedCalendarRepository.GetSharedCalendarById(sharedCalendarId);
+
+            return sharedCalendar is null
+                   ? throw new NotFoundException($"SharedCalendar with id {sharedCalendarId} not found.")
+                   : sharedCalendar;
         }
 
         public async Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel)

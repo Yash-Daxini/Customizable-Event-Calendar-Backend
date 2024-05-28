@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Core.Exceptions;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;
@@ -19,12 +20,12 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
         bool isAlreadyCollaborated = await IsEventAlreadyCollaborated(participant);
 
         if (isAlreadyCollaborated)
-            throw new Exception("Already collaborated in this event");
+            throw new UserAlreadyCollaboratedException("Already collaborated in this event");
 
         Event? overlapEvent = await GetCollaborationOverlap(participant);
 
         if (overlapEvent is not null)
-            throw new Exception($"Overlaps with {overlapEvent.Title} at " +
+            throw new CollaborationOverlapException($"Overlaps with {overlapEvent.Title} at " +
                                 $"{participant.EventDate} from " +
                                 $"{overlapEvent.Duration.GetDurationInFormat()}");
 

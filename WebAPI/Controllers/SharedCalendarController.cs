@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Domain;
+using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
@@ -22,19 +23,35 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSharedCalendars()
         {
-            List<SharedCalendar> sharedCalendars = await _sharedCalendarService.GetAllSharedCalendars();
+            try
+            {
+                List<SharedCalendar> sharedCalendars = await _sharedCalendarService.GetAllSharedCalendars();
 
-            return Ok(_mapper.Map<List<SharedCalendarDto>>(sharedCalendars));
+                return Ok(_mapper.Map<List<SharedCalendarDto>>(sharedCalendars));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{sharedCalendarId}")]
         public async Task<ActionResult> GetSharedCalendarById([FromRoute] int sharedCalendarId)
         {
-            SharedCalendar? sharedCalendarModel = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
+            try
+            {
+                SharedCalendar? sharedCalendarModel = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
 
-            if (sharedCalendarModel is null) return NotFound();
-
-            return Ok(_mapper.Map<SharedCalendarDto>(sharedCalendarModel));
+                return Ok(_mapper.Map<SharedCalendarDto>(sharedCalendarModel));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost()]
@@ -49,7 +66,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }

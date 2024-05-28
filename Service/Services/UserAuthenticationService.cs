@@ -1,34 +1,35 @@
 ﻿using Core.Domain;
-using Core.Interfaces.IRepositories;
+using Core.Exceptions;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;
 
 public class UserAuthenticationService : IUserAuthenticationService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
+
     private readonly IMultipleInviteesEventService _multipleInviteesEventService;
 
-    public UserAuthenticationService(IUserRepository userRepository,
+    public UserAuthenticationService(IUserService userService,
                                      IMultipleInviteesEventService multipleInviteesEventService)
     {
-        _userRepository = userRepository;
+        _userService = userService;
         _multipleInviteesEventService = multipleInviteesEventService;
     }
 
-    public async Task<bool> Authenticate(User user)
+    public async Task Authenticate(User user)
     {
-        User? loggedInUser = await _userRepository.AuthenticateUser(user);
+        await _userService.GetUserById(user.Id);
 
-        if (loggedInUser is not null)
-        {
-            //ScheduleProposedEventsForLoggedInUser();
-        }
+        User? loggedInUser = await _userService.AuthenticateUser(user);
 
-        return loggedInUser != null;
+        if (loggedInUser is null)
+            throw new AuthenticationFailedException("Invalid user name or password!");
+
+        //ScheduleProposedEventsForLoggedInUser();
     }
 
-    private async void ScheduleProposedEventsForLoggedInUser(int userId)
+    private async void ScheduleProposedEventsForLoggedInUser(int userId) //Work on this service
     {
         await _multipleInviteesEventService.StartSchedulingProcessOfProposedEvent(userId);
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces.IServices;
 using AutoMapper;
 using WebAPI.Dtos;
+using Core.Exceptions;
 
 namespace WebAPI.Controllers
 {
@@ -24,18 +25,37 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            List<User> users = await _userService.GetAllUsers();
-            return Ok(_mapper.Map<List<UserDto>>(users));
+            try
+            {
+                List<User> users = await _userService.GetAllUsers();
+                return Ok(_mapper.Map<List<UserDto>>(users));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{userId}")]
         public async Task<ActionResult> GetUserById([FromRoute] int userId)
         {
-            User? user = _userService.GetUserById(userId).Result;
+            try
+            {
 
-            if (user is null) return NotFound();
+                User? user = _userService.GetUserById(userId).Result;
 
-            return Ok(_mapper.Map<UserDto>(user));
+                if (user is null) return NotFound();
+
+                return Ok(_mapper.Map<UserDto>(user));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("")]
@@ -49,7 +69,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -63,9 +83,13 @@ namespace WebAPI.Controllers
                 int addedUserId = await _userService.UpdateUser(user);
                 return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -77,9 +101,13 @@ namespace WebAPI.Controllers
                 await _userService.DeleteUser(userId);
                 return Ok();
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -88,14 +116,21 @@ namespace WebAPI.Controllers
         {
             try
             {
-                bool isAuthenticate = await _userAuthenticationService.Authenticate(user);
+                await _userAuthenticationService.Authenticate(user);
 
-                if (!isAuthenticate) return BadRequest(new { message = "Invalid username or password" });
                 return Ok(new { message = "Login successfully" });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (AuthenticationFailedException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }

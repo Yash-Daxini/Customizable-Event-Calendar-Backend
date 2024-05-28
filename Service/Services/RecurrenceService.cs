@@ -5,12 +5,6 @@ namespace Core.Services;
 
 public class RecurrenceService : IRecurrenceService
 {
-    private readonly IEventCollaboratorService _participantService;
-
-    public RecurrenceService(IEventCollaboratorService participantService)
-    {
-        _participantService = participantService;
-    }
     public List<DateOnly> GetOccurrencesOfEvent(Event eventModel)
     {
         return eventModel.RecurrencePattern.IsNonRecurrenceEvent()

@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 
@@ -20,22 +21,32 @@ namespace Core.Services
 
         public async Task<User?> GetUserById(int userId)
         {
-            return await _userRepository.GetUserById(userId);
+            User? user = await _userRepository.GetUserById(userId);
+            return user == null
+                   ? throw new NotFoundException($"User with id {userId} not found.")
+                   : user;
         }
 
-        public Task<int> AddUser(User userModel)
+        public async Task<int> AddUser(User userModel)
         {
-            return _userRepository.AddUser(userModel);
+            return await _userRepository.AddUser(userModel);
         }
 
-        public Task<int> UpdateUser(User userModel)
+        public async Task<int> UpdateUser(User userModel)
         {
-            return _userRepository.UpdateUser(userModel);
+            await GetUserById(userModel.Id);
+            return await _userRepository.UpdateUser(userModel);
         }
 
-        public Task DeleteUser(int userId)
+        public async Task DeleteUser(int userId)
         {
-            return _userRepository.DeleteUser(userId);
+            await GetUserById(userId);
+            await _userRepository.DeleteUser(userId);
+        }
+
+        public async Task<User?> AuthenticateUser(User user)
+        {
+            return await _userRepository.AuthenticateUser(user);
         }
     }
 }
