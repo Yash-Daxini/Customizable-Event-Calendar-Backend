@@ -3,51 +3,50 @@ using Core.Domain;
 using AutoMapper;
 using Core.Interfaces.IRepositories;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories;
+
+public class EventCollaboratorRepository : IEventCollaboratorRepository
 {
-    public class EventCollaboratorRepository : IEventCollaboratorRepository
+    private readonly DbContextEventCalendar _dbContext;
+
+    private readonly IMapper _mapper;
+
+    public EventCollaboratorRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
     {
-        private readonly DbContextEventCalendar _dbContext;
+        _dbContext = dbContextEvent;
+        _mapper = mapper;
+    }
 
-        private readonly IMapper _mapper;
+    public async Task<int> AddEventCollaborator(EventCollaborator eventCollaborator)
+    {
+        EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
 
-        public EventCollaboratorRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
-        {
-            _dbContext = dbContextEvent;
-            _mapper = mapper;
-        }
+        _dbContext.EventCollaborators.Add(eventCollaboratorDataModel);
 
-        public async Task<int> AddEventCollaborator(EventCollaborator eventCollaborator)
-        {
-            EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
+        await _dbContext.SaveChangesAsync();
 
-            _dbContext.EventCollaborators.Add(eventCollaboratorDataModel);
+        return eventCollaborator.Id;
+    }
 
-            await _dbContext.SaveChangesAsync();
+    public async Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator)
+    {
+        EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
 
-            return eventCollaborator.Id;
-        }
+        _dbContext.EventCollaborators.Update(eventCollaboratorDataModel);
 
-        public async Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator)
-        {
-            EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
+        await _dbContext.SaveChangesAsync();
 
-            _dbContext.EventCollaborators.Update(eventCollaboratorDataModel);
+        return eventCollaboratorDataModel.Id;
+    }
 
-            await _dbContext.SaveChangesAsync();
+    public async Task DeleteEventCollaboratorsByEventId(int eventId)
+    {
+        List<EventCollaboratorDataModel> eventCollaboratorsToDelete = [.._dbContext
+                                                                      .EventCollaborators
+                                                                      .Where(eventcollaborator => eventcollaborator.EventId == eventId)];
 
-            return eventCollaboratorDataModel.Id;
-        }
+        _dbContext.RemoveRange(eventCollaboratorsToDelete);
 
-        public async Task DeleteEventCollaboratorsByEventId(int eventId)
-        {
-            List<EventCollaboratorDataModel> eventCollaboratorsToDelete = [.._dbContext
-                                                                          .EventCollaborators
-                                                                          .Where(eventcollaborator => eventcollaborator.EventId == eventId)];
-
-            _dbContext.RemoveRange(eventCollaboratorsToDelete);
-
-            await _dbContext.SaveChangesAsync();
-        }
+        await _dbContext.SaveChangesAsync();
     }
 }

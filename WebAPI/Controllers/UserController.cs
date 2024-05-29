@@ -4,6 +4,7 @@ using Core.Interfaces.IServices;
 using AutoMapper;
 using WebAPI.Dtos;
 using Core.Exceptions;
+using WebAPI.Filters;
 
 namespace WebAPI.Controllers
 {
@@ -58,6 +59,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("")]
+        [ServiceFilter(typeof(ValidationFilter<UserDto>))]
         public async Task<ActionResult> AddUser([FromBody] UserDto userDto)
         {
             try
@@ -73,6 +75,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [ServiceFilter(typeof(ValidationFilter<UserDto>))]
         public async Task<ActionResult> UpdateUser([FromBody] UserDto userDto)
         {
             try
@@ -109,27 +112,27 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPost("~/api/auth/login")]
-        public async Task<ActionResult> AuthenticateUser([FromBody] User user)
-        {
-            try
-            {
-                await _userAuthenticationService.Authenticate(user);
+        //    [HttpPost("~/api/auth/login")]
+        //    public async Task<ActionResult> AuthenticateUser([FromBody] User user)
+        //    {
+        //        try
+        //        {
+        //            await _userAuthenticationService.Authenticate(user);
 
-                return Ok(new { message = "Login successfully" });
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (AuthenticationFailedException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        //            return Ok(new { message = "Login successfully" });
+        //        }
+        //        catch (NotFoundException ex)
+        //        {
+        //            return NotFound(ex.Message);
+        //        }
+        //        catch (AuthenticationFailedException ex)
+        //        {
+        //            return BadRequest(ex.Message);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return StatusCode(500, ex.Message);
+        //        }
+        //    }
     }
 }

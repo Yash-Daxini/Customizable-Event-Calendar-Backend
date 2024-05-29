@@ -2,8 +2,10 @@
 using Core.Domain;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
+using WebAPI.Filters;
 
 namespace WebAPI.Controllers
 {
@@ -134,7 +136,8 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("~/api/events")]
-        public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto)
+        [ServiceFilter(typeof(ValidationFilter<EventRequestDto>))]
+        public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto) //Validation added for test
         {
             try
             {
@@ -150,6 +153,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("~/api/events")]
+        [ServiceFilter(typeof(ValidationFilter<EventRequestDto>))]
         public async Task<ActionResult> UpdateEvent([FromBody] EventRequestDto eventRequestDto)
         {
             try

@@ -4,6 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
+using WebAPI.Filters;
 
 namespace WebAPI.Controllers
 {
@@ -55,6 +56,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost()]
+        [ServiceFilter(typeof(ValidationFilter<SharedCalendarDto>))]
         public async Task<ActionResult> AddUser([FromBody] SharedCalendarDto sharedCalendarDto)
         {
             try

@@ -4,6 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
+using WebAPI.Filters;
 
 namespace WebAPI.Controllers
 {
@@ -21,11 +22,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> AddEventCollaboration([FromBody] EventCollaboratorDto eventCollaborator)
+        [ServiceFilter(typeof(ValidationFilter<EventCollaboratorDto>))]
+        public async Task<IActionResult> AddEventCollaboration([FromBody] EventCollaboratorDto eventCollaboratorDto)
         {
             try
             {
-                await _sharedEventCollaborationService.AddCollaborator(_mapper.Map<EventCollaborator>(eventCollaborator));
+                await _sharedEventCollaborationService.AddCollaborator(_mapper.Map<EventCollaborator>(eventCollaboratorDto));
 
                 return Ok(new { message = "Successfully collaborated !" });
             }
