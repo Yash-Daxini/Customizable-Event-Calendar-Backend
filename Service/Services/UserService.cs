@@ -1,4 +1,4 @@
-﻿using Core.Domain;
+﻿using Core.Domain.Models;
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
@@ -25,19 +25,19 @@ namespace Core.Services
 
         public async Task<int> AddUser(User userModel)
         {
-            return await _userRepository.AddUser(userModel);
+            return await _userRepository.Add(userModel);
         }
 
         public async Task UpdateUser(User userModel)
         {
             await GetUserById(userModel.Id);
-            await _userRepository.UpdateUser(userModel);
+            await _userRepository.Update(userModel);
         }
 
         public async Task DeleteUser(int userId)
         {
             User user = await GetUserById(userId);
-            await _userRepository.DeleteUser(user);
+            await _userRepository.Delete(user);
         }
 
         public async Task<User?> AuthenticateUser(User user)

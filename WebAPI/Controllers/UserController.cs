@@ -1,10 +1,10 @@
-﻿using Core.Domain;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces.IServices;
 using AutoMapper;
 using WebAPI.Dtos;
 using Core.Exceptions;
 using WebAPI.Filters;
+using Core.Domain.Models;
 
 namespace WebAPI.Controllers
 {

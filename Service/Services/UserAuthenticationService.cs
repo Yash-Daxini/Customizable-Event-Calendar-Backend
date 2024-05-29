@@ -1,4 +1,4 @@
-﻿using Core.Domain;
+﻿using Core.Domain.Models;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
 

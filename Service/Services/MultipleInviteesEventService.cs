@@ -1,5 +1,5 @@
-﻿using Core.Domain;
-using Core.Domain.Enums;
+﻿using Core.Domain.Enums;
+using Core.Domain.Models;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;

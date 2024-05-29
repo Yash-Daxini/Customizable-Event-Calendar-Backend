@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domain;
+using Core.Domain.Models;
 using Infrastructure.DataModels;
 
 namespace Infrastructure.Profiles;

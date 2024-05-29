@@ -1,18 +1,12 @@
-﻿using Core.Domain;
+﻿using Core.Domain.Models;
 
 namespace Core.Interfaces.IRepositories;
 
-public interface IEventRepository
+public interface IEventRepository : IRepository<Event>
 {
     public Task<List<Event>> GetAllEventsByUserId(int userId);
 
     public Task<Event?> GetEventsById(int eventId);
-
-    public Task<int> AddEvent(Event eventModel);
-
-    public Task UpdateEvent(Event eventModel);
-
-    public Task DeleteEvent(Event eventObj);
 
     public Task<List<Event>> GetEventsWithinGivenDateByUserId(int userId, DateOnly startDate, DateOnly endDate);
 

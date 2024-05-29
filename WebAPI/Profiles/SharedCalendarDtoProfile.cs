@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domain;
+using Core.Domain.Models;
 using WebAPI.Dtos;
 
 namespace WebAPI.Profiles;

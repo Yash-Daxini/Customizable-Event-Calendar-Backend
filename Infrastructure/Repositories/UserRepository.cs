@@ -1,29 +1,22 @@
 ﻿using Infrastructure.DataModels;
-using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Core.Interfaces.IRepositories;
 using AutoMapper.QueryableExtensions;
+using Core.Domain.Models;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository : BaseRepository<User,UserDataModel>,IUserRepository
 {
     private readonly DbContextEventCalendar _dbContext;
 
     private readonly IMapper _mapper;
 
-    public UserRepository(DbContextEventCalendar dbContextEvent, IMapper mapper)
+    public UserRepository(DbContextEventCalendar dbContextEvent, IMapper mapper) : base(dbContextEvent, mapper)
     {
         _dbContext = dbContextEvent;
         _mapper = mapper;
-    }
-
-    public async Task<List<User>> GetAllUsers()
-    {
-        return await _dbContext.Users
-                               .ProjectTo<User>(_mapper.ConfigurationProvider)
-                               .ToListAsync();
     }
 
     public async Task<User?> GetUserById(int userId)
@@ -32,33 +25,6 @@ public class UserRepository : IUserRepository
                                .Where(user => user.Id == userId)
                                .ProjectTo<User>(_mapper.ConfigurationProvider)
                                .FirstOrDefaultAsync();
-    }
-
-    public async Task<int> AddUser(User userModel)
-    {
-        UserDataModel user = _mapper.Map<UserDataModel>(userModel);
-
-        _dbContext.Users.Add(user);
-
-        await _dbContext.SaveChangesAsync();
-
-        return user.Id;
-    }
-
-    public async Task UpdateUser(User userModel)
-    {
-        UserDataModel user = _mapper.Map<UserDataModel>(userModel);
-
-        _dbContext.Users.Update(user);
-
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteUser(User user)
-    {
-        _dbContext.Remove(_mapper.Map<UserDataModel>(user));
-
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<User?> AuthenticateUser(User user) //Extra

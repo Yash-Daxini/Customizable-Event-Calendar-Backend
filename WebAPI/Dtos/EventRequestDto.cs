@@ -14,5 +14,5 @@ public class EventRequestDto
 
     public RecurrencePatternDto RecurrencePattern { get; set; }
 
-    public List<EventCollaboratorDto> EventCollaborators { get; set; }
+    public List<EventCollaboratorRequestDto> EventCollaborators { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using Core.Domain;
+﻿using Core.Domain.Models;
 using Core.Exceptions;
 using Core.Extensions;
 using Core.Interfaces.IRepositories;
@@ -52,7 +52,7 @@ namespace Core.Services
             if (overlapEventData is not null)
                 throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
 
-            eventModel.Id = await _eventRepository.AddEvent(eventModel);
+            eventModel.Id = await _eventRepository.Add(eventModel);
 
             return eventModel.Id;
         }
@@ -92,14 +92,14 @@ namespace Core.Services
 
             await _participantService.DeleteEventCollaboratorsByEventId(eventModel.Id);
 
-            await _eventRepository.UpdateEvent(eventModel);
+            await _eventRepository.Update(eventModel);
         }
 
         public async Task DeleteEvent(int eventId)
         {
             Event eventObj = await GetEventById(eventId);
 
-            await _eventRepository.DeleteEvent(eventObj);
+            await _eventRepository.Delete(eventObj);
         }
 
         public async Task<List<Event>> GetProposedEventsByUserId(int userId)

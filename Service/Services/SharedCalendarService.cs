@@ -1,4 +1,4 @@
-﻿using Core.Domain;
+﻿using Core.Domain.Models;
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
@@ -30,7 +30,7 @@ namespace Core.Services
 
         public async Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel)
         {
-            return await _sharedCalendarRepository.AddSharedCalendar(sharedCalendarModel);
+            return await _sharedCalendarRepository.Add(sharedCalendarModel);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Core.Domain;
+﻿using Core.Domain.Models;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 
@@ -15,12 +15,12 @@ namespace Core.Services
 
         public Task<int> AddEventCollaborator(EventCollaborator eventCollaborator)
         {
-            return _eventCollaboratorRepository.AddEventCollaborator(eventCollaborator);
+            return _eventCollaboratorRepository.Add(eventCollaborator);
         }
 
-        public Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator)
+        public Task UpdateEventCollaborator(EventCollaborator eventCollaborator)
         {
-            return _eventCollaboratorRepository.UpdateEventCollaborator(eventCollaborator);
+            return _eventCollaboratorRepository.Update(eventCollaborator);
         }
 
         public Task DeleteEventCollaboratorsByEventId(int eventId)

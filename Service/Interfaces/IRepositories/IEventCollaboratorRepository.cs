@@ -1,12 +1,8 @@
-﻿using Core.Domain;
+﻿using Core.Domain.Models;
 
 namespace Core.Interfaces.IRepositories;
 
-public interface IEventCollaboratorRepository
+public interface IEventCollaboratorRepository : IRepository<EventCollaborator>
 {
-    public Task<int> AddEventCollaborator(EventCollaborator eventCollaborator);
-
-    public Task<int> UpdateEventCollaborator(EventCollaborator eventCollaborator);
-
     public Task DeleteEventCollaboratorsByEventId(int eventId);
 }

@@ -1,18 +1,19 @@
 ﻿using Infrastructure.DataModels;
-using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Core.Interfaces.IRepositories;
 using AutoMapper.QueryableExtensions;
+using Core.Domain.Models;
 
 namespace Infrastructure.Repositories;
 
-public class SharedCalendarRepository : ISharedCalendarRepository
+public class SharedCalendarRepository : BaseRepository<SharedCalendar, SharedCalendarDataModel>, ISharedCalendarRepository
 {
     private readonly DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
-    public SharedCalendarRepository(DbContextEventCalendar dbContextEventCalendar, IMapper mapper)
+    public SharedCalendarRepository(DbContextEventCalendar dbContextEventCalendar, IMapper mapper) 
+                                   : base(dbContextEventCalendar, mapper)
     {
         _dbContext = dbContextEventCalendar;
         _mapper = mapper;
@@ -37,16 +38,5 @@ public class SharedCalendarRepository : ISharedCalendarRepository
                                .FirstOrDefaultAsync();
 
 
-    }
-
-    public async Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel)
-    {
-        SharedCalendarDataModel sharedCalendar = _mapper.Map<SharedCalendarDataModel>(sharedCalendarModel);
-
-        await _dbContext.SharedCalendars.AddAsync(sharedCalendar);
-
-        await _dbContext.SaveChangesAsync();
-
-        return sharedCalendar.Id;
     }
 }

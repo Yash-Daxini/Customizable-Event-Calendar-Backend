@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domain;
+using Core.Domain.Models;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +22,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("")]
-        [ServiceFilter(typeof(ValidationFilter<EventCollaboratorDto>))]
-        public async Task<IActionResult> AddEventCollaboration([FromBody] EventCollaboratorDto eventCollaboratorDto)
+        [ServiceFilter(typeof(ValidationFilter<EventCollaborationRequestDto>))]
+        public async Task<IActionResult> AddEventCollaboration([FromBody] EventCollaborationRequestDto eventCollaborationRequestDto)
         {
             try
             {
-                await _sharedEventCollaborationService.AddCollaborator(_mapper.Map<EventCollaborator>(eventCollaboratorDto));
+                await _sharedEventCollaborationService.AddCollaborator(_mapper.Map<EventCollaborator>(eventCollaborationRequestDto));
 
                 return Ok(new { message = "Successfully collaborated !" });
             }

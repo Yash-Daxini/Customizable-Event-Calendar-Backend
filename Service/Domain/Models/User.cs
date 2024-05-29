@@ -1,6 +1,8 @@
-﻿namespace Core.Domain;
+﻿using Core.Interfaces;
 
-public class User
+namespace Core.Domain.Models;
+
+public class User : IEntity
 {
     public int Id { get; set; }
 

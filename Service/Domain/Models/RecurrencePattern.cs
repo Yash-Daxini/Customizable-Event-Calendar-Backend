@@ -1,6 +1,6 @@
 ﻿using Core.Domain.Enums;
 
-namespace Core.Domain;
+namespace Core.Domain.Models;
 
 public class RecurrencePattern
 {
@@ -20,11 +20,11 @@ public class RecurrencePattern
 
     public int? ByMonth { get; set; }
 
-    public bool IsDailyEvent() => this.Frequency == Frequency.Daily;
+    public bool IsDailyEvent() => Frequency == Frequency.Daily;
 
-    public bool IsWeeklyEvent() => this.Frequency == Frequency.Weekly;
+    public bool IsWeeklyEvent() => Frequency == Frequency.Weekly;
 
-    public bool IsMonthlyEvent() => this.Frequency == Frequency.Monthly;
+    public bool IsMonthlyEvent() => Frequency == Frequency.Monthly;
 
-    public bool IsNonRecurrenceEvent() => this.Frequency == Frequency.None;
+    public bool IsNonRecurrenceEvent() => Frequency == Frequency.None;
 }

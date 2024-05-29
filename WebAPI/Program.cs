@@ -27,7 +27,8 @@ builder.Services.AddAutoMapper(typeof(Program),
                                typeof(UserDtoProfile),
                                typeof(EventRequestDtoProfile),
                                typeof(EventResponseDtoProfile),
-                               typeof(EventCollaboratorDtoProfile),
+                               typeof(EventCollaboratorResponseDtoProfile),
+                               typeof(EventCollaboratorRequestDtoProfile),
                                typeof(RecurrencePatternDtoProfile),
                                typeof(DurationDtoProfile),
                                typeof(SharedCalendarDtoProfile));
@@ -35,9 +36,10 @@ builder.Services.AddAutoMapper(typeof(Program),
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddScoped<ValidationFilter<EventRequestDto>>();
-builder.Services.AddScoped<ValidationFilter<EventCollaboratorDto>>();
+builder.Services.AddScoped<ValidationFilter<EventCollaboratorRequestDto>>();
 builder.Services.AddScoped<ValidationFilter<SharedCalendarDto>>();
 builder.Services.AddScoped<ValidationFilter<UserDto>>();
+builder.Services.AddScoped<ValidationFilter<EventCollaborationRequestDto>>();
 
 //Repositories
 builder.Services.AddTransient<IUserRepository, UserRepository>();

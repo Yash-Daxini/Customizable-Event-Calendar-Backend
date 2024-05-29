@@ -29,7 +29,7 @@ public class EventRequestDtoValidator : AbstractValidator<EventRequestDto>
             .SetValidator(new RecurrencePatternDtoValidator());
 
         RuleForEach(e => e.EventCollaborators)
-            .SetValidator(new EventCollaboratorDtoValidator());
+            .SetValidator(new EventCollaboratorRequestDtoValidator());
 
     }
 }

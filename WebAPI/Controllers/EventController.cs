@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Core.Domain;
+using Core.Domain.Models;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
 using WebAPI.Filters;

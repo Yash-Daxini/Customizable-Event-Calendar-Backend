@@ -1,9 +1,10 @@
 ﻿using Core.Domain.Enums;
+using Core.Interfaces;
 
-namespace Core.Domain;
+namespace Core.Domain.Models;
 
-public class Event
-{
+public class Event : IEntity
+{ 
     public int Id { get; set; }
 
     public string Title { get; set; }
@@ -20,14 +21,14 @@ public class Event
 
     public User GetEventOrganizer()
     {
-        return this.DateWiseParticipants
+        return DateWiseParticipants
                    .SelectMany(participantsByDate => participantsByDate.EventCollaborators)
                    .First(eventCollaborator => eventCollaborator.ParticipantRole == ParticipantRole.Organizer).User;
     }
 
     public bool IsProposedEventToGiveResponse()
     {
-        return this.DateWiseParticipants
+        return DateWiseParticipants
                    .SelectMany(participantsByDate => participantsByDate.EventCollaborators)
                    .ToList()
                    .Exists(eventCollaborator => eventCollaborator.ParticipantRole == ParticipantRole.Participant
@@ -40,7 +41,7 @@ public class Event
 
     public List<EventCollaborator> GetInviteesOfEvent()
     {
-        return [.. this.DateWiseParticipants[0].EventCollaborators
+        return [.. DateWiseParticipants[0].EventCollaborators
                                       .Where(eventCollaborator => eventCollaborator.IsOrganizerOfEvent()
                                                             || eventCollaborator.IsParticipantOfEvent())];
     }

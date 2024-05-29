@@ -1,6 +1,8 @@
-﻿namespace Core.Domain;
+﻿using Core.Interfaces;
 
-public class SharedCalendar
+namespace Core.Domain.Models;
+
+public class SharedCalendar : IEntity
 {
     public int Id { get; set; }
 

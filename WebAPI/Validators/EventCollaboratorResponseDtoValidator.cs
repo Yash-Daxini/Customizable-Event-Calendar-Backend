@@ -4,9 +4,9 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Validators;
 
-public class EventCollaboratorDtoValidator : AbstractValidator<EventCollaboratorDto>
+public class EventCollaboratorResponseDtoValidator : AbstractValidator<EventCollaboratorResponseDto>
 {
-    public EventCollaboratorDtoValidator()
+    public EventCollaboratorResponseDtoValidator()
     {
         RuleFor(e => e.EventId)
             .GreaterThan(0);
