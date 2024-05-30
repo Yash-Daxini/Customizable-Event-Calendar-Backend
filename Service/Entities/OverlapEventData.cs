@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Core.Domain.Models;
+namespace Core.Entities;
 
 public class OverlapEventData(Event eventToVerifyOverlap, Dictionary<Event, DateOnly> overlappedEventsByDate)
 {

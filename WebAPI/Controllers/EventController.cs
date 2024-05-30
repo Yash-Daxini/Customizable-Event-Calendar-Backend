@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domain.Models;
+using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;

@@ -3,7 +3,7 @@ using Core.Interfaces.IServices;
 using AutoMapper;
 using WebAPI.Dtos;
 using Core.Exceptions;
-using Core.Domain.Models;
+using Core.Entities;
 
 namespace WebAPI.Controllers;
 

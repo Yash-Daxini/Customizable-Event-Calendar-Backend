@@ -1,7 +1,7 @@
-﻿using Core.Domain.Enums;
+﻿using Core.Entities.Enums;
 using Core.Interfaces;
 
-namespace Core.Domain.Models;
+namespace Core.Entities;
 
 public class EventCollaborator : IEntity
 {

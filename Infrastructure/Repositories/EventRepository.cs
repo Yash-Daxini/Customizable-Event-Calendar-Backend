@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Domain.Models;
+using Core.Entities;
 using Core.Interfaces.IRepositories;
 using Infrastructure.DataModels;
 using Microsoft.EntityFrameworkCore;

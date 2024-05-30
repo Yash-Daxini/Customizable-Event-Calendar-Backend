@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Core.Domain.Models;
+using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
 

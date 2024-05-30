@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Core.Interfaces.IRepositories;
 using AutoMapper.QueryableExtensions;
-using Core.Domain.Models;
+using Core.Entities;
 
 namespace Infrastructure.Repositories;
 

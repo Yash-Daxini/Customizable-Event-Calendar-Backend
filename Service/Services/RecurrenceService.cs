@@ -1,4 +1,4 @@
-﻿using Core.Domain.Models;
+﻿using Core.Entities;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;

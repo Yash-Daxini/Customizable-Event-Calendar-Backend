@@ -1,4 +1,4 @@
-﻿using Core.Domain.Enums;
+﻿using Core.Entities.Enums;
 using FluentValidation;
 using WebAPI.Dtos;
 

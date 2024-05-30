@@ -1,7 +1,7 @@
 ﻿using Infrastructure.DataModels;
 using AutoMapper;
 using Core.Interfaces.IRepositories;
-using Core.Domain.Models;
+using Core.Entities;
 
 namespace Infrastructure.Repositories;
 

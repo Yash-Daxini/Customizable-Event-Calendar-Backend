@@ -1,4 +1,4 @@
-﻿namespace Core.Domain.Models;
+﻿namespace Core.Entities;
 
 public class EventCollaboratorsByDate
 {

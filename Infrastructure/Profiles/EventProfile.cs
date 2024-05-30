@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Core.Domain.Enums;
+using Core.Entities.Enums;
 using Infrastructure.DataModels;
 using Infrastructure.Extensions;
-using Core.Domain.Models;
+using Core.Entities;
 
 namespace Infrastructure.Profiles;
 

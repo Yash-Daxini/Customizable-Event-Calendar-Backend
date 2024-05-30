@@ -1,4 +1,4 @@
-﻿namespace Core.Domain.Enums;
+﻿namespace Core.Entities.Enums;
 
 public enum Frequency
 {

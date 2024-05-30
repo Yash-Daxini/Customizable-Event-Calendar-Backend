@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core.Domain.Enums;
-using Core.Domain.Models;
+using Core.Entities;
+using Core.Entities.Enums;
 using Infrastructure.Extensions;
 using WebAPI.Dtos;
 

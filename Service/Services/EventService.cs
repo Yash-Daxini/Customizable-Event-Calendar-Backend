@@ -1,4 +1,4 @@
-﻿using Core.Domain.Models;
+﻿using Core.Entities;
 using Core.Exceptions;
 using Core.Extensions;
 using Core.Interfaces.IRepositories;
