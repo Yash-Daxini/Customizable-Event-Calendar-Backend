@@ -45,8 +45,7 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
 
     private async Task<List<Event>> GetCollaborationOverlaps(EventCollaborator eventCollaborator)
     {
-
-        Event? eventToCollaborate = await _eventService.GetEventById(eventCollaborator.EventId);
+        Event eventToCollaborate = await _eventService.GetEventById(eventCollaborator.EventId, eventCollaborator.User.Id);
 
         DateOnly selectedEventDate = eventCollaborator.EventDate;
 
@@ -54,44 +53,16 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
                                    .GetNonProposedEventsByUserId(eventCollaborator.User.Id);
 
         return [..events
-               .Where(eventModel => eventModel
-                                   .DateWiseEventCollaborators
-                                   .Exists(eventCollaboratorByDate => eventCollaboratorByDate.EventDate == selectedEventDate
-                                           && eventCollaboratorByDate.EventCollaborators
-                                                               .Exists(eventCollaborator => eventCollaborator.User.Id == eventCollaborator.User.Id))
-                                    && IsHourOvelapps(eventModel.Duration.StartHour,
-                                                     eventModel.Duration.EndHour,
-                                                     eventToCollaborate.Duration.StartHour,
-                                                     eventToCollaborate.Duration.EndHour))];
+               .Where(eventModel => eventModel.IsUserCollaboratedOnGivenDate(eventCollaborator.User.Id,selectedEventDate)
+                                    && eventModel.Duration.IsOverlappingWith(eventToCollaborate.Duration))];
     }
 
     private async Task<bool> IsEventAlreadyCollaborated(EventCollaborator eventCollaborator)
     {
-
-        Event? eventModelToCheckOverlap = await _eventService.GetEventById(eventCollaborator.EventId);
-
-        if (eventModelToCheckOverlap is null) return false;
+        Event eventModelToCheckOverlap = await _eventService.GetEventById(eventCollaborator.EventId, eventCollaborator.User.Id);
 
         DateOnly selectedEventDate = eventCollaborator.EventDate;
 
-        EventCollaboratorsByDate? eventCollaboratorByDate = eventModelToCheckOverlap
-                                                .DateWiseEventCollaborators
-                                                .Find(eventCollaboratorByDate => eventCollaboratorByDate.EventDate == selectedEventDate);
-
-        if (eventCollaboratorByDate is null) return false;
-
-        return eventCollaboratorByDate.EventCollaborators.Exists(eventCollaboratorOfEvent => eventCollaboratorOfEvent.User.Id == eventCollaborator.User.Id);
-    }
-
-    private static bool IsHourOvelapps(int startHourOfFirstEvent, int endHourOfFirstEvent, int startHourOfSecondEvent, int endHourOfSecondEvent)
-    {
-        return (startHourOfFirstEvent >= startHourOfSecondEvent
-                && startHourOfFirstEvent < endHourOfSecondEvent)
-            || (endHourOfFirstEvent > startHourOfSecondEvent
-                && endHourOfFirstEvent <= endHourOfSecondEvent)
-            || (startHourOfSecondEvent >= startHourOfFirstEvent
-                && startHourOfSecondEvent < endHourOfFirstEvent)
-            || (endHourOfSecondEvent > startHourOfFirstEvent
-                && endHourOfSecondEvent <= endHourOfFirstEvent);
+        return eventModelToCheckOverlap.IsUserCollaboratedOnGivenDate(eventCollaborator.User.Id, selectedEventDate);
     }
 }

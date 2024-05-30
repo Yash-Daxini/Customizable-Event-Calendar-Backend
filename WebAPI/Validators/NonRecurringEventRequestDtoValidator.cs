@@ -3,9 +3,9 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Validators;
 
-public class EventRequestDtoValidator : AbstractValidator<EventRequestDto>
+public class NonRecurringEventRequestDtoValidator : AbstractValidator<NonRecurringEventRequestDto>
 {
-    public EventRequestDtoValidator()
+    public NonRecurringEventRequestDtoValidator()
     {
         RuleFor(e => e.Title)
             .NotEmpty()
@@ -25,11 +25,15 @@ public class EventRequestDtoValidator : AbstractValidator<EventRequestDto>
         RuleFor(e => e.Duration)
             .SetValidator(new DurationDtoValidator());
 
-        RuleFor(e => e.RecurrencePattern)
-            .SetValidator(new RecurrencePatternDtoValidator());
+        RuleFor(e => e.EndDate)
+            .NotNull().DependentRules(() =>
+            {
+                RuleFor(e => e.StartDate)
+                  .NotEmpty()
+                  .GreaterThanOrEqualTo(e => e.EndDate);
+            });
 
         RuleForEach(e => e.EventCollaborators)
             .SetValidator(new EventCollaboratorRequestDtoValidator());
-
     }
 }

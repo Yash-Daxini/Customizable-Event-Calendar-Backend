@@ -30,83 +30,58 @@ public class EventService : IEventService
 
     public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
 
-    public async Task<Event> GetEventById(int eventId)
+    public async Task<Event> GetEventById(int eventId, int userId) //TODO : Pass user Id 
     {
-        Event? eventObj = await _eventRepository.GetEventsById(eventId);
+        Event? eventObj = await _eventRepository.GetEventById(eventId);
 
         return eventObj is null
                ? throw new NotFoundException($"Event with id {eventId} not found.")
                : eventObj;
     }
 
-    public async Task<int> AddEvent(Event eventModel)
+    public async Task<int> AddNonRecurringEvent(Event eventModel, int userId)
     {
-        List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
+        eventModel.RecurrencePattern.MakeNonRecurringEvent();
+        return await AddEvent(eventModel, userId);
+    }
 
-        MakeDateWiseEventCollaboratorListFromOccurrences(eventModel, occurrences);
+    public async Task<int> AddEvent(Event eventModel, int userId) //TODO : Pass user Id 
+    {
+        CreateDateWiseEventCollaboratorList(eventModel);
 
-        OverlapEventData? overlapEventData = _overlappingEventService
-                                             .GetOverlappedEventInformation(eventModel,
-                                                                            GetAllEventsByUserId(eventModel.Id).Result);
-
-        if (overlapEventData is not null)
-            throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
+        await HandleEventOverlap(eventModel, userId);
 
         eventModel.Id = await _eventRepository.Add(eventModel);
 
         return eventModel.Id;
     }
 
-    private void MakeDateWiseEventCollaboratorListFromOccurrences(Event eventModel, List<DateOnly> occurrences)
+
+    public async Task UpdateEvent(Event eventModel, int userId) //TODO : Pass user Id 
     {
-        List<EventCollaborator> eventCollaborators = eventModel.DateWiseEventCollaborators.First().EventCollaborators;
+        await GetEventById(eventModel.Id, userId);
 
-        List<EventCollaboratorsByDate> eventCollaboratorsByDates = [];
+        CreateDateWiseEventCollaboratorList(eventModel);
 
-        foreach (DateOnly occurrence in occurrences)
-        {
-            eventCollaboratorsByDates.Add(new EventCollaboratorsByDate()
-            {
-                EventDate = occurrence,
-                EventCollaborators = eventCollaborators
-            });
-        }
-
-        eventModel.DateWiseEventCollaborators = eventCollaboratorsByDates;
-    }
-
-    public async Task UpdateEvent(Event eventModel)
-    {
-        await GetEventById(eventModel.Id);
-
-        List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
-
-        MakeDateWiseEventCollaboratorListFromOccurrences(eventModel, occurrences);
-
-        OverlapEventData? overlapEventData = _overlappingEventService
-                                             .GetOverlappedEventInformation(eventModel,
-                                                                            GetAllEventsByUserId(eventModel.Id).Result);
-
-        if (overlapEventData is not null)
-            throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
+        await HandleEventOverlap(eventModel, userId);
 
         await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(eventModel.Id);
 
         await _eventRepository.Update(eventModel);
     }
 
-    public async Task DeleteEvent(int eventId)
+    public async Task DeleteEvent(int eventId, int userId)
     {
-        Event eventObj = await GetEventById(eventId);
+        Event eventObj = await GetEventById(eventId, userId);
 
         await _eventRepository.Delete(eventObj);
     }
 
     public async Task<List<Event>> GetProposedEventsByUserId(int userId)
     {
-        List<Event> events = await _eventRepository.GetProposedEventsByUserId(userId);
+        List<Event> events = await _eventRepository.GetAllEventsByUserId(userId);
 
-        return events.Where(eventObj => eventObj.IsProposedEventToGiveResponse())
+        return events.Where(eventObj => eventObj.IsProposedEvent())
                      .ToList();
     }
 
@@ -114,16 +89,19 @@ public class EventService : IEventService
     {
         List<Event> events = await GetAllEventsByUserId(userId);
 
-        return events.Where(eventObj => !eventObj.IsProposedEventToGiveResponse())
+        return events.Where(eventObj => !eventObj.IsProposedEvent())
                      .ToList();
     }
 
-    public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate) =>
-           await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDate, endDate);
+    public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate)
+    {
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDate, endDate);
+    }
 
     public async Task<List<Event>> GetEventsForDailyViewByUserId(int userId)
     {
         DateOnly today = DateTime.Today.ConvertToDateOnly();
+
         return await GetEventsWithinGivenDatesByUserId(userId, today, today);
     }
 
@@ -146,7 +124,30 @@ public class EventService : IEventService
     public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)
     {
         SharedCalendar? sharedCalendar = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
+
         if (sharedCalendar == null) return [];
+
         return await _eventRepository.GetSharedEvents(sharedCalendar);
+    }
+
+    private async Task HandleEventOverlap(Event eventModel, int userId)
+    {
+        List<Event> events = await GetAllEventsByUserId(userId); //TODO : Pass user ID 
+
+        events = [..events
+                   .Where(eventObj => eventObj.Id != eventModel.Id)];
+
+        string? overlapEventInformation = _overlappingEventService
+                                          .GetOverlappedEventInformation(eventModel, events);
+
+        if (overlapEventInformation is not null)
+            throw new EventOverlapException($"{overlapEventInformation}");
+    }
+
+    private void CreateDateWiseEventCollaboratorList(Event eventModel)
+    {
+        List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel.RecurrencePattern);
+
+        eventModel.CreateDateWiseEventCollaboratorsList(occurrences);
     }
 }

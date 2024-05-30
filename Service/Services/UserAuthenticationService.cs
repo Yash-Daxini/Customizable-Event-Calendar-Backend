@@ -21,15 +21,13 @@ public class UserAuthenticationService : IUserAuthenticationService
     {
         await _userService.GetUserById(user.Id);
 
-        User? loggedInUser = await _userService.AuthenticateUser(user);
+        User? loggedInUser = await _userService.AuthenticateUser(user) 
+                                   ?? throw new AuthenticationFailedException("Invalid user name or password!");
 
-        if (loggedInUser is null)
-            throw new AuthenticationFailedException("Invalid user name or password!");
-
-        ScheduleProposedEventsForLoggedInUser(loggedInUser.Id);
+        await ScheduleProposedEventsForLoggedInUser(loggedInUser.Id);
     }
 
-    private async void ScheduleProposedEventsForLoggedInUser(int userId) //Work on this service
+    private async Task ScheduleProposedEventsForLoggedInUser(int userId) //Work on this service
     {
         await _multipleInviteesEventService.StartSchedulingProcessOfProposedEvent(userId);
     }

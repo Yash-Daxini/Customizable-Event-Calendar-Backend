@@ -1,10 +1,9 @@
-﻿using Core.Entities.Enums;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 
 namespace Core.Entities;
 
 public class Event : IEntity
-{ 
+{
     public int Id { get; set; }
 
     public string Title { get; set; }
@@ -21,28 +20,89 @@ public class Event : IEntity
 
     public User GetEventOrganizer()
     {
-        return DateWiseEventCollaborators
-                   .SelectMany(eventCollaboratorsByDate => eventCollaboratorsByDate.EventCollaborators)
-                   .First(eventCollaborator => eventCollaborator.EventCollaboratorRole == EventCollaboratorRole.Organizer).User;
-    }
-
-    public bool IsProposedEventToGiveResponse()
-    {
-        return DateWiseEventCollaborators
-                   .SelectMany(eventCollaboratorsByDate => eventCollaboratorsByDate.EventCollaborators)
-                   .ToList()
-                   .Exists(eventCollaborator => eventCollaborator.EventCollaboratorRole == EventCollaboratorRole.Participant
-                                        && (
-                                                eventCollaborator.ConfirmationStatus == ConfirmationStatus.Pending
-                                                || eventCollaborator.ConfirmationStatus == ConfirmationStatus.Proposed
-                                            )
-                                       );
+        return DateWiseEventCollaborators[0].EventCollaborators
+                                            .First(eventCollaborator => eventCollaborator.IsOrganizerOfEvent())
+                                            .User;
     }
 
     public List<EventCollaborator> GetInviteesOfEvent()
     {
         return [.. DateWiseEventCollaborators[0].EventCollaborators
-                                      .Where(eventCollaborator => eventCollaborator.IsOrganizerOfEvent()
-                                                            || eventCollaborator.IsEventCollaboratorOfEvent())];
+                                                .Where(eventCollaborator => eventCollaborator.IsParticipantOfEvent())];
+    }
+
+    public bool HasPendingResponseFromUser(int userId)
+    {
+        return GetInviteesOfEvent()
+               .Exists(eventCollaborator => eventCollaborator.User.Id == userId
+                                         && eventCollaborator.IsEventCollaboratorWithPendingStatus());
+    }
+
+    public bool IsProposedEvent()
+    {
+        return GetInviteesOfEvent()
+               .Exists(eventCollaborator => eventCollaborator.IsEventCollaboratorWithPendingStatus()
+                                            || eventCollaborator.IsEventCollaboratorWithProposedStatus());
+    }
+
+    public bool IsEventOverlappingWith(Event eventObj, DateOnly matchedDate)
+    {
+        if (matchedDate == default) return false;
+
+        if (this.Duration.IsOverlappingWith(eventObj.Duration))
+            return true;
+
+        return false;
+    }
+
+    public DateOnly GetOverlapDate(Event currentEvent)
+    {
+        List<DateOnly> eventDates = DateWiseEventCollaborators
+                                    .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)
+                                    .ToList();
+
+        List<DateOnly> currentEventDates = currentEvent.DateWiseEventCollaborators
+                                                       .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)
+                                                       .ToList();
+
+        DateOnly matchedDate = eventDates.Intersect(currentEventDates).FirstOrDefault();
+
+        return matchedDate;
+    }
+
+    public void CreateDateWiseEventCollaboratorsList(List<DateOnly> occurrences)
+    {
+        List<EventCollaborator> eventCollaborators = DateWiseEventCollaborators.First().EventCollaborators;
+
+        List<EventCollaboratorsByDate> eventCollaboratorsByDates = [];
+
+        foreach (DateOnly occurrence in occurrences)
+        {
+            eventCollaboratorsByDates.Add(new EventCollaboratorsByDate()
+            {
+                EventDate = occurrence,
+                EventCollaborators = eventCollaborators
+            });
+        }
+
+        this.DateWiseEventCollaborators = eventCollaboratorsByDates;
+    }
+
+    public List<EventCollaborator> GetEventCollaboratorsForGivenDate(DateOnly eventDate)
+    {
+        EventCollaboratorsByDate? eventCollaboratorsByDate = DateWiseEventCollaborators
+                                                             .First(eventCollaboratorByDate => eventCollaboratorByDate.EventDate
+                                                                                               == eventDate);
+        return eventCollaboratorsByDate is null
+               ? []
+               : eventCollaboratorsByDate.EventCollaborators;
+    }
+
+    public bool IsUserCollaboratedOnGivenDate(int userId, DateOnly eventDate)
+    {
+        List<EventCollaborator> eventCollaborators = GetEventCollaboratorsForGivenDate(eventDate);
+
+        return eventCollaborators
+               .Exists(eventCollaborator => eventCollaborator.User.Id == userId);
     }
 }

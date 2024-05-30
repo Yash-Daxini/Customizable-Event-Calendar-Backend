@@ -19,4 +19,12 @@ public class Duration
     public string GetEndHourIn12HourFormat() => ConvertTo12HourFormat(EndHour);
 
     public string GetDurationInFormat() => ConvertTo12HourFormat(StartHour) + " - " + ConvertTo12HourFormat(EndHour);
+
+    public bool IsOverlappingWith(Duration duration)
+    {
+        return (this.StartHour >= duration.StartHour && this.StartHour < duration.EndHour)
+            || (this.EndHour > duration.StartHour && this.EndHour <= duration.EndHour)
+            || (duration.StartHour >= this.StartHour && duration.StartHour < this.EndHour)
+            || (duration.EndHour > this.StartHour && duration.EndHour <= this.EndHour);
+    }
 }

@@ -6,13 +6,15 @@ public interface IEventService
 {
     public Task<List<Event>> GetAllEventsByUserId(int userId);
 
-    public Task<Event> GetEventById(int eventId);
+    public Task<Event> GetEventById(int eventId, int userId);
 
-    public Task<int> AddEvent(Event eventModel);
+    public Task<int> AddEvent(Event eventModel, int userId);
 
-    public Task UpdateEvent(Event eventModel);
+    public Task<int> AddNonRecurringEvent(Event eventModel, int userId);
 
-    public Task DeleteEvent(int eventId);
+    public Task UpdateEvent(Event eventModel, int userId);
+
+    public Task DeleteEvent(int eventId, int userId);
 
     public Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate);
 

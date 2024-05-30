@@ -1,11 +1,12 @@
-﻿using Core.Entities;
+﻿using System.Text;
+using Core.Entities;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;
 
 public class OverlapEventService : IOverlappingEventService
 {
-    public OverlapEventData? GetOverlappedEventInformation(Event eventForVerify, List<Event> events)
+    public string? GetOverlappedEventInformation(Event eventForVerify, List<Event> events)
     {
         Dictionary<Event, DateOnly> overlapEventByDate = [];
 
@@ -13,42 +14,28 @@ public class OverlapEventService : IOverlappingEventService
         {
             if (existingEvent.Id == eventForVerify.Id) continue;
 
-            List<DateOnly> occurrencesOfExistingEvent = [..existingEvent.DateWiseEventCollaborators
-                                                          .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)];
+            DateOnly matchedDate = eventForVerify.GetOverlapDate(existingEvent);
 
-            List<DateOnly> occurrencesOfEventForVerify = [..eventForVerify.DateWiseEventCollaborators
-                                                            .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)];
-
-            DateOnly matchedDate = occurrencesOfExistingEvent.Intersect(occurrencesOfEventForVerify).FirstOrDefault();
-
-            if (IsEventOverlapps(eventForVerify, existingEvent, matchedDate))
+            if (eventForVerify.IsEventOverlappingWith(existingEvent, matchedDate))
                 overlapEventByDate.Add(existingEvent, matchedDate);
         }
 
-
         return overlapEventByDate.Count == 0
                ? null
-               : new OverlapEventData(eventForVerify, overlapEventByDate);
+               : GetOverlapMessage(eventForVerify, overlapEventByDate);
     }
 
-    private static bool IsEventOverlapps(Event eventForVerify, Event existingEvent, DateOnly matchedDate)
+    private string GetOverlapMessage(Event CheckingEvent, Dictionary<Event, DateOnly> OverlappingEventsByDate)
     {
-        if (matchedDate == default) return false;
+        StringBuilder overlapMessage = new($"\"{CheckingEvent.Title}\" overlaps with following events at " +
+                                           $"{CheckingEvent.Duration.GetDurationInFormat()} :-");
 
-        if (IsHourOverlaps(eventForVerify.Duration.StartHour,
-                           eventForVerify.Duration.EndHour,
-                           existingEvent.Duration.StartHour,
-                           existingEvent.Duration.EndHour))
-            return true;
+        foreach (var (overlapEvent, matchedDate) in OverlappingEventsByDate.Select(e => (e.Key, e.Value)))
+        {
+            overlapMessage.AppendLine($"Event Name : {overlapEvent.Title} Date : {matchedDate} " +
+                                      $"Duration : {overlapEvent.Duration.GetDurationInFormat()}");
+        }
 
-        return false;
-    }
-
-    private static bool IsHourOverlaps(int startHourOfFirstEvent, int endHourOfFirstEvent, int startHourOfSecondEvent, int endHourOfSecondEvent)
-    {
-        return (startHourOfFirstEvent >= startHourOfSecondEvent && startHourOfFirstEvent < endHourOfSecondEvent)
-            || (endHourOfFirstEvent > startHourOfSecondEvent && endHourOfFirstEvent <= endHourOfSecondEvent)
-            || (startHourOfSecondEvent >= startHourOfFirstEvent && startHourOfSecondEvent < endHourOfFirstEvent)
-            || (endHourOfSecondEvent > startHourOfFirstEvent && endHourOfSecondEvent <= endHourOfFirstEvent);
+        return overlapMessage.ToString();
     }
 }

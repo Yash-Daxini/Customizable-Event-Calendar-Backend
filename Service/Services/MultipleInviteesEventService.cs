@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
+using Core.Extensions;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;
@@ -22,18 +23,22 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
         foreach (var eventObj in events)
         {
-            int remainingDays = CalculateDayDifference(DateTime.Now, DateTime.Parse(eventObj.RecurrencePattern.StartDate.ToString()));
+            int remainingDays = CalculateDayDifference(DateTime.Now,
+                                                       eventObj.RecurrencePattern.StartDate
+                                                       .ConvertToDateTime());
 
             if (remainingDays is <= 1)
             {
                 int[] proposedHours = CalculateProposedHours(eventObj);
-                FindMaximumMutualTimeBlock(proposedHours, eventObj);
+                Duration mutualTime = FindMaximumMutualTimeBlock(proposedHours, eventObj);
+                UpdateEventDurationToMutualDuration(eventObj, mutualTime, userId);
                 ScheduleProposedEvent(eventObj);
             }
             else if (!IsAnyInviteeWithPendingStatus(eventObj))
             {
                 int[] proposedHours = CalculateProposedHours(eventObj);
-                FindMaximumMutualTimeBlock(proposedHours, eventObj);
+                Duration mutualTime = FindMaximumMutualTimeBlock(proposedHours, eventObj);
+                UpdateEventDurationToMutualDuration(eventObj, mutualTime, userId);
                 UpdateEventCollaboratorsStatus(eventObj);
             }
         }
@@ -42,7 +47,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     private static bool IsAnyInviteeWithPendingStatus(Event eventObj)
     {
         return eventObj.GetInviteesOfEvent()
-            .Exists(eventCollaborator => eventCollaborator.IsEventCollaboratorWithPendingStatus());
+                       .Exists(eventCollaborator => eventCollaborator.IsEventCollaboratorWithPendingStatus());
     }
 
     private static int CalculateDayDifference(DateTime firstDate, DateTime secondDate)
@@ -57,7 +62,9 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
         foreach (var eventCollaborator in GetInviteesWithProposedStatus(eventObj))
         {
             if (!eventCollaborator.IsNullProposedDuration())
-                CountProposeHours(eventCollaborator.ProposedDuration.StartHour, eventCollaborator.ProposedDuration.EndHour, ref proposedHours);
+                CountProposeHours(eventCollaborator.ProposedDuration.StartHour,
+                                  eventCollaborator.ProposedDuration.EndHour,
+                                  ref proposedHours);
         }
 
         return proposedHours;
@@ -66,7 +73,8 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private IEnumerable<EventCollaborator> GetInviteesWithProposedStatus(Event eventObj)
     {
-        return eventObj.GetInviteesOfEvent().Where(eventCollaborator => eventCollaborator.IsEventCollaboratorWithProposedStatus());
+        return eventObj.GetInviteesOfEvent()
+                       .Where(eventCollaborator => eventCollaborator.IsEventCollaboratorWithProposedStatus());
     }
 
     private static void CountProposeHours(int startHour, int endHour, ref int[] proposedHours)
@@ -78,7 +86,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
         }
     }
 
-    private void FindMaximumMutualTimeBlock(int[] proposedHours, Event eventObj)
+    private Duration FindMaximumMutualTimeBlock(int[] proposedHours, Event eventObj)
     {
         int max = proposedHours.Max();
         max = max > 1 ? max : -1;
@@ -109,7 +117,11 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
             endHour = eventObj.Duration.EndHour;
         }
 
-        UpdateEventDurationToMutualDuration(eventObj, startHour, endHour);
+        return new Duration()
+        {
+            StartHour = startHour,
+            EndHour = endHour,
+        };
 
     }
 
@@ -122,7 +134,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
             if (eventCollaborator.IsEventCollaboratorWithProposedStatus())
                 HandleInviteeThatProposedTime(eventObj, eventCollaborator);
 
-            eventCollaborator.ProposedDuration = null;
+            eventCollaborator.SetProposedDurationToNull();
             eventCollaborator.EventDate = eventDate;
             _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
         }
@@ -131,9 +143,9 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     private static void HandleInviteeThatProposedTime(Event eventObj, EventCollaborator eventCollaborator)
     {
         if (IsEventTimeWithInProposedTime(eventObj, eventCollaborator))
-            eventCollaborator.ConfirmationStatus = ConfirmationStatus.Accept;
+            eventCollaborator.AcceptConfirmationStatus();
         else
-            eventCollaborator.ConfirmationStatus = ConfirmationStatus.Reject;
+            eventCollaborator.RejectConfirmationStatus();
     }
 
     private static bool IsEventTimeWithInProposedTime(Event eventObj, EventCollaborator eventCollaborator)
@@ -155,23 +167,22 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
         {
             if (eventCollaborator.IsOrganizerOfEvent())
             {
-                eventCollaborator.ProposedDuration = null;
+                eventCollaborator.SetProposedDurationToNull();
             }
             else
             {
-                eventCollaborator.ProposedDuration = null;
+                eventCollaborator.SetProposedDurationToNull();
                 eventCollaborator.ConfirmationStatus = ConfirmationStatus.Pending;
             }
             _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
         }
     }
 
-    private void UpdateEventDurationToMutualDuration(Event eventObj, int newStartHour, int newEndHour)
+    private void UpdateEventDurationToMutualDuration(Event eventObj, Duration mutualTime, int userId)
     {
-        eventObj.Duration.StartHour = newStartHour;
-        eventObj.Duration.EndHour = newEndHour;
+        eventObj.Duration = mutualTime;
 
-        _eventService.UpdateEvent(eventObj);
+        _eventService.UpdateEvent(eventObj, userId);
     }
 
 }

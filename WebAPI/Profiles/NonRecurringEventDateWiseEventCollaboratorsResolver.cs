@@ -4,16 +4,16 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Profiles;
 
-public class DateWiseEventCollaboratorsResolver : IValueResolver<EventRequestDto, Event, List<EventCollaboratorsByDate>>
+public class NonRecurringEventDateWiseEventCollaboratorsResolver : IValueResolver<NonRecurringEventRequestDto, Event, List<EventCollaboratorsByDate>>
 {
     private readonly IMapper _mapper;
 
-    public DateWiseEventCollaboratorsResolver(IMapper mapper)
+    public NonRecurringEventDateWiseEventCollaboratorsResolver(IMapper mapper)
     {
         _mapper = mapper;
     }
 
-    public List<EventCollaboratorsByDate> Resolve(EventRequestDto source, Event destination, List<EventCollaboratorsByDate> destMember, ResolutionContext context)
+    public List<EventCollaboratorsByDate> Resolve(NonRecurringEventRequestDto source, Event destination, List<EventCollaboratorsByDate> destMember, ResolutionContext context)
     {
         return [new EventCollaboratorsByDate()
                 {

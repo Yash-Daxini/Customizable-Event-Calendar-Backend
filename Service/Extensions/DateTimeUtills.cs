@@ -27,4 +27,27 @@ public static class DateTimeUtills
     {
         return DateOnly.FromDateTime(dateTime);
     }
+
+    public static DateTime ConvertToDateTime(this DateOnly dateOnly)
+    {
+        return DateTime.Parse(dateOnly.ToString());
+    }
+
+    public static bool IsDateInRange(this DateOnly dateOnly, DateOnly startDate, DateOnly endDate)
+    {
+        return dateOnly >= startDate && dateOnly <= endDate;
+    }
+
+    public static DateOnly GetStartDateOfWeek(this DateOnly todayDate)
+    {
+        return todayDate.AddDays(-(int)(todayDate.DayOfWeek - 1));
+    }
+
+    public static int GetDayNumberFromWeekDay(this DateOnly date)
+    {
+        int dayNumber = Convert.ToInt32(date.DayOfWeek.ToString("d"));
+        return dayNumber == 0
+               ? 7
+               : dayNumber;
+    }
 }

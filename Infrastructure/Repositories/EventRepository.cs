@@ -24,13 +24,16 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
                                                       .Where(eventObj => eventObj.UserId == userId)
                                                       .Include(eventObj => eventObj.EventCollaborators)
                                                         .ThenInclude(eventCollaborator => eventCollaborator.User)
+                                                      .Where(eventObj => eventObj
+                                                                        .EventCollaborators
+                                                                        .Select(eventCollaborator => eventCollaborator.UserId)
+                                                                        .Contains(userId))
                                                       .ToListAsync();
 
         return _mapper.Map<List<Event>>(events);
-
     }
 
-    public async Task<Event?> GetEventsById(int eventId)
+    public async Task<Event?> GetEventById(int eventId)
     {
         EventDataModel? eventObj = await _dbContext.Events
                                                    .Where(eventObj => eventObj.Id == eventId)
@@ -45,29 +48,16 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
     public async Task<List<Event>> GetEventsWithinGivenDateByUserId(int userId, DateOnly startDate, DateOnly endDate)
     {
         List<EventDataModel> events = await _dbContext.Events
-                                                     .Include(eventObj => eventObj.EventCollaborators)
+                                                      .Include(eventObj => eventObj.EventCollaborators)
                                                          .ThenInclude(eventCollaborator => eventCollaborator.User)
-                                                     .Where(eventObj => eventObj
+                                                      .Where(eventObj => eventObj
                                                                         .EventCollaborators
                                                                         .Where(eventCollaborator => eventCollaborator.EventDate >= startDate
                                                                                && eventCollaborator.EventDate <= endDate)
-                                                     .Select(eventCollaborator => eventCollaborator.EventId)
-                                                     .Contains(eventObj.Id))
-                                                     .ToListAsync();
-
-        return _mapper.Map<List<Event>>(events);
-    }
-
-    public async Task<List<Event>> GetProposedEventsByUserId(int userId)
-    {
-        List<EventDataModel> events = await _dbContext.Events
-                                                      .Include(eventObj => eventObj.EventCollaborators)
-                                                        .ThenInclude(eventCollaborator => eventCollaborator.User)
-                                                      .Where(eventObj => eventObj
-                                                                        .EventCollaborators
-                                                                        .Select(eventCollaborator => eventCollaborator.UserId)
-                                                                        .Contains(userId))
+                                                      .Select(eventCollaborator => eventCollaborator.EventId)
+                                                      .Contains(eventObj.Id))
                                                       .ToListAsync();
+
         return _mapper.Map<List<Event>>(events);
     }
 

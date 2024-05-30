@@ -32,7 +32,7 @@ public class EventController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -48,7 +48,7 @@ public class EventController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -63,7 +63,7 @@ public class EventController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -78,7 +78,7 @@ public class EventController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -93,7 +93,7 @@ public class EventController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -108,16 +108,16 @@ public class EventController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
     [HttpGet("~/api/events/{eventId}")]
-    public async Task<ActionResult> GetEventById([FromRoute] int eventId)
+    public async Task<ActionResult> GetEventById([FromRoute] int eventId, [FromRoute] int userId)
     {
         try
         {
-            Event? eventModel = await _eventService.GetEventById(eventId);
+            Event? eventModel = await _eventService.GetEventById(eventId, userId);
 
             if (eventModel is null) return NotFound();
 
@@ -125,65 +125,81 @@ public class EventController : ControllerBase
         }
         catch (NotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
-    [HttpPost("~/api/events")]
-    public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto) //Validation added for test
+    [HttpPost("recurring-events")]
+    public async Task<ActionResult> AddRecurringEvent([FromRoute] int userId, [FromBody] RecurringEventRequestDto recurringEventRequestDto)
+    {
+        try
+        {
+            Event eventObj = _mapper.Map<Event>(recurringEventRequestDto);
+
+            int addedEventId = await _eventService.AddEvent(eventObj, userId);
+            return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, new { addedEventId });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+    }
+
+    [HttpPost("")]
+    public async Task<ActionResult> AddNonRecurringEvent([FromRoute] int userId, [FromBody] NonRecurringEventRequestDto nonRecurringEventRequestDto)
+    {
+        try
+        {
+            Event eventObj = _mapper.Map<Event>(nonRecurringEventRequestDto);
+
+            int addedEventId = await _eventService.AddNonRecurringEvent(eventObj, userId);
+            return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, new { addedEventId });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+    }
+
+    [HttpPut("{eventId}")]
+    public async Task<ActionResult> UpdateEvent([FromRoute] int eventId, [FromRoute] int userId, [FromBody] RecurringEventRequestDto eventRequestDto)
     {
         try
         {
             Event eventObj = _mapper.Map<Event>(eventRequestDto);
-
-            int addedEventId = await _eventService.AddEvent(eventObj);
-            return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, addedEventId);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
-
-    [HttpPut("~/api/events")]
-    public async Task<ActionResult> UpdateEvent([FromBody] EventRequestDto eventRequestDto)
-    {
-        try
-        {
-            Event eventObj = _mapper.Map<Event>(eventRequestDto);
-            await _eventService.UpdateEvent(eventObj);
-            return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, eventObj.Id);
+            await _eventService.UpdateEvent(eventObj, userId);
+            return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, new { eventObj.Id });
         }
         catch (NotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
 
     }
 
-    [HttpDelete("~/api/events/{eventId}")]
-    public async Task<ActionResult> DeleteEvent([FromRoute] int eventId)
+    [HttpDelete("{eventId}")]
+    public async Task<ActionResult> DeleteEvent([FromRoute] int eventId, [FromRoute] int userId)
     {
         try
         {
-            await _eventService.DeleteEvent(eventId);
+            await _eventService.DeleteEvent(eventId, userId);
             return Ok();
         }
         catch (NotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -198,7 +214,7 @@ public class EventController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 

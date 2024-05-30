@@ -1,6 +1,6 @@
 ﻿namespace WebAPI.Dtos;
 
-public class EventRequestDto
+public class NonRecurringEventRequestDto
 {
     public int Id { get; set; }
 
@@ -12,7 +12,9 @@ public class EventRequestDto
 
     public DurationDto Duration { get; set; }
 
-    public RecurrencePatternDto RecurrencePattern { get; set; }
+    public DateOnly StartDate { get; set; }
+
+    public DateOnly EndDate { get; set; }
 
     public List<EventCollaboratorRequestDto> EventCollaborators { get; set; }
 }

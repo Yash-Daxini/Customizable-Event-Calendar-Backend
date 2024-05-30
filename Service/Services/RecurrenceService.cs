@@ -1,45 +1,46 @@
 ﻿using Core.Entities;
+using Core.Extensions;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;
 
 public class RecurrenceService : IRecurrenceService
 {
-    public List<DateOnly> GetOccurrencesOfEvent(Event eventModel)
+    public List<DateOnly> GetOccurrencesOfEvent(RecurrencePattern recurrencePattern)
     {
-        return eventModel.RecurrencePattern.IsNonRecurrenceEvent()
-               ? [eventModel.RecurrencePattern.StartDate]
-               : GetOccurrencesOfEventUsingFrequency(eventModel);
+        return recurrencePattern.IsNonRecurrenceEvent()
+               ? [recurrencePattern.StartDate]
+               : GetOccurrencesOfEventUsingFrequency(recurrencePattern);
     }
 
-    private List<DateOnly> GetOccurrencesOfEventUsingFrequency(Event eventModel)
+    private List<DateOnly> GetOccurrencesOfEventUsingFrequency(RecurrencePattern recurrencePattern)
     {
-        if (eventModel.RecurrencePattern.IsDailyEvent())
-            return GetOccurrenceOfDailyEvents(eventModel);
-        else if (eventModel.RecurrencePattern.IsWeeklyEvent())
-            return GetOccurrencesOfWeeklyEvents(eventModel);
-        else if (eventModel.RecurrencePattern.IsMonthlyEvent())
-            return GetOccurrencesOfMonthlyEvents(eventModel);
+        if (recurrencePattern.IsDailyEvent())
+            return GetOccurrenceOfDailyEvents(recurrencePattern);
+        else if (recurrencePattern.IsWeeklyEvent())
+            return GetOccurrencesOfWeeklyEvents(recurrencePattern);
+        else if (recurrencePattern.IsMonthlyEvent())
+            return GetOccurrencesOfMonthlyEvents(recurrencePattern);
         else
-            return GetOccurrencesOfYearlyEvents(eventModel);
+            return GetOccurrencesOfYearlyEvents(recurrencePattern);
     }
 
-    private List<DateOnly> GetOccurrenceOfDailyEvents(Event eventModel)
+    private List<DateOnly> GetOccurrenceOfDailyEvents(RecurrencePattern recurrencePattern)
     {
-        List<int> days = [.. eventModel.RecurrencePattern.ByWeekDay ?? ([])];
+        List<int> days = [.. recurrencePattern.ByWeekDay ?? ([])];
 
-        DateOnly startDateOfEvent = eventModel.RecurrencePattern.StartDate;
-        DateOnly endDateOfEvent = eventModel.RecurrencePattern.EndDate;
-        int interval = eventModel.RecurrencePattern.Interval;
+        DateOnly startDateOfEvent = recurrencePattern.StartDate;
+        DateOnly endDateOfEvent = recurrencePattern.EndDate;
+        int interval = recurrencePattern.Interval;
 
-        TimeSpan difference = DateTime.Parse(endDateOfEvent.ToString())
-                            - DateTime.Parse(startDateOfEvent.ToString());
+        TimeSpan difference = endDateOfEvent.ConvertToDateTime()
+                            - startDateOfEvent.ConvertToDateTime();
 
         int totalOccurrences = ((int)difference.TotalDays / interval) + 1;
 
         return [..Enumerable.Range(0, totalOccurrences)
-                                .Select(weekOffset => startDateOfEvent.AddDays(weekOffset * interval))
-                                .Where(date => IsValidDateForDailyEvent(date, days, startDateOfEvent, endDateOfEvent))];
+                            .Select(weekOffset => startDateOfEvent.AddDays(weekOffset * interval))
+                            .Where(date => IsValidDateForDailyEvent(date, days, startDateOfEvent, endDateOfEvent))];
     }
 
     private bool IsValidDateForDailyEvent(DateOnly date,
@@ -47,27 +48,22 @@ public class RecurrenceService : IRecurrenceService
                                           DateOnly startDateOfEvent,
                                           DateOnly endDateOfEvent)
     {
-        return IsDateInRange(startDateOfEvent, endDateOfEvent, date)
-               && (days.Count == 0 || days.Contains(GetDayNumberFromWeekDay(date)));
+        return date.IsDateInRange(startDateOfEvent, endDateOfEvent)
+               && (days.Count == 0 || days.Contains(date.GetDayNumberFromWeekDay()));
     }
 
-    private static int GetDayNumberFromWeekDay(DateOnly date)
-    {
-        int dayNumber = Convert.ToInt32(date.DayOfWeek.ToString("d"));
-        return dayNumber == 0 ? 7 : dayNumber;
-    }
-
-    private List<DateOnly> GetOccurrencesOfWeeklyEvents(Event eventModel)
+    private List<DateOnly> GetOccurrencesOfWeeklyEvents(RecurrencePattern recurrencePattern)
     {
         List<DateOnly> occurrences = [];
 
-        List<int> weekDays = [.. eventModel.RecurrencePattern.ByWeekDay ?? ([])];
+        List<int> weekDays = [.. recurrencePattern.ByWeekDay ?? ([])];
 
-        DateOnly startDateOfWeek = GetStartDateOfWeek(eventModel.RecurrencePattern.StartDate);
+        DateOnly startDateOfWeek = recurrencePattern.StartDate
+                                   .GetStartDateOfWeek();
 
         foreach (var item in weekDays)
         {
-            occurrences = [.. occurrences.Concat(GetOccurrencesOfWeekDay(eventModel, startDateOfWeek, item))];
+            occurrences = [.. occurrences.Concat(GetOccurrencesOfWeekDay(recurrencePattern, startDateOfWeek, item))];
         }
 
         occurrences.Sort();
@@ -75,77 +71,56 @@ public class RecurrenceService : IRecurrenceService
         return occurrences;
     }
 
-    private static DateOnly GetStartDateOfWeek(DateOnly todayDate)
+    private List<DateOnly> GetOccurrencesOfWeekDay(RecurrencePattern recurrencePattern, DateOnly startDateOfWeek, int item)
     {
-        return todayDate.AddDays(-(int)(todayDate.DayOfWeek - 1));
-    }
-
-    private List<DateOnly> GetOccurrencesOfWeekDay(Event eventModel, DateOnly startDateOfWeek, int item)
-    {
-        DateOnly startDateOfEvent = eventModel.RecurrencePattern.StartDate;
-        DateOnly endDateOfEvent = eventModel.RecurrencePattern.EndDate;
+        DateOnly startDateOfEvent = recurrencePattern.StartDate;
+        DateOnly endDateOfEvent = recurrencePattern.EndDate;
 
         DateOnly startDateForSpecificWeekday = startDateOfWeek.AddDays(item - 1);
 
-        TimeSpan difference = DateTime.Parse(endDateOfEvent.ToString())
-                            - DateTime.Parse(startDateForSpecificWeekday.ToString());
+        TimeSpan difference = endDateOfEvent.ConvertToDateTime()
+                            - startDateForSpecificWeekday.ConvertToDateTime();
 
-        int interval = eventModel.RecurrencePattern.Interval;
+        int interval = recurrencePattern.Interval;
 
         int totalOccurrences = ((int)difference.TotalDays / 7 * interval) + 1;
 
         return [..Enumerable.Range(0, totalOccurrences)
-                                .Select(weekOffset => startDateForSpecificWeekday.AddDays(7 * weekOffset * interval))
-                                .Where(date => IsDateInRange(startDateOfEvent,endDateOfEvent,date))];
+                            .Select(weekOffset => startDateForSpecificWeekday.AddDays(7 * weekOffset * interval))
+                            .Where(date => date.IsDateInRange(startDateOfEvent,endDateOfEvent))];
     }
 
-    private static bool IsDateInRange(DateOnly startDate, DateOnly endDate, DateOnly dateToCheck)
+    private List<DateOnly> GetOccurrencesOfMonthlyEvents(RecurrencePattern recurrencePattern)
     {
-        return dateToCheck >= startDate && dateToCheck <= endDate;
+        return recurrencePattern.IsMonthDayNull()
+               ? GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(recurrencePattern, true)
+               : GetOccurrencesOfEventsUsingMonthDay(recurrencePattern, true);
     }
 
-    private List<DateOnly> GetOccurrencesOfMonthlyEvents(Event eventModel)
+    private List<DateOnly> GetOccurrencesOfYearlyEvents(RecurrencePattern recurrencePattern)
     {
-        return eventModel.RecurrencePattern.ByMonthDay is null
-               ? GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(eventModel, true)
-               : GetOccurrencesOfEventsUsingMonthDay(eventModel, true);
+        return recurrencePattern.IsMonthDayNull()
+               ? GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(recurrencePattern, false)
+               : GetOccurrencesOfEventsUsingMonthDay(recurrencePattern, false);
     }
 
-    private List<DateOnly> GetOccurrencesOfYearlyEvents(Event eventModel)
+    private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay(RecurrencePattern recurrencePattern, bool isMonthly)
     {
-        return eventModel.RecurrencePattern.ByMonthDay is null
-               ? GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(eventModel, false)
-               : GetOccurrencesOfEventsUsingMonthDay(eventModel, false);
-    }
+        int monthDay = (int)recurrencePattern.ByMonthDay;
 
-    private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay(Event eventModel, bool isMonthly)
-    {
-        int monthDay = (int)eventModel.RecurrencePattern.ByMonthDay;
+        DateOnly startDateOfEvent = recurrencePattern.StartDate;
 
-        DateOnly startDateOfEvent = eventModel.RecurrencePattern.StartDate;
-        DateOnly endDateOfEvent = eventModel.RecurrencePattern.EndDate;
+        int interval = recurrencePattern.Interval;
 
-        int interval = eventModel.RecurrencePattern.Interval;
-
-        int month = isMonthly ? startDateOfEvent.Month : (int)eventModel.RecurrencePattern.ByMonth;
+        int month = isMonthly ? startDateOfEvent.Month : (int)recurrencePattern.ByMonth;
 
         DateOnly currentDate = new(startDateOfEvent.Year, month, GetMinimumDateFromGivenMonthAndDay(monthDay, month, startDateOfEvent.Year));
 
         int totalOccurrences = isMonthly
-                               ? GetCountOfMonthlyEventOccurrences(startDateOfEvent, endDateOfEvent, interval)
-                               : GetCountOfYearlyEventOccurences(startDateOfEvent, endDateOfEvent, interval);
+                               ? recurrencePattern.GetCountOfMonthlyEventOccurrences()
+                               : recurrencePattern.GetCountOfYearlyEventOccurences();
 
         return GetOccurrencesUsingMonthDay(monthDay, interval, currentDate, totalOccurrences, isMonthly);
-    }
-
-    private static int GetCountOfYearlyEventOccurences(DateOnly startDateOfEvent, DateOnly endDateOfEvent, int interval)
-    {
-        return (endDateOfEvent.Year - startDateOfEvent.Year) / interval + 1;
-    }
-
-    private static int GetCountOfMonthlyEventOccurrences(DateOnly startDateOfEvent, DateOnly endDateOfEvent, int interval)
-    {
-        return ((endDateOfEvent.Year - startDateOfEvent.Year) * 12 + (endDateOfEvent.Month - startDateOfEvent.Month)) / interval + 1;
     }
 
     private List<DateOnly> GetOccurrencesUsingMonthDay(int monthDay,
@@ -171,28 +146,26 @@ public class RecurrenceService : IRecurrenceService
         return Math.Min(day, daysInMonth);
     }
 
-    private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(Event eventModel, bool isMonthly)
+    private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay(RecurrencePattern recurrencePattern, bool isMonthly)
     {
-        int weekOrder = (int)eventModel.RecurrencePattern.WeekOrder;
+        int weekOrder = (int)recurrencePattern.WeekOrder;
 
-        int weekDay = eventModel.RecurrencePattern.ByWeekDay[0];
+        int weekDay = recurrencePattern.ByWeekDay[0];
         if (weekDay == 7) weekDay = 0;
 
         DayOfWeek dayOfWeek = (DayOfWeek)weekDay;
 
-        DateOnly startDateOfEvent = eventModel.RecurrencePattern.StartDate;
-        DateOnly endDateOfEvent = eventModel.RecurrencePattern.EndDate;
-        int interval = eventModel.RecurrencePattern.Interval;
+        int interval = recurrencePattern.Interval;
 
         int month = isMonthly
-                    ? eventModel.RecurrencePattern.StartDate.Month
-                    : (int)eventModel.RecurrencePattern.ByMonth;
+                    ? recurrencePattern.StartDate.Month
+                    : (int)recurrencePattern.ByMonth;
 
-        DateOnly currentDate = new(eventModel.RecurrencePattern.StartDate.Year, month, 1);
+        DateOnly currentDate = new(recurrencePattern.StartDate.Year, month, 1);
 
         int totalOccurrences = isMonthly
-                               ? GetCountOfMonthlyEventOccurrences(startDateOfEvent, endDateOfEvent, interval)
-                               : GetCountOfYearlyEventOccurences(startDateOfEvent, endDateOfEvent, interval);
+                               ? recurrencePattern.GetCountOfMonthlyEventOccurrences()
+                               : recurrencePattern.GetCountOfYearlyEventOccurences();
 
         return GetOccurrencesUsingWeekOrderAndWeekDay(weekOrder, dayOfWeek, currentDate, interval, totalOccurrences, isMonthly);
     }

@@ -31,7 +31,7 @@ public class SharedCalendarController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -46,11 +46,11 @@ public class SharedCalendarController : ControllerBase
         }
         catch (NotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -62,11 +62,13 @@ public class SharedCalendarController : ControllerBase
             SharedCalendar sharedCalendar = _mapper.Map<SharedCalendar>(sharedCalendarDto);
 
             int addedSharedCalendarId = await _sharedCalendarService.AddSharedCalendar(sharedCalendar);
-            return CreatedAtAction(nameof(GetSharedCalendarById), new { sharedCalendarId = addedSharedCalendarId, controller = "sharedcalendar" }, addedSharedCalendarId);
+            return CreatedAtAction(nameof(GetSharedCalendarById),
+                                   new { sharedCalendarId = addedSharedCalendarId, controller = "sharedcalendar" },
+                                   new { addedSharedCalendarId });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 }

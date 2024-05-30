@@ -49,11 +49,11 @@ public class UserController : ControllerBase
         }
         catch (NotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -64,11 +64,11 @@ public class UserController : ControllerBase
         {
             User user = _mapper.Map<User>(userDto);
             int addedUserId = await _userService.AddUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, addedUserId);
+            return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, new { addedUserId });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -79,15 +79,15 @@ public class UserController : ControllerBase
         {
             User user = _mapper.Map<User>(userDto);
             await _userService.UpdateUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { userId = user.Id, controller = "user" }, user.Id);
+            return CreatedAtAction(nameof(GetUserById), new { userId = user.Id, controller = "user" }, new { user.Id });
         }
         catch (NotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 
@@ -101,11 +101,11 @@ public class UserController : ControllerBase
         }
         catch (NotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
 

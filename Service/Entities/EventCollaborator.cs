@@ -29,7 +29,27 @@ public class EventCollaborator : IEntity
 
     public bool IsOrganizerOfEvent() => EventCollaboratorRole == EventCollaboratorRole.Organizer;
 
-    public bool IsEventCollaboratorOfEvent() => EventCollaboratorRole == EventCollaboratorRole.Participant;
+    public bool IsParticipantOfEvent() => EventCollaboratorRole == EventCollaboratorRole.Participant;
 
     public bool IsNullProposedDuration() => ProposedDuration == null;
+
+    public void SetProposedDurationToNull()
+    {
+        ProposedDuration = null;
+    }
+
+    public void AcceptConfirmationStatus()
+    {
+        ConfirmationStatus = ConfirmationStatus.Accept;
+    }
+    
+    public void RejectConfirmationStatus()
+    {
+        ConfirmationStatus = ConfirmationStatus.Reject;
+    }
+    
+    public void SetConfirmationToPending()
+    {
+        ConfirmationStatus = ConfirmationStatus.Pending;
+    }
 }

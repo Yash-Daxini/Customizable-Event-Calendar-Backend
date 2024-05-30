@@ -27,4 +27,26 @@ public class RecurrencePattern
     public bool IsMonthlyEvent() => this.Frequency == Frequency.Monthly;
 
     public bool IsNonRecurrenceEvent() => this.Frequency == Frequency.None;
+
+    public bool IsMonthDayNull() => this.ByMonthDay == null;
+
+    public int GetCountOfMonthlyEventOccurrences()
+    {
+        return ((EndDate.Year - StartDate.Year) * 12 + (EndDate.Month - StartDate.Month)) / Interval + 1;
+    }
+
+    public int GetCountOfYearlyEventOccurences()
+    {
+        return (EndDate.Year - StartDate.Year) / Interval + 1;
+    }
+
+    public void MakeNonRecurringEvent()
+    {
+        Frequency = Frequency.None;
+        Interval = 1;
+        ByWeekDay = null;
+        ByMonthDay = null;
+        ByMonth = null;
+        WeekOrder = null;
+    }
 }
