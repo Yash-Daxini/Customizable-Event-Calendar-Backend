@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "BfdsAzThcpfWYl/RfjIBborkKfCepZknp631TGC1BAGxw6Ogk2J303CFevoY7TDeotAGOli5tuEtJ8yHp1a36g==",
+  "dgSpecHash": "+0NHHal9IRksBPxutMityNDXsh8JsyQn8XjqCgdb4xJ1/BPJGkS2pZeRA+1292gee8wQx0URr6iiKoMi6QXm9w==",
   "success": true,
   "projectFilePath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\WebAPI\\WebAPI.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\YashDaxini\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\fluentvalidation\\11.9.1\\fluentvalidation.11.9.1.nupkg.sha512",
+    "C:\\Users\\YashDaxini\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.9.1\\fluentvalidation.dependencyinjectionextensions.11.9.1.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.5\\microsoft.aspnetcore.authentication.jwtbearer.8.0.5.nupkg.sha512",
     "C:\\Users\\YashDaxini\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.5\\microsoft.aspnetcore.cryptography.internal.8.0.5.nupkg.sha512",

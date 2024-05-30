@@ -6,9 +6,9 @@ public class SharedCalendar : IEntity
 {
     public int Id { get; set; }
 
-    public User SenderUser { get; set; }
+    public User Sender { get; set; }
 
-    public User ReceiverUser { get; set; }
+    public User Receiver { get; set; }
 
     public DateOnly FromDate { get; set; }
 

@@ -10,9 +10,9 @@ public class SharedCalendarProfile : Profile
     {
         CreateMap<SharedCalendarDataModel, SharedCalendar>();
         CreateMap<SharedCalendar, SharedCalendarDataModel>()
-            .ForMember(dest => dest.SenderUserId, opt => opt.MapFrom(src => src.SenderUser.Id))
-            .ForMember(dest => dest.ReceiverUserId, opt => opt.MapFrom(src => src.ReceiverUser.Id))
-            .ForMember(dest => dest.SenderUser, opt => opt.Ignore())
-            .ForMember(dest => dest.ReceiverUser, opt => opt.Ignore());
+            .ForMember(dest => dest.SenderId, opt => opt.MapFrom(src => src.Sender.Id))
+            .ForMember(dest => dest.ReceiverId, opt => opt.MapFrom(src => src.Receiver.Id))
+            .ForMember(dest => dest.Sender, opt => opt.Ignore())
+            .ForMember(dest => dest.Receiver, opt => opt.Ignore());
     }
 }

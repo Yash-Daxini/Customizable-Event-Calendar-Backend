@@ -17,12 +17,12 @@ public class EventCollaboratorResolver : IValueResolver<Event, EventDataModel, L
     {
         List<EventCollaboratorDataModel> eventCollaboratorDataModels = [];
 
-        foreach (var participantByDate in source.DateWiseParticipants)
+        foreach (var eventCollaboratorByDate in source.DateWiseEventCollaborators)
         {
-            foreach (var eventCollaborator in participantByDate.EventCollaborators)
+            foreach (var eventCollaborator in eventCollaboratorByDate.EventCollaborators)
             {
                 EventCollaboratorDataModel eventCollaboratorDataModel = _mapper.Map<EventCollaboratorDataModel>(eventCollaborator);
-                eventCollaboratorDataModel.EventDate = participantByDate.EventDate;
+                eventCollaboratorDataModel.EventDate = eventCollaboratorByDate.EventDate;
                 eventCollaboratorDataModels.Add(eventCollaboratorDataModel);
             }
         }

@@ -4,11 +4,11 @@ using Infrastructure.DataModels;
 
 namespace Infrastructure.Profiles;
 
-public class DateWiseParticipantsResolver : IValueResolver<EventDataModel, Event, List<EventCollaboratorsByDate>>
+public class DateWiseEventCollaboratorsResolver : IValueResolver<EventDataModel, Event, List<EventCollaboratorsByDate>>
 {
     private readonly IMapper _mapper;
 
-    public DateWiseParticipantsResolver(IMapper mapper)
+    public DateWiseEventCollaboratorsResolver(IMapper mapper)
     {
         _mapper = mapper;
     }

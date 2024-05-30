@@ -4,206 +4,202 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
-using WebAPI.Filters;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers;
+
+[Route("api/users/{userId}/events")]
+[ApiController]
+//[Authorize]
+public class EventController : ControllerBase
 {
-    [Route("api/users/{userId}/events")]
-    [ApiController]
-    //[Authorize]
-    public class EventController : ControllerBase
+    private readonly IEventService _eventService;
+    private readonly IMapper _mapper;
+
+    public EventController(IEventService eventService, IMapper mapper)
     {
-        private readonly IEventService _eventService;
-        private readonly IMapper _mapper;
+        _eventService = eventService;
+        _mapper = mapper;
+    }
 
-        public EventController(IEventService eventService, IMapper mapper)
+    [HttpGet]
+    public async Task<IActionResult> GetAllEvents([FromRoute] int userId)
+    {
+        try
         {
-            _eventService = eventService;
-            _mapper = mapper;
+            List<Event> events = await _eventService.GetAllEventsByUserId(userId);
+
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllEvents([FromRoute] int userId)
+        catch (Exception ex)
         {
-            try
-            {
-                List<Event> events = await _eventService.GetAllEventsByUserId(userId);
-
-                return Ok(_mapper.Map<List<EventResponseDto>>(events));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, ex.Message);
         }
+    }
 
 
-        [HttpGet("eventsBetweenDates")]
-        public async Task<ActionResult> GetEventsWithInGivenDates([FromRoute] int userId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+    [HttpGet("eventsBetweenDates")]
+    public async Task<ActionResult> GetEventsWithInGivenDates([FromRoute] int userId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+    {
+        try
         {
-            try
-            {
-                List<Event> events = await _eventService.GetEventsWithinGivenDatesByUserId(userId, startDate, endDate);
+            List<Event> events = await _eventService.GetEventsWithinGivenDatesByUserId(userId, startDate, endDate);
 
-                return Ok(_mapper.Map<List<EventResponseDto>>(events));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
-
-        [HttpGet("proposed")]
-        public async Task<ActionResult> GetProposedEvents([FromRoute] int userId)
+        catch (Exception ex)
         {
-            try
-            {
-                List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
-
-                return Ok(_mapper.Map<List<EventResponseDto>>(events));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, ex.Message);
         }
+    }
 
-        [HttpGet("daily")]
-        public async Task<ActionResult> GetEventsForDailyView([FromRoute] int userId)
+    [HttpGet("proposed")]
+    public async Task<ActionResult> GetProposedEvents([FromRoute] int userId)
+    {
+        try
         {
-            try
-            {
-                List<Event> events = await _eventService.GetEventsForDailyViewByUserId(userId);
+            List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
-                return Ok(_mapper.Map<List<EventResponseDto>>(events));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
-
-        [HttpGet("weekly")]
-        public async Task<ActionResult> GetEventsForWeeklyView([FromRoute] int userId)
+        catch (Exception ex)
         {
-            try
-            {
-                List<Event> events = await _eventService.GetEventsForWeeklyViewByUserId(userId);
-
-                return Ok(_mapper.Map<List<EventResponseDto>>(events));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, ex.Message);
         }
+    }
 
-        [HttpGet("monthly")]
-        public async Task<ActionResult> GetEventsForMonthlyView([FromRoute] int userId)
+    [HttpGet("daily")]
+    public async Task<ActionResult> GetEventsForDailyView([FromRoute] int userId)
+    {
+        try
         {
-            try
-            {
-                List<Event> events = await _eventService.GetEventsForMonthlyViewByUserId(userId);
+            List<Event> events = await _eventService.GetEventsForDailyViewByUserId(userId);
 
-                return Ok(_mapper.Map<List<EventResponseDto>>(events));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
-
-        [HttpGet("~/api/events/{eventId}")]
-        public async Task<ActionResult> GetEventById([FromRoute] int eventId)
+        catch (Exception ex)
         {
-            try
-            {
-                Event? eventModel = await _eventService.GetEventById(eventId);
-
-                if (eventModel is null) return NotFound();
-
-                return Ok(_mapper.Map<EventResponseDto>(eventModel));
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, ex.Message);
         }
+    }
 
-        [HttpPost("~/api/events")]
-        [ServiceFilter(typeof(ValidationFilter<EventRequestDto>))]
-        public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto) //Validation added for test
+    [HttpGet("weekly")]
+    public async Task<ActionResult> GetEventsForWeeklyView([FromRoute] int userId)
+    {
+        try
         {
-            try
-            {
-                Event eventObj = _mapper.Map<Event>(eventRequestDto);
+            List<Event> events = await _eventService.GetEventsForWeeklyViewByUserId(userId);
 
-                int addedEventId = await _eventService.AddEvent(eventObj);
-                return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, addedEventId);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
-
-        [HttpPut("~/api/events")]
-        [ServiceFilter(typeof(ValidationFilter<EventRequestDto>))]
-        public async Task<ActionResult> UpdateEvent([FromBody] EventRequestDto eventRequestDto)
+        catch (Exception ex)
         {
-            try
-            {
-                Event eventObj = _mapper.Map<Event>(eventRequestDto);
-                await _eventService.UpdateEvent(eventObj);
-                return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, eventObj.Id);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-
+            return StatusCode(500, ex.Message);
         }
+    }
 
-        [HttpDelete("~/api/events/{eventId}")]
-        public async Task<ActionResult> DeleteEvent([FromRoute] int eventId)
+    [HttpGet("monthly")]
+    public async Task<ActionResult> GetEventsForMonthlyView([FromRoute] int userId)
+    {
+        try
         {
-            try
-            {
-                await _eventService.DeleteEvent(eventId);
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            List<Event> events = await _eventService.GetEventsForMonthlyViewByUserId(userId);
+
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
         }
-
-        [HttpGet("~/api/sharedCalendars/{sharedCalendarId}/events")]
-        public async Task<ActionResult> GetSharedEventsFromSharedCalendarId([FromRoute] int sharedCalendarId)
+        catch (Exception ex)
         {
-            try
-            {
-                List<Event> events = await _eventService.GetSharedEvents(sharedCalendarId);
+            return StatusCode(500, ex.Message);
+        }
+    }
 
-                return Ok(_mapper.Map<List<EventResponseDto>>(events));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+    [HttpGet("~/api/events/{eventId}")]
+    public async Task<ActionResult> GetEventById([FromRoute] int eventId)
+    {
+        try
+        {
+            Event? eventModel = await _eventService.GetEventById(eventId);
+
+            if (eventModel is null) return NotFound();
+
+            return Ok(_mapper.Map<EventResponseDto>(eventModel));
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpPost("~/api/events")]
+    public async Task<ActionResult> AddEvent([FromBody] EventRequestDto eventRequestDto) //Validation added for test
+    {
+        try
+        {
+            Event eventObj = _mapper.Map<Event>(eventRequestDto);
+
+            int addedEventId = await _eventService.AddEvent(eventObj);
+            return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, addedEventId);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpPut("~/api/events")]
+    public async Task<ActionResult> UpdateEvent([FromBody] EventRequestDto eventRequestDto)
+    {
+        try
+        {
+            Event eventObj = _mapper.Map<Event>(eventRequestDto);
+            await _eventService.UpdateEvent(eventObj);
+            return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, eventObj.Id);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
         }
 
     }
+
+    [HttpDelete("~/api/events/{eventId}")]
+    public async Task<ActionResult> DeleteEvent([FromRoute] int eventId)
+    {
+        try
+        {
+            await _eventService.DeleteEvent(eventId);
+            return Ok();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpGet("~/api/sharedCalendars/{sharedCalendarId}/events")]
+    public async Task<ActionResult> GetSharedEventsFromSharedCalendarId([FromRoute] int sharedCalendarId)
+    {
+        try
+        {
+            List<Event> events = await _eventService.GetSharedEvents(sharedCalendarId);
+
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
 }

@@ -11,7 +11,7 @@ public class EventCollaborator : IEntity
 
     public User User { get; set; }
 
-    public ParticipantRole ParticipantRole { get; set; }
+    public EventCollaboratorRole EventCollaboratorRole { get; set; }
 
     public ConfirmationStatus ConfirmationStatus { get; set; }
 
@@ -27,9 +27,9 @@ public class EventCollaborator : IEntity
 
     public bool IsEventCollaboratorWithMaybeStatus() => ConfirmationStatus == ConfirmationStatus.Maybe;
 
-    public bool IsOrganizerOfEvent() => ParticipantRole == ParticipantRole.Organizer;
+    public bool IsOrganizerOfEvent() => EventCollaboratorRole == EventCollaboratorRole.Organizer;
 
-    public bool IsParticipantOfEvent() => ParticipantRole == ParticipantRole.Participant;
+    public bool IsEventCollaboratorOfEvent() => EventCollaboratorRole == EventCollaboratorRole.Participant;
 
     public bool IsNullProposedDuration() => ProposedDuration == null;
 }

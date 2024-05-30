@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using AutoMapper;
+﻿using AutoMapper;
 using Core.Interfaces;
 using Core.Interfaces.IRepositories;
 

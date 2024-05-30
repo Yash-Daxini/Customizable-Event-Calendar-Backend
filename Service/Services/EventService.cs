@@ -4,150 +4,149 @@ using Core.Extensions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 
-namespace Core.Services
+namespace Core.Services;
+
+public class EventService : IEventService
 {
-    public class EventService : IEventService
+    private readonly IEventRepository _eventRepository;
+
+    private readonly IRecurrenceService _recurrenceService;
+    private readonly IEventCollaboratorService _eventCollaboratorService;
+    private readonly IOverlappingEventService _overlappingEventService;
+    private readonly ISharedCalendarService _sharedCalendarService;
+
+    public EventService(IEventRepository eventRepository,
+                        IRecurrenceService recurrenceService,
+                        IEventCollaboratorService eventCollaboratorService,
+                        IOverlappingEventService overlappingEventService,
+                        ISharedCalendarService sharedCalendarService)
     {
-        private readonly IEventRepository _eventRepository;
+        _eventRepository = eventRepository;
+        _recurrenceService = recurrenceService;
+        _eventCollaboratorService = eventCollaboratorService;
+        _overlappingEventService = overlappingEventService;
+        _sharedCalendarService = sharedCalendarService;
+    }
 
-        private readonly IRecurrenceService _recurrenceService;
-        private readonly IEventCollaboratorService _participantService;
-        private readonly IOverlappingEventService _overlappingEventService;
-        private readonly ISharedCalendarService _sharedCalendarService;
+    public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
 
-        public EventService(IEventRepository eventRepository,
-                            IRecurrenceService recurrenceService,
-                            IEventCollaboratorService participantService,
-                            IOverlappingEventService overlappingEventService,
-                            ISharedCalendarService sharedCalendarService)
+    public async Task<Event> GetEventById(int eventId)
+    {
+        Event? eventObj = await _eventRepository.GetEventsById(eventId);
+
+        return eventObj is null
+               ? throw new NotFoundException($"Event with id {eventId} not found.")
+               : eventObj;
+    }
+
+    public async Task<int> AddEvent(Event eventModel)
+    {
+        List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
+
+        MakeDateWiseEventCollaboratorListFromOccurrences(eventModel, occurrences);
+
+        OverlapEventData? overlapEventData = _overlappingEventService
+                                             .GetOverlappedEventInformation(eventModel,
+                                                                            GetAllEventsByUserId(eventModel.Id).Result);
+
+        if (overlapEventData is not null)
+            throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
+
+        eventModel.Id = await _eventRepository.Add(eventModel);
+
+        return eventModel.Id;
+    }
+
+    private void MakeDateWiseEventCollaboratorListFromOccurrences(Event eventModel, List<DateOnly> occurrences)
+    {
+        List<EventCollaborator> eventCollaborators = eventModel.DateWiseEventCollaborators.First().EventCollaborators;
+
+        List<EventCollaboratorsByDate> eventCollaboratorsByDates = [];
+
+        foreach (DateOnly occurrence in occurrences)
         {
-            _eventRepository = eventRepository;
-            _recurrenceService = recurrenceService;
-            _participantService = participantService;
-            _overlappingEventService = overlappingEventService;
-            _sharedCalendarService = sharedCalendarService;
-        }
-
-        public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
-
-        public async Task<Event> GetEventById(int eventId)
-        {
-            Event? eventObj = await _eventRepository.GetEventsById(eventId);
-
-            return eventObj is null 
-                   ? throw new NotFoundException($"Event with id {eventId} not found.") 
-                   : eventObj;
-        }
-
-        public async Task<int> AddEvent(Event eventModel)
-        {
-            List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
-
-            MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
-
-            OverlapEventData? overlapEventData = _overlappingEventService
-                                                 .GetOverlappedEventInformation(eventModel,
-                                                                                GetAllEventsByUserId(eventModel.Id).Result);
-
-            if (overlapEventData is not null)
-                throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
-
-            eventModel.Id = await _eventRepository.Add(eventModel);
-
-            return eventModel.Id;
-        }
-
-        private void MakeDateWiseParticipantListFromOccurrences(Event eventModel, List<DateOnly> occurrences)
-        {
-            List<EventCollaborator> participants = eventModel.DateWiseParticipants.First().EventCollaborators;
-
-            List<EventCollaboratorsByDate> participantsByDates = [];
-
-            foreach (DateOnly occurrence in occurrences)
+            eventCollaboratorsByDates.Add(new EventCollaboratorsByDate()
             {
-                participantsByDates.Add(new EventCollaboratorsByDate()
-                {
-                    EventDate = occurrence,
-                    EventCollaborators = participants
-                });
-            }
-
-            eventModel.DateWiseParticipants = participantsByDates;
+                EventDate = occurrence,
+                EventCollaborators = eventCollaborators
+            });
         }
 
-        public async Task UpdateEvent(Event eventModel)
-        {
-            await GetEventById(eventModel.Id);
+        eventModel.DateWiseEventCollaborators = eventCollaboratorsByDates;
+    }
 
-            List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
+    public async Task UpdateEvent(Event eventModel)
+    {
+        await GetEventById(eventModel.Id);
 
-            MakeDateWiseParticipantListFromOccurrences(eventModel, occurrences);
+        List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel);
 
-            OverlapEventData? overlapEventData = _overlappingEventService
-                                                 .GetOverlappedEventInformation(eventModel,
-                                                                                GetAllEventsByUserId(eventModel.Id).Result);
+        MakeDateWiseEventCollaboratorListFromOccurrences(eventModel, occurrences);
 
-            if (overlapEventData is not null)
-                throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
+        OverlapEventData? overlapEventData = _overlappingEventService
+                                             .GetOverlappedEventInformation(eventModel,
+                                                                            GetAllEventsByUserId(eventModel.Id).Result);
 
-            await _participantService.DeleteEventCollaboratorsByEventId(eventModel.Id);
+        if (overlapEventData is not null)
+            throw new EventOverlapException($"{overlapEventData.GetOverlapMessage()}");
 
-            await _eventRepository.Update(eventModel);
-        }
+        await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(eventModel.Id);
 
-        public async Task DeleteEvent(int eventId)
-        {
-            Event eventObj = await GetEventById(eventId);
+        await _eventRepository.Update(eventModel);
+    }
 
-            await _eventRepository.Delete(eventObj);
-        }
+    public async Task DeleteEvent(int eventId)
+    {
+        Event eventObj = await GetEventById(eventId);
 
-        public async Task<List<Event>> GetProposedEventsByUserId(int userId)
-        {
-            List<Event> events = await _eventRepository.GetProposedEventsByUserId(userId);
+        await _eventRepository.Delete(eventObj);
+    }
 
-            return events.Where(eventObj => eventObj.IsProposedEventToGiveResponse())
-                         .ToList();
-        }
+    public async Task<List<Event>> GetProposedEventsByUserId(int userId)
+    {
+        List<Event> events = await _eventRepository.GetProposedEventsByUserId(userId);
 
-        public async Task<List<Event>> GetNonProposedEventsByUserId(int userId)
-        {
-            List<Event> events = await GetAllEventsByUserId(userId);
+        return events.Where(eventObj => eventObj.IsProposedEventToGiveResponse())
+                     .ToList();
+    }
 
-            return events.Where(eventObj => !eventObj.IsProposedEventToGiveResponse())
-                         .ToList();
-        }
+    public async Task<List<Event>> GetNonProposedEventsByUserId(int userId)
+    {
+        List<Event> events = await GetAllEventsByUserId(userId);
 
-        public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate) =>
-               await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDate, endDate);
+        return events.Where(eventObj => !eventObj.IsProposedEventToGiveResponse())
+                     .ToList();
+    }
 
-        public async Task<List<Event>> GetEventsForDailyViewByUserId(int userId)
-        {
-            DateOnly today = DateTime.Today.ConvertToDateOnly();
-            return await GetEventsWithinGivenDatesByUserId(userId, today, today);
-        }
+    public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate) =>
+           await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDate, endDate);
 
-        public async Task<List<Event>> GetEventsForWeeklyViewByUserId(int userId)
-        {
-            DateOnly startDateOfWeek = DateTime.Today.GetStartDateOfWeek();
-            DateOnly endDateOfWeek = DateTime.Today.GetEndDateOfWeek();
+    public async Task<List<Event>> GetEventsForDailyViewByUserId(int userId)
+    {
+        DateOnly today = DateTime.Today.ConvertToDateOnly();
+        return await GetEventsWithinGivenDatesByUserId(userId, today, today);
+    }
 
-            return await GetEventsWithinGivenDatesByUserId(userId, startDateOfWeek, endDateOfWeek);
-        }
+    public async Task<List<Event>> GetEventsForWeeklyViewByUserId(int userId)
+    {
+        DateOnly startDateOfWeek = DateTime.Today.GetStartDateOfWeek();
+        DateOnly endDateOfWeek = DateTime.Today.GetEndDateOfWeek();
 
-        public async Task<List<Event>> GetEventsForMonthlyViewByUserId(int userId)
-        {
-            DateOnly startDateOfMonth = DateTime.Today.GetStartDateOfMonth();
-            DateOnly endDateOfMonth = DateTime.Today.GetEndDateOfMonth();
+        return await GetEventsWithinGivenDatesByUserId(userId, startDateOfWeek, endDateOfWeek);
+    }
 
-            return await GetEventsWithinGivenDatesByUserId(userId, startDateOfMonth, endDateOfMonth);
-        }
+    public async Task<List<Event>> GetEventsForMonthlyViewByUserId(int userId)
+    {
+        DateOnly startDateOfMonth = DateTime.Today.GetStartDateOfMonth();
+        DateOnly endDateOfMonth = DateTime.Today.GetEndDateOfMonth();
 
-        public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)
-        {
-            SharedCalendar? sharedCalendar = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
-            if (sharedCalendar == null) return [];
-            return await _eventRepository.GetSharedEvents(sharedCalendar);
-        }
+        return await GetEventsWithinGivenDatesByUserId(userId, startDateOfMonth, endDateOfMonth);
+    }
+
+    public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)
+    {
+        SharedCalendar? sharedCalendar = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
+        if (sharedCalendar == null) return [];
+        return await _eventRepository.GetSharedEvents(sharedCalendar);
     }
 }

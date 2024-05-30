@@ -7,11 +7,11 @@ namespace WebAPI.Validators
     {
         public SharedCalendarDtoValidator()
         {
-            RuleFor(e => e.SenderUser)
+            RuleFor(e => e.Sender)
                 .NotNull()
                 .SetValidator(new UserDtoValidator());
 
-            RuleFor(e => e.ReceiverUser)
+            RuleFor(e => e.Receiver)
                 .NotNull()
                 .SetValidator(new UserDtoValidator());
 

@@ -13,11 +13,11 @@ public class OverlapEventService : IOverlappingEventService
         {
             if (existingEvent.Id == eventForVerify.Id) continue;
 
-            List<DateOnly> occurrencesOfExistingEvent = [..existingEvent.DateWiseParticipants
-                                                          .Select(participantByDate => participantByDate.EventDate)];
+            List<DateOnly> occurrencesOfExistingEvent = [..existingEvent.DateWiseEventCollaborators
+                                                          .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)];
 
-            List<DateOnly> occurrencesOfEventForVerify = [..eventForVerify.DateWiseParticipants
-                                                            .Select(participantByDate => participantByDate.EventDate)];
+            List<DateOnly> occurrencesOfEventForVerify = [..eventForVerify.DateWiseEventCollaborators
+                                                            .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)];
 
             DateOnly matchedDate = occurrencesOfExistingEvent.Intersect(occurrencesOfEventForVerify).FirstOrDefault();
 

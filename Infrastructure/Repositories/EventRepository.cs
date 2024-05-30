@@ -73,10 +73,10 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
 
     public async Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar)
     {
-        List<Event> events = await GetEventsWithinGivenDateByUserId(sharedCalendar.SenderUser.Id, sharedCalendar.FromDate, sharedCalendar.ToDate);
+        List<Event> events = await GetEventsWithinGivenDateByUserId(sharedCalendar.Sender.Id, sharedCalendar.FromDate, sharedCalendar.ToDate);
 
         return events
-               .Where(eventModel => eventModel.GetEventOrganizer().Id == sharedCalendar.SenderUser.Id)
+               .Where(eventModel => eventModel.GetEventOrganizer().Id == sharedCalendar.Sender.Id)
                .ToList();
     }
 }

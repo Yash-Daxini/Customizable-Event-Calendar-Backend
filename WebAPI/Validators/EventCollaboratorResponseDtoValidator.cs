@@ -19,7 +19,7 @@ public class EventCollaboratorResponseDtoValidator : AbstractValidator<EventColl
         RuleFor(e => e.ParticipantRole)
             .NotEmpty()
             .NotNull()
-            .IsEnumName(typeof(ParticipantRole));
+            .IsEnumName(typeof(EventCollaboratorRole));
 
         RuleFor(e => e.ConfirmationStatus)
             .NotEmpty()

@@ -16,7 +16,7 @@ namespace WebAPI.Validators
             RuleFor(e => e.ParticipantRole)
                 .NotEmpty()
                 .NotNull()
-                .IsEnumName(typeof(ParticipantRole));
+                .IsEnumName(typeof(EventCollaboratorRole));
 
             RuleFor(e => e.ConfirmationStatus)
                 .NotEmpty()

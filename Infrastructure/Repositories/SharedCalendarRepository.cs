@@ -22,8 +22,8 @@ public class SharedCalendarRepository : BaseRepository<SharedCalendar, SharedCal
     public async Task<List<SharedCalendar>> GetAllSharedCalendars()
     {
         return await _dbContext.SharedCalendars
-                               .Include(sharedCalendar => sharedCalendar.SenderUser)
-                               .Include(sharedCalendar => sharedCalendar.ReceiverUser)
+                               .Include(sharedCalendar => sharedCalendar.Sender)
+                               .Include(sharedCalendar => sharedCalendar.Receiver)
                                .ProjectTo<SharedCalendar>(_mapper.ConfigurationProvider)
                                .ToListAsync();
     }
@@ -32,8 +32,8 @@ public class SharedCalendarRepository : BaseRepository<SharedCalendar, SharedCal
     {
         return await _dbContext.SharedCalendars
                                .Where(sharedCalendar => sharedCalendar.Id == sharedCalendarId)
-                               .Include(sharedCalendar => sharedCalendar.SenderUser)
-                               .Include(sharedCalendar => sharedCalendar.ReceiverUser)
+                               .Include(sharedCalendar => sharedCalendar.Sender)
+                               .Include(sharedCalendar => sharedCalendar.Receiver)
                                .ProjectTo<SharedCalendar>(_mapper.ConfigurationProvider)
                                .FirstOrDefaultAsync();
 

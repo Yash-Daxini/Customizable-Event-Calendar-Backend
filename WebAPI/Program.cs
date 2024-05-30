@@ -3,14 +3,13 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure;
 using Infrastructure.Profiles;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using WebAPI.Dtos;
-using WebAPI.Filters;
 using WebAPI.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,13 +32,8 @@ builder.Services.AddAutoMapper(typeof(Program),
                                typeof(DurationDtoProfile),
                                typeof(SharedCalendarDtoProfile));
 
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
-
-builder.Services.AddScoped<ValidationFilter<EventRequestDto>>();
-builder.Services.AddScoped<ValidationFilter<EventCollaboratorRequestDto>>();
-builder.Services.AddScoped<ValidationFilter<SharedCalendarDto>>();
-builder.Services.AddScoped<ValidationFilter<UserDto>>();
-builder.Services.AddScoped<ValidationFilter<EventCollaborationRequestDto>>();
+builder.Services.AddFluentValidationAutoValidation()
+    .AddValidatorsFromAssemblyContaining<Program>();
 
 //Repositories
 builder.Services.AddTransient<IUserRepository, UserRepository>();

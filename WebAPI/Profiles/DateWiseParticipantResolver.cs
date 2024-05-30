@@ -4,11 +4,11 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Profiles;
 
-public class DateWiseParticipantsResolver : IValueResolver<EventRequestDto, Event, List<EventCollaboratorsByDate>>
+public class DateWiseEventCollaboratorsResolver : IValueResolver<EventRequestDto, Event, List<EventCollaboratorsByDate>>
 {
     private readonly IMapper _mapper;
 
-    public DateWiseParticipantsResolver(IMapper mapper)
+    public DateWiseEventCollaboratorsResolver(IMapper mapper)
     {
         _mapper = mapper;
     }

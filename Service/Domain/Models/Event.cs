@@ -17,21 +17,21 @@ public class Event : IEntity
 
     public RecurrencePattern RecurrencePattern { get; set; }
 
-    public List<EventCollaboratorsByDate> DateWiseParticipants { get; set; }
+    public List<EventCollaboratorsByDate> DateWiseEventCollaborators { get; set; }
 
     public User GetEventOrganizer()
     {
-        return DateWiseParticipants
-                   .SelectMany(participantsByDate => participantsByDate.EventCollaborators)
-                   .First(eventCollaborator => eventCollaborator.ParticipantRole == ParticipantRole.Organizer).User;
+        return DateWiseEventCollaborators
+                   .SelectMany(eventCollaboratorsByDate => eventCollaboratorsByDate.EventCollaborators)
+                   .First(eventCollaborator => eventCollaborator.EventCollaboratorRole == EventCollaboratorRole.Organizer).User;
     }
 
     public bool IsProposedEventToGiveResponse()
     {
-        return DateWiseParticipants
-                   .SelectMany(participantsByDate => participantsByDate.EventCollaborators)
+        return DateWiseEventCollaborators
+                   .SelectMany(eventCollaboratorsByDate => eventCollaboratorsByDate.EventCollaborators)
                    .ToList()
-                   .Exists(eventCollaborator => eventCollaborator.ParticipantRole == ParticipantRole.Participant
+                   .Exists(eventCollaborator => eventCollaborator.EventCollaboratorRole == EventCollaboratorRole.Participant
                                         && (
                                                 eventCollaborator.ConfirmationStatus == ConfirmationStatus.Pending
                                                 || eventCollaborator.ConfirmationStatus == ConfirmationStatus.Proposed
@@ -41,8 +41,8 @@ public class Event : IEntity
 
     public List<EventCollaborator> GetInviteesOfEvent()
     {
-        return [.. DateWiseParticipants[0].EventCollaborators
+        return [.. DateWiseEventCollaborators[0].EventCollaborators
                                       .Where(eventCollaborator => eventCollaborator.IsOrganizerOfEvent()
-                                                            || eventCollaborator.IsParticipantOfEvent())];
+                                                            || eventCollaborator.IsEventCollaboratorOfEvent())];
     }
 }

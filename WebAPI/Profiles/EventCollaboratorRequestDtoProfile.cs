@@ -12,6 +12,6 @@ public class EventCollaboratorRequestDtoProfile : Profile
     {
         CreateMap<EventCollaboratorRequestDto, EventCollaborator>()
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => src.ConfirmationStatus.ToEnum<ConfirmationStatus>()))
-            .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => src.ParticipantRole.ToEnum<ParticipantRole>()));
+            .ForMember(dest => dest.EventCollaboratorRole, opt => opt.MapFrom(src => src.ParticipantRole.ToEnum<EventCollaboratorRole>()));
     }
 }

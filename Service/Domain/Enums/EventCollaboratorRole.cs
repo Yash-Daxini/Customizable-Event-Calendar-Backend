@@ -1,6 +1,6 @@
 ﻿namespace Core.Domain.Enums;
 
-public enum ParticipantRole
+public enum EventCollaboratorRole
 {
     Organizer,
     Participant,

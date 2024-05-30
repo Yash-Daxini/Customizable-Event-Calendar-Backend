@@ -27,7 +27,7 @@ public class EventProfile : Profile
                     ByMonth = src.ByMonth,
                     ByMonthDay = src.ByMonthDay,
                 }))
-                .ForMember(dest => dest.DateWiseParticipants, opt => opt.MapFrom<DateWiseParticipantsResolver>());
+                .ForMember(dest => dest.DateWiseEventCollaborators, opt => opt.MapFrom<DateWiseEventCollaboratorsResolver>());
 
         CreateMap<Event, EventDataModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.GetEventOrganizer().Id))

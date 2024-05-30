@@ -9,6 +9,6 @@ public class EventRequestDtoProfile : Profile
     public EventRequestDtoProfile()
     {
         CreateMap<EventRequestDto, Event>()
-            .ForMember(dest => dest.DateWiseParticipants, opt => opt.MapFrom<DateWiseParticipantsResolver>());
+            .ForMember(dest => dest.DateWiseEventCollaborators, opt => opt.MapFrom<DateWiseEventCollaboratorsResolver>());
     }
 }

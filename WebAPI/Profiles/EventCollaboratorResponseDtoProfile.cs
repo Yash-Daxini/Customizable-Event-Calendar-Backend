@@ -10,6 +10,6 @@ public class EventCollaboratorResponseDtoProfile : Profile
     {
         CreateMap<EventCollaborator, EventCollaboratorResponseDto>()
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => src.ConfirmationStatus))
-            .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => src.ParticipantRole));
+            .ForMember(dest => dest.ParticipantRole, opt => opt.MapFrom(src => src.EventCollaboratorRole));
     }
 }
