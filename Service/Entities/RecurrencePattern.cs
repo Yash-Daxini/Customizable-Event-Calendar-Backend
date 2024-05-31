@@ -35,7 +35,7 @@ public class RecurrencePattern
         return ((EndDate.Year - StartDate.Year) * 12 + (EndDate.Month - StartDate.Month)) / Interval + 1;
     }
 
-    public int GetCountOfYearlyEventOccurences()
+    public int GetCountOfYearlyEventOccurrences()
     {
         return (EndDate.Year - StartDate.Year) / Interval + 1;
     }

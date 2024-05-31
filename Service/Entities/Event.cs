@@ -20,9 +20,10 @@ public class Event : IEntity
 
     public User GetEventOrganizer()
     {
-        return DateWiseEventCollaborators[0].EventCollaborators
-                                            .First(eventCollaborator => eventCollaborator.IsOrganizerOfEvent())
-                                            .User;
+        return DateWiseEventCollaborators.FirstOrDefault()
+                                         .EventCollaborators
+                                         .FirstOrDefault(eventCollaborator => eventCollaborator.IsOrganizerOfEvent())
+                                         .User;
     }
 
     public List<EventCollaborator> GetInviteesOfEvent()

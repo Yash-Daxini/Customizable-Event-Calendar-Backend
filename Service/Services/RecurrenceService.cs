@@ -118,7 +118,7 @@ public class RecurrenceService : IRecurrenceService
 
         int totalOccurrences = isMonthly
                                ? recurrencePattern.GetCountOfMonthlyEventOccurrences()
-                               : recurrencePattern.GetCountOfYearlyEventOccurences();
+                               : recurrencePattern.GetCountOfYearlyEventOccurrences();
 
         return GetOccurrencesUsingMonthDay(monthDay, interval, currentDate, totalOccurrences, isMonthly);
     }
@@ -165,7 +165,7 @@ public class RecurrenceService : IRecurrenceService
 
         int totalOccurrences = isMonthly
                                ? recurrencePattern.GetCountOfMonthlyEventOccurrences()
-                               : recurrencePattern.GetCountOfYearlyEventOccurences();
+                               : recurrencePattern.GetCountOfYearlyEventOccurrences();
 
         return GetOccurrencesUsingWeekOrderAndWeekDay(weekOrder, dayOfWeek, currentDate, interval, totalOccurrences, isMonthly);
     }
