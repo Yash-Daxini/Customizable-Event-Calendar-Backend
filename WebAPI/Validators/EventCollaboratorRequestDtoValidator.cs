@@ -8,11 +8,6 @@ namespace WebAPI.Validators
     {
         public EventCollaboratorRequestDtoValidator()
         {
-            RuleFor(e => e.User)
-                .NotNull()
-                .SetValidator(new UserDtoValidator());
-
-
             RuleFor(e => e.ParticipantRole)
                 .NotEmpty()
                 .NotNull()

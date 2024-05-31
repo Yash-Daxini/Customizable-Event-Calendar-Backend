@@ -6,7 +6,7 @@ public class EventCollaborationRequestDto
 
     public int EventId { get; set; }
 
-    public UserDto User { get; set; }
+    public int UserId { get; set; }
 
     public string ParticipantRole { get; set; }
 

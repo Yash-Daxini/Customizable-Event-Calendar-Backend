@@ -11,11 +11,6 @@ public class EventCollaborationRequestDtoValidator : AbstractValidator<EventColl
         RuleFor(e => e.EventId)
             .GreaterThan(0);
 
-        RuleFor(e => e.User)
-            .NotNull()
-            .SetValidator(new UserDtoValidator());
-
-
         RuleFor(e => e.ParticipantRole)
             .NotEmpty()
             .NotNull()

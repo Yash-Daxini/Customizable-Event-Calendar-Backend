@@ -91,7 +91,7 @@ public class Event : IEntity
     public List<EventCollaborator> GetEventCollaboratorsForGivenDate(DateOnly eventDate)
     {
         EventCollaboratorsByDate? eventCollaboratorsByDate = DateWiseEventCollaborators
-                                                             .First(eventCollaboratorByDate => eventCollaboratorByDate.EventDate
+                                                             .FirstOrDefault(eventCollaboratorByDate => eventCollaboratorByDate.EventDate
                                                                                                == eventDate);
         return eventCollaboratorsByDate is null
                ? []

@@ -4,7 +4,7 @@ public class EventCollaboratorRequestDto
 {
     public int Id { get; set; }
 
-    public UserDto User { get; set; }
+    public int UserId { get; set; }
 
     public string ParticipantRole { get; set; }
 

@@ -35,7 +35,7 @@ public class EventController : ControllerBase
             return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
-    
+
     [HttpGet("organizer-events")]
     public async Task<IActionResult> GetAllEventsCreatedByUser([FromRoute] int userId)
     {
@@ -157,6 +157,10 @@ public class EventController : ControllerBase
 
             int addedEventId = await _eventService.AddEvent(eventObj, userId);
             return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, new { addedEventId });
+        }
+        catch (EventOverlapException ex)
+        {
+            return BadRequest(new { ErrorMessage = ex.Message});
         }
         catch (Exception ex)
         {

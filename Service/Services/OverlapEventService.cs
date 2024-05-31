@@ -27,12 +27,13 @@ public class OverlapEventService : IOverlappingEventService
 
     private string GetOverlapMessage(Event CheckingEvent, Dictionary<Event, DateOnly> OverlappingEventsByDate)
     {
-        StringBuilder overlapMessage = new($"\"{CheckingEvent.Title}\" overlaps with following events at " +
-                                           $"{CheckingEvent.Duration.GetDurationInFormat()} :-");
+        StringBuilder overlapMessage = new($"{CheckingEvent.Title} overlaps with following events at " +
+                                           $"{CheckingEvent.Duration.GetDurationInFormat()} :-  ");
 
         foreach (var (overlapEvent, matchedDate) in OverlappingEventsByDate.Select(e => (e.Key, e.Value)))
         {
-            overlapMessage.AppendLine($"Event Name : {overlapEvent.Title} Date : {matchedDate} " +
+            overlapMessage.AppendLine($"Event Name : {overlapEvent.Title} , " +
+                                      $"Date : {matchedDate} , " +
                                       $"Duration : {overlapEvent.Duration.GetDurationInFormat()}");
         }
 
