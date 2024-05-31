@@ -11,7 +11,7 @@ public class EventCollaborationRequestDtoValidator : AbstractValidator<EventColl
         RuleFor(e => e.EventId)
             .GreaterThan(0);
 
-        RuleFor(e => e.ParticipantRole)
+        RuleFor(e => e.EventCollaboratorRole)
             .NotEmpty()
             .NotNull()
             .IsEnumName(typeof(EventCollaboratorRole));

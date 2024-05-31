@@ -10,6 +10,7 @@ using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.Dtos;
 using WebAPI.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,7 @@ builder.Services.AddAutoMapper(typeof(Program),
                                typeof(EventResponseDtoProfile),
                                typeof(EventCollaboratorResponseDtoProfile),
                                typeof(EventCollaboratorRequestDtoProfile),
+                               typeof(EventCollaboratorConfirmationDto),
                                typeof(RecurrencePatternDtoProfile),
                                typeof(DurationDtoProfile),
                                typeof(SharedCalendarDtoProfile));

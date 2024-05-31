@@ -42,14 +42,19 @@ public class EventCollaborator : IEntity
     {
         ConfirmationStatus = ConfirmationStatus.Accept;
     }
-    
+
     public void RejectConfirmationStatus()
     {
         ConfirmationStatus = ConfirmationStatus.Reject;
     }
-    
+
     public void SetConfirmationToPending()
     {
         ConfirmationStatus = ConfirmationStatus.Pending;
+    }
+
+    public void SetEventCollaboratorRoleToParticipant()
+    {
+        EventCollaboratorRole = EventCollaboratorRole.Participant;
     }
 }

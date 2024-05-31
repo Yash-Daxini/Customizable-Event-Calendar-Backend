@@ -20,6 +20,7 @@ public class EventCollaboratorService : IEventCollaboratorService
 
     public Task UpdateEventCollaborator(EventCollaborator eventCollaborator)
     {
+        eventCollaborator.SetEventCollaboratorRoleToParticipant();
         return _eventCollaboratorRepository.Update(eventCollaborator);
     }
 

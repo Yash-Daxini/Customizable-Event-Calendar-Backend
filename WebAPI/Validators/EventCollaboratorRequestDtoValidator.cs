@@ -8,7 +8,7 @@ namespace WebAPI.Validators
     {
         public EventCollaboratorRequestDtoValidator()
         {
-            RuleFor(e => e.ParticipantRole)
+            RuleFor(e => e.EventCollaboratorRole)
                 .NotEmpty()
                 .NotNull()
                 .IsEnumName(typeof(EventCollaboratorRole));

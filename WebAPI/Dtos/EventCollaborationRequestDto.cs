@@ -8,7 +8,7 @@ public class EventCollaborationRequestDto
 
     public int UserId { get; set; }
 
-    public string ParticipantRole { get; set; }
+    public string EventCollaboratorRole { get; set; }
 
     public string ConfirmationStatus { get; set; }
 
