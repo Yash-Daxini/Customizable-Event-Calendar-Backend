@@ -62,7 +62,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
         foreach (var eventCollaborator in GetInviteesWithProposedStatus(eventObj))
         {
             if (!eventCollaborator.IsNullProposedDuration())
-                CountProposeHours(eventCollaborator.ProposedDuration.StartHour,
+                CountProposedHours(eventCollaborator.ProposedDuration.StartHour,
                                   eventCollaborator.ProposedDuration.EndHour,
                                   ref proposedHours);
         }
@@ -77,7 +77,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
                        .Where(eventCollaborator => eventCollaborator.IsEventCollaboratorWithProposedStatus());
     }
 
-    private static void CountProposeHours(int startHour, int endHour, ref int[] proposedHours)
+    private static void CountProposedHours(int startHour, int endHour, ref int[] proposedHours)
     {
         while (startHour < endHour)
         {

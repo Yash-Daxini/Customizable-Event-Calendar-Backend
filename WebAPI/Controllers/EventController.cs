@@ -35,6 +35,21 @@ public class EventController : ControllerBase
             return StatusCode(500, new { ErrorMessage = ex.Message });
         }
     }
+    
+    [HttpGet("organizer-events")]
+    public async Task<IActionResult> GetAllEventsCreatedByUser([FromRoute] int userId)
+    {
+        try
+        {
+            List<Event> events = await _eventService.GetAllEventCreatedByUser(userId);
+
+            return Ok(_mapper.Map<List<EventResponseDto>>(events));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+    }
 
 
     [HttpGet("eventsBetweenDates")]
@@ -166,7 +181,7 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("{eventId}")]
-    public async Task<ActionResult> UpdateEvent([FromRoute] int eventId, [FromRoute] int userId, [FromBody] RecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateEvent([FromRoute] int userId, [FromBody] RecurringEventRequestDto eventRequestDto)
     {
         try
         {

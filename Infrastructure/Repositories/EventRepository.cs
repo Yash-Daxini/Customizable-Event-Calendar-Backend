@@ -21,7 +21,6 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
     public async Task<List<Event>> GetAllEventsByUserId(int userId)
     {
         List<EventDataModel> events = await _dbContext.Events
-                                                      .Where(eventObj => eventObj.UserId == userId)
                                                       .Include(eventObj => eventObj.EventCollaborators)
                                                         .ThenInclude(eventCollaborator => eventCollaborator.User)
                                                       .Where(eventObj => eventObj

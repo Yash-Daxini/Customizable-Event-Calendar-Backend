@@ -30,7 +30,15 @@ public class EventService : IEventService
 
     public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
 
-    public async Task<Event> GetEventById(int eventId, int userId) //TODO : Pass user Id 
+    public async Task<List<Event>> GetAllEventCreatedByUser(int userId)
+    {
+        List<Event> events = await _eventRepository.GetAllEventsByUserId(userId);
+
+        return [..events
+                 .Where(eventObj => eventObj.GetEventOrganizer().Id == userId)];
+    }
+
+    public async Task<Event> GetEventById(int eventId, int userId)
     {
         Event? eventObj = await _eventRepository.GetEventById(eventId);
 
@@ -39,13 +47,14 @@ public class EventService : IEventService
                : eventObj;
     }
 
+
     public async Task<int> AddNonRecurringEvent(Event eventModel, int userId)
     {
         eventModel.RecurrencePattern.MakeNonRecurringEvent();
         return await AddEvent(eventModel, userId);
     }
 
-    public async Task<int> AddEvent(Event eventModel, int userId) //TODO : Pass user Id 
+    public async Task<int> AddEvent(Event eventModel, int userId)
     {
         CreateDateWiseEventCollaboratorList(eventModel);
 
@@ -57,7 +66,7 @@ public class EventService : IEventService
     }
 
 
-    public async Task UpdateEvent(Event eventModel, int userId) //TODO : Pass user Id 
+    public async Task UpdateEvent(Event eventModel, int userId)
     {
         await GetEventById(eventModel.Id, userId);
 
@@ -132,7 +141,7 @@ public class EventService : IEventService
 
     private async Task HandleEventOverlap(Event eventModel, int userId)
     {
-        List<Event> events = await GetAllEventsByUserId(userId); //TODO : Pass user ID 
+        List<Event> events = await GetAllEventsByUserId(userId);
 
         events = [..events
                    .Where(eventObj => eventObj.Id != eventModel.Id)];
