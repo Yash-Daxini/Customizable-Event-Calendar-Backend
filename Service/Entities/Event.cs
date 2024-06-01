@@ -22,28 +22,28 @@ public class Event : IEntity
     {
         return DateWiseEventCollaborators.FirstOrDefault()
                                          .EventCollaborators
-                                         .FirstOrDefault(eventCollaborator => eventCollaborator.IsOrganizerOfEvent())
+                                         .FirstOrDefault(eventCollaborator => eventCollaborator.IsEventOrganizer())
                                          .User;
     }
 
     public List<EventCollaborator> GetInviteesOfEvent()
     {
         return [.. DateWiseEventCollaborators[0].EventCollaborators
-                                                .Where(eventCollaborator => eventCollaborator.IsParticipantOfEvent())];
+                                                .Where(eventCollaborator => eventCollaborator.IsEventParticipant())];
     }
 
     public bool HasPendingResponseFromUser(int userId)
     {
         return GetInviteesOfEvent()
                .Exists(eventCollaborator => eventCollaborator.User.Id == userId
-                                         && eventCollaborator.IsEventCollaboratorWithPendingStatus());
+                                         && eventCollaborator.IsPendingStatus());
     }
 
     public bool IsProposedEvent()
     {
         return GetInviteesOfEvent()
-               .Exists(eventCollaborator => eventCollaborator.IsEventCollaboratorWithPendingStatus()
-                                            || eventCollaborator.IsEventCollaboratorWithProposedStatus());
+               .Exists(eventCollaborator => eventCollaborator.IsPendingStatus()
+                                            || eventCollaborator.IsProposedStatus());
     }
 
     public bool IsEventOverlappingWith(Event eventObj, DateOnly matchedDate)

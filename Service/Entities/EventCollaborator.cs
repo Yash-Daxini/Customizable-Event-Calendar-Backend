@@ -19,21 +19,21 @@ public class EventCollaborator : IEntity
 
     public DateOnly EventDate { get; set; }
 
-    public bool IsEventCollaboratorWithPendingStatus() => ConfirmationStatus == ConfirmationStatus.Pending;
+    public bool IsPendingStatus() => ConfirmationStatus == ConfirmationStatus.Pending;
 
-    public bool IsEventCollaboratorWithProposedStatus() => ConfirmationStatus == ConfirmationStatus.Proposed;
+    public bool IsProposedStatus() => ConfirmationStatus == ConfirmationStatus.Proposed;
 
-    public bool IsEventCollaboratorWithAcceptStatus() => ConfirmationStatus == ConfirmationStatus.Accept;
+    public bool IsAcceptStatus() => ConfirmationStatus == ConfirmationStatus.Accept;
 
-    public bool IsEventCollaboratorWithMaybeStatus() => ConfirmationStatus == ConfirmationStatus.Maybe;
+    public bool IsMaybeStatus() => ConfirmationStatus == ConfirmationStatus.Maybe;
 
-    public bool IsOrganizerOfEvent() => EventCollaboratorRole == EventCollaboratorRole.Organizer;
+    public bool IsEventOrganizer() => EventCollaboratorRole == EventCollaboratorRole.Organizer;
 
-    public bool IsParticipantOfEvent() => EventCollaboratorRole == EventCollaboratorRole.Participant;
+    public bool IsEventParticipant() => EventCollaboratorRole == EventCollaboratorRole.Participant;
 
     public bool IsNullProposedDuration() => ProposedDuration == null;
 
-    public void SetProposedDurationToNull()
+    public void SetProposedDurationNull()
     {
         ProposedDuration = null;
     }
@@ -48,12 +48,12 @@ public class EventCollaborator : IEntity
         ConfirmationStatus = ConfirmationStatus.Reject;
     }
 
-    public void SetConfirmationToPending()
+    public void SetConfirmationStatusPending()
     {
         ConfirmationStatus = ConfirmationStatus.Pending;
     }
 
-    public void SetEventCollaboratorRoleToParticipant()
+    public void SetEventCollaboratorRoleAsParticipant()
     {
         EventCollaboratorRole = EventCollaboratorRole.Participant;
     }

@@ -47,7 +47,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     private static bool IsAnyInviteeWithPendingStatus(Event eventObj)
     {
         return eventObj.GetInviteesOfEvent()
-                       .Exists(eventCollaborator => eventCollaborator.IsEventCollaboratorWithPendingStatus());
+                       .Exists(eventCollaborator => eventCollaborator.IsPendingStatus());
     }
 
     private static int CalculateDayDifference(DateTime firstDate, DateTime secondDate)
@@ -74,7 +74,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     private IEnumerable<EventCollaborator> GetInviteesWithProposedStatus(Event eventObj)
     {
         return eventObj.GetInviteesOfEvent()
-                       .Where(eventCollaborator => eventCollaborator.IsEventCollaboratorWithProposedStatus());
+                       .Where(eventCollaborator => eventCollaborator.IsProposedStatus());
     }
 
     private static void CountProposedHours(int startHour, int endHour, ref int[] proposedHours)
@@ -131,10 +131,10 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
         foreach (var eventCollaborator in eventObj.GetInviteesOfEvent().Where(IsInviteePresentInEvent))
         {
-            if (eventCollaborator.IsEventCollaboratorWithProposedStatus())
+            if (eventCollaborator.IsProposedStatus())
                 HandleInviteeThatProposedTime(eventObj, eventCollaborator);
 
-            eventCollaborator.SetProposedDurationToNull();
+            eventCollaborator.SetProposedDurationNull();
             eventCollaborator.EventDate = eventDate;
             _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
         }
@@ -156,22 +156,22 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private static bool IsInviteePresentInEvent(EventCollaborator eventCollaborator)
     {
-        return eventCollaborator.IsEventCollaboratorWithAcceptStatus()
-               || eventCollaborator.IsEventCollaboratorWithMaybeStatus()
-               || eventCollaborator.IsEventCollaboratorWithProposedStatus();
+        return eventCollaborator.IsAcceptStatus()
+               || eventCollaborator.IsMaybeStatus()
+               || eventCollaborator.IsProposedStatus();
     }
 
     private void UpdateEventCollaboratorsStatus(Event eventObj)
     {
         foreach (var eventCollaborator in eventObj.GetInviteesOfEvent())
         {
-            if (eventCollaborator.IsOrganizerOfEvent())
+            if (eventCollaborator.IsEventOrganizer())
             {
-                eventCollaborator.SetProposedDurationToNull();
+                eventCollaborator.SetProposedDurationNull();
             }
             else
             {
-                eventCollaborator.SetProposedDurationToNull();
+                eventCollaborator.SetProposedDurationNull();
                 eventCollaborator.ConfirmationStatus = ConfirmationStatus.Pending;
             }
             _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
