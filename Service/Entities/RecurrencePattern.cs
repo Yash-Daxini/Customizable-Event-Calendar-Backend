@@ -30,12 +30,12 @@ public class RecurrencePattern
 
     public bool IsMonthDayNull() => this.ByMonthDay == null;
 
-    public int GetCountOfMonthlyEventOccurrences()
+    public int GetMonthlyOccurrencesCount()
     {
         return ((EndDate.Year - StartDate.Year) * 12 + (EndDate.Month - StartDate.Month)) / Interval + 1;
     }
 
-    public int GetCountOfYearlyEventOccurrences()
+    public int GetYearlyOccurrencesCount()
     {
         return (EndDate.Year - StartDate.Year) / Interval + 1;
     }

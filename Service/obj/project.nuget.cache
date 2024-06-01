@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hBAJLj7w0zZu0dAi7wVjWi7eM71r7S0ujm1Io3ECJ03o4FSwJDj6w7YUEhBQth/1/38pZH7tEfCmJ7XDB0xDHg==",
+  "dgSpecHash": "KAX0Dl+ynt9p9KIkovT86uDmknta41VqF4nhLjEVPCKm9vIs7sfyB0T9SKsfSzaANGc5+C8Hc0BgysdtxKy9rQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\YashDaxini\\Desktop\\C#Practice\\CustomizableEventCalendarWebAPI\\Service\\Core.csproj",
+  "projectFilePath": "C:\\Users\\admin\\Desktop\\.NETWebAPI\\Service\\Core.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
