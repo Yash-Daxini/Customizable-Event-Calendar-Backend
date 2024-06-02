@@ -46,7 +46,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private static bool IsAnyInviteeWithPendingStatus(Event eventObj)
     {
-        return eventObj.GetInviteesOfEvent()
+        return eventObj.GetEventInvitees()
                        .Exists(eventCollaborator => eventCollaborator.IsPendingStatus());
     }
 
@@ -73,7 +73,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private IEnumerable<EventCollaborator> GetInviteesWithProposedStatus(Event eventObj)
     {
-        return eventObj.GetInviteesOfEvent()
+        return eventObj.GetEventInvitees()
                        .Where(eventCollaborator => eventCollaborator.IsProposedStatus());
     }
 
@@ -129,7 +129,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     {
         DateOnly eventDate = eventObj.RecurrencePattern.StartDate;
 
-        foreach (var eventCollaborator in eventObj.GetInviteesOfEvent().Where(IsInviteePresentInEvent))
+        foreach (var eventCollaborator in eventObj.GetEventInvitees().Where(IsInviteePresentInEvent))
         {
             if (eventCollaborator.IsProposedStatus())
                 HandleInviteeThatProposedTime(eventObj, eventCollaborator);
@@ -163,7 +163,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private void UpdateEventCollaboratorsStatus(Event eventObj)
     {
-        foreach (var eventCollaborator in eventObj.GetInviteesOfEvent())
+        foreach (var eventCollaborator in eventObj.GetEventInvitees())
         {
             if (eventCollaborator.IsEventOrganizer())
             {

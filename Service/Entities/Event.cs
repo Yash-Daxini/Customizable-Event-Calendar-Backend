@@ -16,32 +16,40 @@ public class Event : IEntity
 
     public RecurrencePattern RecurrencePattern { get; set; }
 
-    public List<EventCollaboratorsByDate> DateWiseEventCollaborators { get; set; }
+    public List<EventCollaboratorsByDate> DateWiseEventCollaborators { get; set; } = [];
 
-    public User GetEventOrganizer()
+    public User? GetEventOrganizer()
     {
-        return DateWiseEventCollaborators.FirstOrDefault()
+        if (DateWiseEventCollaborators is null
+            || DateWiseEventCollaborators.Count is 0)
+            return null;
+
+        return DateWiseEventCollaborators.First()
                                          .EventCollaborators
                                          .FirstOrDefault(eventCollaborator => eventCollaborator.IsEventOrganizer())
                                          .User;
     }
 
-    public List<EventCollaborator> GetInviteesOfEvent()
+    public List<EventCollaborator> GetEventInvitees()
     {
+        if (DateWiseEventCollaborators is null
+            || DateWiseEventCollaborators.Count is 0)
+            return [];
+
         return [.. DateWiseEventCollaborators[0].EventCollaborators
                                                 .Where(eventCollaborator => eventCollaborator.IsEventParticipant())];
     }
 
     public bool HasPendingResponseFromUser(int userId)
     {
-        return GetInviteesOfEvent()
+        return GetEventInvitees()
                .Exists(eventCollaborator => eventCollaborator.User.Id == userId
                                          && eventCollaborator.IsPendingStatus());
     }
 
     public bool IsProposedEvent()
     {
-        return GetInviteesOfEvent()
+        return GetEventInvitees()
                .Exists(eventCollaborator => eventCollaborator.IsPendingStatus()
                                             || eventCollaborator.IsProposedStatus());
     }
@@ -79,10 +87,21 @@ public class Event : IEntity
 
         foreach (DateOnly occurrence in occurrences)
         {
+            List<EventCollaborator> updatedCollaborators = [];
+
+            foreach (EventCollaborator eventCollaborator in eventCollaborators)
+            {
+                EventCollaborator newEventCollaborator = new(eventCollaborator)
+                {
+                    EventDate = occurrence
+                };
+                updatedCollaborators.Add(newEventCollaborator);
+            }
+
             eventCollaboratorsByDates.Add(new EventCollaboratorsByDate()
             {
                 EventDate = occurrence,
-                EventCollaborators = eventCollaborators
+                EventCollaborators = updatedCollaborators
             });
         }
 
