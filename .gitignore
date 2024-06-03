@@ -1,3 +1,9 @@
 **/bin/
 **/obj/
 .vs
+**/WebAPI/obj
+**/WebAPI/bin
+**/Service/obj
+**/Service/bin
+**/Infrastructure/obj
+**/Infrastructure/bin

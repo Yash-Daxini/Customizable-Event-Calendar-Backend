@@ -27,7 +27,7 @@ public class UserAuthenticationService : IUserAuthenticationService
         await ScheduleProposedEventsForLoggedInUser(loggedInUser.Id);
     }
 
-    private async Task ScheduleProposedEventsForLoggedInUser(int userId) //Work on this service
+    private async Task ScheduleProposedEventsForLoggedInUser(int userId) //TODO: Work on this service
     {
         await _multipleInviteesEventService.StartSchedulingProcessOfProposedEvent(userId);
     }

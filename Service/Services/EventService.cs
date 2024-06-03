@@ -74,7 +74,7 @@ public class EventService : IEventService
 
         await HandleEventOverlap(eventModel, userId);
 
-        await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(eventModel.Id);
+        await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(eventModel.Id, userId);
 
         await _eventRepository.Update(eventModel);
     }

@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 
@@ -7,10 +8,12 @@ namespace Core.Services;
 public class EventCollaboratorService : IEventCollaboratorService
 {
     private readonly IEventCollaboratorRepository _eventCollaboratorRepository;
+    private readonly IEventService _eventService;
 
-    public EventCollaboratorService(IEventCollaboratorRepository eventCollaboratorRepository)
+    public EventCollaboratorService(IEventCollaboratorRepository eventCollaboratorRepository, IEventService eventService)
     {
         _eventCollaboratorRepository = eventCollaboratorRepository;
+        _eventService = eventService;
     }
 
     public Task<int> AddEventCollaborator(EventCollaborator eventCollaborator)
@@ -18,14 +21,24 @@ public class EventCollaboratorService : IEventCollaboratorService
         return _eventCollaboratorRepository.Add(eventCollaborator);
     }
 
-    public Task UpdateEventCollaborator(EventCollaborator eventCollaborator)
+    public async Task UpdateEventCollaborator(EventCollaborator eventCollaborator)
     {
+        EventCollaborator? eventCollaboratorById = await _eventCollaboratorRepository.GetEventCollaboratorById(eventCollaborator.Id);
+
+        if (eventCollaboratorById is null)
+            throw new NotFoundException($"Event collaborator with Id ${eventCollaborator.Id} not present!");
+
         eventCollaborator.SetEventCollaboratorRoleAsParticipant();
-        return _eventCollaboratorRepository.Update(eventCollaborator);
+        await _eventCollaboratorRepository.Update(eventCollaborator);
     }
 
-    public Task DeleteEventCollaboratorsByEventId(int eventId)
+    public async Task DeleteEventCollaboratorsByEventId(int eventId, int userId)
     {
-        return _eventCollaboratorRepository.DeleteEventCollaboratorsByEventId(eventId);
+        Event? eventObj = await _eventService.GetEventById(eventId, userId);
+
+        if (eventObj is null)
+            throw new NotFoundException($"Event with Id ${eventId} not present!");
+
+        await _eventCollaboratorRepository.DeleteEventCollaboratorsByEventId(eventId);
     }
 }

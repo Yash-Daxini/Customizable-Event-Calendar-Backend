@@ -1,0 +1,67 @@
+﻿using Core.Entities;
+using Core.Exceptions;
+using Core.Interfaces.IRepositories;
+using Core.Interfaces.IServices;
+using Core.Services;
+using NSubstitute;
+using NSubstitute.ReturnsExtensions;
+
+namespace UnitTests.ApplicationCore.Services.UserAuthenticationServiceTests;
+
+public class Authenticate
+{
+
+    private readonly IMultipleInviteesEventService _multipleInviteesEventService;
+    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
+    private readonly IUserAuthenticationService _userAuthenticationService;
+
+    public Authenticate()
+    {
+        _userRepository = Substitute.For<IUserRepository>();
+        _multipleInviteesEventService = Substitute.For<IMultipleInviteesEventService>();
+        _userService = new UserService(_userRepository);
+        _userAuthenticationService = new UserAuthenticationService(_userService, _multipleInviteesEventService);
+    }
+
+    [Fact]
+    public async Task Should_LogIn_When_ValidUser()
+    {
+        User user = new()
+        {
+            Id = 1,
+            Name = "Test",
+            Email = "Test@gmail.com",
+            Password = "password",
+        };
+
+        _userRepository.AuthenticateUser(user).Returns(user);
+
+        _userService.AuthenticateUser(user).Returns(user);
+
+        await _userService.AuthenticateUser(user);
+
+        await _userRepository.Received().AuthenticateUser(user);
+
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_InValidUser()
+    {
+        User user = new()
+        {
+            Id = 1,
+            Name = "Test",
+            Email = "Test@gmail.com",
+            Password = "password",
+        };
+
+        _userService.GetUserById(1).Returns(user);
+
+        _userService.AuthenticateUser(user).ReturnsNull();
+
+        await Assert.ThrowsAsync<AuthenticationFailedException>(async () => await _userAuthenticationService.Authenticate(user));
+
+        await _userRepository.Received().AuthenticateUser(user);
+    }
+}
