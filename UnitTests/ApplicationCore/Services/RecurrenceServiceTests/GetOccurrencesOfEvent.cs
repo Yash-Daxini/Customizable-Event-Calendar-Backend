@@ -103,7 +103,7 @@ public class GetOccurrencesOfEvent
     }
 
     [Fact]
-    public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDay()
+    public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDayForLastDayOfMonth()
     {
         RecurrencePattern recurrencePattern = new()
         {
@@ -118,6 +118,32 @@ public class GetOccurrencesOfEvent
         };
 
         List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31), new DateOnly(2024, 7, 31), new DateOnly(2024, 9, 30)];
+
+        List<DateOnly> actualOutput = _recurrenceService.GetOccurrencesOfEvent(recurrencePattern);
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Theory]
+    [InlineData(25)]
+    [InlineData(21)]
+    [InlineData(18)]
+    [InlineData(1)]
+    public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDay(int monthDay)
+    {
+        RecurrencePattern recurrencePattern = new()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2024, 10, 20),
+            Frequency = Core.Entities.Enums.Frequency.Monthly,
+            WeekOrder = null,
+            ByMonth = null,
+            ByMonthDay = monthDay,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [new DateOnly(2024, 5, monthDay), new DateOnly(2024, 7, monthDay), new DateOnly(2024, 9, monthDay)];
 
         List<DateOnly> actualOutput = _recurrenceService.GetOccurrencesOfEvent(recurrencePattern);
 
@@ -146,9 +172,8 @@ public class GetOccurrencesOfEvent
         Assert.Equal(expectedOutput, actualOutput);
     }
 
-
     [Fact]
-    public void Should_ReturnListOfOccurrences_When_ItIsYearlyRecurringEventUsingMonthDay()
+    public void Should_ReturnListOfOccurrences_When_ItIsYearlyRecurringEventUsingMonthDayForLastDayOfMonth()
     {
         RecurrencePattern recurrencePattern = new()
         {
@@ -163,6 +188,34 @@ public class GetOccurrencesOfEvent
         };
 
         List<DateOnly> expectedOutput = [new DateOnly(2024, 9, 30)];
+
+        List<DateOnly> actualOutput = _recurrenceService.GetOccurrencesOfEvent(recurrencePattern);
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+
+    [Theory]
+    [InlineData(25)]
+    [InlineData(21)]
+    [InlineData(19)]
+    [InlineData(1)]
+    [InlineData(5)]
+    public void Should_ReturnListOfOccurrences_When_ItIsYearlyRecurringEventUsingMonthDay(int monthDay)
+    {
+        RecurrencePattern recurrencePattern = new()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = null,
+            ByMonth = 9,
+            ByMonthDay = monthDay,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [new DateOnly(2024, 9, monthDay)];
 
         List<DateOnly> actualOutput = _recurrenceService.GetOccurrencesOfEvent(recurrencePattern);
 
@@ -190,6 +243,4 @@ public class GetOccurrencesOfEvent
 
         Assert.Equal(expectedOutput, actualOutput);
     }
-
-
 }
