@@ -9,7 +9,8 @@ public class DurationGetStartHourIn12HourFormat
     [InlineData(-2)]
     [InlineData(25)]
     [InlineData(24)]
-    public void ReturnNullIfInValid24HourFormat(int hour)
+    [InlineData(-1)]
+    public void Should_ReturnNull_When_Invalid24HourFormat(int hour)
     {
         Duration duration = new Duration
         {
@@ -28,7 +29,7 @@ public class DurationGetStartHourIn12HourFormat
     [InlineData(12)]
     [InlineData(13)]
     [InlineData(23)]
-    public void ReturnValid12HourFormatIfValid24HourFormat(int hour)
+    public void Should_ReturnValid12HourFormat_When_Valid24HourFormat(int hour)
     {
         Duration duration = new Duration
         {

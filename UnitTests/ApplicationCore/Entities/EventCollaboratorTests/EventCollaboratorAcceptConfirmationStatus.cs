@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorAcceptConfirmationStatus
 {
     [Fact]
-    public void AcceptConfirmationStatusIfAlreadyAccepted()
+    public void Should_AcceptConfirmationStatus_When_AlreadyAccepted()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -26,7 +26,7 @@ public class EventCollaboratorAcceptConfirmationStatus
     [InlineData(ConfirmationStatus.Proposed)]
     [InlineData(ConfirmationStatus.Maybe)]
     [InlineData(ConfirmationStatus.Pending)]
-    public void AcceptConfirmationStatusIfNotAccepted(ConfirmationStatus confirmationStatus)
+    public void Should_AcceptConfirmationStatus_When_NotAlreadyAccepted(ConfirmationStatus confirmationStatus)
     {
         EventCollaborator eventCollaborator = new()
         {

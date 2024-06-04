@@ -72,7 +72,7 @@ public class EventIsOverlappingWith
     }
 
     [Fact]
-    public void IsEventOverlappingWithReturnsFalseIfEventOccurOnDifferentDates()
+    public void Should_ReturnsFalse_When_EventOccurOnDifferentDates()
     {
         Event eventToCheckOverlap = new()
         {
@@ -127,7 +127,7 @@ public class EventIsOverlappingWith
     }
     
     [Fact]
-    public void IsEventOverlappingWithReturnsFalseIfEventOccurOnDifferentDuration()
+    public void Should_ReturnsFalse_When_EventOccurOnDifferentDuration()
     {
         Event eventToCheckOverlap = new()
         {
@@ -182,7 +182,7 @@ public class EventIsOverlappingWith
     }
     
     [Fact]
-    public void IsEventOverlappingWithReturnsTrueIfEventOccurOnSameDuration()
+    public void Should_ReturnsTrue_When_EventOccurOnSameDuration()
     {
         Event eventToCheckOverlap = new()
         {
@@ -237,7 +237,7 @@ public class EventIsOverlappingWith
     }
     
     [Fact]
-    public void IsEventOverlappingWithReturnsTrueIfEventOccurOnOverlapDuration()
+    public void Should_ReturnsTrue_When_EventOccurWithOverlapDuration()
     {
         Event eventToCheckOverlap = new()
         {

@@ -72,7 +72,7 @@ public class EventGetOverlapDate
     }
 
     [Fact]
-    public void GetOverlapDateReturnsDefaultDateIfNotOverlap()
+    public void Should_ReturnsDefaultDate_When_OverlapNotOccur()
     {
         Event eventToCheckOverlap = new()
         {
@@ -142,7 +142,7 @@ public class EventGetOverlapDate
     }
 
     [Fact]
-    public void GetOverlapDateReturnsOverlapDateIfOverlap()
+    public void Should_ReturnsOverlapDate_When_OverlapOccur()
     {
         Event eventToCheckOverlap = new()
         {

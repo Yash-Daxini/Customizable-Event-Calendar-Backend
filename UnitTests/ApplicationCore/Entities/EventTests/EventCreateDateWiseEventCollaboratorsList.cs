@@ -107,7 +107,7 @@ public class EventCreateDateWiseEventCollaboratorsList
     }
 
     [Fact]
-    public void CreateDateWiseEventCollaboratorsListFromOccurrences()
+    public void Should_CreateDateWiseEventCollaboratorsListFromOccurrences_When_CallsTheMethod()
     {
         List<DateOnly> occurrences = [new DateOnly(2024, 5, 31),
                                       new DateOnly(2024, 6, 1)];

@@ -24,7 +24,7 @@ public class RecurrencePatternMakeNonRecurringEvent
     }
 
     [Fact]
-    public void MakeNonRecurringEventIfEventIsDailyRecurringEvent()
+    public void Should_MakeNonRecurringEvent_When_EventIsDailyRecurringEvent()
     {
         RecurrencePattern recurrencePattern = new()
         {
@@ -41,7 +41,7 @@ public class RecurrencePatternMakeNonRecurringEvent
     }
 
     [Fact]
-    public void MakeNonRecurringEventIfEventIsMonthlyRecurringEventUsingMonthDay()
+    public void Should_MakeNonRecurringEvent_When_EventIsMonthlyRecurringEventUsingMonthDay()
     {
         RecurrencePattern recurrencePattern = new()
         {
@@ -61,7 +61,7 @@ public class RecurrencePatternMakeNonRecurringEvent
     }
 
     [Fact]
-    public void MakeNonRecurringEventIfEventIsMonthlyRecurringEventUsingWeekOrder()
+    public void Should_MakeNonRecurringEvent_When_EventIsMonthlyRecurringEventUsingWeekOrder()
     {
         RecurrencePattern recurrencePattern = new()
         {
@@ -81,7 +81,7 @@ public class RecurrencePatternMakeNonRecurringEvent
     }
 
     [Fact]
-    public void MakeNonRecurringEventIfEventIsYearlyRecurringEventUsingMonthDay()
+    public void Should_MakeNonRecurringEvent_When_EventIsYearlyRecurringEventUsingMonthDay()
     {
         RecurrencePattern recurrencePattern = new()
         {
@@ -101,7 +101,7 @@ public class RecurrencePatternMakeNonRecurringEvent
     }
 
     [Fact]
-    public void MakeNonRecurringEventIfEventIsYearlyRecurringEventUsingWeekOrder()
+    public void Should_MakeNonRecurringEvent_When_EventIsYearlyRecurringEventUsingWeekOrder()
     {
         RecurrencePattern recurrencePattern = new()
         {
@@ -121,7 +121,7 @@ public class RecurrencePatternMakeNonRecurringEvent
     }
 
     [Fact]
-    public void MakeNonRecurringEventIfEventIsNonRecurringEvent()
+    public void Should_MakeNonRecurringEvent_When_EventIsNonRecurringEvent()
     {
         RecurrencePattern recurrencePattern = new()
         {

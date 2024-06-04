@@ -16,7 +16,7 @@ public class RecurrencePatternIsNonRecurrenceEvent
     }
 
     [Fact]
-    public void ReturnTrueIfFrequencyIsNonRecurrenceEvent()
+    public void Should_ReturnTrue_When_EventIsNonRecurrenceEvent()
     {
         bool result = _recurrencePattern.IsNonRecurrenceEvent();
 
@@ -28,7 +28,7 @@ public class RecurrencePatternIsNonRecurrenceEvent
     [InlineData(Frequency.Monthly)]
     [InlineData(Frequency.Weekly)]
     [InlineData(Frequency.Yearly)]
-    public void ReturnFalseIfFrequencyIsNonRecurrenceEvent(Frequency frequency)
+    public void Should_ReturnFalse_When_EventIsNotNonRecurrenceEvent(Frequency frequency)
     {
         _recurrencePattern.Frequency = frequency;
 

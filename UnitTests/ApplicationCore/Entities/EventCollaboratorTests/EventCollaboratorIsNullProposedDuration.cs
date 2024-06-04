@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorIsNullProposedDuration
 {
     [Fact]
-    public void IsNullProposedDurationRetursTrueIfNull()
+    public void Should_ReturnsTrue_When_ProposedDurationIsNull()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -19,7 +19,7 @@ public class EventCollaboratorIsNullProposedDuration
     }
 
     [Fact]
-    public void IsNullProposedDurationRetursFalseIfNotNull()
+    public void Should_ReturnsFalse_When_ProposedDurationIsNotNull()
     {
         EventCollaborator eventCollaborator = new()
         {

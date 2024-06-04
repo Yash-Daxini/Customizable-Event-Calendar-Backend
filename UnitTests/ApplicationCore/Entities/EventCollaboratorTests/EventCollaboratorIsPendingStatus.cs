@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorIsPendingStatus
 {
     [Fact]
-    public void IsPendingStatusReturnTrueIfPendingStatus()
+    public void Should_ReturnsTrue_When_EventCollaboratorWithPendingStatus()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -23,7 +23,7 @@ public class EventCollaboratorIsPendingStatus
     [InlineData(ConfirmationStatus.Accept)]
     [InlineData(ConfirmationStatus.Proposed)]
     [InlineData(ConfirmationStatus.Maybe)]
-    public void IsPendingStatusReturnFalseIfNotPendingStatus(ConfirmationStatus confirmationStatus)
+    public void Should_ReturnsFalse_When_EventCollaboratorNotWithPendingStatus(ConfirmationStatus confirmationStatus)
     {
         EventCollaborator eventCollaborator = new()
         {

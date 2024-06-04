@@ -108,7 +108,7 @@ public class EventGetEventInvitees
     }
 
     [Fact]
-    public void GetEventInviteesAsEmptyListIfDateWiseEventCollaboratorsIsNull()
+    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsIsNull()
     {
         _event.DateWiseEventCollaborators = null;
 
@@ -118,7 +118,7 @@ public class EventGetEventInvitees
     }
 
     [Fact]
-    public void GetEventInviteesAsEmptyListIfDateWiseEventCollaboratorsIsEmpty()
+    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsIsEmpty()
     {
         _event.DateWiseEventCollaborators = [];
 
@@ -128,7 +128,7 @@ public class EventGetEventInvitees
     }
 
     [Fact]
-    public void GetEventInviteesIfDateWiseEventCollaboratorsIsPresent()
+    public void Should_ReturnListOfEventCollaborators_When_DateWiseEventCollaboratorsIsPresent()
     {
         List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
 
@@ -136,7 +136,7 @@ public class EventGetEventInvitees
     }
 
     [Fact]
-    public void GetEventInviteesIfDateWiseEventCollaboratorsContainsCollaborator()
+    public void Should_ReturnListOfEventCollaborators_When_DateWiseEventCollaboratorsContainsCollaborator()
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator

@@ -74,7 +74,7 @@ public class EventHasPendingResponseFromUser
     [Theory]
     [InlineData(50)]
     [InlineData(51)]
-    public void HasPendingResponseFromUserReturnsFalseIfUserIsNotAvailableAsEventCollaborator(int userId)
+    public void Should_ReturnsFalse_When_UserIsNotAvailableAsEventCollaborator(int userId)
     {
         bool result = _event.HasPendingResponseFromUser(userId);
 
@@ -84,7 +84,7 @@ public class EventHasPendingResponseFromUser
     [Theory]
     [InlineData(48)]
     [InlineData(49)]
-    public void HasPendingResponseFromUserReturnsFalseIfUserHasNotPendingResponse(int userId)
+    public void Should_ReturnsFalse_When_UserHasNotPendingResponse(int userId)
     {
         bool result = _event.HasPendingResponseFromUser(userId);
 
@@ -93,7 +93,7 @@ public class EventHasPendingResponseFromUser
 
     [Theory]
     [InlineData(50)]
-    public void HasPendingResponseFromUserReturnsTrueIfUserHasPendingResponse(int userId)
+    public void Should_ReturnsTrue_When_UserHasPendingResponse(int userId)
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
         new EventCollaborator
@@ -121,7 +121,7 @@ public class EventHasPendingResponseFromUser
     [Theory]
     [InlineData(50)]
     [InlineData(51)]
-    public void HasPendingResponseFromUserReturnsTrueIfMultipleUserHasPendingResponse(int userId)
+    public void Should_ReturnsTrue_When_MultipleUserHasPendingResponse(int userId)
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
         new EventCollaborator

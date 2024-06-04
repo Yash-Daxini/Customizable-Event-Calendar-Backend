@@ -73,7 +73,7 @@ public class EventGetEventOrganizer
     }
 
     [Fact]
-    public void GetOrganizerOfEventIfMultipleEventCollaboratorsPresent()
+    public void Should_ReturnOrganizerOfEvent_When_MultipleEventCollaboratorsPresent()
     {
         User actualUser = new()
         {
@@ -89,7 +89,7 @@ public class EventGetEventOrganizer
     }
 
     [Fact]
-    public void GetOrganizerOfEventIfOnlyOrganizerPresent()
+    public void Should_ReturnOrganizerOfEvent_When_OnlyOrganizerPresent()
     {
         _event.DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -127,9 +127,9 @@ public class EventGetEventOrganizer
 
         Assert.Equivalent(expectedUser, actualUser);
     }
-    
+
     [Fact]
-    public void GetOrganizerOfEventAsNullIfDateWiseEventCollaboratorsIsNull()
+    public void Should_ReturnOrganizerOfEventAsNull_When_DateWiseEventCollaboratorsIsNull()
     {
         _event.DateWiseEventCollaborators = null;
 
@@ -137,9 +137,9 @@ public class EventGetEventOrganizer
 
         Assert.Equivalent(expectedUser, null);
     }
-    
+
     [Fact]
-    public void GetOrganizerOfEventAsNullIfDateWiseEventCollaboratorsIsEmpty()
+    public void Should_ReturnOrganizerOfEventAsNull_When_DateWiseEventCollaboratorsIsEmpty()
     {
         _event.DateWiseEventCollaborators = [];
 

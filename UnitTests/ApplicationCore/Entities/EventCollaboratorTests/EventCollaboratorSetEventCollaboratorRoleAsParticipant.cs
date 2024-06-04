@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorSetEventCollaboratorRoleAsParticipant
 {
     [Fact]
-    public void SetEventCollaboratorRoleAsParticipantIfAlreadyParticipant()
+    public void Should_SetEventCollaboratorRoleAsParticipant_When_EventCollaboratorRoleIsAlreadyParticipant()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -23,7 +23,7 @@ public class EventCollaboratorSetEventCollaboratorRoleAsParticipant
     [Theory]
     [InlineData(EventCollaboratorRole.Organizer)]
     [InlineData(EventCollaboratorRole.Collaborator)]
-    public void SetEventCollaboratorRoleAsParticipantIfNotParticipant(EventCollaboratorRole eventCollaboratorRole)
+    public void Should_SetEventCollaboratorRoleAsParticipant_When_EventCollaboratorRoleIsNotAlreadyParticipant(EventCollaboratorRole eventCollaboratorRole)
     {
         EventCollaborator eventCollaborator = new()
         {

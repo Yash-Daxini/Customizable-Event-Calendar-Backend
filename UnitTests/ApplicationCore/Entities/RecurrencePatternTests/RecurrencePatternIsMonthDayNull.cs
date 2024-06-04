@@ -1,5 +1,4 @@
-﻿using Core.Entities.Enums;
-using Core.Entities;
+﻿using Core.Entities;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests;
 
@@ -16,7 +15,7 @@ public class RecurrencePatternIsMonthDayNull
     }
 
     [Fact]
-    public void ReturnTrueIfMonthDayIsNull()
+    public void Should_ReturnTrue_When_MonthDayIsNull()
     {
         bool result = _recurrencePattern.IsMonthDayNull();
 
@@ -24,7 +23,7 @@ public class RecurrencePatternIsMonthDayNull
     }
 
     [Fact]
-    public void ReturnFalseIfMonthDayIsNotNull()
+    public void Should_ReturnFalse_When_MonthDayIsNotNull()
     {
         _recurrencePattern.ByMonthDay = 5;
 

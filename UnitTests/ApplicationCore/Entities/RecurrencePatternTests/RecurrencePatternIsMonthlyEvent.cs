@@ -16,7 +16,7 @@ public class RecurrencePatternIsMonthlyEvent
     }
 
     [Fact]
-    public void ReturnTrueIfFrequencyIsMonthly()
+    public void Should_ReturnTrue_When_FrequencyIsMonthly()
     {
         bool result = _recurrencePattern.IsMonthlyEvent();
 
@@ -28,7 +28,7 @@ public class RecurrencePatternIsMonthlyEvent
     [InlineData(Frequency.Daily)]
     [InlineData(Frequency.Weekly)]
     [InlineData(Frequency.None)]
-    public void ReturnFalseIfFrequencyIsMonthly(Frequency frequency)
+    public void Should_ReturnFalse_When_FrequencyIsNotMonthly(Frequency frequency)
     {
         _recurrencePattern.Frequency = frequency;
 

@@ -5,7 +5,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorSetProposedDurationNull
 {
     [Fact]
-    public void SetProposedDurationNullIfAlreadyNull()
+    public void Should_SetProposedDurationNull_When_ProposedDurationIsAlreadyNull()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -20,7 +20,7 @@ public class EventCollaboratorSetProposedDurationNull
     }
 
     [Fact]
-    public void SetProposedDurationNullIfNotNull()
+    public void Should_SetProposedDurationNull_When_ProposedDurationIsNotAlreadyNull()
     {
         EventCollaborator eventCollaborator = new()
         {

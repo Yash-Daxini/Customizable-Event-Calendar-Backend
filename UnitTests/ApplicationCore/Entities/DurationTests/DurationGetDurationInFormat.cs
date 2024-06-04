@@ -6,7 +6,8 @@ public class DurationGetDurationInFormat
 {
     [Theory]
     [InlineData(-5, 25)]
-    public void GetNullIfInvalidStartHourInvalidEndHour(int startHour, int endHour)
+    [InlineData(-10,-25)]
+    public void Should_ReturnNull_When_InvalidStartHourAndInValidEndHour(int startHour, int endHour)
     {
         Duration duration = new Duration
         {
@@ -21,7 +22,8 @@ public class DurationGetDurationInFormat
 
     [Theory]
     [InlineData(-5, 23)]
-    public void GetNullIfInvalidStartHourValidEndHour(int startHour, int endHour)
+    [InlineData(25, 23)]
+    public void Should_ReturnNull_When_InvalidStartHourAndValidEndHour(int startHour, int endHour)
     {
         Duration duration = new Duration
         {
@@ -36,7 +38,8 @@ public class DurationGetDurationInFormat
 
     [Theory]
     [InlineData(5, 25)]
-    public void GetNullIfValidStartHourInvalidEndHour(int startHour, int endHour)
+    [InlineData(3, -4)]
+    public void Should_ReturnNull_When_ValidStartHourAndInvalidEndHour(int startHour, int endHour)
     {
         Duration duration = new Duration
         {
@@ -55,7 +58,7 @@ public class DurationGetDurationInFormat
     [InlineData(0, 23)]
     [InlineData(23, 1)]
     [InlineData(23, 0)]
-    public void GetSpaceSeparatedStartHourAndEndHourIfValidStartHourValidEndHour(int startHour, int endHour)
+    public void Should_ReturnFormatedString_When_ValidStartHourAndValidEndHour(int startHour, int endHour)
     {
         Duration duration = new Duration
         {

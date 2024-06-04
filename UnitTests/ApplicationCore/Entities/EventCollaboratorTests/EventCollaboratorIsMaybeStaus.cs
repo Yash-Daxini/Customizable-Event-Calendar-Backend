@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorIsMaybeStaus
 {
     [Fact]
-    public void IsMaybeStatusReturnTrueIfMaybeStatus()
+    public void Should_ReturnsTrue_When_EventCollaboratorWithMaybeStatus()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -23,7 +23,7 @@ public class EventCollaboratorIsMaybeStaus
     [InlineData(ConfirmationStatus.Accept)]
     [InlineData(ConfirmationStatus.Pending)]
     [InlineData(ConfirmationStatus.Proposed)]
-    public void IsMaybeStatusReturnFalseIfNotMaybeStatus(ConfirmationStatus confirmationStatus)
+    public void Should_ReturnsFalse_When_EventCollaboratorNotWithMaybeStatus(ConfirmationStatus confirmationStatus)
     {
         EventCollaborator eventCollaborator = new()
         {

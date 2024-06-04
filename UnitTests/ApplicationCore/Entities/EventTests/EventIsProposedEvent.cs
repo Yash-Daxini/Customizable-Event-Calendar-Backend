@@ -74,14 +74,14 @@ public class EventIsProposedEvent
     }
 
     [Fact]
-    public void IsProposedEventReturnsFalseIfNoEventCollaboratorWithProposedOrPendingStatus()
+    public void Should_ReturnsFalse_When_NotAnyEventCollaboratorWithProposedOrPendingStatus()
     {
         bool result = _event.IsProposedEvent();
         Assert.False(result);
     }
     
     [Fact]
-    public void IsProposedEventReturnsTrueIfAnyEventCollaboratorWithProposedStatus()
+    public void Should_ReturnsTrue_When_AnyEventCollaboratorWithProposedStatus()
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
@@ -105,7 +105,7 @@ public class EventIsProposedEvent
     }
     
     [Fact]
-    public void IsProposedEventReturnsTrueIfAnyEventCollaboratorWithPendingStatus()
+    public void Should_ReturnsTrue_When_AnyEventCollaboratorWithPendingStatus()
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
@@ -129,7 +129,7 @@ public class EventIsProposedEvent
     }
     
     [Fact]
-    public void IsProposedEventReturnsTrueIfEventCollaboratorsWithPendingAndProposedStatus()
+    public void Should_ReturnsTrue_When_EventCollaboratorsWithPendingAndProposedStatus()
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator

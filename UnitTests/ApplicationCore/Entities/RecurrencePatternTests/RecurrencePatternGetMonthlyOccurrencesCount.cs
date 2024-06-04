@@ -18,7 +18,7 @@ public class RecurrencePatternGetMonthlyOccurrencesCount
     [InlineData(2024, 2026, 2, 8, 3, 11)]
     [InlineData(2024, 2028, 1, 6, 4, 14)]
     [InlineData(2024, 2028, 1, 6, 5, 11)]
-    public void GetMonthlyOccurrencesCount(int startDateYear, int endDateYear, int startDateMonth, int endDateMonth, int interval, int actualResult)
+    public void Should_ReturnMonthlyOccurrencesCount_When_CallsTheMethod(int startDateYear, int endDateYear, int startDateMonth, int endDateMonth, int interval, int actualResult)
     {
         _recurrencePattern.StartDate = new DateOnly(startDateYear, startDateMonth, 1);
         _recurrencePattern.EndDate = new DateOnly(endDateYear, endDateMonth, 1);

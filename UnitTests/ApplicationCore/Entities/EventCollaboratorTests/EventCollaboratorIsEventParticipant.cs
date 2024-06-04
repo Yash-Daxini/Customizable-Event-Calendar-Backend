@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorIsEventParticipant
 {
     [Fact]
-    public void IsEventParticipantRetursTrueIfParticipant()
+    public void Should_ReturnsTrue_When_EventCollaboratorIsParticipant()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -21,7 +21,7 @@ public class EventCollaboratorIsEventParticipant
     [Theory]
     [InlineData(EventCollaboratorRole.Organizer)]
     [InlineData(EventCollaboratorRole.Collaborator)]
-    public void IsEventParticipantRetursFalseIfNotParticipant(EventCollaboratorRole eventCollaboratorRole)
+    public void Should_ReturnsFalse_When_EventCollaboratorIsNotParticipant(EventCollaboratorRole eventCollaboratorRole)
     {
         EventCollaborator eventCollaborator = new()
         {

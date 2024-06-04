@@ -107,14 +107,14 @@ public class EventGetEventCollaboratorsForGivenDate
                 },
                 new EventCollaboratorsByDate
                 {
-                    EventDate = new DateOnly(2024, 5, 2),
+                    EventDate = new DateOnly(2024, 6, 2),
                     EventCollaborators = [
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 2),
+                            EventDate = new DateOnly(2024, 6, 2),
                             User = new User
                             {
                                 Id = 48,
@@ -165,35 +165,26 @@ public class EventGetEventCollaboratorsForGivenDate
     [Theory]
     [InlineData(2024, 5, 30)]
     [InlineData(2024, 5, 29)]
-    [InlineData(2024, 6, 2)]
     [InlineData(2024, 6, 3)]
-    public void GetEventCollaboratorsForGivenDateReturnsEmptyListIfNotOccurOnGivenDate(int year, int month, int day)
+    [InlineData(2024, 6, 1)]
+    
+    public void Should_ReturnsEmptyList_When_EventCollaboratorNotOccurOnGivenDate(int year, int month, int day)
     {
         DateOnly date = new(year, month, day);
         List<EventCollaborator> eventCollaborators = _event.GetEventCollaboratorsForGivenDate(date);
 
-        Assert.Equivalent(eventCollaborators, new List<EventCollaborator>());
+        Assert.Equivalent(new List<EventCollaborator>(), eventCollaborators);
     }
 
     [Theory]
     [InlineData(2024, 5, 31)]
-    [InlineData(2024, 6, 1)]
-    public void GetEventCollaboratorsForGivenDateReturnsEventCollaboratorListIfOccurOnGivenDate(int year, int month, int day)
-    {
-        DateOnly date = new(year, month, day);
-        List<EventCollaborator> eventCollaborators = _event.GetEventCollaboratorsForGivenDate(date);
-
-        Assert.Equivalent(eventCollaborators, _eventCollaborators);
-    }
-
-    [Theory]
     [InlineData(2024, 6, 2)]
-    public void GetEventCollaboratorsForGivenDateReturnsDifferentEventCollaboratorListIfOccurOnGivenDate(int year, int month, int day)
+    public void Should_ReturnsEventCollaboratorList_When_EventCollaboratorOccurOnGivenDate(int year, int month, int day)
     {
         DateOnly date = new(year, month, day);
         List<EventCollaborator> eventCollaborators = _event.GetEventCollaboratorsForGivenDate(date);
 
-        List<EventCollaborator> actualResult = [
+        List<EventCollaborator> expectedResult = [
             new EventCollaborator
             {
                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
@@ -211,6 +202,9 @@ public class EventGetEventCollaboratorsForGivenDate
             }
         ];
 
-        Assert.Equivalent(eventCollaborators, actualResult);
+        if (day == 2)
+            Assert.Equivalent(expectedResult, eventCollaborators);
+        else
+            Assert.Equivalent(_eventCollaborators, eventCollaborators);
     }
 }

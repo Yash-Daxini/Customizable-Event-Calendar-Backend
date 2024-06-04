@@ -22,7 +22,7 @@ public class RecurrencePatternGetYearlyOccurrencesCount
     [InlineData(2024, 2030, 3, 3)]
     [InlineData(2024, 2030, 4, 2)]
     [InlineData(2024, 2030, 5, 2)]
-    public void GetYearlyOccurrencesCountIfValidDates(int startDateYear, int endDateYear, int interval, int actualResult)
+    public void Should_ReturnYearlyOccurrencesCount_When_CallsTheMethod(int startDateYear, int endDateYear, int interval, int actualResult)
     {
         _recurrencePattern.StartDate = new DateOnly(startDateYear, 1, 1);
         _recurrencePattern.EndDate = new DateOnly(endDateYear, 1, 1);

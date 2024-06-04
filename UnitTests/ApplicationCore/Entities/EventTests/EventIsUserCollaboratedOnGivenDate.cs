@@ -109,7 +109,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 29)]
     [InlineData(2024, 10, 1)]
-    public void IsUserCollaboratedOnGivenDateReturnsFalseIfDateIsNotPresentInEvent(int year, int month, int day)
+    public void Should_ReturnsFalse_When_DateIsNotPresentInEvent(int year, int month, int day)
     {
         DateOnly date = new DateOnly(year, month, day);
 
@@ -121,7 +121,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 29, 50)]
     [InlineData(2024, 10, 1, 51)]
-    public void IsUserCollaboratedOnGivenDateReturnsFalseIfDateAndUserAreNotPresentInEvent(int year, int month, int day, int userId)
+    public void Should_ReturnsFalse_When_DateAndUserAreNotPresentInEvent(int year, int month, int day, int userId)
     {
         DateOnly date = new DateOnly(year, month, day);
 
@@ -133,7 +133,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 30, 48)]
     [InlineData(2024, 5, 31, 48)]
-    public void IsUserCollaboratedOnGivenDateReturnsTrueIfDateAndUserArePresentInEvent(int year, int month, int day, int userId)
+    public void Should_ReturnsTrue_When_DateAndUserArePresentInEvent(int year, int month, int day, int userId)
     {
         DateOnly date = new DateOnly(year, month, day);
 

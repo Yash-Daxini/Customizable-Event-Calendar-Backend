@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorSetConfirmationStatusPending
 {
     [Fact]
-    public void SetConfirmationStatusPendingIfAlreadyPending()
+    public void Should_SetConfirmationStatusPending_When_ConfirmationStatusIsAlreadyPending()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -26,7 +26,7 @@ public class EventCollaboratorSetConfirmationStatusPending
     [InlineData(ConfirmationStatus.Proposed)]
     [InlineData(ConfirmationStatus.Maybe)]
     [InlineData(ConfirmationStatus.Reject)]
-    public void SetConfirmationStatusPendingIfNotPending(ConfirmationStatus confirmationStatus)
+    public void Should_SetConfirmationStatusPending_When_ConfirmationStatusIsNotAlreadyPending(ConfirmationStatus confirmationStatus)
     {
         EventCollaborator eventCollaborator = new()
         {
