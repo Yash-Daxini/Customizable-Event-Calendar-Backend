@@ -36,7 +36,11 @@ public class UserService : IUserService
 
     public async Task DeleteUser(int userId)
     {
-        User user = await GetUserById(userId);
+        User? user = await _userRepository.GetUserById(userId);
+
+        if (user is null)
+            throw new NotFoundException($"User with id {userId} not found.");
+
         await _userRepository.Delete(user);
     }
 

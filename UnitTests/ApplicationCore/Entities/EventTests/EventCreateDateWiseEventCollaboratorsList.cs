@@ -114,6 +114,26 @@ public class EventCreateDateWiseEventCollaboratorsList
 
         Event eventObj = new()
         {
+            Id = 2205,
+            Title = "event",
+            Location = "event",
+            Description = "event",
+            Duration = new Duration()
+            {
+                StartHour = 1,
+                EndHour = 2
+            },
+            RecurrencePattern = new RecurrencePattern()
+            {
+                StartDate = new DateOnly(),
+                EndDate = new DateOnly(),
+                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Interval = 2,
+                ByWeekDay = [2, 6],
+                WeekOrder = null,
+                ByMonthDay = null,
+                ByMonth = null
+            },
             DateWiseEventCollaborators = [
             new EventCollaboratorsByDate
             {

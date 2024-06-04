@@ -81,7 +81,10 @@ public class EventService : IEventService
 
     public async Task DeleteEvent(int eventId, int userId)
     {
-        Event eventObj = await GetEventById(eventId, userId);
+        Event? eventObj = await _eventRepository.GetEventById(eventId);
+
+        if (eventObj is null)
+            throw new NotFoundException($"Event with id ${eventId} not present");
 
         await _eventRepository.Delete(eventObj);
     }
@@ -96,7 +99,7 @@ public class EventService : IEventService
 
     public async Task<List<Event>> GetNonProposedEventsByUserId(int userId)
     {
-        List<Event> events = await GetAllEventsByUserId(userId);
+        List<Event> events = await _eventRepository.GetAllEventsByUserId(userId);
 
         return events.Where(eventObj => !eventObj.IsProposedEvent())
                      .ToList();
@@ -111,7 +114,7 @@ public class EventService : IEventService
     {
         DateOnly today = DateTime.Today.ConvertToDateOnly();
 
-        return await GetEventsWithinGivenDatesByUserId(userId, today, today);
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, today, today);
     }
 
     public async Task<List<Event>> GetEventsForWeeklyViewByUserId(int userId)
@@ -119,7 +122,7 @@ public class EventService : IEventService
         DateOnly startDateOfWeek = DateTime.Today.GetStartDateOfWeek();
         DateOnly endDateOfWeek = DateTime.Today.GetEndDateOfWeek();
 
-        return await GetEventsWithinGivenDatesByUserId(userId, startDateOfWeek, endDateOfWeek);
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDateOfWeek, endDateOfWeek);
     }
 
     public async Task<List<Event>> GetEventsForMonthlyViewByUserId(int userId)
@@ -127,7 +130,7 @@ public class EventService : IEventService
         DateOnly startDateOfMonth = DateTime.Today.GetStartDateOfMonth();
         DateOnly endDateOfMonth = DateTime.Today.GetEndDateOfMonth();
 
-        return await GetEventsWithinGivenDatesByUserId(userId, startDateOfMonth, endDateOfMonth);
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDateOfMonth, endDateOfMonth);
     }
 
     public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)
@@ -141,7 +144,7 @@ public class EventService : IEventService
 
     private async Task HandleEventOverlap(Event eventModel, int userId)
     {
-        List<Event> events = await GetAllEventsByUserId(userId);
+        List<Event> events = await _eventRepository.GetAllEventsByUserId(userId); 
 
         events = [..events
                    .Where(eventObj => eventObj.Id != eventModel.Id)];

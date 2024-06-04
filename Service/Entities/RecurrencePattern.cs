@@ -49,4 +49,49 @@ public class RecurrencePattern
         ByMonth = null;
         WeekOrder = null;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is RecurrencePattern recurrencePattern)
+        {
+            bool result = this.StartDate.Equals(recurrencePattern.StartDate)
+                && this.EndDate.Equals(recurrencePattern.EndDate)
+                && this.Frequency.Equals(recurrencePattern.Frequency)
+                && this.Interval == recurrencePattern.Interval
+                && this.ByMonth == recurrencePattern.ByMonth
+                && this.ByMonthDay == recurrencePattern.ByMonthDay
+                && this.WeekOrder == recurrencePattern.WeekOrder;
+
+            if (this.ByWeekDay is not null && recurrencePattern.ByWeekDay is not null)
+            {
+                result &= this.ByWeekDay.Count == recurrencePattern.ByWeekDay.Count;
+
+                foreach (var day in ByWeekDay)
+                {
+                    result &= recurrencePattern.ByWeekDay.Contains(day);
+                }
+            }
+            else
+            {
+                result &= this.ByWeekDay is null && recurrencePattern.ByWeekDay is null;
+            }
+
+            return result;
+
+        }
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(this.StartDate,
+                                this.EndDate,
+                                this.Frequency,
+                                this.Interval,
+                                this.ByWeekDay,
+                                this.ByMonth,
+                                this.ByMonthDay,
+                                this.WeekOrder);
+    }
 }

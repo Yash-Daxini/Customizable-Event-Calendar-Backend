@@ -1,5 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces.IServices;
+﻿using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 

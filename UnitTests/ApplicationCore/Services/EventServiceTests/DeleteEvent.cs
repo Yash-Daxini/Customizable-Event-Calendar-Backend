@@ -1,12 +1,14 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
-public class GetAllEventsByUserId
+public class DeleteEvent
 {
     private readonly IEventRepository _eventRepository;
 
@@ -17,14 +19,14 @@ public class GetAllEventsByUserId
     private readonly IEventService _eventService;
     private readonly List<Event> _events;
 
-    public GetAllEventsByUserId()
+    public DeleteEvent()
     {
         _eventRepository = Substitute.For<IEventRepository>();
         _recurrenceService = Substitute.For<IRecurrenceService>();
         _eventCollaboratorService = Substitute.For<IEventCollaboratorService>();
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
-        _eventService = new EventService(_eventRepository,_recurrenceService,_eventCollaboratorService,_overlappingEventService,_sharedCalendarService);
+        _eventService = new EventService(_eventRepository, _recurrenceService, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
         _events =
         [
             new()
@@ -56,7 +58,7 @@ public class GetAllEventsByUserId
                     EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
@@ -71,7 +73,7 @@ public class GetAllEventsByUserId
                         },
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
@@ -214,12 +216,144 @@ public class GetAllEventsByUserId
     }
 
     [Fact]
-    public async Task Should_ReturnListEventsByUserId_When_UserWithIdAvailable()
+    public async Task Should_DeleteEvent_When_EvnetWithIdAvailable()
     {
-        _eventRepository.GetAllEventsByUserId(48).Returns(_events);
+        Event eventObj = new()
+        {
+            Title = "event",
+            Location = "event",
+            Description = "event",
+            Duration = new Duration()
+            {
+                StartHour = 1,
+                EndHour = 2
+            },
+            RecurrencePattern = new RecurrencePattern()
+            {
+                StartDate = new DateOnly(2024, 5, 31),
+                EndDate = new DateOnly(2024, 8, 25),
+                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Interval = 2,
+                ByWeekDay = [2, 6],
+                WeekOrder = null,
+                ByMonthDay = null,
+                ByMonth = null
+            },
+            DateWiseEventCollaborators = [
+                new EventCollaboratorsByDate
+                {
+                    EventDate = new DateOnly(2024, 5, 31),
+                    EventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
+                            EventId = 47
+                        }
+                    ]
+                }
+            ]
+        };
 
-        await _eventService.GetAllEventsByUserId(48);
+        _eventRepository.GetEventById(1).Returns(eventObj);
 
-        _eventRepository.Received().GetAllEventsByUserId(48);
+        await _eventService.DeleteEvent(1, 48);
+
+        await _eventRepository.Received().Delete(eventObj);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EvnetWithIdNotAvailable()
+    {
+        Event eventObj = new()
+        {
+            Title = "event",
+            Location = "event",
+            Description = "event",
+            Duration = new Duration()
+            {
+                StartHour = 1,
+                EndHour = 2
+            },
+            RecurrencePattern = new RecurrencePattern()
+            {
+                StartDate = new DateOnly(2024, 5, 31),
+                EndDate = new DateOnly(2024, 8, 25),
+                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Interval = 2,
+                ByWeekDay = [2, 6],
+                WeekOrder = null,
+                ByMonthDay = null,
+                ByMonth = null
+            },
+            DateWiseEventCollaborators = [
+                new EventCollaboratorsByDate
+                {
+                    EventDate = new DateOnly(2024, 5, 31),
+                    EventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
+                            EventId = 47
+                        }
+                    ]
+                }
+            ]
+        };
+
+        _eventRepository.GetEventById(1).ReturnsNull();
+
+        await Assert.ThrowsAsync<NotFoundException>(async () => await _eventService.DeleteEvent(1, 48));
+
+        await _eventRepository.DidNotReceive().Delete(eventObj);
     }
 }

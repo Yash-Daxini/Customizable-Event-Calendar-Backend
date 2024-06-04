@@ -41,4 +41,21 @@ public class Duration
             || (duration.StartHour >= this.StartHour && duration.StartHour < this.EndHour)
             || (duration.EndHour > this.StartHour && duration.EndHour <= this.EndHour);
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Duration duration)
+        {
+            return this.StartHour == duration.StartHour
+                && this.EndHour == duration.EndHour;
+        }
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(this.StartHour,
+                                this.EndHour);
+    }
 }
