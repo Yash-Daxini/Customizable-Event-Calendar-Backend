@@ -344,7 +344,7 @@ public class GetNonProposedEventsByUserId
 
         Assert.Equal(expected.Count, events.Count);
 
-        Assert.Equal(expected, events);
+        Assert.Equivalent(expected, events);
 
         await _eventRepository.Received().GetAllEventsByUserId(48);
     }

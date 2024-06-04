@@ -74,34 +74,4 @@ public class EventCollaborator : IEntity
     {
         EventCollaboratorRole = EventCollaboratorRole.Participant;
     }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is EventCollaborator eventCollaborator)
-        {
-            return this.Id == eventCollaborator.Id
-                && this.User.Equals(eventCollaborator.User)
-                && ((this.ProposedDuration is not null && eventCollaborator.ProposedDuration is not null 
-                    && this.ProposedDuration.Equals(eventCollaborator.ProposedDuration)) 
-                    || this.ProposedDuration is null && eventCollaborator.ProposedDuration is null)
-                && this.EventId == eventCollaborator.EventId
-                && this.ConfirmationStatus == eventCollaborator.ConfirmationStatus
-                && this.EventCollaboratorRole == eventCollaborator.EventCollaboratorRole
-                && this.EventDate == eventCollaborator.EventDate;
-        }
-
-        return false;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(this.Id,
-                                this.User,
-                                this.ProposedDuration,
-                                this.EventId,
-                                this.ConfirmationStatus,
-                                this.EventCollaboratorRole,
-                                this.EventDate
-                                );
-    }
 }

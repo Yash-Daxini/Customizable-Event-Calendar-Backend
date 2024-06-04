@@ -125,38 +125,4 @@ public class Event : IEntity
         return eventCollaborators
                .Exists(eventCollaborator => eventCollaborator.User.Id == userId);
     }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is Event eventObj)
-        {
-            bool result = this.Id == eventObj.Id
-                && this.Title.Equals(eventObj.Title)
-                && this.Location.Equals(eventObj.Location)
-                && this.Description.Equals(eventObj.Description)
-                && this.Duration.Equals(eventObj.Duration)
-                && this.RecurrencePattern.Equals(eventObj.RecurrencePattern)
-                && this.DateWiseEventCollaborators.Count == eventObj.DateWiseEventCollaborators.Count;
-
-            foreach (var dateWiseEventCollaborators in this.DateWiseEventCollaborators)
-            {
-                result &= eventObj.DateWiseEventCollaborators.Contains(dateWiseEventCollaborators);
-            }
-
-            return result;
-        }
-
-        return false;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(this.Id,
-                                this.Title,
-                                this.Location,
-                                this.Description,
-                                this.Description,
-                                this.RecurrencePattern,
-                                this.DateWiseEventCollaborators);
-    }
 }

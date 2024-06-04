@@ -209,21 +209,7 @@ public class StartSchedulingProcessOfProposedEvents
     [Fact]
     public async Task Should_StartSchedulingProcess_When_UserWithIdAvailableAndUserWithPendingStatus()
     {
-        EventCollaborator eventCollaborator = new EventCollaborator
-        {
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-            ProposedDuration = null,
-            EventDate = new DateOnly(2024, 5, 31),
-            User = new User
-            {
-                Id = 49,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            EventId = 47
-        };
+        EventCollaborator eventCollaborator = _events[1].DateWiseEventCollaborators[0].EventCollaborators[1];
 
         _eventService.GetProposedEventsByUserId(1).Returns(_events);
 
@@ -237,21 +223,7 @@ public class StartSchedulingProcessOfProposedEvents
     [Fact]
     public async Task Should_StartSchedulingProcess_When_UserWithIdAvailableAndUserWithProposedStatus()
     {
-        EventCollaborator eventCollaborator = new EventCollaborator
-        {
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-            ProposedDuration = null,
-            EventDate = new DateOnly(2024, 5, 31),
-            User = new User
-            {
-                Id = 49,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            EventId = 47,
-        };
+        EventCollaborator eventCollaborator = _events[1].DateWiseEventCollaborators[0].EventCollaborators[1]; 
 
         _events[0].DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
@@ -286,7 +258,6 @@ public class StartSchedulingProcessOfProposedEvents
     [Fact]
     public async Task Should_StartSchedulingProcess_When_UsersWithProposedStatusAndMutualTimeBlockRequired()
     {
-
         Event eventObj = new()
         {
             Id = 47,
@@ -374,21 +345,7 @@ public class StartSchedulingProcessOfProposedEvents
 
         _events.Add(eventObj);
 
-        EventCollaborator eventCollaborator = new ()
-        {
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-            ProposedDuration = null,
-            EventDate = new DateOnly(2024, 6, 5),
-            User = new User
-            {
-                Id = 49,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            EventId = 47,
-        };
+        EventCollaborator eventCollaborator = _events[0].DateWiseEventCollaborators[0].EventCollaborators[1];
 
         _eventService.GetProposedEventsByUserId(1).Returns(_events);
 

@@ -222,9 +222,9 @@ public class GetAllEventsCreatedByUser
 
         List<Event> events = await _eventService.GetAllEventCreatedByUser(userId);
 
-        List<Event> expected = [
-            userId == 49 
-            ? new()
+        List<Event> expected =
+            userId == 49
+            ? [new()
         {
             Id = 2205,
             Title = "event",
@@ -284,8 +284,8 @@ public class GetAllEventsCreatedByUser
                     ]
                 }
             ]
-        } 
-            : new()
+        } ]
+            : [new()
         {
             Id = 2205,
             Title = "event 1",
@@ -405,17 +405,13 @@ public class GetAllEventsCreatedByUser
                     ]
                 }
             ]
-        }
-        ];
+        }];
 
-        if(userId == 49) 
+        if (userId == 49)
             Assert.Equal(1, events.Count);
-        else 
+        else
             Assert.Equal(2, events.Count);
 
-        foreach (var eventObj in events)
-        {
-            Assert.Contains(eventObj, expected);
-        }
+        Assert.Equivalent(expected, events);
     }
 }
