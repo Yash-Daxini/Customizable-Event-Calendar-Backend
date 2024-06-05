@@ -30,11 +30,7 @@ public class DeleteEventCollaboratorsByEventId
             Title = "Title",
             Description = "Description",
             Location = "Location",
-            Duration = new()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new(1, 2),
             DateWiseEventCollaborators = [],
             RecurrencePattern = new()
             {
@@ -52,11 +48,21 @@ public class DeleteEventCollaboratorsByEventId
     }
 
     [Fact]
-    public async Task Should_ReturnException_When_EventIdNotPresent()
+    public async Task Should_ThrowException_When_EventIdNotPresent()
     {
         _eventService.GetEventById(2, 2).ReturnsNull();
 
         await Assert.ThrowsAsync<NotFoundException>(async () => await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(1, 1));
+
+        await _eventCollaboratorRepository.DidNotReceive().DeleteEventCollaboratorsByEventId(1);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EventIdNotValid()
+    {
+        _eventService.GetEventById(-1, 2).ReturnsNull();
+
+        await Assert.ThrowsAsync<ArgumentException>(async () => await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(-1, 1));
 
         await _eventCollaboratorRepository.DidNotReceive().DeleteEventCollaboratorsByEventId(1);
     }

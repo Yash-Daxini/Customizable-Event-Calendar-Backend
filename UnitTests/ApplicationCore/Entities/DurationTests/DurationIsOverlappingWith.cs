@@ -7,11 +7,7 @@ public class DurationIsOverlappingWith
     [Fact]
     public void Should_ReturnFalse_When_DurationIsNull()
     {
-        Duration firstDuration = new()
-        {
-            StartHour = 5,
-            EndHour = 6
-        };
+        Duration firstDuration = new(5, 6);
 
         Duration secondDuration = null;
 
@@ -26,17 +22,9 @@ public class DurationIsOverlappingWith
     [InlineData(4, 8, 10, 12)]
     public void Should_ReturnFalse_When_DurationNotOverlaps(int firstStartHour, int firstEndHour, int secondStartHour, int secondEndHour)
     {
-        Duration firstDuration = new()
-        {
-            StartHour = firstStartHour,
-            EndHour = firstEndHour
-        };
+        Duration firstDuration = new(firstStartHour, firstEndHour);
 
-        Duration secondDuration = new()
-        {
-            StartHour = secondStartHour,
-            EndHour = secondEndHour
-        };
+        Duration secondDuration = new(secondStartHour, secondEndHour);
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
@@ -47,17 +35,9 @@ public class DurationIsOverlappingWith
     [InlineData(5, 6, 5, 6)]
     public void Should_ReturnTrue_When_DurationIsSame(int firstStartHour, int firstEndHour, int secondStartHour, int secondEndHour)
     {
-        Duration firstDuration = new()
-        {
-            StartHour = firstStartHour,
-            EndHour = firstEndHour
-        };
+        Duration firstDuration = new(firstStartHour, firstEndHour);
 
-        Duration secondDuration = new()
-        {
-            StartHour = secondStartHour,
-            EndHour = secondEndHour
-        };
+        Duration secondDuration = new(secondStartHour, secondEndHour);
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
@@ -68,17 +48,9 @@ public class DurationIsOverlappingWith
     [InlineData(5, 6, 5, 7)]
     public void Should_ReturnTrue_When_StartHoursAreSame(int firstStartHour, int firstEndHour, int secondStartHour, int secondEndHour)
     {
-        Duration firstDuration = new()
-        {
-            StartHour = firstStartHour,
-            EndHour = firstEndHour
-        };
+        Duration firstDuration = new(firstStartHour, firstEndHour);
 
-        Duration secondDuration = new()
-        {
-            StartHour = secondStartHour,
-            EndHour = secondEndHour
-        };
+        Duration secondDuration = new(secondStartHour, secondEndHour);
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
@@ -90,17 +62,9 @@ public class DurationIsOverlappingWith
     [InlineData(4, 6, 5, 6)]
     public void Should_ReturnTrue_When_EndHoursAreSame(int firstStartHour, int firstEndHour, int secondStartHour, int secondEndHour)
     {
-        Duration firstDuration = new()
-        {
-            StartHour = firstStartHour,
-            EndHour = firstEndHour
-        };
+        Duration firstDuration = new(firstStartHour, firstEndHour);
 
-        Duration secondDuration = new()
-        {
-            StartHour = secondStartHour,
-            EndHour = secondEndHour
-        };
+        Duration secondDuration = new(secondStartHour, secondEndHour);
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
@@ -115,17 +79,9 @@ public class DurationIsOverlappingWith
     [InlineData(10, 12, 4, 11)]
     public void Should_ReturnTrue_When_HourOverlaps(int firstStartHour, int firstEndHour, int secondStartHour, int secondEndHour)
     {
-        Duration firstDuration = new()
-        {
-            StartHour = firstStartHour,
-            EndHour = firstEndHour
-        };
+        Duration firstDuration = new(firstStartHour, firstEndHour);
 
-        Duration secondDuration = new()
-        {
-            StartHour = secondStartHour,
-            EndHour = secondEndHour
-        };
+        Duration secondDuration = new(secondStartHour, secondEndHour);
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 

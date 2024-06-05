@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
 
 namespace UnitTests.ApplicationCore.Entities.DurationTests;
 
@@ -9,39 +10,32 @@ public class DurationGetEndHourIn12HourFormat
     [InlineData(25)]
     [InlineData(24)]
     [InlineData(-4)]
-    public void Should_ReturnNull_When_Invalid24HourFormat(int hour)
+    public void Should_ThrowException_When_Invalid24HourFormat(int hour)
     {
-        Duration duration = new Duration
+        Assert.Throws<InvalidDurationException>(() =>
         {
-            StartHour = hour,
-            EndHour = hour,
-        };
+            Duration duration = new(hour, hour);
 
-        string? result = duration.GetEndHourIn12HourFormat();
-
-        Assert.Equal(result, null);
+            string? result = duration.GetEndHourIn12HourFormat();
+        });
     }
 
     [Theory]
-    [InlineData(0)]
+    [InlineData(2)]
     [InlineData(1)]
     [InlineData(12)]
     [InlineData(13)]
     [InlineData(23)]
     public void Should_ReturnValid12HourFormat_When_Valid24HourFormat(int hour)
     {
-        Duration duration = new Duration
-        {
-            StartHour = hour,
-            EndHour = hour,
-        };
+        Duration duration = new(0, hour);
 
         string actualResult = "";
 
         switch (hour)
         {
-            case 0:
-                actualResult = "12 AM";
+            case 2:
+                actualResult = "2 AM";
                 break;
             case 1:
                 actualResult = "1 AM";

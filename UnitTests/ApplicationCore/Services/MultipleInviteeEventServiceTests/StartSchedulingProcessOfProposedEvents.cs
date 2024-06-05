@@ -26,11 +26,7 @@ public class StartSchedulingProcessOfProposedEvents
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -87,11 +83,7 @@ public class StartSchedulingProcessOfProposedEvents
             Title = "event 1",
             Location = "event 1",
             Description = "event 1",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -148,11 +140,7 @@ public class StartSchedulingProcessOfProposedEvents
             Title = "event 2",
             Location = "event 2",
             Description = "event 2",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -223,18 +211,14 @@ public class StartSchedulingProcessOfProposedEvents
     [Fact]
     public async Task Should_StartSchedulingProcess_When_UserWithIdAvailableAndUserWithProposedStatus()
     {
-        EventCollaborator eventCollaborator = _events[1].DateWiseEventCollaborators[0].EventCollaborators[1]; 
+        EventCollaborator eventCollaborator = _events[1].DateWiseEventCollaborators[0].EventCollaborators[1];
 
         _events[0].DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
             {
                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                 ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
-                ProposedDuration = new()
-                {
-                    StartHour = 1,
-                    EndHour = 2,
-                },
+                ProposedDuration = new(1,2),
                 EventDate = new DateOnly(2024, 5, 31),
                 User = new User
                 {
@@ -264,11 +248,7 @@ public class StartSchedulingProcessOfProposedEvents
             Title = "event 2",
             Location = "event 2",
             Description = "event 2",
-            Duration = new Duration()
-            {
-                StartHour = 10,
-                EndHour = 11
-            },
+            Duration = new Duration(10, 11),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 6, 5),
@@ -304,10 +284,7 @@ public class StartSchedulingProcessOfProposedEvents
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
-                            ProposedDuration = new(){
-                                StartHour = 15,
-                                EndHour = 17,
-                            },
+                            ProposedDuration = new(15,17),
                             EventDate = new DateOnly(2024, 6, 5),
                             User = new User
                             {
@@ -322,10 +299,7 @@ public class StartSchedulingProcessOfProposedEvents
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
-                            ProposedDuration = new(){
-                                StartHour = 16,
-                                EndHour = 17,
-                            },
+                            ProposedDuration = new(16,17),
                             EventDate = new DateOnly(2024, 6, 5),
                             User = new User
                             {
@@ -355,11 +329,7 @@ public class StartSchedulingProcessOfProposedEvents
 
         await _eventCollaboratorService.Received().UpdateEventCollaborator(eventCollaborator);
 
-        eventObj.Duration = new()
-        {
-            StartHour = 16,
-            EndHour = 17
-        };
+        eventObj.Duration = new(16, 17);
 
         await _eventService.Received().UpdateEvent(eventObj, 1);
     }

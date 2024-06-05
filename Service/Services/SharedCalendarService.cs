@@ -2,6 +2,7 @@
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace Core.Services;
 
@@ -21,6 +22,9 @@ public class SharedCalendarService : ISharedCalendarService
 
     public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
     {
+        if (sharedCalendarId is <= 0)
+            throw new ArgumentException($"Invalid shared calendar id");
+
         SharedCalendar? sharedCalendar = await _sharedCalendarRepository.GetSharedCalendarById(sharedCalendarId);
 
         return sharedCalendar is null
@@ -30,6 +34,9 @@ public class SharedCalendarService : ISharedCalendarService
 
     public async Task<int> AddSharedCalendar(SharedCalendar sharedCalendarModel)
     {
+        if (sharedCalendarModel is null)
+            throw new ArgumentNullException($" Shared calendar can't be null");
+
         return await _sharedCalendarRepository.Add(sharedCalendarModel);
     }
 }

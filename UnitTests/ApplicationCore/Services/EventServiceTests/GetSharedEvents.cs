@@ -34,11 +34,7 @@ public class GetSharedEvents
         Title = "event",
         Location = "event",
         Description = "event",
-        Duration = new Duration()
-        {
-            StartHour = 1,
-            EndHour = 2
-        },
+        Duration = new Duration(1,2),
         RecurrencePattern = new RecurrencePattern()
         {
             StartDate = new DateOnly(2024, 5, 31),
@@ -95,11 +91,7 @@ public class GetSharedEvents
         Title = "event 1",
         Location = "event 1",
         Description = "event 1",
-        Duration = new Duration()
-        {
-            StartHour = 1,
-            EndHour = 2
-        },
+        Duration = new Duration(1,2),
         RecurrencePattern = new RecurrencePattern()
         {
             StartDate = new DateOnly(2024, 5, 31),
@@ -156,11 +148,7 @@ public class GetSharedEvents
         Title = "event 2",
         Location = "event 2",
         Description = "event 2",
-        Duration = new Duration()
-        {
-            StartHour = 1,
-            EndHour = 2
-        },
+        Duration = new Duration(1,2),
         RecurrencePattern = new RecurrencePattern()
         {
             StartDate = new DateOnly(2024, 6, 2),
@@ -283,7 +271,43 @@ public class GetSharedEvents
 
         Assert.Equal(0, events.Count);
 
-        Assert.Equal([],events);
+        Assert.Equal([], events);
+
+        await _eventRepository.DidNotReceive().GetSharedEvents(sharedCalendar);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_SharedCalendarWithIdNotValid()
+    {
+        SharedCalendar sharedCalendar = new()
+        {
+            Id = 1,
+            Sender = new()
+            {
+                Id = 1,
+                Name = "a",
+                Email = "a@gmail.com",
+                Password = "a"
+            },
+            Receiver = new()
+            {
+                Id = 2,
+                Name = "b",
+                Email = "b@gmail.com",
+                Password = "b"
+            },
+            FromDate = new DateOnly(),
+            ToDate = new DateOnly(),
+        };
+
+        _sharedCalendarService.GetSharedCalendarById(-1).ReturnsNull();
+
+        _eventRepository.GetSharedEvents(sharedCalendar).Returns([]);
+
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await _eventService.GetSharedEvents(-1);
+        });
 
         await _eventRepository.DidNotReceive().GetSharedEvents(sharedCalendar);
     }

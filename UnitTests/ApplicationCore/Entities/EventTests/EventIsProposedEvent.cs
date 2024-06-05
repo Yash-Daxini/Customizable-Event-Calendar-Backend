@@ -16,16 +16,12 @@ public class EventIsProposedEvent
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(),
                 EndDate = new DateOnly(),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Frequency = Frequency.Weekly,
                 Interval = 2,
                 ByWeekDay = [2, 6],
                 WeekOrder = null,
@@ -39,8 +35,8 @@ public class EventIsProposedEvent
                     EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
                             User = new User
@@ -54,8 +50,8 @@ public class EventIsProposedEvent
                         },
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Participant,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
                             User = new User

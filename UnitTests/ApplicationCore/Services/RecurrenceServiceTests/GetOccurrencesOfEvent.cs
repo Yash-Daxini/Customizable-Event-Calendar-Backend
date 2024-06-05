@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
 using Core.Services;
 
 namespace UnitTests.ApplicationCore.Services.RecurrenceServiceTests;
@@ -242,5 +243,14 @@ public class GetOccurrencesOfEvent
         List<DateOnly> actualOutput = _recurrenceService.GetOccurrencesOfEvent(recurrencePattern);
 
         Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ThrowException_When_RecurrencePatternIsNull()
+    {
+        Assert.Throws<InvalidRecurrencePatternException>(() =>
+        {
+            _recurrenceService.GetOccurrencesOfEvent(null);
+        });
     }
 }

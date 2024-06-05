@@ -41,10 +41,6 @@ public class EventCollaboratorProfile : Profile
     {
         if (startHour is null || endHour is null) return null;
 
-        return new Duration
-        {
-            StartHour = (int)startHour,
-            EndHour = (int)endHour
-        };
+        return new Duration((int)startHour,(int)endHour);
     }
 }

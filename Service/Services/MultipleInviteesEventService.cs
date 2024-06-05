@@ -117,11 +117,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
             endHour = eventObj.Duration.EndHour;
         }
 
-        return new Duration()
-        {
-            StartHour = startHour,
-            EndHour = endHour,
-        };
+        return new Duration(startHour, endHour);
 
     }
 

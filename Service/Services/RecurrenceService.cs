@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
 using Core.Extensions;
 using Core.Interfaces.IServices;
 
@@ -8,6 +9,9 @@ public class RecurrenceService : IRecurrenceService
 {
     public List<DateOnly> GetOccurrencesOfEvent(RecurrencePattern recurrencePattern)
     {
+        if (recurrencePattern is null)
+            throw new InvalidRecurrencePatternException("Recurrence pattern is null !");
+
         return recurrencePattern.IsNonRecurrenceEvent()
                ? [recurrencePattern.StartDate]
                : GetOccurrencesOfEventUsingFrequency(recurrencePattern);

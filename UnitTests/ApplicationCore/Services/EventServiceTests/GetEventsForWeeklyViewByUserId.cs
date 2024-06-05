@@ -34,11 +34,7 @@ public class GetEventsForWeeklyViewByUserId
         Title = "event",
         Location = "event",
         Description = "event",
-        Duration = new Duration()
-        {
-            StartHour = 1,
-            EndHour = 2
-        },
+        Duration = new Duration(1,2),
         RecurrencePattern = new RecurrencePattern()
         {
             StartDate = new DateOnly(2024, 5, 31),
@@ -95,11 +91,7 @@ public class GetEventsForWeeklyViewByUserId
         Title = "event 1",
         Location = "event 1",
         Description = "event 1",
-        Duration = new Duration()
-        {
-            StartHour = 1,
-            EndHour = 2
-        },
+        Duration = new Duration(1,2),
         RecurrencePattern = new RecurrencePattern()
         {
             StartDate = new DateOnly(2024, 5, 31),
@@ -156,11 +148,7 @@ public class GetEventsForWeeklyViewByUserId
         Title = "event 2",
         Location = "event 2",
         Description = "event 2",
-        Duration = new Duration()
-        {
-            StartHour = 1,
-            EndHour = 2
-        },
+        Duration = new Duration(1,2),
         RecurrencePattern = new RecurrencePattern()
         {
             StartDate = new DateOnly(2024, 6, 2),
@@ -217,8 +205,8 @@ public class GetEventsForWeeklyViewByUserId
     [Fact]
     public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
     {
-        DateOnly startDateOfWeek = new (2024,6,3);
-        DateOnly endDateOfWeek = new (2024,6,9);
+        DateOnly startDateOfWeek = new(2024, 6, 3);
+        DateOnly endDateOfWeek = new(2024, 6, 9);
 
         _eventRepository.GetEventsWithinGivenDateByUserId(48, startDateOfWeek, endDateOfWeek).ReturnsForAnyArgs(_events);
 

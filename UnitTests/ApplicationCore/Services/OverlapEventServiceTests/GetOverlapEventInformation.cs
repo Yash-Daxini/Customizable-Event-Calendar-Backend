@@ -17,15 +17,12 @@ public class GetOverlapEventInformation
     {
         _events =
             [
-                new (){
+                new(){
                     Id = 1,
                     Title = "1",
                     Description = "1",
                     Location = "1",
-                    Duration = new (){
-                        StartHour = 5,
-                        EndHour = 6,
-                    },
+                    Duration = new (5,6),
                     RecurrencePattern = new(){
                         StartDate = new DateOnly(2024,5,30),
                         EndDate = new DateOnly(2024,6,2),
@@ -134,11 +131,7 @@ public class GetOverlapEventInformation
             Title = "2",
             Description = "2",
             Location = "2",
-            Duration = new()
-            {
-                StartHour = 6,
-                EndHour = 7,
-            },
+            Duration = new(6,7),
             RecurrencePattern = new()
             {
                 StartDate = new DateOnly(2024, 5, 30),
@@ -204,11 +197,7 @@ public class GetOverlapEventInformation
             Title = "3",
             Description = "3",
             Location = "3",
-            Duration = new()
-            {
-                StartHour = 6,
-                EndHour = 7,
-            },
+            Duration = new(6,7),
             RecurrencePattern = new()
             {
                 StartDate = new DateOnly(2024, 6, 2),
@@ -260,11 +249,7 @@ public class GetOverlapEventInformation
             Title = "2",
             Description = "2",
             Location = "2",
-            Duration = new()
-            {
-                StartHour = 5,
-                EndHour = 6,
-            },
+            Duration = new(5, 6),
             RecurrencePattern = new()
             {
                 StartDate = new DateOnly(2024, 5, 30),
@@ -347,11 +332,7 @@ public class GetOverlapEventInformation
             Title = "4",
             Description = "4",
             Location = "4",
-            Duration = new()
-            {
-                StartHour = 6,
-                EndHour = 7,
-            },
+            Duration = new(6, 7),
             RecurrencePattern = new()
             {
                 StartDate = new DateOnly(2024, 5, 30),
@@ -439,11 +420,7 @@ public class GetOverlapEventInformation
             Title = "2",
             Description = "2",
             Location = "2",
-            Duration = new()
-            {
-                StartHour = 6,
-                EndHour = 7,
-            },
+            Duration = new(6, 7),
             RecurrencePattern = new()
             {
                 StartDate = new DateOnly(2024, 5, 30),
@@ -483,6 +460,22 @@ public class GetOverlapEventInformation
         };
 
         string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
+
+        Assert.Null(message);
+    }
+
+    [Fact]
+    public void Should_ReturnNull_When_EventToCheckOverlapIsNull()
+    {
+        string? message = _overlappingEventService.GetOverlappedEventInformation(null, _events);
+
+        Assert.Null(message);
+    }
+
+    [Fact]
+    public void Should_ReturnNull_When_EventToCheckOverlapIsEmpty()
+    {
+        string? message = _overlappingEventService.GetOverlappedEventInformation(null, []);
 
         Assert.Null(message);
     }

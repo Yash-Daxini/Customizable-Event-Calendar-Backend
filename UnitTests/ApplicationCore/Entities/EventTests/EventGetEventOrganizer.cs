@@ -15,11 +15,7 @@ public class EventGetEventOrganizer
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(),
@@ -139,9 +135,29 @@ public class EventGetEventOrganizer
     }
 
     [Fact]
+    public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsNull()
+    {
+        _event.DateWiseEventCollaborators[0].EventCollaborators = null;
+
+        User? expectedUser = _event.GetEventOrganizer();
+
+        Assert.Equivalent(expectedUser, null);
+    }
+
+    [Fact]
     public void Should_ReturnOrganizerOfEventAsNull_When_DateWiseEventCollaboratorsIsEmpty()
     {
         _event.DateWiseEventCollaborators = [];
+
+        User? expectedUser = _event.GetEventOrganizer();
+
+        Assert.Equivalent(expectedUser, null);
+    }
+
+    [Fact]
+    public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsEmpty()
+    {
+        _event.DateWiseEventCollaborators[0].EventCollaborators = [];
 
         User? expectedUser = _event.GetEventOrganizer();
 

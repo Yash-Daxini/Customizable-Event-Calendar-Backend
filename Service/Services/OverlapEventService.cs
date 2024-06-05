@@ -10,14 +10,17 @@ public class OverlapEventService : IOverlappingEventService
     {
         Dictionary<Event, DateOnly> overlapEventByDate = [];
 
+        if(eventForVerify is null || events.Count is 0)
+            return null;
+
         foreach (var existingEvent in events)
         {
             if (existingEvent.Id == eventForVerify.Id) continue;
 
-            DateOnly matchedDate = eventForVerify.GetOverlapDate(existingEvent);
+            DateOnly? matchedDate = eventForVerify.GetOverlapDate(existingEvent);
 
             if (eventForVerify.IsEventOverlappingWith(existingEvent, matchedDate))
-                overlapEventByDate.Add(existingEvent, matchedDate);
+                overlapEventByDate.Add(existingEvent, (DateOnly)matchedDate);
         }
 
         return overlapEventByDate.Count == 0

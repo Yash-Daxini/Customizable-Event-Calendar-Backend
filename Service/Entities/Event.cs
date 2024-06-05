@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.Entities.Enums;
+using Core.Interfaces;
 
 namespace Core.Entities;
 
@@ -24,16 +25,28 @@ public class Event : IEntity
             || DateWiseEventCollaborators.Count is 0)
             return null;
 
-        return DateWiseEventCollaborators.First()
-                                         .EventCollaborators
-                                         .FirstOrDefault(eventCollaborator => eventCollaborator.IsEventOrganizer())
-                                         .User;
+        List<EventCollaborator>? eventCollaborators = DateWiseEventCollaborators.First()
+                                                     .EventCollaborators;
+
+        if (eventCollaborators is null)
+            return null;
+
+        EventCollaborator? eventCollaborator = eventCollaborators
+                                              .FirstOrDefault(eventCollaborator => eventCollaborator.IsEventOrganizer());
+
+        if (eventCollaborator is null)
+            return null;
+
+        return eventCollaborator.User;
     }
 
     public List<EventCollaborator> GetEventInvitees()
     {
         if (DateWiseEventCollaborators is null
             || DateWiseEventCollaborators.Count is 0)
+            return [];
+
+        if (DateWiseEventCollaborators[0].EventCollaborators is null)
             return [];
 
         return [.. DateWiseEventCollaborators[0].EventCollaborators
@@ -54,9 +67,9 @@ public class Event : IEntity
                                             || eventCollaborator.IsProposedStatus());
     }
 
-    public bool IsEventOverlappingWith(Event eventObj, DateOnly matchedDate)
+    public bool IsEventOverlappingWith(Event eventObj, DateOnly? matchedDate)
     {
-        if (matchedDate == default) return false;
+        if (matchedDate is null || eventObj is null) return false;
 
         if (this.Duration.IsOverlappingWith(eventObj.Duration))
             return true;
@@ -64,8 +77,11 @@ public class Event : IEntity
         return false;
     }
 
-    public DateOnly GetOverlapDate(Event currentEvent)
+    public DateOnly? GetOverlapDate(Event currentEvent)
     {
+        if (currentEvent is null)
+            return null;
+
         List<DateOnly> eventDates = DateWiseEventCollaborators
                                     .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)
                                     .ToList();
@@ -76,33 +92,32 @@ public class Event : IEntity
 
         DateOnly matchedDate = eventDates.Intersect(currentEventDates).FirstOrDefault();
 
-        return matchedDate;
+        return matchedDate == default
+               ? null
+               : matchedDate;
     }
 
     public void CreateDateWiseEventCollaboratorsList(List<DateOnly> occurrences)
     {
-        List<EventCollaborator> eventCollaborators = DateWiseEventCollaborators.First().EventCollaborators;
+        EventCollaboratorsByDate? eventCollaboratorsByDate = DateWiseEventCollaborators.FirstOrDefault();
+
+        if (eventCollaboratorsByDate is null) return;
+
+        List<EventCollaborator> eventCollaborators = eventCollaboratorsByDate.EventCollaborators;
 
         List<EventCollaboratorsByDate> eventCollaboratorsByDates = [];
 
         foreach (DateOnly occurrence in occurrences)
         {
-            List<EventCollaborator> updatedCollaborators = [];
-
-            foreach (EventCollaborator eventCollaborator in eventCollaborators)
-            {
-                EventCollaborator newEventCollaborator = new(eventCollaborator)
-                {
-                    EventDate = occurrence
-                };
-                updatedCollaborators.Add(newEventCollaborator);
-            }
-
             eventCollaboratorsByDates.Add(new EventCollaboratorsByDate()
             {
                 EventDate = occurrence,
-                EventCollaborators = updatedCollaborators
-            });
+                EventCollaborators = [..eventCollaborators.Select(eventCollaborator =>
+                {
+                    EventCollaborator newEventCollaborator = new(eventCollaborator) { EventDate = occurrence };
+                    return newEventCollaborator;
+                })]
+        });
         }
 
         this.DateWiseEventCollaborators = eventCollaboratorsByDates;
@@ -110,6 +125,9 @@ public class Event : IEntity
 
     public List<EventCollaborator> GetEventCollaboratorsForGivenDate(DateOnly eventDate)
     {
+        if (DateWiseEventCollaborators is null)
+            return [];
+
         EventCollaboratorsByDate? eventCollaboratorsByDate = DateWiseEventCollaborators
                                                              .FirstOrDefault(eventCollaboratorByDate => eventCollaboratorByDate.EventDate
                                                                                                == eventDate);
@@ -124,5 +142,15 @@ public class Event : IEntity
 
         return eventCollaborators
                .Exists(eventCollaborator => eventCollaborator.User.Id == userId);
+    }
+
+    public void MakeNonRecurringEvent()
+    {
+        RecurrencePattern.Frequency = Frequency.None;
+        RecurrencePattern.Interval = 1;
+        RecurrencePattern.ByWeekDay = null;
+        RecurrencePattern.ByMonthDay = null;
+        RecurrencePattern.ByMonth = null;
+        RecurrencePattern.WeekOrder = null;
     }
 }

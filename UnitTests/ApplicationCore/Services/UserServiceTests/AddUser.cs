@@ -1,8 +1,10 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -36,5 +38,17 @@ public class AddUser
         Assert.Equal(1, userId);
 
         await _userRepository.Received().Add(user);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_UserIsNull()
+    {
+        User user = null;
+
+        _userRepository.Add(user).Returns(1);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async() => await _userService.AddUser(user));
+
+        await _userRepository.DidNotReceive().Add(user);
     }
 }

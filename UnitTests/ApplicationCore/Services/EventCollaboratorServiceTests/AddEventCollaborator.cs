@@ -1,9 +1,11 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -46,5 +48,21 @@ public class AddEventCollaborator
         _eventCollaboratorRepository.Received().Add(eventCollaborator);
 
         Assert.Equivalent(result, 1);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EventCollaboratorIsNull()
+    {
+        EventCollaborator eventCollaborator = null;
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+        {
+            _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
+
+            await _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
+
+            await _eventCollaboratorRepository.DidNotReceive().Add(eventCollaborator);
+        });
+
     }
 }

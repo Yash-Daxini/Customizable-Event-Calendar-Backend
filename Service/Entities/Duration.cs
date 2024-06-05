@@ -1,7 +1,26 @@
-﻿namespace Core.Entities;
+﻿
+using Core.Exceptions;
+
+namespace Core.Entities;
 
 public class Duration
 {
+    public Duration(int startHour, int endHour)
+    {
+        if (!IsValidStartAndEndHour(startHour, endHour))
+            throw new InvalidDurationException("Invalid duration !");
+
+        this.StartHour = startHour;
+        this.EndHour = endHour;
+    }
+
+    private bool IsValidStartAndEndHour(int startHour, int endHour)
+    {
+        return startHour >= 0 && startHour <= 23
+            && endHour >= 0 && endHour <= 23
+            && startHour < endHour;
+    }
+
     public int StartHour { get; set; }
 
     public int EndHour { get; set; }

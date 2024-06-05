@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Entities.Enums;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -14,15 +15,11 @@ public class EventIsOverlappingWith
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
-                StartDate = new DateOnly(2024,5,31),
-                EndDate = new DateOnly(2024,8,25),
+                StartDate = new DateOnly(2024, 5, 31),
+                EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
                 ByWeekDay = [2, 6],
@@ -80,16 +77,12 @@ public class EventIsOverlappingWith
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 4
-            },
+            Duration = new Duration(1, 4),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Frequency = Frequency.Weekly,
                 Interval = 2,
                 ByWeekDay = [2, 6],
                 WeekOrder = null,
@@ -103,8 +96,8 @@ public class EventIsOverlappingWith
                     EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
                             User = new User
@@ -121,11 +114,11 @@ public class EventIsOverlappingWith
             ]
         };
 
-        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly());
+        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, null);
 
         Assert.False(result);
     }
-    
+
     [Fact]
     public void Should_ReturnsFalse_When_EventOccurOnDifferentDuration()
     {
@@ -135,11 +128,7 @@ public class EventIsOverlappingWith
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 2,
-                EndHour = 3
-            },
+            Duration = new Duration(2, 3),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -180,7 +169,7 @@ public class EventIsOverlappingWith
 
         Assert.False(result);
     }
-    
+
     [Fact]
     public void Should_ReturnsTrue_When_EventOccurOnSameDuration()
     {
@@ -190,11 +179,7 @@ public class EventIsOverlappingWith
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -235,7 +220,7 @@ public class EventIsOverlappingWith
 
         Assert.True(result);
     }
-    
+
     [Fact]
     public void Should_ReturnsTrue_When_EventOccurWithOverlapDuration()
     {
@@ -245,16 +230,12 @@ public class EventIsOverlappingWith
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 4
-            },
+            Duration = new Duration(1, 4),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Frequency = Frequency.Weekly,
                 Interval = 2,
                 ByWeekDay = [2, 6],
                 WeekOrder = null,
@@ -268,8 +249,8 @@ public class EventIsOverlappingWith
                     EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
                             User = new User
@@ -290,4 +271,13 @@ public class EventIsOverlappingWith
 
         Assert.True(result);
     }
+
+    [Fact]
+    public void Should_ReturnFalse_When_MatchedDateAndEventAreNull()
+    {
+        bool result = _event.IsEventOverlappingWith(null,null);
+
+        Assert.False(result);
+    }
+
 }

@@ -11,11 +11,7 @@ public class EventProfile : Profile
     public EventProfile()
     {
         CreateMap<EventDataModel, Event>()
-                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => new Duration()
-                {
-                    StartHour = src.EventStartHour,
-                    EndHour = src.EventEndHour,
-                }))
+                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => new Duration(src.EventStartHour, src.EventEndHour)))
                 .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom(src => new RecurrencePattern()
                 {
                     StartDate = src.EventStartDate,

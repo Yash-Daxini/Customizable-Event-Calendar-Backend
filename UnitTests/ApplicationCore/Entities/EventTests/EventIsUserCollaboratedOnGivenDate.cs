@@ -13,11 +13,7 @@ public class EventIsUserCollaboratedOnGivenDate
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(),
@@ -111,7 +107,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [InlineData(2024, 10, 1)]
     public void Should_ReturnsFalse_When_DateIsNotPresentInEvent(int year, int month, int day)
     {
-        DateOnly date = new DateOnly(year, month, day);
+        DateOnly date = new(year, month, day);
 
         bool result = _event.IsUserCollaboratedOnGivenDate(48, date);
 
@@ -123,7 +119,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [InlineData(2024, 10, 1, 51)]
     public void Should_ReturnsFalse_When_DateAndUserAreNotPresentInEvent(int year, int month, int day, int userId)
     {
-        DateOnly date = new DateOnly(year, month, day);
+        DateOnly date = new (year, month, day);
 
         bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
 
@@ -135,10 +131,38 @@ public class EventIsUserCollaboratedOnGivenDate
     [InlineData(2024, 5, 31, 48)]
     public void Should_ReturnsTrue_When_DateAndUserArePresentInEvent(int year, int month, int day, int userId)
     {
-        DateOnly date = new DateOnly(year, month, day);
+        DateOnly date = new (year, month, day);
 
         bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
 
         Assert.True(result);
+    }
+    
+    [Theory]
+    [InlineData(2024, 5, 30, 48)]
+    [InlineData(2024, 5, 31, 48)]
+    public void Should_ReturnsFalse_When_DateWiseEventCollaboratorsIsNull(int year, int month, int day, int userId)
+    {
+        DateOnly date = new DateOnly(year, month, day);
+
+        _event.DateWiseEventCollaborators = null;
+
+        bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
+
+        Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData(2024, 5, 30, 48)]
+    [InlineData(2024, 5, 31, 48)]
+    public void Should_ReturnsFalse_When_DateWiseEventCollaboratorsIsEmpty(int year, int month, int day, int userId)
+    {
+        DateOnly date = new DateOnly(year, month, day);
+
+        _event.DateWiseEventCollaborators = [];
+
+        bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
+
+        Assert.False(result);
     }
 }

@@ -56,12 +56,22 @@ public class GetSharedCalendarById
     }
 
     [Fact]
-    public async Task Should_ReturnsNull_When_IdWithSharedCalendarNotAvailable()
+    public async Task Should_ThrowException_When_IdWithSharedCalendarNotAvailable()
     {
         _sharedCalendarRepository.GetSharedCalendarById(1).ReturnsNull();
 
         await Assert.ThrowsAsync<NotFoundException>(() =>_sharedCalendarService.GetSharedCalendarById(1));
 
         _sharedCalendarRepository.Received().GetSharedCalendarById(1);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_IdWithSharedCalendarNotValid()
+    {
+        _sharedCalendarRepository.GetSharedCalendarById(-11).ReturnsNull();
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sharedCalendarService.GetSharedCalendarById(-1));
+
+        await _sharedCalendarRepository.DidNotReceive().GetSharedCalendarById(1);
     }
 }

@@ -16,11 +16,7 @@ public class EventGetEventCollaboratorsForGivenDate
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -167,7 +163,7 @@ public class EventGetEventCollaboratorsForGivenDate
     [InlineData(2024, 5, 29)]
     [InlineData(2024, 6, 3)]
     [InlineData(2024, 6, 1)]
-    
+
     public void Should_ReturnsEmptyList_When_EventCollaboratorNotOccurOnGivenDate(int year, int month, int day)
     {
         DateOnly date = new(year, month, day);
@@ -206,5 +202,35 @@ public class EventGetEventCollaboratorsForGivenDate
             Assert.Equivalent(expectedResult, eventCollaborators);
         else
             Assert.Equivalent(_eventCollaborators, eventCollaborators);
+    }
+
+    [Theory]
+    [InlineData(2024, 5, 31)]
+    [InlineData(2024, 6, 2)]
+    public void Should_ReturnsEmptyList_When_DateWiseEventCollaboratorsIsNull(int year, int month, int day)
+    {
+        _event.DateWiseEventCollaborators = null;
+
+        DateOnly date = new(year, month, day);
+        List<EventCollaborator> eventCollaborators = _event.GetEventCollaboratorsForGivenDate(date);
+
+        List<EventCollaborator> expectedResult = [];
+
+        Assert.Equivalent(expectedResult, eventCollaborators);
+    }
+
+    [Theory]
+    [InlineData(2024, 5, 31)]
+    [InlineData(2024, 6, 2)]
+    public void Should_ReturnsEmptyList_When_DateWiseEventCollaboratorsIsEmpty(int year, int month, int day)
+    {
+        _event.DateWiseEventCollaborators = [];
+
+        DateOnly date = new(year, month, day);
+        List<EventCollaborator> eventCollaborators = _event.GetEventCollaboratorsForGivenDate(date);
+
+        List<EventCollaborator> expectedResult = [];
+
+        Assert.Equivalent(expectedResult, eventCollaborators);
     }
 }

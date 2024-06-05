@@ -23,7 +23,7 @@ public class EventCollaboratorIsNullProposedDuration
     {
         EventCollaborator eventCollaborator = new()
         {
-            ProposedDuration = new Duration()
+            ProposedDuration = new Duration(5,6)
         };
 
         bool result = eventCollaborator.IsNullProposedDuration();

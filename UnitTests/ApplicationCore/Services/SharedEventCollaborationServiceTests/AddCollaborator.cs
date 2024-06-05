@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace UnitTests.ApplicationCore.Services.SharedEventCollaborationServiceTests;
 
@@ -27,11 +28,7 @@ public class AddCollaborator
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -88,11 +85,7 @@ public class AddCollaborator
             Title = "event 1",
             Location = "event 1",
             Description = "event 1",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -155,11 +148,7 @@ public class AddCollaborator
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -246,11 +235,7 @@ public class AddCollaborator
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -354,11 +339,7 @@ public class AddCollaborator
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -449,6 +430,95 @@ public class AddCollaborator
         _eventService.GetNonProposedEventsByUserId(50).Returns(_events);
 
         await Assert.ThrowsAsync<UserAlreadyCollaboratedException>(async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator));
+
+        await _eventCollaboratorService.DidNotReceive().AddEventCollaborator(eventCollaborator);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EventCollaboratorIsNull()
+    {
+        Event eventObj = new()
+        {
+            Id = 1,
+            Title = "event",
+            Location = "event",
+            Description = "event",
+            Duration = new Duration(1, 2),
+            RecurrencePattern = new RecurrencePattern()
+            {
+                StartDate = new DateOnly(2024, 5, 31),
+                EndDate = new DateOnly(2024, 8, 25),
+                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Interval = 2,
+                ByWeekDay = [2, 6],
+                WeekOrder = null,
+                ByMonthDay = null,
+                ByMonth = null
+            },
+            DateWiseEventCollaborators = [
+                new EventCollaboratorsByDate
+                {
+                    EventDate = new DateOnly(2024, 5, 31),
+                    EventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+            {
+                EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                ProposedDuration = null,
+                EventDate = new DateOnly(2024, 5, 31),
+                User = new User
+                {
+                    Id = 50,
+                    Name = "c",
+                    Email = "c@gmail.com",
+                    Password = "c"
+                },
+                EventId = 47
+            }
+                    ]
+                }
+            ]
+        };
+
+        _events.Add(eventObj);
+
+        EventCollaborator eventCollaborator = null;
+
+        _eventService.GetEventById(1, 50).Returns(eventObj);
+
+        _eventService.GetNonProposedEventsByUserId(50).Returns(_events);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator));
 
         await _eventCollaboratorService.DidNotReceive().AddEventCollaborator(eventCollaborator);
     }

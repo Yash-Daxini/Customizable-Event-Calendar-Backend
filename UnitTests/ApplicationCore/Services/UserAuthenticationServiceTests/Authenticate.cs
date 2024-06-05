@@ -5,6 +5,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace UnitTests.ApplicationCore.Services.UserAuthenticationServiceTests;
 
@@ -63,5 +64,19 @@ public class Authenticate
         await Assert.ThrowsAsync<AuthenticationFailedException>(async () => await _userAuthenticationService.Authenticate(user));
 
         await _userRepository.Received().AuthenticateUser(user);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_UserIsNull()
+    {
+        User user = null;
+
+        _userService.GetUserById(1).Returns(user);
+
+        _userService.AuthenticateUser(new User()).ReturnsNull();
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _userAuthenticationService.Authenticate(user));
+
+        await _userRepository.DidNotReceive().AuthenticateUser(user);
     }
 }

@@ -24,7 +24,7 @@ public class EventCollaboratorSetProposedDurationNull
     {
         EventCollaborator eventCollaborator = new()
         {
-            ProposedDuration = new(),
+            ProposedDuration = new(5, 6),
         };
 
         eventCollaborator.SetProposedDurationNull();

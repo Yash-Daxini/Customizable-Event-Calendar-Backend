@@ -39,7 +39,7 @@ public class DeleteUser
     }
 
     [Fact]
-    public async Task Should_DeleteUser_When_UserWithIdNotAvailable()
+    public async Task Should_Throw_When_UserWithIdNotAvailable()
     {
         User user = new User()
         {
@@ -49,6 +49,18 @@ public class DeleteUser
         _userRepository.GetUserById(1).ReturnsNull();
 
         await Assert.ThrowsAsync<NotFoundException>(async () => await _userService.DeleteUser(user.Id));
+
+        await _userRepository.DidNotReceive().Delete(user);
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_UserIdIsNotValid()
+    {
+        User user = null;
+
+        _userRepository.GetUserById(-1).ReturnsNull();
+
+        await Assert.ThrowsAsync<ArgumentException>(async () => await _userService.DeleteUser(-1));
 
         await _userRepository.DidNotReceive().Delete(user);
     }

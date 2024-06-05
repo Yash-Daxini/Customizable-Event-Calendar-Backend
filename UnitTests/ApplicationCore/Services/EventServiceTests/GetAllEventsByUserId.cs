@@ -24,7 +24,7 @@ public class GetAllEventsByUserId
         _eventCollaboratorService = Substitute.For<IEventCollaboratorService>();
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
-        _eventService = new EventService(_eventRepository,_recurrenceService,_eventCollaboratorService,_overlappingEventService,_sharedCalendarService);
+        _eventService = new EventService(_eventRepository, _recurrenceService, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
         _events =
         [
             new()
@@ -33,11 +33,7 @@ public class GetAllEventsByUserId
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -94,11 +90,7 @@ public class GetAllEventsByUserId
             Title = "event 1",
             Location = "event 1",
             Description = "event 1",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -155,11 +147,7 @@ public class GetAllEventsByUserId
             Title = "event 2",
             Location = "event 2",
             Description = "event 2",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),

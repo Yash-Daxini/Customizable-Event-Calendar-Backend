@@ -6,6 +6,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -49,7 +50,7 @@ public class UpdateEventCollaborator
     }
 
     [Fact]
-    public async Task Should_ReturnException_When_EventCollaboratorIdIsNotPresent()
+    public async Task Should_ThrowException_When_EventCollaboratorIdIsNotPresent()
     {
         EventCollaborator eventCollaborator = new()
         {
@@ -71,6 +72,18 @@ public class UpdateEventCollaborator
         _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();
 
         await Assert.ThrowsAsync<NotFoundException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
+
+        _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
+    }
+    
+    [Fact]
+    public async Task Should_ThrowException_When_EventCollaboratorIsNull()
+    {
+        EventCollaborator eventCollaborator = null;
+
+        _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
 
         _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
     }

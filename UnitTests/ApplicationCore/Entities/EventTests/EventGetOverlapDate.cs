@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Entities.Enums;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -14,11 +15,7 @@ public class EventGetOverlapDate
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -72,7 +69,7 @@ public class EventGetOverlapDate
     }
 
     [Fact]
-    public void Should_ReturnsDefaultDate_When_OverlapNotOccur()
+    public void Should_ReturnsNull_When_OverlapNotOccur()
     {
         Event eventToCheckOverlap = new()
         {
@@ -80,16 +77,12 @@ public class EventGetOverlapDate
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Frequency = Frequency.Weekly,
                 Interval = 2,
                 ByWeekDay = [2, 6],
                 WeekOrder = null,
@@ -136,9 +129,9 @@ public class EventGetOverlapDate
             ]
         };
 
-        DateOnly overlapDate = _event.GetOverlapDate(eventToCheckOverlap);
+        DateOnly? overlapDate = _event.GetOverlapDate(eventToCheckOverlap);
 
-        Assert.Equivalent(overlapDate, new DateOnly());
+        Assert.Equivalent(overlapDate, null);
     }
 
     [Fact]
@@ -150,16 +143,12 @@ public class EventGetOverlapDate
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Frequency = Frequency.Weekly,
                 Interval = 2,
                 ByWeekDay = [2, 6],
                 WeekOrder = null,
@@ -173,8 +162,8 @@ public class EventGetOverlapDate
                     EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
@@ -188,8 +177,8 @@ public class EventGetOverlapDate
                         },
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Participant,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
@@ -209,8 +198,8 @@ public class EventGetOverlapDate
                     EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 6, 1),
                             User = new User
@@ -224,8 +213,8 @@ public class EventGetOverlapDate
                         },
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Participant,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 6, 1),
                             User = new User
@@ -242,8 +231,16 @@ public class EventGetOverlapDate
             ]
         };
 
-        DateOnly overlapDate = _event.GetOverlapDate(eventToCheckOverlap);
+        DateOnly? overlapDate = _event.GetOverlapDate(eventToCheckOverlap);
 
         Assert.Equivalent(overlapDate, new DateOnly(2024, 5, 31));
+    }
+
+    [Fact]
+    public void Should_ReturnsNull_When_PassedEventIsNull()
+    {
+        DateOnly? overlapDate = _event.GetOverlapDate(null);
+
+        Assert.Equivalent(overlapDate, null);
     }
 }

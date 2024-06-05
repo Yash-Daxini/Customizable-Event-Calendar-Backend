@@ -40,12 +40,22 @@ public class GetUserById
     }
 
     [Fact]
-    public async Task Should_ReturnException_When_UserWithGivenUserIdNotAvailable()
+    public async Task Should_ThrowException_When_UserWithGivenUserIdNotAvailable()
     {
         _userRepository.GetUserById(1).ReturnsNull();
 
         await Assert.ThrowsAsync<NotFoundException>(async () => await _userService.GetUserById(1));
 
         await _userRepository.Received().GetUserById(1);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_UserWithGivenUserIdNotValid()
+    {
+        _userRepository.GetUserById(-11).ReturnsNull();
+
+        await Assert.ThrowsAsync<ArgumentException>(async () => await _userService.GetUserById(-11));
+
+        await _userRepository.DidNotReceive().GetUserById(-1);
     }
 }

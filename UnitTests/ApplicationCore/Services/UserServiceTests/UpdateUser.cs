@@ -5,6 +5,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -49,6 +50,18 @@ public class UpdateUser
         _userRepository.GetUserById(1).ReturnsNull();
 
         await Assert.ThrowsAsync<NotFoundException>(async () => await _userService.UpdateUser(user));
+
+        await _userRepository.DidNotReceive().Update(user);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_UserIsNull()
+    {
+        User user = null;
+
+        _userRepository.GetUserById(1).ReturnsNull();
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _userService.UpdateUser(user));
 
         await _userRepository.DidNotReceive().Update(user);
     }

@@ -14,11 +14,7 @@ public class EventHasPendingResponseFromUser
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(),
@@ -117,7 +113,7 @@ public class EventHasPendingResponseFromUser
 
         Assert.False(result);
     }
-    
+
     [Theory]
     [InlineData(50)]
     [InlineData(51)]

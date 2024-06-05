@@ -39,14 +39,4 @@ public class RecurrencePattern
     {
         return (EndDate.Year - StartDate.Year) / Interval + 1;
     }
-
-    public void MakeNonRecurringEvent()
-    {
-        Frequency = Frequency.None;
-        Interval = 1;
-        ByWeekDay = null;
-        ByMonthDay = null;
-        ByMonth = null;
-        WeekOrder = null;
-    }
 }

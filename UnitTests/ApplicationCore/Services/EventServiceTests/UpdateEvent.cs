@@ -5,6 +5,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -35,11 +36,7 @@ public class UpdateEvent
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -96,11 +93,7 @@ public class UpdateEvent
             Title = "event 1",
             Location = "event 1",
             Description = "event 1",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -157,11 +150,7 @@ public class UpdateEvent
             Title = "event 2",
             Location = "event 2",
             Description = "event 2",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -224,11 +213,7 @@ public class UpdateEvent
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -306,11 +291,7 @@ public class UpdateEvent
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
@@ -377,5 +358,27 @@ public class UpdateEvent
         _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
 
         _recurrenceService.Received().GetOccurrencesOfEvent(eventObj.RecurrencePattern);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EventIsNull()
+    {
+        Event eventObj = null;
+
+        _eventService.GetAllEventsByUserId(-1).ReturnsNull();
+
+        _eventService.GetEventById(-1, 48).ReturnsNull();
+
+        _overlappingEventService.GetOverlappedEventInformation(null, _events).Returns("Overlaps");
+
+        _recurrenceService.GetOccurrencesOfEvent(null).Returns([new DateOnly(2024, 5, 31)]);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _eventService.UpdateEvent(null, 48));
+
+        await _eventRepository.DidNotReceive().Update(null);
+
+        _overlappingEventService.DidNotReceiveWithAnyArgs().GetOverlappedEventInformation(null, _events);
+
+        _recurrenceService.DidNotReceive().GetOccurrencesOfEvent(null);
     }
 }

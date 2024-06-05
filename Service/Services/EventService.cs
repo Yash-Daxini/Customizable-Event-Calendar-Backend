@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.Extensions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
+using ArgumentNullException = Core.Exceptions.ArgumentNullException;
 
 namespace Core.Services;
 
@@ -50,12 +51,18 @@ public class EventService : IEventService
 
     public async Task<int> AddNonRecurringEvent(Event eventModel, int userId)
     {
-        eventModel.RecurrencePattern.MakeNonRecurringEvent();
+        if(eventModel is null)
+            throw new ArgumentNullException($" Event can't be null");
+
+        eventModel.MakeNonRecurringEvent();
         return await AddEvent(eventModel, userId);
     }
 
     public async Task<int> AddEvent(Event eventModel, int userId)
     {
+        if (eventModel is null)
+            throw new ArgumentNullException($" Event can't be null");
+
         CreateDateWiseEventCollaboratorList(eventModel);
 
         await HandleEventOverlap(eventModel, userId);
@@ -68,6 +75,9 @@ public class EventService : IEventService
 
     public async Task UpdateEvent(Event eventModel, int userId)
     {
+        if (eventModel is null)
+            throw new ArgumentNullException($" Event can't be null");
+
         await GetEventById(eventModel.Id, userId);
 
         CreateDateWiseEventCollaboratorList(eventModel);
@@ -81,10 +91,11 @@ public class EventService : IEventService
 
     public async Task DeleteEvent(int eventId, int userId)
     {
-        Event? eventObj = await _eventRepository.GetEventById(eventId);
+        if (eventId is <= 0 )
+            throw new ArgumentException($"Invalid event id");
 
-        if (eventObj is null)
-            throw new NotFoundException($"Event with id ${eventId} not present");
+        Event? eventObj = await _eventRepository.GetEventById(eventId) 
+                          ?? throw new NotFoundException($"Event with id ${eventId} not present");
 
         await _eventRepository.Delete(eventObj);
     }
@@ -107,6 +118,9 @@ public class EventService : IEventService
 
     public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate)
     {
+        if (startDate > endDate)
+            throw new ArgumentException("start date can't be greater than end date.");
+
         return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDate, endDate);
     }
 
@@ -135,6 +149,9 @@ public class EventService : IEventService
 
     public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)
     {
+        if (sharedCalendarId is <= 0)
+            throw new ArgumentException($"Invalid shared calendar id");
+
         SharedCalendar? sharedCalendar = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
 
         if (sharedCalendar == null) return [];

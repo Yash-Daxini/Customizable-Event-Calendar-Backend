@@ -17,16 +17,12 @@ public class EventGetEventInvitees
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration()
-            {
-                StartHour = 1,
-                EndHour = 2
-            },
+            Duration = new Duration(1,2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(),
                 EndDate = new DateOnly(),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Frequency = Frequency.Weekly,
                 Interval = 2,
                 ByWeekDay = [2, 6],
                 WeekOrder = null,
@@ -121,6 +117,26 @@ public class EventGetEventInvitees
     public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsIsEmpty()
     {
         _event.DateWiseEventCollaborators = [];
+
+        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
+
+        Assert.Equivalent(expectedInvitees, new List<EventCollaborator>());
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsDoesNotContainsAnyParticipants()
+    {
+        _event.DateWiseEventCollaborators[0].EventCollaborators = [];
+
+        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
+
+        Assert.Equivalent(expectedInvitees, new List<EventCollaborator>());
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsContainsNullCollaborators()
+    {
+        _event.DateWiseEventCollaborators[0].EventCollaborators = null;
 
         List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
 
