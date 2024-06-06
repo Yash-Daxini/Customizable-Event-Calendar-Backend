@@ -5,7 +5,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -374,7 +374,7 @@ public class AddNonRecurringEvent
 
         _eventRepository.Add(eventObj).Returns(1);
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _eventService.AddEvent(eventObj, 48));
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventService.AddEvent(eventObj, 48));
 
         await _eventRepository.DidNotReceive().Add(eventObj);
 

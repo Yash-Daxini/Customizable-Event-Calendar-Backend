@@ -3,7 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.SharedEventCollaborationServiceTests;
 
@@ -518,7 +518,7 @@ public class AddCollaborator
 
         _eventService.GetNonProposedEventsByUserId(50).Returns(_events);
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator));
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator));
 
         await _eventCollaboratorService.DidNotReceive().AddEventCollaborator(eventCollaborator);
     }

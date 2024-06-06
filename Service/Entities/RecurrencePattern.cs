@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Enums;
+using Core.Extensions;
 
 namespace Core.Entities;
 
@@ -26,17 +27,47 @@ public class RecurrencePattern
 
     public bool IsMonthlyEvent() => this.Frequency == Frequency.Monthly;
 
+    public bool IsYearlyEvent() => this.Frequency == Frequency.Yearly;
+
     public bool IsNonRecurrenceEvent() => this.Frequency == Frequency.None;
 
     public bool IsMonthDayNull() => this.ByMonthDay == null;
 
-    public int GetMonthlyOccurrencesCount()
+    private int GetMonthlyOccurrencesCount()
     {
-        return ((EndDate.Year - StartDate.Year) * 12 + (EndDate.Month - StartDate.Month)) / Interval + 1;
+        return (((EndDate.Year - StartDate.Year) * 12 + (EndDate.Month - StartDate.Month)) / Interval) + 1;
     }
 
-    public int GetYearlyOccurrencesCount()
+    private int GetYearlyOccurrencesCount()
     {
-        return (EndDate.Year - StartDate.Year) / Interval + 1;
+        return ((EndDate.Year - StartDate.Year) / Interval) + 1;
+    }
+
+    private int GetDailyOccurrencesCount()
+    {
+        TimeSpan difference = EndDate.ConvertToDateTime()
+                            - StartDate.ConvertToDateTime();
+
+        return ((int)difference.TotalDays / Interval) + 1;
+    }
+
+    private int GetWeeklyOccurrencesCount()
+    {
+        TimeSpan difference = EndDate.ConvertToDateTime()
+                            - StartDate.ConvertToDateTime();
+
+        return ((int)difference.TotalDays / (7 * Interval)) + 1;
+    }
+
+    public int GetOccurrencesCount()
+    {
+        return true switch
+        {
+            var _ when IsDailyEvent() => GetDailyOccurrencesCount(),
+            var _ when IsWeeklyEvent() => GetWeeklyOccurrencesCount(),
+            var _ when IsMonthlyEvent() => GetMonthlyOccurrencesCount(),
+            var _ when IsYearlyEvent() => GetYearlyOccurrencesCount(),
+            _ => 0,
+        };
     }
 }

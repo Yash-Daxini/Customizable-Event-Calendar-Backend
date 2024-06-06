@@ -25,8 +25,10 @@ public class RecurrenceService : IRecurrenceService
             return GetOccurrencesOfWeeklyEvents(recurrencePattern);
         else if (recurrencePattern.IsMonthlyEvent())
             return GetOccurrencesOfMonthlyEvents(recurrencePattern);
-        else
+        else if (recurrencePattern.IsYearlyEvent())
             return GetOccurrencesOfYearlyEvents(recurrencePattern);
+        else
+            return [];
     }
 
     private List<DateOnly> GetOccurrenceOfDailyEvents(RecurrencePattern recurrencePattern)
@@ -37,10 +39,7 @@ public class RecurrenceService : IRecurrenceService
         DateOnly endDateOfEvent = recurrencePattern.EndDate;
         int interval = recurrencePattern.Interval;
 
-        TimeSpan difference = endDateOfEvent.ConvertToDateTime()
-                            - startDateOfEvent.ConvertToDateTime();
-
-        int totalOccurrences = ((int)difference.TotalDays / interval) + 1;
+        int totalOccurrences = recurrencePattern.GetOccurrencesCount();
 
         return [..Enumerable.Range(0, totalOccurrences)
                             .Select(weekOffset => startDateOfEvent.AddDays(weekOffset * interval))
@@ -82,12 +81,9 @@ public class RecurrenceService : IRecurrenceService
 
         DateOnly startDateForSpecificWeekday = startDateOfWeek.AddDays(item - 1);
 
-        TimeSpan difference = endDateOfEvent.ConvertToDateTime()
-                            - startDateForSpecificWeekday.ConvertToDateTime();
-
         int interval = recurrencePattern.Interval;
 
-        int totalOccurrences = ((int)difference.TotalDays / 7 * interval) + 1;
+        int totalOccurrences = recurrencePattern.GetOccurrencesCount();
 
         return [..Enumerable.Range(0, totalOccurrences)
                             .Select(weekOffset => startDateForSpecificWeekday.AddDays(7 * weekOffset * interval))
@@ -120,9 +116,7 @@ public class RecurrenceService : IRecurrenceService
 
         DateOnly currentDate = new(startDateOfEvent.Year, month, GetMinimumDateFromGivenMonthAndDay(monthDay, month, startDateOfEvent.Year));
 
-        int totalOccurrences = isMonthly
-                               ? recurrencePattern.GetMonthlyOccurrencesCount()
-                               : recurrencePattern.GetYearlyOccurrencesCount();
+        int totalOccurrences = recurrencePattern.GetOccurrencesCount();
 
         return GetOccurrencesUsingMonthDay(monthDay, interval, currentDate, totalOccurrences, isMonthly);
     }
@@ -167,9 +161,7 @@ public class RecurrenceService : IRecurrenceService
 
         DateOnly currentDate = new(recurrencePattern.StartDate.Year, month, 1);
 
-        int totalOccurrences = isMonthly
-                               ? recurrencePattern.GetMonthlyOccurrencesCount()
-                               : recurrencePattern.GetYearlyOccurrencesCount();
+        int totalOccurrences = recurrencePattern.GetOccurrencesCount();
 
         return GetOccurrencesUsingWeekOrderAndWeekDay(weekOrder, dayOfWeek, currentDate, interval, totalOccurrences, isMonthly);
     }

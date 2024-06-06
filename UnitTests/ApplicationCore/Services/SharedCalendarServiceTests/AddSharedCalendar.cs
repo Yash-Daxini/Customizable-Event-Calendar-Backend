@@ -4,7 +4,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.SharedCalendarServiceTests;
 
@@ -61,7 +61,7 @@ public class AddSharedCalendar
 
         _sharedCalendarRepository.Add(sharedCalendar).Returns(1);
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _sharedCalendarService.AddSharedCalendar(sharedCalendar));
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _sharedCalendarService.AddSharedCalendar(sharedCalendar));
 
         _sharedCalendarRepository.DidNotReceive().Add(sharedCalendar);
     }

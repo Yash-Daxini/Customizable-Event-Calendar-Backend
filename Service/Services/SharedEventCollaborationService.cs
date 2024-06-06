@@ -2,7 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using ArgumentNullException = Core.Exceptions.NullArgumentException;
 
 namespace Core.Services;
 

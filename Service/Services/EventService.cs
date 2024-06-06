@@ -3,7 +3,7 @@ using Core.Exceptions;
 using Core.Extensions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using ArgumentNullException = Core.Exceptions.NullArgumentException;
 
 namespace Core.Services;
 

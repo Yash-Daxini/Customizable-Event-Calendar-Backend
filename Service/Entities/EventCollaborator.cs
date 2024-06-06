@@ -17,10 +17,7 @@ public class EventCollaborator : IEntity
         EventId = eventCollaborator.EventId;
     }
 
-    public EventCollaborator()
-    {
-        
-    }
+    public EventCollaborator() { }
 
     public int Id { get; set; }
 

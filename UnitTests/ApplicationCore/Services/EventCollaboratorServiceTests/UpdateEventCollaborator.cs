@@ -6,7 +6,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -83,7 +83,7 @@ public class UpdateEventCollaborator
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
 
         _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
     }

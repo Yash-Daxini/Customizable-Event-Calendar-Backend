@@ -5,7 +5,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -55,7 +55,7 @@ public class AddEventCollaborator
     {
         EventCollaborator eventCollaborator = null;
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+        await Assert.ThrowsAsync<NullArgumentException>(async () =>
         {
             _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
 

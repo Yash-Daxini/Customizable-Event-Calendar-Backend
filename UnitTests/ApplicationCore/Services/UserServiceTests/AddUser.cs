@@ -4,7 +4,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -47,7 +47,7 @@ public class AddUser
 
         _userRepository.Add(user).Returns(1);
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async() => await _userService.AddUser(user));
+        await Assert.ThrowsAsync<NullArgumentException>(async() => await _userService.AddUser(user));
 
         await _userRepository.DidNotReceive().Add(user);
     }

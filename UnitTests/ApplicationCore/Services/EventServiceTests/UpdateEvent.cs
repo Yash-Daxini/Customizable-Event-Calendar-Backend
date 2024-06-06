@@ -5,7 +5,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using ArgumentNullException = Core.Exceptions.ArgumentNullException;
+using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -373,7 +373,7 @@ public class UpdateEvent
 
         _recurrenceService.GetOccurrencesOfEvent(null).Returns([new DateOnly(2024, 5, 31)]);
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _eventService.UpdateEvent(null, 48));
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventService.UpdateEvent(null, 48));
 
         await _eventRepository.DidNotReceive().Update(null);
 
