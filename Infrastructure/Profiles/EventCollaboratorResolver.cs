@@ -13,6 +13,17 @@ public class EventCollaboratorResolver : IValueResolver<Event, EventDataModel, L
         _mapper = mapper;
     }
 
+    public EventCollaboratorResolver()
+    {
+        var mappingConfig = new MapperConfiguration(mc =>
+        {
+            mc.AddProfile(new EventCollaboratorProfile());
+            mc.AddProfile(new UserProfile());
+        });
+        IMapper mapper = mappingConfig.CreateMapper();
+        _mapper = mapper;
+    }
+
     public List<EventCollaboratorDataModel> Resolve(Event source, EventDataModel destination, List<EventCollaboratorDataModel> destMember, ResolutionContext context)
     {
         List<EventCollaboratorDataModel> eventCollaboratorDataModels = [];

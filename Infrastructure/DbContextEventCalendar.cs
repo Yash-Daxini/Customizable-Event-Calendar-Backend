@@ -14,6 +14,7 @@ namespace Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             var dateOnlyConverter = new DateOnlyConverter();
 
             modelBuilder.Entity<EventDataModel>()
@@ -52,6 +53,8 @@ namespace Infrastructure
                 .HasConversion(dateOnlyConverter);
 
             base.OnModelCreating(modelBuilder);
+
+
         }
 
         public DbSet<EventCollaboratorDataModel> EventCollaborators { get; set; }

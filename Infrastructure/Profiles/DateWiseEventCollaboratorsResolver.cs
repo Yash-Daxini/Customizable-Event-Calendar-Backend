@@ -13,6 +13,17 @@ public class DateWiseEventCollaboratorsResolver : IValueResolver<EventDataModel,
         _mapper = mapper;
     }
 
+    public DateWiseEventCollaboratorsResolver()
+    {
+        var mappingConfig = new MapperConfiguration(mc =>
+        {
+            mc.AddProfile(new EventCollaboratorProfile());
+            mc.AddProfile(new UserProfile());
+        });
+        IMapper mapper = mappingConfig.CreateMapper();
+        _mapper = mapper;
+    }
+
     public List<EventCollaboratorsByDate> Resolve(EventDataModel source, Event destination, List<EventCollaboratorsByDate> destMember, ResolutionContext context)
     {
         return source.EventCollaborators
