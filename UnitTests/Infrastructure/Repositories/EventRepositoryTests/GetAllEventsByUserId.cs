@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure;
 using Infrastructure.DataModels;
+using Infrastructure.Profiles;
 using Infrastructure.Repositories;
 using NSubstitute;
 

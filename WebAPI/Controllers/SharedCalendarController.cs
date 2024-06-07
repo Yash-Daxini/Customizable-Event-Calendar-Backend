@@ -55,7 +55,7 @@ public class SharedCalendarController : ControllerBase
     }
 
     [HttpPost()]
-    public async Task<ActionResult> AddUser([FromBody] SharedCalendarDto sharedCalendarDto)
+    public async Task<ActionResult> AddSharedCalendar([FromBody] SharedCalendarDto sharedCalendarDto)
     {
         try
         {

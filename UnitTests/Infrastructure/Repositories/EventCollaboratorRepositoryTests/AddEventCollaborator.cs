@@ -31,7 +31,7 @@ public class AddEventCollaborator
             EventId = 1,
             User = new()
             {
-                Id = 1,
+                //Id = 1,
                 Name = "a",
                 Email = "a",
                 Password = "a",
