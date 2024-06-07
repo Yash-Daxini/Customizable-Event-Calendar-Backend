@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.Profiles;
+using Infrastructure.DataModels;
 using Infrastructure.Repositories;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -13,25 +14,13 @@ public class UpdateSharedCalendar
     private readonly IMapper _mapper;
     public UpdateSharedCalendar()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new SharedCalendarProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
     public async Task Should_UpdateSharedCalendar_When_SharedCalendarAvailableWithId()
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
-
-        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
-
-        _dbContext.ChangeTracker.Clear();   
 
         SharedCalendar sharedCalendar = new()
         {
@@ -53,6 +42,22 @@ public class UpdateSharedCalendar
             FromDate = new DateOnly(2024, 6, 7),
             ToDate = new DateOnly(2024, 6, 7)
         };
+
+        SharedCalendarDataModel sharedCalendarDataModel = new()
+        {
+            SenderId = 1,
+            ReceiverId = 2,
+            FromDate = new DateOnly(2024, 6, 7),
+            ToDate = new DateOnly(2024, 6, 7)
+        };
+
+        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(sharedCalendarDataModel);
+
+        _mapper.Map<SharedCalendar>(sharedCalendarDataModel).ReturnsForAnyArgs(sharedCalendar);
+
+        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
+
+        _dbContext.ChangeTracker.Clear();   
 
         await sharedCalendarRepository.Update(sharedCalendar);
 

@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebAPI\Controllers\" />
+    <Folder Include="WebAPI\Controllers\EventCollaborationControllerTests\" />
   </ItemGroup>
 
 </Project>

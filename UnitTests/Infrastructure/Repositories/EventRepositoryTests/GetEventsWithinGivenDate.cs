@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.Profiles;
+using Infrastructure.DataModels;
 using Infrastructure.Repositories;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -14,16 +15,7 @@ public class GetEventsWithinGivenDate
 
     public GetEventsWithinGivenDate()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
-
+        _mapper = Substitute.For<IMapper>();
         _events = [
             new() {
                 Id = 1,
@@ -127,7 +119,15 @@ public class GetEventsWithinGivenDate
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
+        EventDataModel eventDataModel = _dbContextEvent.Events.First(eventObj => eventObj.Id == userId);
+
+        eventDataModel.EventCollaborators = [_dbContextEvent.EventCollaborators.First(eventCollaborator => eventCollaborator.Id == userId)];
+
+        List<EventDataModel> eventDataModels = [eventDataModel];
+
         _events.RemoveAt(userId - 1);
+
+        _mapper.Map<List<Event>>(eventDataModels).ReturnsForAnyArgs(_events);
 
         List<Event> actualResult = await eventRepository.GetEventsWithinGivenDateByUserId(userId, start, end);
 

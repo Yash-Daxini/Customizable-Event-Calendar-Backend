@@ -2,7 +2,8 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using Infrastructure.Profiles;
+using NSubstitute;
+using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -14,15 +15,7 @@ public class AddSharedCalendar
 
     public AddSharedCalendar()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new SharedCalendarProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
         _sharedCalendars = [new() {
             Id = 1,
             Sender = new(){
@@ -47,8 +40,6 @@ public class AddSharedCalendar
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 
-        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
-
         SharedCalendar sharedCalendar = new()
         {
             Sender = new()
@@ -69,9 +60,23 @@ public class AddSharedCalendar
             ToDate = new DateOnly(2024, 6, 7)
         };
 
+        SharedCalendarDataModel sharedCalendarDataModel = new()
+        {
+            SenderId = 1,
+            ReceiverId = 2,
+            FromDate = new DateOnly(2024, 6, 7),
+            ToDate = new DateOnly(2024, 6, 7)
+        };
+
+        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(sharedCalendarDataModel);
+
+        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
+
         int id = await sharedCalendarRepository.Add(sharedCalendar);
 
         sharedCalendar.Id = id;
+
+        _mapper.Map<SharedCalendar>(sharedCalendarDataModel).ReturnsForAnyArgs(sharedCalendar);
 
         SharedCalendar? addedSharedCalendar = await sharedCalendarRepository.GetSharedCalendarById(id);
 

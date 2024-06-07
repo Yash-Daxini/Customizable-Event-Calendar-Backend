@@ -2,7 +2,8 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using Infrastructure.Profiles;
+using NSubstitute;
+using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -13,23 +14,13 @@ public class DeleteEventCollaborator
 
     public DeleteEventCollaborator()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
     public async Task Should_UpdateEventCollaborator_When_EventCollaboratorAvailableWithGivenId()
     {
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
-
-        EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
         EventCollaborator eventCollaborator = new()
         {
@@ -48,7 +39,23 @@ public class DeleteEventCollaborator
             ProposedDuration = null
         };
 
+        EventCollaboratorDataModel eventCollaboratorDataModel = new()
+        {
+            Id = 1,
+            EventId = 1,
+            UserId = 1,
+            ParticipantRole = "Organizer",
+            ConfirmationStatus = "Accept",
+            ProposedStartHour = null,
+            ProposedEndHour = null,
+            EventDate = new DateOnly(2024, 6, 7)
+        };
+
+        _mapper.Map<EventCollaboratorDataModel>(eventCollaborator).ReturnsForAnyArgs(eventCollaboratorDataModel);
+
         _dbContext.ChangeTracker.Clear();
+
+        EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
         await eventCollaboratorRepository.Delete(eventCollaborator);
 

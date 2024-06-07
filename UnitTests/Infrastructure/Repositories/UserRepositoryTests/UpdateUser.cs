@@ -2,7 +2,8 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using Infrastructure.Profiles;
+using NSubstitute;
+using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -12,26 +13,9 @@ public class UpdateUser
 
     private readonly IMapper _mapper;
 
-    private readonly List<User> _users;
-
     public UpdateUser()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new SharedCalendarProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
-        _users = [ new(){
-
-            Id = 1,
-            Name = "a",
-            Password = "a",
-            Email = "a",
-        }];
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
@@ -46,6 +30,18 @@ public class UpdateUser
             Password = "b",
             Email = "b",
         };
+
+        UserDataModel userDataModel = new()
+        {
+            Id = 1,
+            Name = "b",
+            Password = "b",
+            Email = "b",
+        };
+
+        _mapper.Map<UserDataModel>(user).ReturnsForAnyArgs(userDataModel);
+
+        _mapper.Map<User>(userDataModel).ReturnsForAnyArgs(user);
 
         _dbContext.ChangeTracker.Clear();
 

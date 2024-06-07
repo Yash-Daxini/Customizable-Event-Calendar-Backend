@@ -2,7 +2,8 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using Infrastructure.Profiles;
+using NSubstitute;
+using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -13,23 +14,13 @@ public class DeleteSharedCalendar
     private readonly IMapper _mapper;
     public DeleteSharedCalendar()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new SharedCalendarProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
     public async Task Should_DeleteSharedCalendar_When_SharedCalendarAvailableWithId()
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
-
-        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 
         _dbContext.ChangeTracker.Clear();
 
@@ -53,6 +44,19 @@ public class DeleteSharedCalendar
             FromDate = new DateOnly(2024, 6, 7),
             ToDate = new DateOnly(2024, 6, 7)
         };
+
+        SharedCalendarDataModel sharedCalendarDataModel = new()
+        {
+            Id = 1,
+            SenderId = 1,
+            ReceiverId = 2,
+            FromDate = new DateOnly(2024, 6, 7),
+            ToDate = new DateOnly(2024, 6, 7)
+        };
+
+        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(sharedCalendarDataModel);
+
+        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 
         await sharedCalendarRepository.Delete(sharedCalendar);
 

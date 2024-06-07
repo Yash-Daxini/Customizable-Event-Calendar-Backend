@@ -2,7 +2,8 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using Infrastructure.Profiles;
+using NSubstitute;
+using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -12,26 +13,9 @@ public class GetUserById
 
     private readonly IMapper _mapper;
 
-    private readonly List<User> _users;
-
     public GetUserById()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new SharedCalendarProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
-        _users = [ new(){
-
-            Id = 1,
-            Name = "a",
-            Password = "a",
-            Email = "a",
-        }];
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
@@ -39,10 +23,30 @@ public class GetUserById
     {
         _dbContext = await new UserRepositoryDBContext().GetDatabaseContext();
 
+        User user = new()
+        {
+
+            Id = 1,
+            Name = "a",
+            Password = "a",
+            Email = "a",
+        };
+
+        UserDataModel userDataModel = new()
+        {
+            Name = "b",
+            Password = "b",
+            Email = "b",
+        };
+
+        _mapper.Map<UserDataModel>(user).ReturnsForAnyArgs(userDataModel);
+
+        _mapper.Map<User>(userDataModel).ReturnsForAnyArgs(user);
+
         UserRepository userRepository = new(_dbContext, _mapper);
 
-        User? user = await userRepository.GetUserById(1);
+        User? userById = await userRepository.GetUserById(1);
 
-        Assert.Equivalent(_users[0], user);
+        Assert.Equivalent(user,userById);
     }
 }

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.Profiles;
+using Infrastructure.DataModels;
 using Infrastructure.Repositories;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -14,15 +15,7 @@ public class GetAllEventsByUserId
 
     public GetAllEventsByUserId()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
         _events = [
             new() {
                 Id = 1,
@@ -114,17 +107,31 @@ public class GetAllEventsByUserId
             ];
     }
 
-    [Fact]
-    public async Task Should_ReturnListEvents_When_EventAvailableWithGivenUserId()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task Should_ReturnListEvents_When_EventAvailableWithGivenUserId(int userId)
     {
+        //Arrange
+
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+
+        EventDataModel eventDataModel = _dbContextEvent.Events.First(eventObj => eventObj.Id == userId);
+
+        eventDataModel.EventCollaborators = [_dbContextEvent.EventCollaborators.First(eventCollaborator => eventCollaborator.Id == userId)];
+
+        List<EventDataModel> eventDataModels = [eventDataModel];
+
+        _events.RemoveAt(userId-1);
+
+        _mapper.Map<List<Event>>(eventDataModels).ReturnsForAnyArgs(_events);
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
-        _events.RemoveAt(1);
-
+        //Act
         List<Event> actualResult = await eventRepository.GetAllEventsByUserId(1);
 
+        //Assert
         Assert.Equivalent(_events, actualResult);
     }
 

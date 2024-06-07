@@ -7,7 +7,7 @@ using Core.Entities;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository : BaseRepository<User,UserDataModel>,IUserRepository
+public class UserRepository : BaseRepository<User, UserDataModel>, IUserRepository
 {
     private readonly DbContextEventCalendar _dbContext;
 
@@ -21,10 +21,9 @@ public class UserRepository : BaseRepository<User,UserDataModel>,IUserRepository
 
     public async Task<User?> GetUserById(int userId)
     {
-        return await _dbContext.Users
+        return _mapper.Map<User>(await _dbContext.Users
                                .Where(user => user.Id == userId)
-                               .ProjectTo<User>(_mapper.ConfigurationProvider)
-                               .FirstOrDefaultAsync();
+                               .FirstOrDefaultAsync());
     }
 
     public async Task<User?> AuthenticateUser(User user) //Extra

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.Profiles;
+using Infrastructure.DataModels;
 using Infrastructure.Repositories;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -13,15 +14,7 @@ public class DeleteEvent
 
     public DeleteEvent()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
@@ -33,7 +26,36 @@ public class DeleteEvent
 
         Event? eventObj = await eventRepository.GetEventById(1);
 
+        EventDataModel eventDataModel = new()
+        {
+            Id = 1,
+            Title = "Test",
+            Description = "Test",
+            Location = "Test",
+            UserId = 1,
+            EventStartHour = 1,
+            EventEndHour = 2,
+            EventStartDate = new DateOnly(2024, 6, 7),
+            EventEndDate = new DateOnly(2024, 6, 7),
+            Frequency = "None",
+            Interval = 1,
+            ByMonth = null,
+            ByMonthDay = null,
+            ByWeekDay = null,
+            EventCollaborators = [new (){
+                                EventDate = new DateOnly(2024, 6, 8),
+                                ParticipantRole = "Organizer",
+                                ConfirmationStatus = "Accept",
+                                ProposedStartHour = null,
+                                ProposedEndHour = null,
+                                UserId = 1
+                            }
+                            ]
+        };
+
         _dbContextEvent.ChangeTracker.Clear();
+
+        _mapper.Map<EventDataModel>(eventObj).ReturnsForAnyArgs(eventDataModel);
 
         await eventRepository.Delete(eventObj);
 
@@ -41,5 +63,5 @@ public class DeleteEvent
 
         Assert.Null(deletedEvent);
     }
-        
+
 }

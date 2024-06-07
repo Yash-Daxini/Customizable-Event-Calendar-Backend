@@ -2,7 +2,8 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using Infrastructure.Profiles;
+using NSubstitute;
+using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -13,15 +14,7 @@ public class UpdateEventCollaborator
 
     public UpdateEventCollaborator()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
@@ -47,6 +40,21 @@ public class UpdateEventCollaborator
             },
             ProposedDuration = null
         };
+
+        EventCollaboratorDataModel eventCollaboratorDataModel = new()
+        {
+            EventId = 1,
+            UserId = 1,
+            ParticipantRole = "Organizer",
+            ConfirmationStatus = "Accept",
+            ProposedStartHour = null,
+            ProposedEndHour = null,
+            EventDate = new DateOnly(2024, 6, 7)
+        };
+
+        _mapper.Map<EventCollaboratorDataModel>(eventCollaborator).ReturnsForAnyArgs(eventCollaboratorDataModel);
+
+        _mapper.Map<EventCollaborator>(eventCollaboratorDataModel).ReturnsForAnyArgs(eventCollaborator);
 
         _dbContext.ChangeTracker.Clear();
 

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.Profiles;
+using Infrastructure.DataModels;
 using Infrastructure.Repositories;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -13,23 +14,14 @@ public class AddEventCollaborator
 
     public AddEventCollaborator()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
     public async Task Should_AddEventCollaboratorAndReturnId_When_CallsRepositoryMethod()
     {
+        //Arrange
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
-
-        EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
         EventCollaborator eventCollaborator = new()
         {
@@ -47,10 +39,27 @@ public class AddEventCollaborator
             ProposedDuration = null
         };
 
+        EventCollaboratorDataModel eventCollaboratorDataModel = new()
+        {
+            EventId = 1,
+            UserId = 1,
+            ParticipantRole = "Organizer",
+            ConfirmationStatus = "Accept",
+            ProposedStartHour = null,
+            ProposedEndHour = null,
+            EventDate = new DateOnly(2024, 6, 7)
+        };
+
+        _mapper.Map<EventCollaboratorDataModel>(eventCollaborator).ReturnsForAnyArgs(eventCollaboratorDataModel);
+
+        EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
+
+        //Act
         int id = await eventCollaboratorRepository.Add(eventCollaborator);
 
         bool isContains = _dbContext.EventCollaborators.Any(e => e.Id == id);
 
+        //Assert
         Assert.True(id > 0 && isContains);
     }
 }

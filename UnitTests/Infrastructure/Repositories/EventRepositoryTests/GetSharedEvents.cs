@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
+using Infrastructure.DataModels;
 using Infrastructure.Profiles;
 using Infrastructure.Repositories;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -14,17 +16,7 @@ public class GetSharedEvents
 
     public GetSharedEvents()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new SharedCalendarProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
-
+        _mapper = Substitute.For<IMapper>();
         _events = [
             new() {
                 Id = 1,
@@ -119,16 +111,48 @@ public class GetSharedEvents
     [Fact]
     public async Task Should_ReturnListOfEvents_When_SharedCalendarAvailableWithGivenId()
     {
+        //Arrange
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventDataModel eventDataModel = _dbContextEvent.Events.First(eventObj => eventObj.Id == 1);
+
+        eventDataModel.EventCollaborators = [_dbContextEvent.EventCollaborators.First(eventCollaborator => eventCollaborator.Id == 1)];
+
+        List<EventDataModel> eventDataModels = [eventDataModel];
 
         _events.RemoveAt(1);
 
-        SharedCalendar sharedCalendar = _mapper.Map<SharedCalendar>(_dbContextEvent.SharedCalendars.First());
+        _mapper.Map<List<Event>>(eventDataModels).ReturnsForAnyArgs(_events);
 
+        SharedCalendar sharedCalendar = new()
+        {
+            Id = 1,
+            Sender = new()
+            {
+                Id = 1,
+                Name = "a",
+                Email = "a",
+                Password = "a",
+            },
+            Receiver = new()
+            {
+                Id = 2,
+                Name = "b",
+                Email = "b",
+                Password = "b",
+            },
+            FromDate = new DateOnly(2024, 6, 7),
+            ToDate = new DateOnly(2024, 6, 7)
+        };
+
+        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(_dbContextEvent.SharedCalendars.First());
+
+        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+
+        //Act
         List<Event> actualResult = await eventRepository.GetSharedEvents(sharedCalendar);
-
-        Assert.Equivalent(_events,actualResult);
+        
+        //Assert
+        Assert.Equivalent(_events, actualResult);
     }
 }

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.Profiles;
+using Infrastructure.DataModels;
 using Infrastructure.Repositories;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -13,15 +14,7 @@ public class AddEvent
 
     public AddEvent()
     {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new EventProfile());
-            mc.AddProfile(new UserProfile());
-            mc.AddProfile(new EventCollaboratorProfile());
-            mc.AddProfile(new UserProfile());
-        });
-        IMapper mapper = mappingConfig.CreateMapper();
-        _mapper = mapper;
+        _mapper = Substitute.For<IMapper>();
     }
 
     [Fact]
@@ -31,7 +24,7 @@ public class AddEvent
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
-        Event eventToAdd = new Event()
+        Event eventToAdd = new()
         {
             Title = "Test2",
             Description = "Test2",
@@ -47,7 +40,7 @@ public class AddEvent
                 ByMonthDay = null,
                 WeekOrder = null,
             },
-            DateWiseEventCollaborators = 
+            DateWiseEventCollaborators =
             [
                     new (){
                         EventDate = new DateOnly(2024, 6, 8),
@@ -79,6 +72,39 @@ public class AddEvent
                     }
             ]
         };
+
+        EventDataModel eventDataModel = new()
+        {
+            Title = "Test2",
+            Description = "Test2",
+            Location = "Test2",
+            EventStartDate = new DateOnly(2024, 6, 8),
+            EventEndDate = new DateOnly(2024, 6, 8),
+            EventStartHour = 3,
+            EventEndHour = 4,
+            Frequency = "None",
+            Interval = 1,
+            ByMonth = null,
+            ByMonthDay = null,
+            WeekOrder = null,
+            EventCollaborators = [new (){
+                                EventDate = new DateOnly(2024, 6, 8),
+                                ParticipantRole = "Organizer",
+                                ConfirmationStatus = "Accept",
+                                ProposedStartHour = null,
+                                ProposedEndHour = null,
+                                UserId = 3
+                            },new (){
+                                EventDate = new DateOnly(2024, 6, 8),
+                                ParticipantRole = "Participant",
+                                ConfirmationStatus = "Pending",
+                                ProposedStartHour = null,
+                                ProposedEndHour = null,
+                                UserId = 2
+                            }]
+        };
+
+        _mapper.Map<EventDataModel>(eventToAdd).ReturnsForAnyArgs(eventDataModel);
 
         int eventId = await eventRepository.Add(eventToAdd);
 
