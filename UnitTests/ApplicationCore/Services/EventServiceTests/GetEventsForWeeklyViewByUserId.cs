@@ -205,8 +205,8 @@ public class GetEventsForWeeklyViewByUserId
     [Fact]
     public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
     {
-        DateOnly startDateOfWeek = new(2024, 6, 3);
-        DateOnly endDateOfWeek = new(2024, 6, 9);
+        DateOnly startDateOfWeek = DateTimeUtills.GetStartDateOfWeek(DateTime.Now);
+        DateOnly endDateOfWeek = DateTimeUtills.GetEndDateOfWeek(DateTime.Now);
 
         _eventRepository.GetEventsWithinGivenDateByUserId(48, startDateOfWeek, endDateOfWeek).ReturnsForAnyArgs(_events);
 

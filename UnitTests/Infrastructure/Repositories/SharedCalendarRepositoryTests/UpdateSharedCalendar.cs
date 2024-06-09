@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.DataModels;
 using Infrastructure.Repositories;
-using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
-public class UpdateSharedCalendar
+public class UpdateSharedCalendar : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
 
     private readonly IMapper _mapper;
-    public UpdateSharedCalendar()
+    public UpdateSharedCalendar(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -42,18 +40,6 @@ public class UpdateSharedCalendar
             FromDate = new DateOnly(2024, 6, 7),
             ToDate = new DateOnly(2024, 6, 7)
         };
-
-        SharedCalendarDataModel sharedCalendarDataModel = new()
-        {
-            SenderId = 1,
-            ReceiverId = 2,
-            FromDate = new DateOnly(2024, 6, 7),
-            ToDate = new DateOnly(2024, 6, 7)
-        };
-
-        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(sharedCalendarDataModel);
-
-        _mapper.Map<SharedCalendar>(sharedCalendarDataModel).ReturnsForAnyArgs(sharedCalendar);
 
         SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 

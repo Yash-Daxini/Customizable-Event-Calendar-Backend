@@ -1,22 +1,19 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.DataModels;
-using Infrastructure.Profiles;
 using Infrastructure.Repositories;
-using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
-public class GetSharedEvents
+public class GetSharedEvents : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContextEvent;
     private readonly IMapper _mapper;
     private readonly List<Event> _events;
 
-    public GetSharedEvents()
+    public GetSharedEvents(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
         _events = [
             new() {
                 Id = 1,
@@ -114,15 +111,7 @@ public class GetSharedEvents
         //Arrange
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
-        EventDataModel eventDataModel = _dbContextEvent.Events.First(eventObj => eventObj.Id == 1);
-
-        eventDataModel.EventCollaborators = [_dbContextEvent.EventCollaborators.First(eventCollaborator => eventCollaborator.Id == 1)];
-
-        List<EventDataModel> eventDataModels = [eventDataModel];
-
         _events.RemoveAt(1);
-
-        _mapper.Map<List<Event>>(eventDataModels).ReturnsForAnyArgs(_events);
 
         SharedCalendar sharedCalendar = new()
         {
@@ -144,8 +133,6 @@ public class GetSharedEvents
             FromDate = new DateOnly(2024, 6, 7),
             ToDate = new DateOnly(2024, 6, 7)
         };
-
-        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(_dbContextEvent.SharedCalendars.First());
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 

@@ -3,18 +3,17 @@ using Core.Entities;
 using Infrastructure;
 using Infrastructure.DataModels;
 using Infrastructure.Repositories;
-using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
-public class AddEvent
+public class AddEvent : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContextEvent;
     private readonly IMapper _mapper;
 
-    public AddEvent()
+    public AddEvent(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -42,26 +41,31 @@ public class AddEvent
             },
             DateWiseEventCollaborators =
             [
-                    new (){
+                    new()
+                    {
                         EventDate = new DateOnly(2024, 6, 8),
                         EventCollaborators = [
-                            new (){
+                            new()
+                            {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
                                 ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                                 ProposedDuration = null,
-                                User = new(){
+                                User = new()
+                                {
                                     Id = 3,
                                     Name = "c",
                                     Email = "c",
                                     Password = "c",
                                 }
-                            },new (){
+                            }, new()
+                            {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                                 ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
                                 ProposedDuration = null,
-                                User = new(){
+                                User = new()
+                                {
                                     Id = 2,
                                     Name = "b",
                                     Email = "b",
@@ -72,39 +76,6 @@ public class AddEvent
                     }
             ]
         };
-
-        EventDataModel eventDataModel = new()
-        {
-            Title = "Test2",
-            Description = "Test2",
-            Location = "Test2",
-            EventStartDate = new DateOnly(2024, 6, 8),
-            EventEndDate = new DateOnly(2024, 6, 8),
-            EventStartHour = 3,
-            EventEndHour = 4,
-            Frequency = "None",
-            Interval = 1,
-            ByMonth = null,
-            ByMonthDay = null,
-            WeekOrder = null,
-            EventCollaborators = [new (){
-                                EventDate = new DateOnly(2024, 6, 8),
-                                ParticipantRole = "Organizer",
-                                ConfirmationStatus = "Accept",
-                                ProposedStartHour = null,
-                                ProposedEndHour = null,
-                                UserId = 3
-                            },new (){
-                                EventDate = new DateOnly(2024, 6, 8),
-                                ParticipantRole = "Participant",
-                                ConfirmationStatus = "Pending",
-                                ProposedStartHour = null,
-                                ProposedEndHour = null,
-                                UserId = 2
-                            }]
-        };
-
-        _mapper.Map<EventDataModel>(eventToAdd).ReturnsForAnyArgs(eventDataModel);
 
         int eventId = await eventRepository.Add(eventToAdd);
 

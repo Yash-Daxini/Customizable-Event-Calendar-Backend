@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.DataModels;
 using Infrastructure.Repositories;
-using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
-public class GetEventCollaboratorById
+public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
-    public GetEventCollaboratorById()
+    public GetEventCollaboratorById(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -38,21 +36,6 @@ public class GetEventCollaboratorById
             },
             ProposedDuration = null
         };
-
-        EventCollaboratorDataModel eventCollaboratorDataModel = new()
-        {
-            EventId = 1,
-            UserId = 1,
-            ParticipantRole = "Organizer",
-            ConfirmationStatus = "Accept",
-            ProposedStartHour = null,
-            ProposedEndHour = null,
-            EventDate = new DateOnly(2024, 6, 7)
-        };
-
-        _mapper.Map<EventCollaboratorDataModel>(eventCollaborator).ReturnsForAnyArgs(eventCollaboratorDataModel);
-
-        _mapper.Map<EventCollaborator>(eventCollaboratorDataModel).ReturnsForAnyArgs(eventCollaborator);
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 

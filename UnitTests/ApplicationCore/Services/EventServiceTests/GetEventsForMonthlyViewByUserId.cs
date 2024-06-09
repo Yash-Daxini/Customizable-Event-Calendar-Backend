@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Extensions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
@@ -204,8 +205,8 @@ public class GetEventsForMonthlyViewByUserId
     [Fact]
     public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
     {
-        DateOnly startDateOfMonth = new(2024, 6, 1);
-        DateOnly endDateOfMonth = new(2024, 6, 30);
+        DateOnly startDateOfMonth = DateTimeUtills.GetStartDateOfMonth(DateTime.Now);
+        DateOnly endDateOfMonth = DateTimeUtills.GetEndDateOfMonth(DateTime.Now);
 
         _eventRepository.GetEventsWithinGivenDateByUserId(48, startDateOfMonth, endDateOfMonth).ReturnsForAnyArgs(_events);
 

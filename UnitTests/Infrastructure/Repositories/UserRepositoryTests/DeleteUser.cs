@@ -2,20 +2,18 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using NSubstitute;
-using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
-public class DeleteUser
+public class DeleteUser : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
 
     private readonly IMapper _mapper;
 
-    public DeleteUser()
+    public DeleteUser(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -30,16 +28,6 @@ public class DeleteUser
             Password = "a",
             Email = "a",
         };
-
-        UserDataModel userDataModel = new()
-        {
-            Id = 1,
-            Name = "b",
-            Password = "b",
-            Email = "b",
-        };
-
-        _mapper.Map<UserDataModel>(user).ReturnsForAnyArgs(userDataModel);
 
         _dbContext.ChangeTracker.Clear();
 

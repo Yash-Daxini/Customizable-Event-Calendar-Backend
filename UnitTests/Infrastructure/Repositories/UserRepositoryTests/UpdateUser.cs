@@ -2,20 +2,18 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using NSubstitute;
-using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
-public class UpdateUser
+public class UpdateUser : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
 
     private readonly IMapper _mapper;
 
-    public UpdateUser()
+    public UpdateUser(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -30,18 +28,6 @@ public class UpdateUser
             Password = "b",
             Email = "b",
         };
-
-        UserDataModel userDataModel = new()
-        {
-            Id = 1,
-            Name = "b",
-            Password = "b",
-            Email = "b",
-        };
-
-        _mapper.Map<UserDataModel>(user).ReturnsForAnyArgs(userDataModel);
-
-        _mapper.Map<User>(userDataModel).ReturnsForAnyArgs(user);
 
         _dbContext.ChangeTracker.Clear();
 

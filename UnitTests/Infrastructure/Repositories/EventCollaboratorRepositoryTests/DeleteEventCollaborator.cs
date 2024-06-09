@@ -2,19 +2,17 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using NSubstitute;
-using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
-public class DeleteEventCollaborator
+public class DeleteEventCollaborator : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
-    public DeleteEventCollaborator()
+    public DeleteEventCollaborator(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -38,20 +36,6 @@ public class DeleteEventCollaborator
             },
             ProposedDuration = null
         };
-
-        EventCollaboratorDataModel eventCollaboratorDataModel = new()
-        {
-            Id = 1,
-            EventId = 1,
-            UserId = 1,
-            ParticipantRole = "Organizer",
-            ConfirmationStatus = "Accept",
-            ProposedStartHour = null,
-            ProposedEndHour = null,
-            EventDate = new DateOnly(2024, 6, 7)
-        };
-
-        _mapper.Map<EventCollaboratorDataModel>(eventCollaborator).ReturnsForAnyArgs(eventCollaboratorDataModel);
 
         _dbContext.ChangeTracker.Clear();
 

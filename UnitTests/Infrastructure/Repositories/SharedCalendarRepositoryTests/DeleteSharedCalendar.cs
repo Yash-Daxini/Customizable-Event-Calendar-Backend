@@ -2,19 +2,17 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using NSubstitute;
-using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
-public class DeleteSharedCalendar
+public class DeleteSharedCalendar : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
 
     private readonly IMapper _mapper;
-    public DeleteSharedCalendar()
+    public DeleteSharedCalendar(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -44,17 +42,6 @@ public class DeleteSharedCalendar
             FromDate = new DateOnly(2024, 6, 7),
             ToDate = new DateOnly(2024, 6, 7)
         };
-
-        SharedCalendarDataModel sharedCalendarDataModel = new()
-        {
-            Id = 1,
-            SenderId = 1,
-            ReceiverId = 2,
-            FromDate = new DateOnly(2024, 6, 7),
-            ToDate = new DateOnly(2024, 6, 7)
-        };
-
-        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(sharedCalendarDataModel);
 
         SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 

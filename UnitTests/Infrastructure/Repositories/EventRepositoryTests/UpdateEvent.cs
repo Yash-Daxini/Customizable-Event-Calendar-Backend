@@ -7,14 +7,14 @@ using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
-public class UpdateEvent
+public class UpdateEvent : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContextEvent;
     private readonly IMapper _mapper;
 
-    public UpdateEvent()
+    public UpdateEvent(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -77,42 +77,6 @@ public class UpdateEvent
                     }
             ]
         };
-
-        EventDataModel eventDataModel = new()
-        {
-            Id = 1,
-            Title = "Test1",
-            Description = "Test1",
-            Location = "Test1",
-            EventStartDate = new DateOnly(2024, 6, 8),
-            EventEndDate = new DateOnly(2024, 6, 8),
-            EventStartHour = 3,
-            EventEndHour = 4,
-            Frequency = "None",
-            Interval = 1,
-            ByMonth = null,
-            ByMonthDay = null,
-            WeekOrder = null,
-            EventCollaborators = [new (){
-                                EventDate = new DateOnly(2024, 6, 7),
-                                ParticipantRole = "Organizer",
-                                ConfirmationStatus = "Accept",
-                                ProposedStartHour = null,
-                                ProposedEndHour = null,
-                                UserId = 1
-                            },new (){
-                                EventDate = new DateOnly(2024, 6, 7),
-                                ParticipantRole = "Participant",
-                                ConfirmationStatus = "Pending",
-                                ProposedStartHour = null,
-                                ProposedEndHour = null,
-                                UserId = 2
-                            }]
-        };
-
-        _mapper.Map<EventDataModel>(eventToUpdate).ReturnsForAnyArgs(eventDataModel);
-
-        _mapper.Map<Event>(eventDataModel).ReturnsForAnyArgs(eventToUpdate);
 
         await eventCollaboratorRepository.DeleteEventCollaboratorsByEventId(1);
 

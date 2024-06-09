@@ -2,19 +2,17 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using NSubstitute;
-using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
-public class GetSharedCalendarById
+public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
-    public GetSharedCalendarById()
+    public GetSharedCalendarById(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -24,6 +22,7 @@ public class GetSharedCalendarById
 
         SharedCalendar sharedCalendar = new()
         {
+            Id = 1,
             Sender = new()
             {
                 Id = 1,
@@ -41,19 +40,6 @@ public class GetSharedCalendarById
             FromDate = new DateOnly(2024, 6, 7),
             ToDate = new DateOnly(2024, 6, 7)
         };
-
-        SharedCalendarDataModel sharedCalendarDataModel = new()
-        {
-            Id = 1,
-            SenderId = 1,
-            ReceiverId = 2,
-            FromDate = new DateOnly(2024, 6, 7),
-            ToDate = new DateOnly(2024, 6, 7)
-        };
-
-        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(sharedCalendarDataModel);
-
-        _mapper.Map<SharedCalendar>(sharedCalendarDataModel).ReturnsForAnyArgs(sharedCalendar);
 
         SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 
@@ -86,17 +72,6 @@ public class GetSharedCalendarById
             FromDate = new DateOnly(2024, 6, 7),
             ToDate = new DateOnly(2024, 6, 7)
         };
-
-        SharedCalendarDataModel sharedCalendarDataModel = new()
-        {
-            Id = 1,
-            SenderId = 1,
-            ReceiverId = 2,
-            FromDate = new DateOnly(2024, 6, 7),
-            ToDate = new DateOnly(2024, 6, 7)
-        };
-
-        _mapper.Map<SharedCalendarDataModel>(sharedCalendar).ReturnsForAnyArgs(sharedCalendarDataModel);
 
         SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 

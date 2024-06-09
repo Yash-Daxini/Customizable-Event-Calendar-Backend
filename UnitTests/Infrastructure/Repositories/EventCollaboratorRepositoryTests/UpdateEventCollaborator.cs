@@ -7,14 +7,14 @@ using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
-public class UpdateEventCollaborator
+public class UpdateEventCollaborator : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
-    public UpdateEventCollaborator()
+    public UpdateEventCollaborator(AutoMapperFixture autoMapperFixture)
     {
-        _mapper = Substitute.For<IMapper>();
+        _mapper = autoMapperFixture.Mapper;
     }
 
     [Fact]
@@ -40,21 +40,6 @@ public class UpdateEventCollaborator
             },
             ProposedDuration = null
         };
-
-        EventCollaboratorDataModel eventCollaboratorDataModel = new()
-        {
-            EventId = 1,
-            UserId = 1,
-            ParticipantRole = "Organizer",
-            ConfirmationStatus = "Accept",
-            ProposedStartHour = null,
-            ProposedEndHour = null,
-            EventDate = new DateOnly(2024, 6, 7)
-        };
-
-        _mapper.Map<EventCollaboratorDataModel>(eventCollaborator).ReturnsForAnyArgs(eventCollaboratorDataModel);
-
-        _mapper.Map<EventCollaborator>(eventCollaboratorDataModel).ReturnsForAnyArgs(eventCollaborator);
 
         _dbContext.ChangeTracker.Clear();
 
