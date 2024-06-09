@@ -6,4 +6,9 @@ public class UserAlreadyCollaboratedException : Exception
     {
         
     }
+
+    public UserAlreadyCollaboratedException() : base()
+    {
+        
+    }
 }

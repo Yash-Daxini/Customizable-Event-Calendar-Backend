@@ -6,4 +6,9 @@ public class CollaborationOverlapException : Exception
     {
         
     }
+
+    public CollaborationOverlapException() : base()
+    {
+        
+    }
 }

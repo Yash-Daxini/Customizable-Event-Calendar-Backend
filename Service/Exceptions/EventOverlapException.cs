@@ -6,4 +6,9 @@ public class EventOverlapException : Exception
     {
         
     }
+
+    public EventOverlapException() : base()
+    {
+         
+    }
 }

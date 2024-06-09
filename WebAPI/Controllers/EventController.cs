@@ -178,6 +178,10 @@ public class EventController : ControllerBase
             int addedEventId = await _eventService.AddNonRecurringEvent(eventObj, userId);
             return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, new { addedEventId });
         }
+        catch (EventOverlapException ex)
+        {
+            return BadRequest(new { ErrorMessage = ex.Message });
+        }
         catch (Exception ex)
         {
             return StatusCode(500, new { ErrorMessage = ex.Message });
@@ -196,6 +200,10 @@ public class EventController : ControllerBase
         catch (NotFoundException ex)
         {
             return NotFound(new { ErrorMessage = ex.Message });
+        }
+        catch (EventOverlapException ex)
+        {
+            return BadRequest(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
@@ -230,6 +238,10 @@ public class EventController : ControllerBase
             List<Event> events = await _eventService.GetSharedEvents(sharedCalendarId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {

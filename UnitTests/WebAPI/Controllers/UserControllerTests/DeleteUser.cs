@@ -1,22 +1,22 @@
 ﻿using AutoMapper;
-using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using UnitTests.Infrastructure.Repositories;
 using WebAPI.Controllers;
-using WebAPI.Dtos;
 
 namespace UnitTests.WebAPI.Controllers.UserControllerTests;
 
-public class AddUser : IClassFixture<AutoMapperFixture>
+public class DeleteUser : IClassFixture<AutoMapperFixture>
 {
     private readonly IUserService _userService;
     private readonly IUserAuthenticationService _userAuthenticationService;
     private readonly IMapper _mapper;
     private readonly UserController _userController;
 
-    public AddUser(AutoMapperFixture autoMapperFixture)
+    public DeleteUser(AutoMapperFixture autoMapperFixture)
     {
         _userService = Substitute.For<IUserService>();
         _userAuthenticationService = Substitute.For<IUserAuthenticationService>();
@@ -25,31 +25,29 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddUserAndReturnActionResult_When_CallsTheMethod()
+    public async Task Should_DeleteUserAndReturnActionResult_When_UserAvailableWithId()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        IActionResult actionResult = await _userController.DeleteUser(1);
 
-        User user = Substitute.For<User>();
-
-        _userService.AddUser(user).ReturnsForAnyArgs(1);
-
-        IActionResult actionResult = await _userController.AddUser(userDto);
-
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedUserId = 1 }, returnedResult.Value);
+        Assert.IsType<OkResult>(actionResult);
     }
+    
+    [Fact]
+    public async Task Should_DeleteUserAndReturnActionResult_When_UserNotAvailableWithId()
+    {
+        _userService.DeleteUser(1).Throws<NotFoundException>();
 
+        IActionResult actionResult = await _userController.DeleteUser(1);
+
+        Assert.IsType<NotFoundObjectResult>(actionResult);
+    }
+    
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccured()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        _userService.DeleteUser(1).Throws<Exception>();
 
-        User user = Substitute.For<User>();
-
-        _userService.AddUser(user).ThrowsForAnyArgs<Exception>();
-
-        IActionResult actionResult = await _userController.AddUser(userDto);
+        IActionResult actionResult = await _userController.DeleteUser(1);
 
         Assert.IsType<ObjectResult>(actionResult);
     }
