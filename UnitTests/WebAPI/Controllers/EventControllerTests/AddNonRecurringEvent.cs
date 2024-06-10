@@ -55,7 +55,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         Event eventObj = Substitute.For<Event>();
 

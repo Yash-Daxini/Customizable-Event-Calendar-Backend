@@ -5,7 +5,6 @@ using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using NSubstitute.ReturnsExtensions;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
 
@@ -55,7 +54,7 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         User user = Substitute.For<User>();
 

@@ -39,7 +39,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         SharedCalendar sharedCalendar = Substitute.For<SharedCalendar>();
 

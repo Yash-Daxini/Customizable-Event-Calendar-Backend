@@ -40,13 +40,7 @@ public class EventGetEventInvitees
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -55,13 +49,7 @@ public class EventGetEventInvitees
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                     ]
@@ -75,13 +63,7 @@ public class EventGetEventInvitees
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -90,13 +72,7 @@ public class EventGetEventInvitees
                             ConfirmationStatus = ConfirmationStatus.Pending,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                         ];
@@ -161,13 +137,7 @@ public class EventGetEventInvitees
                 ConfirmationStatus = ConfirmationStatus.Accept,
                 ProposedDuration = null,
                 EventDate = new DateOnly(),
-                User = new User
-                {
-                    Id = 50,
-                    Name = "c",
-                    Email = "c@gmail.com",
-                    Password = "c"
-                },
+                User = new User(50, "c", "c@gmail.com", "c"),
                 EventId = 47
             });
 
@@ -178,13 +148,7 @@ public class EventGetEventInvitees
                 ConfirmationStatus = ConfirmationStatus.Accept,
                 ProposedDuration = null,
                 EventDate = new DateOnly(),
-                User = new User
-                {
-                    Id = 50,
-                    Name = "c",
-                    Email = "c@gmail.com",
-                    Password = "c"
-                },
+                User = new User(50, "c", "c@gmail.com", "c"),
                 EventId = 47
             });
 

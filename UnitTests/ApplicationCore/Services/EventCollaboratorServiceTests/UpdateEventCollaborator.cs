@@ -34,13 +34,8 @@ public class UpdateEventCollaborator
             EventDate = new DateOnly(2024, 6, 2),
             EventId = 1,
             ProposedDuration = null,
-            User = new User()
-            {
-                Id = 1,
-                Name = "Test",
-                Email = "Test@gmail.com",
-                Password = "Password",
-            }
+            User = new User(1, "Test", "Test@gmail.com", "Password")
+
         };
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).Returns(eventCollaborator);
@@ -60,13 +55,7 @@ public class UpdateEventCollaborator
             EventDate = new DateOnly(2024, 6, 2),
             EventId = 1,
             ProposedDuration = null,
-            User = new User()
-            {
-                Id = 1,
-                Name = "Test",
-                Email = "Test@gmail.com",
-                Password = "Password",
-            }
+            User = new User(1, "Test", "Test@gmail.com", "Password")
         };
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();
@@ -75,7 +64,7 @@ public class UpdateEventCollaborator
 
         _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
     }
-    
+
     [Fact]
     public async Task Should_ThrowException_When_EventCollaboratorIsNull()
     {

@@ -27,7 +27,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateUserAndReturnActionResult_When_CallsTheMethod()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
 
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 
@@ -35,7 +35,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         UserDto userDto = Substitute.For<UserDto>();
 

@@ -21,44 +21,16 @@ public class GetAllSharedCalendars
         _sharedCalendarService = new SharedCalendarService(_sharedCalendarRepository);
         _sharedCalendars =
             [
-                new()
-                {
-                    Id = 1,
-                    Sender = new(){
-                        Id = 1,
-                        Name = "1",
-                        Email = "x@gmail.com",
-                        Password = "1",
-
-                    },
-                    Receiver = new(){
-                        Id = 2,
-                        Name = "2",
-                        Email = "y@gmail.com",
-                        Password = "2",
-                    },
-                    FromDate = new DateOnly(2024,6,2),
-                    ToDate = new DateOnly(2024,6,20)
-                },
-                new()
-                {
-                    Id = 2,
-                    Sender = new(){
-                        Id = 2,
-                        Name = "2",
-                        Email = "y@gmail.com",
-                        Password = "2",
-                    },
-                    Receiver = new(){
-                        Id = 1,
-                        Name = "1",
-                        Email = "x@gmail.com",
-                        Password = "1",
-
-                    },
-                    FromDate = new DateOnly(2024,6,12),
-                    ToDate = new DateOnly(2024,6,22)
-                }
+                new(1,
+                    new(1,"1","x@gmail.com","1"),
+                    new(2,"2","y@gmail.com","2"),
+                    new DateOnly(2024,6,2),
+                    new DateOnly(2024,6,20)),
+                new(2,
+                    new(2,"2","y@gmail.com","2"),
+                    new(1,"1","x@gmail.com","1"),
+                    new DateOnly(2024,6,12),
+                    new DateOnly(2024,6,22))
             ];
     }
 
@@ -72,6 +44,5 @@ public class GetAllSharedCalendars
 
         Assert.Equal(sharedCalendars[0], _sharedCalendars[0]);
         Assert.Equal(sharedCalendars[1], _sharedCalendars[1]);
-
     }
 }

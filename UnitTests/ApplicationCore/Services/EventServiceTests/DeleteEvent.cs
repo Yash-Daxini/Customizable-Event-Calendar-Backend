@@ -58,13 +58,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -73,13 +67,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         }
                     ]
@@ -115,13 +103,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -130,13 +112,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                     ]
@@ -172,13 +148,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -187,13 +157,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                     ]
@@ -234,13 +198,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -249,13 +207,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         }
                     ]
@@ -301,13 +253,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -316,13 +262,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         }
                     ]
@@ -368,13 +308,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -383,13 +317,7 @@ public class DeleteEvent
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         }
                     ]

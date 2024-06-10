@@ -16,7 +16,7 @@ public class EventIsProposedEvent
             Title = "event",
             Location = "event",
             Description = "event",
-            Duration = new Duration(1,2),
+            Duration = new Duration(1, 2),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(),
@@ -39,13 +39,7 @@ public class EventIsProposedEvent
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
+                            User = new User(48,"a","a@gmail.com","a"),
                             EventId = 47
                         },
                         new EventCollaborator
@@ -54,13 +48,7 @@ public class EventIsProposedEvent
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
+                            User = new User(49,"b","b@gmail.com","b"),
                             EventId = 47
                         },
                     ]
@@ -75,74 +63,56 @@ public class EventIsProposedEvent
         bool result = _event.IsProposedEvent();
         Assert.False(result);
     }
-    
+
     [Fact]
     public void Should_ReturnsTrue_When_AnyEventCollaboratorWithProposedStatus()
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
-        {
-            EventCollaboratorRole = EventCollaboratorRole.Participant,
-            ConfirmationStatus = ConfirmationStatus.Proposed,
-            ProposedDuration = null,
-            EventDate = new DateOnly(),
-            User = new User
             {
-                Id = 49,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            EventId = 47
-        }
+                EventCollaboratorRole = EventCollaboratorRole.Participant,
+                ConfirmationStatus = ConfirmationStatus.Proposed,
+                ProposedDuration = null,
+                EventDate = new DateOnly(),
+                User = new User(49, "b", "b@gmail.com", "b"),
+                EventId = 47
+            }
         );
         bool result = _event.IsProposedEvent();
         Assert.True(result);
     }
-    
+
     [Fact]
     public void Should_ReturnsTrue_When_AnyEventCollaboratorWithPendingStatus()
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
-        {
-            EventCollaboratorRole = EventCollaboratorRole.Participant,
-            ConfirmationStatus = ConfirmationStatus.Pending,
-            ProposedDuration = null,
-            EventDate = new DateOnly(),
-            User = new User
             {
-                Id = 49,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            EventId = 47
-        }
+                EventCollaboratorRole = EventCollaboratorRole.Participant,
+                ConfirmationStatus = ConfirmationStatus.Pending,
+                ProposedDuration = null,
+                EventDate = new DateOnly(),
+                User = new User(49, "b", "b@gmail.com", "b"),
+                EventId = 47
+            }
         );
         bool result = _event.IsProposedEvent();
         Assert.True(result);
     }
-    
+
     [Fact]
     public void Should_ReturnsTrue_When_EventCollaboratorsWithPendingAndProposedStatus()
     {
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
-        {
-            EventCollaboratorRole = EventCollaboratorRole.Participant,
-            ConfirmationStatus = ConfirmationStatus.Pending,
-            ProposedDuration = null,
-            EventDate = new DateOnly(),
-            User = new User
             {
-                Id = 49,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            EventId = 47
-        }
+                EventCollaboratorRole = EventCollaboratorRole.Participant,
+                ConfirmationStatus = ConfirmationStatus.Pending,
+                ProposedDuration = null,
+                EventDate = new DateOnly(),
+                User = new User(49, "b", "b@gmail.com", "b"),
+                EventId = 47
+            }
         );
         _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
             new EventCollaborator
@@ -151,13 +121,7 @@ public class EventIsProposedEvent
                 ConfirmationStatus = ConfirmationStatus.Proposed,
                 ProposedDuration = null,
                 EventDate = new DateOnly(),
-                User = new User
-                {
-                    Id = 49,
-                    Name = "b",
-                    Email = "b@gmail.com",
-                    Password = "b"
-                },
+                User = new User(49, "b", "b@gmail.com", "b"),
                 EventId = 47
             }
         );

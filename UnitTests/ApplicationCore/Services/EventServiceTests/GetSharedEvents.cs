@@ -205,26 +205,10 @@ public class GetSharedEvents
     [Fact]
     public async Task Should_ReturnListOfEvent_When_SharedCalendarWithIdAvailable()
     {
-        SharedCalendar sharedCalendar = new()
-        {
-            Id = 1,
-            Sender = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a@gmail.com",
-                Password = "a"
-            },
-            Receiver = new()
-            {
-                Id = 2,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            FromDate = new DateOnly(),
-            ToDate = new DateOnly(),
-        };
+        SharedCalendar sharedCalendar = new(1, new(1, "a", "a@gmail.com", "a"), 
+                                               new(2, "b", "b@gmail.com", "b"), 
+                                               new DateOnly(), 
+                                               new DateOnly());
 
         _sharedCalendarService.GetSharedCalendarById(48).Returns(sharedCalendar);
 
@@ -242,26 +226,10 @@ public class GetSharedEvents
     [Fact]
     public async Task Should_ReturnEmptyList_When_SharedCalendarWithIdNotAvailable()
     {
-        SharedCalendar sharedCalendar = new()
-        {
-            Id = 1,
-            Sender = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a@gmail.com",
-                Password = "a"
-            },
-            Receiver = new()
-            {
-                Id = 2,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            FromDate = new DateOnly(),
-            ToDate = new DateOnly(),
-        };
+        SharedCalendar sharedCalendar = new(1, new(1, "a", "a@gmail.com", "a"),
+                                               new(2, "b", "b@gmail.com", "b"),
+                                               new DateOnly(),
+                                               new DateOnly());
 
         _sharedCalendarService.GetSharedCalendarById(48).ReturnsNull();
 
@@ -279,26 +247,10 @@ public class GetSharedEvents
     [Fact]
     public async Task Should_ThrowException_When_SharedCalendarWithIdNotValid()
     {
-        SharedCalendar sharedCalendar = new()
-        {
-            Id = 1,
-            Sender = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a@gmail.com",
-                Password = "a"
-            },
-            Receiver = new()
-            {
-                Id = 2,
-                Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
-            },
-            FromDate = new DateOnly(),
-            ToDate = new DateOnly(),
-        };
+        SharedCalendar sharedCalendar = new(1, new(1, "a", "a@gmail.com", "a"),
+                                               new(2, "b", "b@gmail.com", "b"),
+                                               new DateOnly(),
+                                               new DateOnly());
 
         _sharedCalendarService.GetSharedCalendarById(-1).ReturnsNull();
 

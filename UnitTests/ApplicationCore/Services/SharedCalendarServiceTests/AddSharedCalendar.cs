@@ -23,27 +23,10 @@ public class AddSharedCalendar
     [Fact]
     public async Task Should_ReturnsAddedSharedCalendarId_When_CallsTheMethod()
     {
-        SharedCalendar sharedCalendar = new()
-        {
-            Id = 1,
-            Sender = new()
-            {
-                Id = 1,
-                Name = "1",
-                Email = "x@gmail.com",
-                Password = "1",
-
-            },
-            Receiver = new()
-            {
-                Id = 2,
-                Name = "2",
-                Email = "y@gmail.com",
-                Password = "2",
-            },
-            FromDate = new DateOnly(2024, 6, 2),
-            ToDate = new DateOnly(2024, 6, 20)
-        };
+        SharedCalendar sharedCalendar = new(1, new(1, "a", "a@gmail.com", "a"),
+                                               new(2, "b", "b@gmail.com", "b"),
+                                               new DateOnly(),
+                                               new DateOnly()); ;
 
         _sharedCalendarRepository.Add(sharedCalendar).Returns(1);
 

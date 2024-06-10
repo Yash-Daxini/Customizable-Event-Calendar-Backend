@@ -43,7 +43,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         _userService.DeleteUser(1).Throws<Exception>();
 

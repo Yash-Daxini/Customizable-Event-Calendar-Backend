@@ -27,9 +27,9 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_AddUserAndReturnActionResult_When_CallsTheMethod()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
 
-        User user = Substitute.For<User>();
+        User user = new(49, "b", "b@gmail.com", "b");
 
         _userService.AddUser(user).ReturnsForAnyArgs(1);
 
@@ -41,7 +41,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         UserDto userDto = Substitute.For<UserDto>();
 

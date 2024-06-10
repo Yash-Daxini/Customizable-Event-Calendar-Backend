@@ -14,23 +14,13 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
     public GetAllSharedCalendars(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _sharedCalendars = [new() {
-            Id = 1,
-            Sender = new(){
-                Id = 1,
-                Name = "a",
-                Email = "a",
-                Password = "a",
-            },
-            Receiver = new(){
-                Id = 2,
-                Name = "b",
-                Email = "b",
-                Password = "b",
-            },
-            FromDate = new DateOnly(2024,6,7),
-            ToDate = new DateOnly(2024,6,7)
-        }];
+        _sharedCalendars = [new(
+            1,
+            new(1,"a","a","a"),
+            new(2,"b","b","b"),
+            new DateOnly(2024,6,7),
+            new DateOnly(2024,6,7))
+            ];
     }
 
     [Fact]

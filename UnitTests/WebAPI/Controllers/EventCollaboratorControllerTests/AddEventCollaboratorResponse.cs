@@ -33,7 +33,7 @@ public class AddEventCollaboratorResponse : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = Substitute.For<EventCollaboratorConfirmationDto>();
 

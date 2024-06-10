@@ -63,7 +63,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         EventCollaborationRequestDto eventCollaborationRequestDto = Substitute.For<EventCollaborationRequestDto>();
 

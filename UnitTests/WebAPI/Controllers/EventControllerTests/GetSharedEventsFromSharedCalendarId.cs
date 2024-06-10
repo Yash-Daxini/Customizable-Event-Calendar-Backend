@@ -45,7 +45,7 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         _eventService.GetSharedEvents(1).Throws<Exception>();
 

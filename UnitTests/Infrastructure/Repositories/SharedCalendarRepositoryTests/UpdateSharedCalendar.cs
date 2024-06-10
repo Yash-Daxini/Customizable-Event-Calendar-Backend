@@ -20,30 +20,16 @@ public class UpdateSharedCalendar : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 
-        SharedCalendar sharedCalendar = new()
-        {
-            Id = 1,
-            Sender = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a",
-                Password = "a",
-            },
-            Receiver = new()
-            {
-                Id = 2,
-                Name = "b",
-                Email = "b",
-                Password = "b",
-            },
-            FromDate = new DateOnly(2024, 6, 7),
-            ToDate = new DateOnly(2024, 6, 7)
-        };
-
-        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
+        SharedCalendar sharedCalendar = new(
+            1,
+            new(1, "a", "a", "a"),
+            new(2, "b", "b", "b"),
+            new DateOnly(2024, 6, 7),
+            new DateOnly(2024, 6, 7));
 
         _dbContext.ChangeTracker.Clear();   
+
+        SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 
         await sharedCalendarRepository.Update(sharedCalendar);
 

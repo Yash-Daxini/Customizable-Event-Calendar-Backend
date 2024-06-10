@@ -9,28 +9,10 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
-    private readonly List<SharedCalendar> _sharedCalendars;
 
     public AddSharedCalendar(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _sharedCalendars = [new() {
-            Id = 1,
-            Sender = new(){
-                Id = 1,
-                Name = "a",
-                Email = "a",
-                Password = "a",
-            },
-            Receiver = new(){
-                Id = 2,
-                Name = "b",
-                Email = "b",
-                Password = "b",
-            },
-            FromDate = new DateOnly(2024,6,7),
-            ToDate = new DateOnly(2024,6,7)
-        }];
     }
 
     [Fact]
@@ -38,25 +20,12 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 
-        SharedCalendar sharedCalendar = new()
-        {
-            Sender = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a",
-                Password = "a",
-            },
-            Receiver = new()
-            {
-                Id = 2,
-                Name = "b",
-                Email = "b",
-                Password = "b",
-            },
-            FromDate = new DateOnly(2024, 6, 7),
-            ToDate = new DateOnly(2024, 6, 7)
-        };
+        SharedCalendar sharedCalendar = new(
+            0,
+            new(1, "a", "a", "a"),
+            new(2, "b", "b", "b"),
+            new DateOnly(2024, 6, 7),
+            new DateOnly(2024, 6, 7));
 
         SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 
@@ -66,6 +35,6 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
 
         SharedCalendar? addedSharedCalendar = await sharedCalendarRepository.GetSharedCalendarById(id);
 
-        Assert.Equivalent(sharedCalendar,addedSharedCalendar);
+        Assert.Equivalent(sharedCalendar, addedSharedCalendar);
     }
 }

@@ -34,7 +34,7 @@ public class GetEventsWithInGivenDates : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         _eventService.GetEventsWithinGivenDatesByUserId(1, new DateOnly(), new DateOnly()).Throws<Exception>();
 

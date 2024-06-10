@@ -34,7 +34,7 @@ public class GetAllEvents : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         _eventService.GetAllEventsByUserId(1).Throws<Exception>();
 

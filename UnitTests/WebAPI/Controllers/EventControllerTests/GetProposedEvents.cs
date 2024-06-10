@@ -34,7 +34,7 @@ public class GetProposedEvents : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccured()
+    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         _eventService.GetProposedEventsByUserId(1).Throws<Exception>();
 
