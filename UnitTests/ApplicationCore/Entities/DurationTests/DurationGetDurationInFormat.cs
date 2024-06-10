@@ -13,8 +13,6 @@ public class DurationGetDurationInFormat
         Assert.Throws<InvalidDurationException>(() =>
         {
             Duration duration = new(startHour, endHour);
-
-            string? result = duration.GetDurationInFormat();
         });
     }
 
@@ -26,8 +24,6 @@ public class DurationGetDurationInFormat
         Assert.Throws<InvalidDurationException>(() =>
         {
             Duration duration = new(startHour, endHour);
-
-            string? result = duration.GetDurationInFormat();
         });
     }
 
@@ -39,8 +35,6 @@ public class DurationGetDurationInFormat
         Assert.Throws<InvalidDurationException>(() =>
         {
             Duration duration = new(startHour, endHour);
-
-            string? result = duration.GetDurationInFormat();
         });
     }
 
@@ -57,15 +51,15 @@ public class DurationGetDurationInFormat
         string? result = duration.GetDurationInFormat();
 
         if (startHour == 5 && endHour == 23)
-            Assert.Equal(result, "5 AM - 11 PM");
+            Assert.Equal("5 AM - 11 PM", result);
         else if (startHour == 1 && endHour == 23)
-            Assert.Equal(result, "1 AM - 11 PM");
+            Assert.Equal("1 AM - 11 PM", result);
         else if (startHour == 0 && endHour == 23)
-            Assert.Equal(result, "12 AM - 11 PM");
-        else if (startHour == 23 && endHour == 1)
-            Assert.Equal(result, "11 PM - 1 AM");
-        else if (startHour == 23 && endHour == 0)
-            Assert.Equal(result, "11 PM - 12 AM");
+            Assert.Equal("12 AM - 11 PM", result);
+        else if (startHour == 0 && endHour == 1)
+            Assert.Equal("12 AM - 1 AM", result);
+        else
+            Assert.Equal("10 PM - 11 PM", result);
 
     }
 }

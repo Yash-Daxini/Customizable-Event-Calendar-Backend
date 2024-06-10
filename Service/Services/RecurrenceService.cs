@@ -25,10 +25,8 @@ public class RecurrenceService : IRecurrenceService
             return GetOccurrencesOfWeeklyEvents(recurrencePattern);
         else if (recurrencePattern.IsMonthlyEvent())
             return GetOccurrencesOfMonthlyEvents(recurrencePattern);
-        else if (recurrencePattern.IsYearlyEvent())
-            return GetOccurrencesOfYearlyEvents(recurrencePattern);
         else
-            return [];
+            return GetOccurrencesOfYearlyEvents(recurrencePattern);
     }
 
     private List<DateOnly> GetOccurrenceOfDailyEvents(RecurrencePattern recurrencePattern)

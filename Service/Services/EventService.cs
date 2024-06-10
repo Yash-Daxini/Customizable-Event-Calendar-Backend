@@ -3,7 +3,6 @@ using Core.Exceptions;
 using Core.Extensions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
-using ArgumentNullException = Core.Exceptions.NullArgumentException;
 
 namespace Core.Services;
 
@@ -52,7 +51,7 @@ public class EventService : IEventService
     public async Task<int> AddNonRecurringEvent(Event eventModel, int userId)
     {
         if(eventModel is null)
-            throw new ArgumentNullException($" Event can't be null");
+            throw new NullArgumentException($" Event can't be null");
 
         eventModel.MakeNonRecurringEvent();
         return await AddEvent(eventModel, userId);
@@ -61,7 +60,7 @@ public class EventService : IEventService
     public async Task<int> AddEvent(Event eventModel, int userId)
     {
         if (eventModel is null)
-            throw new ArgumentNullException($" Event can't be null");
+            throw new NullArgumentException($" Event can't be null");
 
         CreateDateWiseEventCollaboratorList(eventModel);
 
@@ -76,7 +75,7 @@ public class EventService : IEventService
     public async Task UpdateEvent(Event eventModel, int userId)
     {
         if (eventModel is null)
-            throw new ArgumentNullException($" Event can't be null");
+            throw new NullArgumentException($" Event can't be null");
 
         await GetEventById(eventModel.Id, userId);
 

@@ -39,7 +39,13 @@ public class EventIsProposedEvent
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User(48,"a","a@gmail.com","a"),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
                             EventId = 47
                         },
                         new EventCollaborator
@@ -48,7 +54,13 @@ public class EventIsProposedEvent
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(),
-                            User = new User(49,"b","b@gmail.com","b"),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
                             EventId = 47
                         },
                     ]
@@ -74,7 +86,13 @@ public class EventIsProposedEvent
                 ConfirmationStatus = ConfirmationStatus.Proposed,
                 ProposedDuration = null,
                 EventDate = new DateOnly(),
-                User = new User(49, "b", "b@gmail.com", "b"),
+                User = new User
+                {
+                    Id = 49,
+                    Name = "b",
+                    Email = "b@gmail.com",
+                    Password = "b"
+                },
                 EventId = 47
             }
         );
@@ -92,7 +110,13 @@ public class EventIsProposedEvent
                 ConfirmationStatus = ConfirmationStatus.Pending,
                 ProposedDuration = null,
                 EventDate = new DateOnly(),
-                User = new User(49, "b", "b@gmail.com", "b"),
+                User = new User
+                {
+                    Id = 49,
+                    Name = "b",
+                    Email = "b@gmail.com",
+                    Password = "b"
+                },
                 EventId = 47
             }
         );
@@ -110,7 +134,13 @@ public class EventIsProposedEvent
                 ConfirmationStatus = ConfirmationStatus.Pending,
                 ProposedDuration = null,
                 EventDate = new DateOnly(),
-                User = new User(49, "b", "b@gmail.com", "b"),
+                User = new User
+                {
+                    Id = 49,
+                    Name = "b",
+                    Email = "b@gmail.com",
+                    Password = "b"
+                },
                 EventId = 47
             }
         );
@@ -121,7 +151,13 @@ public class EventIsProposedEvent
                 ConfirmationStatus = ConfirmationStatus.Proposed,
                 ProposedDuration = null,
                 EventDate = new DateOnly(),
-                User = new User(49, "b", "b@gmail.com", "b"),
+                User = new User
+                {
+                    Id = 49,
+                    Name = "b",
+                    Email = "b@gmail.com",
+                    Password = "b"
+                },
                 EventId = 47
             }
         );

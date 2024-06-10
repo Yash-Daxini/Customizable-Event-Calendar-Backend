@@ -114,7 +114,16 @@ public class Event : IEntity
                 EventDate = occurrence,
                 EventCollaborators = [..eventCollaborators.Select(eventCollaborator =>
                 {
-                    EventCollaborator newEventCollaborator = new(eventCollaborator) { EventDate = occurrence };
+                    EventCollaborator newEventCollaborator = new() 
+                    { 
+                        Id = eventCollaborator.Id,
+                        EventCollaboratorRole = eventCollaborator.EventCollaboratorRole,
+                        ConfirmationStatus = eventCollaborator.ConfirmationStatus,
+                        ProposedDuration = eventCollaborator.ProposedDuration,
+                        EventDate = occurrence,
+                        EventId = eventCollaborator.EventId,
+                        User = eventCollaborator.User,
+                    };
                     return newEventCollaborator;
                 })]
         });

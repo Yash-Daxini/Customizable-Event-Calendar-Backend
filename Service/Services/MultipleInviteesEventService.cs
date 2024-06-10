@@ -161,15 +161,11 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     {
         foreach (var eventCollaborator in eventObj.GetEventInvitees())
         {
-            if (eventCollaborator.IsEventOrganizer())
+            if (!eventCollaborator.IsEventOrganizer())
             {
-                eventCollaborator.SetProposedDurationNull();
-            }
-            else
-            {
-                eventCollaborator.SetProposedDurationNull();
                 eventCollaborator.ConfirmationStatus = ConfirmationStatus.Pending;
             }
+            eventCollaborator.SetProposedDurationNull();
             _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
         }
     }

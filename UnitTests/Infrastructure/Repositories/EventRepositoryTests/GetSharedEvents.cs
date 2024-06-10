@@ -115,8 +115,20 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
 
         SharedCalendar sharedCalendar = new(
             1,
-            new(1, "a", "a", "a"),
-            new(2, "b", "b", "b"),
+            new User
+            {
+                Id = 1,
+                Name = "a",
+                Email = "a@gmail.com",
+                Password = "a"
+            },
+            new User
+            {
+                Id = 2,
+                Name = "b",
+                Email = "b@gmail.com",
+                Password = "b"
+            },
             new DateOnly(2024, 6, 7),
             new DateOnly(2024, 6, 7));
 
@@ -124,7 +136,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
 
         //Act
         List<Event> actualResult = await eventRepository.GetSharedEvents(sharedCalendar);
-        
+
         //Assert
         Assert.Equivalent(_events, actualResult);
     }

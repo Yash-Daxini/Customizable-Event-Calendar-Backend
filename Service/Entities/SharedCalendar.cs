@@ -16,7 +16,10 @@ public class SharedCalendar : IEntity
         this.ToDate = ToDate;
     }
 
-    public SharedCalendar() { }
+    public SharedCalendar()
+    {
+        
+    }
 
     private bool ValidateProperties(int id, User sender, User receiver, DateOnly fromDate, DateOnly toDate)
     {

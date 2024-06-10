@@ -33,9 +33,6 @@ public class UserAuthenticationService : IUserAuthenticationService
 
     private async Task ScheduleProposedEventsForLoggedInUser(int userId) //TODO: Work on this service
     {
-        if (userId is <= 0)
-            throw new ArgumentException($"Invalid user id");
-
         await _multipleInviteesEventService.StartSchedulingProcessOfProposedEvent(userId);
     }
 }

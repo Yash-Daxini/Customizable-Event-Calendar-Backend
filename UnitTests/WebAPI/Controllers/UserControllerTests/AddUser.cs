@@ -29,7 +29,13 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     {
         UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
 
-        User user = new(49, "b", "b@gmail.com", "b");
+        User user = new User
+        {
+            Id = 49,
+            Name = "b",
+            Email = "b@gmail.com",
+            Password = "b"
+        };
 
         _userService.AddUser(user).ReturnsForAnyArgs(1);
 

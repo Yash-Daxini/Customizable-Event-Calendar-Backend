@@ -15,8 +15,6 @@ public class DurationGetEndHourIn12HourFormat
         Assert.Throws<InvalidDurationException>(() =>
         {
             Duration duration = new(hour, hour);
-
-            string? result = duration.GetEndHourIn12HourFormat();
         });
     }
 

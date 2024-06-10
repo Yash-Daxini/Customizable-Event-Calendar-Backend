@@ -33,7 +33,7 @@ public class AddEventCollaborator
             EventDate = new DateOnly(2024, 6, 2),
             EventId = 1,
             ProposedDuration = null,
-            User = new User(1, "Test", "Test@gmail.com", "Password")
+            User = new User() { Id = 1, Name = "Test", Email = "Test@gmail.com", Password = "Password" }
         };
 
         _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);

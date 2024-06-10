@@ -38,12 +38,15 @@ public class Authenticate
 
         _userRepository.AuthenticateUser(user).Returns(user);
 
+        _userService.GetUserById(1).Returns(user);
+
         _userService.AuthenticateUser(user).Returns(user);
 
-        await _userService.AuthenticateUser(user);
+        await _userAuthenticationService.Authenticate(user);
 
         await _userRepository.Received().AuthenticateUser(user);
 
+        await _multipleInviteesEventService.Received().StartSchedulingProcessOfProposedEvent(1);
     }
 
     [Fact]

@@ -25,7 +25,19 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnIActionResult_When_SharedCalendarAdded()
     {
-        SharedCalendar sharedCalendar = Substitute.For<SharedCalendar>();
+        SharedCalendar sharedCalendar = new(1, new User
+        {
+            Id = 48,
+            Name = "a",
+            Email = "a@gmail.com",
+            Password = "a"
+        }, new User
+        {
+            Id = 49,
+            Name = "b",
+            Email = "b@gmail.com",
+            Password = "b"
+        }, new DateOnly(), new DateOnly());
 
         _sharedCalendarService.AddSharedCalendar(sharedCalendar).ReturnsForAnyArgs(1);
 
@@ -37,11 +49,23 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
 
         Assert.Equivalent(new { addedSharedCalendarId = 1 }, returnedValue.Value);
     }
-    
+
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
-        SharedCalendar sharedCalendar = Substitute.For<SharedCalendar>();
+        SharedCalendar sharedCalendar = new(1, new User
+        {
+            Id = 48,
+            Name = "a",
+            Email = "a@gmail.com",
+            Password = "a"
+        }, new User
+        {
+            Id = 49,
+            Name = "b",
+            Email = "b@gmail.com",
+            Password = "b"
+        }, new DateOnly(), new DateOnly());
 
         _sharedCalendarService.AddSharedCalendar(sharedCalendar).ThrowsAsyncForAnyArgs<Exception>();
 

@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Extensions;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
@@ -218,7 +219,7 @@ public class StartSchedulingProcessOfProposedEvents
             {
                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                 ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
-                ProposedDuration = new(1,2),
+                ProposedDuration = new(1, 2),
                 EventDate = new DateOnly(2024, 5, 31),
                 User = new User
                 {
@@ -248,7 +249,7 @@ public class StartSchedulingProcessOfProposedEvents
             Title = "event 2",
             Location = "event 2",
             Description = "event 2",
-            Duration = new Duration(10, 11),
+            Duration = new Duration(10, 12),
             RecurrencePattern = new RecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 6, 5),
@@ -284,7 +285,7 @@ public class StartSchedulingProcessOfProposedEvents
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
-                            ProposedDuration = new(15,17),
+                            ProposedDuration = new(1,4),
                             EventDate = new DateOnly(2024, 6, 5),
                             User = new User
                             {
@@ -299,11 +300,26 @@ public class StartSchedulingProcessOfProposedEvents
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
-                            ProposedDuration = new(16,17),
+                            ProposedDuration = new(2,5),
                             EventDate = new DateOnly(2024, 6, 5),
                             User = new User
                             {
                                 Id = 50,
+                                Name = "c",
+                                Email = "c@gmail.com",
+                                Password = "c"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
+                            ProposedDuration = new(10,15),
+                            EventDate = new DateOnly(2024, 6, 5),
+                            User = new User
+                            {
+                                Id = 51,
                                 Name = "c",
                                 Email = "c@gmail.com",
                                 Password = "c"
@@ -329,7 +345,117 @@ public class StartSchedulingProcessOfProposedEvents
 
         await _eventCollaboratorService.Received().UpdateEventCollaborator(eventCollaborator);
 
-        eventObj.Duration = new(16, 17);
+        eventObj.Duration = new(1, 3);
+
+        await _eventService.Received().UpdateEvent(eventObj, 1);
+    }
+
+    [Fact]
+    public async Task Should_StartSchedulingProcess_When_UsersWithProposedStatusAndMutualTimeBlockRequiredAndEventTimeLessThanOneDay()
+    {
+        Event eventObj = new()
+        {
+            Id = 47,
+            Title = "event 2",
+            Location = "event 2",
+            Description = "event 2",
+            Duration = new Duration(10, 12),
+            RecurrencePattern = new RecurrencePattern()
+            {
+                StartDate = DateTime.Now.ConvertToDateOnly(),
+                EndDate = DateTime.Now.ConvertToDateOnly(),
+                Frequency = Core.Entities.Enums.Frequency.None,
+                Interval = 1,
+                ByWeekDay = null,
+                WeekOrder = null,
+                ByMonthDay = null,
+                ByMonth = null
+            },
+            DateWiseEventCollaborators = [
+                new EventCollaboratorsByDate
+                {
+                    EventDate = new DateOnly(2024, 6, 5),
+                    EventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 6, 5),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
+                            ProposedDuration = new(1,4),
+                            EventDate = new DateOnly(2024, 6, 5),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
+                            ProposedDuration = new(2,5),
+                            EventDate = new DateOnly(2024, 6, 5),
+                            User = new User
+                            {
+                                Id = 50,
+                                Name = "c",
+                                Email = "c@gmail.com",
+                                Password = "c"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
+                            ProposedDuration = new(8,9),
+                            EventDate = new DateOnly(2024, 6, 5),
+                            User = new User
+                            {
+                                Id = 51,
+                                Name = "ac",
+                                Email = "ac@gmail.com",
+                                Password = "ac"
+                            },
+                            EventId = 47
+                        },
+                    ]
+                }
+            ]
+        };
+
+        _events.Clear();
+
+        _events.Add(eventObj);
+
+        EventCollaborator eventCollaborator = _events[0].DateWiseEventCollaborators[0].EventCollaborators[1];
+
+        _eventService.GetProposedEventsByUserId(1).Returns(_events);
+
+        await _multipleInviteesEventService.StartSchedulingProcessOfProposedEvent(1);
+
+        await _eventService.Received().GetProposedEventsByUserId(1);
+
+        await _eventCollaboratorService.Received().UpdateEventCollaborator(eventCollaborator);
+
+        eventObj.Duration = new(1, 3);
 
         await _eventService.Received().UpdateEvent(eventObj, 1);
     }

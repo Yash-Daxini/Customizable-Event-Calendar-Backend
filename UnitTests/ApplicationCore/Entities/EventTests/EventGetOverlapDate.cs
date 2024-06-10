@@ -38,7 +38,13 @@ public class EventGetOverlapDate
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User(48,"a","a@gmail.com","a"),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
                             EventId = 47
                         },
                         new EventCollaborator
@@ -47,7 +53,13 @@ public class EventGetOverlapDate
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User(49,"b","b@gmail.com","b"),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
                             EventId = 47
                         },
                     ]
@@ -154,7 +166,13 @@ public class EventGetOverlapDate
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User(48,"a","a@gmail.com","a"),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
                             EventId = 47
                         },
                         new EventCollaborator
@@ -163,7 +181,13 @@ public class EventGetOverlapDate
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
-                            User = new User(49,"b","b@gmail.com","b"),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
                             EventId = 47
                         },
                     ]
@@ -178,7 +202,13 @@ public class EventGetOverlapDate
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 6, 1),
-                            User = new User(48,"a","a@gmail.com","a"),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
                             EventId = 47
                         },
                         new EventCollaborator
@@ -187,7 +217,13 @@ public class EventGetOverlapDate
                             ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 6, 1),
-                            User = new User(49,"b","b@gmail.com","b"),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
                             EventId = 47
                         },
                     ]

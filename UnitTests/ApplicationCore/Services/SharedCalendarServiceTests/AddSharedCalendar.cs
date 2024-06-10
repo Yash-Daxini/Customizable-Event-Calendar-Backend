@@ -23,8 +23,8 @@ public class AddSharedCalendar
     [Fact]
     public async Task Should_ReturnsAddedSharedCalendarId_When_CallsTheMethod()
     {
-        SharedCalendar sharedCalendar = new(1, new(1, "a", "a@gmail.com", "a"),
-                                               new(2, "b", "b@gmail.com", "b"),
+        SharedCalendar sharedCalendar = new(1, new User { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
+                                               new User { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
                                                new DateOnly(),
                                                new DateOnly()); ;
 

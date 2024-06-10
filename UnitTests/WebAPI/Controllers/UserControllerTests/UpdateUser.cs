@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -32,6 +33,20 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 
         Assert.IsType<CreatedAtActionResult>(actionResult);
+    }
+    
+    [Fact]
+    public async Task Should_ReturnBadRequest_When_UserNotAvailableWithId()
+    {
+        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
+
+        User userModel = Substitute.For<User>();
+
+        _userService.UpdateUser(userModel).ThrowsForAnyArgs<NotFoundException>();
+
+        IActionResult actionResult = await _userController.UpdateUser(userDto);
+
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
     
     [Fact]

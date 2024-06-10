@@ -5,20 +5,6 @@ namespace Core.Entities;
 
 public class EventCollaborator : IEntity
 {
-
-    public EventCollaborator(EventCollaborator eventCollaborator)
-    {
-        Id = eventCollaborator.Id;
-        EventCollaboratorRole = eventCollaborator.EventCollaboratorRole;
-        ProposedDuration = eventCollaborator.ProposedDuration;
-        User = eventCollaborator.User;
-        ConfirmationStatus = eventCollaborator.ConfirmationStatus;
-        EventDate = eventCollaborator.EventDate;
-        EventId = eventCollaborator.EventId;
-    }
-
-    public EventCollaborator() { }
-
     public int Id { get; set; }
 
     public int EventId { get; set; }

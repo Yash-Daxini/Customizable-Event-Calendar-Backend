@@ -22,13 +22,13 @@ public class GetAllSharedCalendars
         _sharedCalendars =
             [
                 new(1,
-                    new(1,"1","x@gmail.com","1"),
-                    new(2,"2","y@gmail.com","2"),
+                    new(){Id = 1,Name = "1",Email = "x@gmail.com",Password = "1" },
+                    new(){Id = 2,Name = "2",Email = "y@gmail.com",Password = "2" },
                     new DateOnly(2024,6,2),
                     new DateOnly(2024,6,20)),
                 new(2,
-                    new(2,"2","y@gmail.com","2"),
-                    new(1,"1","x@gmail.com","1"),
+                    new(){Id = 2,Name = "2",Email = "y@gmail.com",Password = "2" },
+                    new(){Id = 1,Name = "1",Email = "x@gmail.com",Password = "1" },
                     new DateOnly(2024,6,12),
                     new DateOnly(2024,6,22))
             ];

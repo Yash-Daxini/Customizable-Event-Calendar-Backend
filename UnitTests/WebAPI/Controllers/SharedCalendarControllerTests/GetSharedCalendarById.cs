@@ -28,7 +28,23 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     {
         SharedCalendarDto sharedCalendarDto = Substitute.For<SharedCalendarDto>();
 
-        SharedCalendar sharedCalendar = Substitute.For<SharedCalendar>();
+        SharedCalendar sharedCalendar = new(0, 
+                                            new User 
+                                            { 
+                                                Id = 48, 
+                                                Name = "a", 
+                                                Email = "a@gmail.com",
+                                                Password = "a" 
+                                            }, 
+                                            new User 
+                                            { 
+                                                Id = 49,
+                                                Name = "b",
+                                                Email = "b@gmail.com",
+                                                Password = "b"
+                                            }, 
+                                            new DateOnly(),
+                                            new DateOnly());
 
         _sharedCalendarService.GetSharedCalendarById(1).Returns(sharedCalendar);
 
@@ -42,24 +58,16 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnBadRequest_When_SharedCalendarNotAvailableWithId()
     {
-        SharedCalendarDto sharedCalendarDto = Substitute.For<SharedCalendarDto>();
-
-        SharedCalendar sharedCalendar = Substitute.For<SharedCalendar>();
-
         _sharedCalendarService.GetSharedCalendarById(1).Throws<NotFoundException>();
 
         IActionResult actionResult = await _sharedCalendarController.GetSharedCalendarById(1);
 
-        var returedResult = Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
     
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
-        SharedCalendarDto sharedCalendarDto = Substitute.For<SharedCalendarDto>();
-
-        SharedCalendar sharedCalendar = Substitute.For<SharedCalendar>();
-
         _sharedCalendarService.GetSharedCalendarById(1).Throws<Exception>();
 
         IActionResult actionResult = await _sharedCalendarController.GetSharedCalendarById(1);

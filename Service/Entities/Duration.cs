@@ -27,9 +27,6 @@ public class Duration
 
     private string? ConvertTo12HourFormat(int hour)
     {
-        if (hour < 0 || hour >= 24)
-            return null;
-
         string abbreviation = hour >= 12 && hour != 24 ? "PM" : "AM";
         hour = hour % 12 == 0 ? 12 : hour % 12;
 
@@ -44,9 +41,6 @@ public class Duration
     {
         string? startHour = ConvertTo12HourFormat(StartHour);
         string? endHour = ConvertTo12HourFormat(EndHour);
-
-        if (startHour is null || endHour is null)
-            return null;
 
         return startHour + " - " + endHour;
     }

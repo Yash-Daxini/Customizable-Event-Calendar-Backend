@@ -26,13 +26,11 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateEvent_When_EventNotOverlaps()
     {
-        Event eventObj = Substitute.For<Event>();
-
         RecurringEventRequestDto recurringEventRequestDto = Substitute.For<RecurringEventRequestDto>();
 
         IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
+        Assert.IsType<CreatedAtActionResult>(actionResult);
     }
 
     [Fact]
