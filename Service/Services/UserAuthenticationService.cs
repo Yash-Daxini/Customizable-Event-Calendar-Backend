@@ -1,34 +1,36 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
+using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
-using ArgumentNullException = Core.Exceptions.NullArgumentException;
 
 namespace Core.Services;
 
 public class UserAuthenticationService : IUserAuthenticationService
 {
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
 
     private readonly IMultipleInviteesEventService _multipleInviteesEventService;
 
-    public UserAuthenticationService(IUserService userService,
+    public UserAuthenticationService(IUserRepository userRepository,
                                      IMultipleInviteesEventService multipleInviteesEventService)
     {
-        _userService = userService;
+        _userRepository = userRepository;
         _multipleInviteesEventService = multipleInviteesEventService;
     }
 
-    public async Task Authenticate(User user)
+    public async Task<AuthenticateResponse?> Authenticate(User user)
     {
         if (user is null)
-            throw new ArgumentNullException($"User can't be null");
+            throw new NullArgumentException($"User can't be null");
 
-        await _userService.GetUserById(user.Id);
+        await _userRepository.GetUserById(user.Id);
 
-        User? loggedInUser = await _userService.AuthenticateUser(user) 
+        AuthenticateResponse? loggedInUser = await _userRepository.AuthenticateUser(user)
                                    ?? throw new AuthenticationFailedException("Invalid user name or password!");
 
         await ScheduleProposedEventsForLoggedInUser(loggedInUser.Id);
+
+        return loggedInUser;
     }
 
     private async Task ScheduleProposedEventsForLoggedInUser(int userId) //TODO: Work on this service

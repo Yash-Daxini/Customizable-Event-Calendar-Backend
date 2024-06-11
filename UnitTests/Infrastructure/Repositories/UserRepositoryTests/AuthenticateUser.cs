@@ -2,6 +2,8 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
+using Microsoft.Extensions.Configuration;
+using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -11,9 +13,12 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
 
     private readonly IMapper _mapper;
 
+    private readonly IConfiguration _configuration;
+
     public AuthenticateUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
+        _configuration = Substitute.For<IConfiguration>();
     }
 
     [Fact]
@@ -30,10 +35,10 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Email = "a",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper);
+        UserRepository userRepository = new(_dbContext, _mapper, _configuration);
 
-        User? authenticatedUser = await userRepository.AuthenticateUser(user);
+        AuthenticateResponse? authenticatedUser = await userRepository.AuthenticateUser(user);
 
-        Assert.Equivalent(user, authenticatedUser);
+        Assert.Equivalent(user.Name, authenticatedUser.Name);
     }
 }

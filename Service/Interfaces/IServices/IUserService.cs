@@ -11,6 +11,4 @@ public interface IUserService
     public Task UpdateUser(User userModel);
 
     public Task DeleteUser(int userId);
-
-    public Task<User?> AuthenticateUser(User user);
 }

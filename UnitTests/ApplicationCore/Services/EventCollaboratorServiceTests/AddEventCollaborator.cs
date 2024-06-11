@@ -1,6 +1,5 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
-using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
@@ -11,15 +10,13 @@ namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
 public class AddEventCollaborator
 {
-    private readonly IEventService _eventService;
     private readonly IEventCollaboratorRepository _eventCollaboratorRepository;
     private readonly IEventCollaboratorService _eventCollaboratorService;
 
     public AddEventCollaborator()
     {
         _eventCollaboratorRepository = Substitute.For<IEventCollaboratorRepository>();
-        _eventService = Substitute.For<IEventService>();
-        _eventCollaboratorService = new EventCollaboratorService(_eventCollaboratorRepository, _eventService);
+        _eventCollaboratorService = new EventCollaboratorService(_eventCollaboratorRepository);
     }
 
     [Fact]

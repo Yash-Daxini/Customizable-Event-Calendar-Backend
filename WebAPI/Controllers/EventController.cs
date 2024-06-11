@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
 
@@ -9,7 +10,7 @@ namespace WebAPI.Controllers;
 
 [Route("api/users/{userId}/events")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class EventController : ControllerBase
 {
     private readonly IEventService _eventService;

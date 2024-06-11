@@ -6,6 +6,6 @@ namespace Core.Interfaces.IRepositories
     {
         public Task<User?> GetUserById(int userId);
 
-        public Task<User?> AuthenticateUser(User user);
+        public Task<AuthenticateResponse?> AuthenticateUser(User user);
     }
 }

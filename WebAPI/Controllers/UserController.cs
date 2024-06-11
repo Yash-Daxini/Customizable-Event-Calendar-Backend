@@ -4,6 +4,7 @@ using AutoMapper;
 using WebAPI.Dtos;
 using Core.Exceptions;
 using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers;
 
@@ -22,20 +23,8 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> GetAllUsers()
-    //{
-    //    try
-    //    {
-    //        List<User> users = await _userService.GetAllUsers();
-    //        return Ok(_mapper.Map<List<UserDto>>(users));
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return StatusCode(500, ex.Message);
-    //    }
-    //}
 
+    [Authorize]
     [HttpGet("{userId}")]
     public async Task<ActionResult> GetUserById([FromRoute] int userId)
     {
@@ -72,6 +61,7 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<ActionResult> UpdateUser([FromBody] UserDto userDto)
     {
@@ -91,6 +81,7 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpDelete("{userId}")]
     public async Task<ActionResult> DeleteUser([FromRoute] int userId)
     {
@@ -109,26 +100,26 @@ public class UserController : ControllerBase
         }
     }
 
-    //    [HttpPost("~/api/auth/login")]
-    //    public async Task<ActionResult> AuthenticateUser([FromBody] User user)
-    //    {
-    //        try
-    //        {
-    //            await _userAuthenticationService.Authenticate(user);
+    [HttpPost("~/api/auth/login")]
+    public async Task<ActionResult> AuthenticateUser([FromBody] User user)
+    {
+        try
+        {
+            AuthenticateResponseDto authenticateResponseDto = _mapper.Map<AuthenticateResponseDto>(await _userAuthenticationService.Authenticate(user));
 
-    //            return Ok(new { message = "Login successfully" });
-    //        }
-    //        catch (NotFoundException ex)
-    //        {
-    //            return NotFound(ex.Message);
-    //        }
-    //        catch (AuthenticationFailedException ex)
-    //        {
-    //            return BadRequest(ex.Message);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return StatusCode(500, ex.Message);
-    //        }
-    //    }
+            return Ok(authenticateResponseDto);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (AuthenticationFailedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
 }

@@ -12,15 +12,13 @@ namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
 public class UpdateEventCollaborator
 {
-    private readonly IEventService _eventService;
     private readonly IEventCollaboratorRepository _eventCollaboratorRepository;
     private readonly IEventCollaboratorService _eventCollaboratorService;
 
     public UpdateEventCollaborator()
     {
         _eventCollaboratorRepository = Substitute.For<IEventCollaboratorRepository>();
-        _eventService = Substitute.For<IEventService>();
-        _eventCollaboratorService = new EventCollaboratorService(_eventCollaboratorRepository, _eventService);
+        _eventCollaboratorService = new EventCollaboratorService(_eventCollaboratorRepository);
     }
 
     [Fact]

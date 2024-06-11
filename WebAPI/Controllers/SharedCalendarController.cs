@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
 
@@ -9,6 +10,7 @@ namespace WebAPI.Controllers;
 
 [Route("api/sharedCalendars")]
 [ApiController]
+[Authorize]
 public class SharedCalendarController : ControllerBase
 {
     private readonly ISharedCalendarService _sharedCalendarService;

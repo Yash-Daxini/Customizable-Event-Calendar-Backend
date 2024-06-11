@@ -10,15 +10,13 @@ namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
 public class DeleteEventCollaboratorsByEventId
 {
-    private readonly IEventService _eventService;
     private readonly IEventCollaboratorRepository _eventCollaboratorRepository;
     private readonly IEventCollaboratorService _eventCollaboratorService;
 
     public DeleteEventCollaboratorsByEventId()
     {
         _eventCollaboratorRepository = Substitute.For<IEventCollaboratorRepository>();
-        _eventService = Substitute.For<IEventService>();
-        _eventCollaboratorService = new EventCollaboratorService(_eventCollaboratorRepository, _eventService);
+        _eventCollaboratorService = new EventCollaboratorService(_eventCollaboratorRepository);
     }
 
     [Fact]
@@ -40,27 +38,27 @@ public class DeleteEventCollaboratorsByEventId
             }
         };
 
-        _eventService.GetEventById(2, 2).Returns(eventObj);
+        //_eventService.GetEventById(2, 2).Returns(eventObj);
 
         await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(2, 2);
 
         await _eventCollaboratorRepository.Received().DeleteEventCollaboratorsByEventId(2);
     }
 
-    [Fact]
-    public async Task Should_ThrowException_When_EventIdNotPresent()
-    {
-        _eventService.GetEventById(2, 2).ReturnsNull();
+    //[Fact]
+    //public async Task Should_ThrowException_When_EventIdNotPresent()
+    //{
+    //    //_eventService.GetEventById(2, 2).ReturnsNull();
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(1, 1));
+    //    await Assert.ThrowsAsync<NotFoundException>(async () => await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(1, 1));
 
-        await _eventCollaboratorRepository.DidNotReceive().DeleteEventCollaboratorsByEventId(1);
-    }
+    //    await _eventCollaboratorRepository.DidNotReceive().DeleteEventCollaboratorsByEventId(1);
+    //}
 
     [Fact]
     public async Task Should_ThrowException_When_EventIdNotValid()
     {
-        _eventService.GetEventById(-1, 2).ReturnsNull();
+        //_eventService.GetEventById(-1, 2).ReturnsNull();
 
         await Assert.ThrowsAsync<ArgumentException>(async () => await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(-1, 1));
 

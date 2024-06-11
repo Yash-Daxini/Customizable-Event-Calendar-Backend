@@ -56,12 +56,4 @@ public class UserService : IUserService
 
         await _userRepository.Delete(user);
     }
-
-    public async Task<User?> AuthenticateUser(User user)
-    {
-        if (user is null)
-            throw new ArgumentNullException($" Event collaborator can't be null");
-
-        return await _userRepository.AuthenticateUser(user);
-    }
 }

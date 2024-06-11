@@ -14,15 +14,13 @@ public class Authenticate
 
     private readonly IMultipleInviteesEventService _multipleInviteesEventService;
     private readonly IUserRepository _userRepository;
-    private readonly IUserService _userService;
     private readonly IUserAuthenticationService _userAuthenticationService;
 
     public Authenticate()
     {
         _userRepository = Substitute.For<IUserRepository>();
         _multipleInviteesEventService = Substitute.For<IMultipleInviteesEventService>();
-        _userService = new UserService(_userRepository);
-        _userAuthenticationService = new UserAuthenticationService(_userService, _multipleInviteesEventService);
+        _userAuthenticationService = new UserAuthenticationService(_userRepository, _multipleInviteesEventService);
     }
 
     [Fact]
@@ -36,17 +34,19 @@ public class Authenticate
             Password = "password",
         };
 
-        _userRepository.AuthenticateUser(user).Returns(user);
+        AuthenticateResponse authenticateResponse = new (user,"auth");
 
-        _userService.GetUserById(1).Returns(user);
+        _userRepository.GetUserById(1).Returns(user);
 
-        _userService.AuthenticateUser(user).Returns(user);
+        _userRepository.AuthenticateUser(user).Returns(authenticateResponse);
 
-        await _userAuthenticationService.Authenticate(user);
+        AuthenticateResponse? auth = await _userAuthenticationService.Authenticate(user);
 
         await _userRepository.Received().AuthenticateUser(user);
 
         await _multipleInviteesEventService.Received().StartSchedulingProcessOfProposedEvent(1);
+
+        Assert.Equivalent(authenticateResponse, auth);  
     }
 
     [Fact]
@@ -60,9 +60,9 @@ public class Authenticate
             Password = "password",
         };
 
-        _userService.GetUserById(1).Returns(user);
+        _userRepository.GetUserById(1).Returns(user);
 
-        _userService.AuthenticateUser(user).ReturnsNull();
+        _userRepository.AuthenticateUser(user).ReturnsNull();
 
         await Assert.ThrowsAsync<AuthenticationFailedException>(async () => await _userAuthenticationService.Authenticate(user));
 
@@ -74,9 +74,9 @@ public class Authenticate
     {
         User user = null;
 
-        _userService.GetUserById(1).Returns(user);
+        _userRepository.GetUserById(1).Returns(user);
 
-        _userService.AuthenticateUser(new User()).ReturnsNull();
+        _userRepository.AuthenticateUser(new User()).ReturnsNull();
 
         await Assert.ThrowsAsync<NullArgumentException>(async () => await _userAuthenticationService.Authenticate(user));
 
