@@ -34,8 +34,6 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
             Email = "a",
         };
 
-        _dbContext.ChangeTracker.Clear();
-
         UserRepository userRepository = new(_dbContext, _mapper, _configuration);
 
         await userRepository.Delete(user);

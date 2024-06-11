@@ -59,6 +59,8 @@ public class SharedCalendarRepositoryDBContext : IDisposable
             dbContextEvent.SaveChanges();
         }
 
+        dbContextEvent.ChangeTracker.Clear();
+
         return dbContextEvent;
     }
 }

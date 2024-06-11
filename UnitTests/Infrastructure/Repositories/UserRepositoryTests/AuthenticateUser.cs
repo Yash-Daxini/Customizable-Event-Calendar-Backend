@@ -37,6 +37,8 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
 
         UserRepository userRepository = new(_dbContext, _mapper, _configuration);
 
+        _configuration["JWT:Secret"].Returns("ADSJIDJFIEKNFIOJVNBOIEDFEW90432jkj");
+
         AuthenticateResponse? authenticatedUser = await userRepository.AuthenticateUser(user);
 
         Assert.Equivalent(user.Name, authenticatedUser.Name);

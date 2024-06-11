@@ -34,8 +34,6 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
             Email = "b",
         };
 
-        _dbContext.ChangeTracker.Clear();
-
         UserRepository userRepository = new(_dbContext, _mapper, _configuration);
 
         await userRepository.Update(user);

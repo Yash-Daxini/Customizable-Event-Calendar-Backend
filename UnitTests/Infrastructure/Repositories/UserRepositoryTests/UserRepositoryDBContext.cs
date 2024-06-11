@@ -36,6 +36,8 @@ public class UserRepositoryDBContext : IDisposable
             dbContextEvent.SaveChanges();
         }
 
+        dbContextEvent.ChangeTracker.Clear();
+
         return dbContextEvent;
     }
 }

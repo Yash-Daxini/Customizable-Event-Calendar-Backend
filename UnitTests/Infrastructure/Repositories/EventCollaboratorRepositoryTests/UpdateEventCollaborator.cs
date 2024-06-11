@@ -41,8 +41,6 @@ public class UpdateEventCollaborator : IClassFixture<AutoMapperFixture>
             ProposedDuration = null
         };
 
-        _dbContext.ChangeTracker.Clear();
-
         await eventCollaboratorRepository.Update(eventCollaborator);
 
         EventCollaborator? updatedEventCollaborator = await eventCollaboratorRepository.GetEventCollaboratorById(1);

@@ -37,8 +37,6 @@ public class DeleteEventCollaborator : IClassFixture<AutoMapperFixture>
             ProposedDuration = null
         };
 
-        _dbContext.ChangeTracker.Clear();
-
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
         await eventCollaboratorRepository.Delete(eventCollaborator);

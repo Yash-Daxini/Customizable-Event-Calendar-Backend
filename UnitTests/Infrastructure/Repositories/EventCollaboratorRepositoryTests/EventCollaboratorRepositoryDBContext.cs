@@ -122,8 +122,12 @@ public class EventCollaboratorRepositoryDBContext : IDisposable
                 FromDate = new DateOnly(2024, 6, 7),
                 ToDate = new DateOnly(2024, 6, 7)
             });
+
+
             dbContextEvent.SaveChanges();
         }
+
+        dbContextEvent.ChangeTracker.Clear();
 
         return dbContextEvent;
     }

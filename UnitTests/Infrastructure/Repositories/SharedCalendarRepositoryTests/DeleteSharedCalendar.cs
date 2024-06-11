@@ -20,8 +20,6 @@ public class DeleteSharedCalendar : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 
-        _dbContext.ChangeTracker.Clear();
-
         SharedCalendar sharedCalendar = new(
             1,
             new User { Id = 1, Name = "a", Email = "a", Password = "a" },
