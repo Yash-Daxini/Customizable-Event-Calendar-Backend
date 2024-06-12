@@ -65,7 +65,7 @@ public class EventCollaboratorRepositoryDBContext : IDisposable
                 Id = 1,
                 EventId = 1,
                 UserId = 1,
-                ParticipantRole = "Organizer",
+                EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
                 ProposedEndHour = null,
@@ -76,7 +76,7 @@ public class EventCollaboratorRepositoryDBContext : IDisposable
                 Id = 2,
                 EventId = 2,
                 UserId = 2,
-                ParticipantRole = "Organizer",
+                EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
                 ProposedEndHour = null,
@@ -87,10 +87,10 @@ public class EventCollaboratorRepositoryDBContext : IDisposable
                 Id = 3,
                 EventId = 2,
                 UserId = 3,
-                ParticipantRole = "Participant",
-                ConfirmationStatus = "Pending",
-                ProposedStartHour = null,
-                ProposedEndHour = null,
+                EventCollaboratorRole = "Participant",
+                ConfirmationStatus = "Proposed",
+                ProposedStartHour = 1,
+                ProposedEndHour = 2,
                 EventDate = new DateOnly(2024, 6, 7)
             });
             dbContextEvent.Users.Add(new()

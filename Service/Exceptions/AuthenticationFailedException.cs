@@ -6,4 +6,9 @@ public class AuthenticationFailedException : Exception
     {
         
     }
+
+    public AuthenticationFailedException() : base()
+    {
+        
+    }
 }

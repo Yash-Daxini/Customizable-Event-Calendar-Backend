@@ -16,7 +16,7 @@ public class EventCollaboratorConfirmationDtoValidator : AbstractValidator<Event
             .NotNull()
             .IsEnumName(typeof(ConfirmationStatus));
 
-        When(e => !e.ConfirmationStatus.Equals("Proposed"), () =>
+        When(e => e.ConfirmationStatus is not null && !e.ConfirmationStatus.Equals("Proposed"), () =>
         {
             RuleFor(e => e.ProposedDuration)
                 .Null()

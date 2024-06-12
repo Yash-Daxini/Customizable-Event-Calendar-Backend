@@ -14,20 +14,27 @@ public class AddEventCollaboratorResponse : IClassFixture<AutoMapperFixture>
     private readonly IMapper _mapper;
     private readonly IEventCollaboratorService _eventCollaboratorService;
     private readonly EventCollaboratorController _eventCollaboratorController;
+    private readonly EventCollaboratorConfirmationDto _eventCollaboratorConfirmationDto;
 
     public AddEventCollaboratorResponse(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
         _eventCollaboratorService = Substitute.For<IEventCollaboratorService>();
         _eventCollaboratorController = new EventCollaboratorController(_mapper, _eventCollaboratorService); 
+        _eventCollaboratorConfirmationDto = new EventCollaboratorConfirmationDto()
+        {
+            Id = 1,
+            EventId = 1,
+            UserId = 1,
+            ConfirmationStatus = "Accept",
+            ProposedDuration = null
+        };
     }
 
     [Fact]
     public async Task Should_AddEventCollaboratorResponse_When_EventCollaboratorResponseGiven()
     {
-        EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = Substitute.For<EventCollaboratorConfirmationDto>();
-
-        IActionResult actionResult  = await _eventCollaboratorController.AddEventCollaboratorResponse(eventCollaboratorConfirmationDto);
+        IActionResult actionResult  = await _eventCollaboratorController.AddEventCollaboratorResponse(_eventCollaboratorConfirmationDto);
 
         Assert.IsType<OkObjectResult>(actionResult);
     }
@@ -35,13 +42,11 @@ public class AddEventCollaboratorResponse : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
-        EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = Substitute.For<EventCollaboratorConfirmationDto>();
-
         EventCollaborator eventCollaborator = Substitute.For<EventCollaborator>();
 
         _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator).ThrowsAsyncForAnyArgs<Exception>();
 
-        IActionResult actionResult  = await _eventCollaboratorController.AddEventCollaboratorResponse(eventCollaboratorConfirmationDto);
+        IActionResult actionResult  = await _eventCollaboratorController.AddEventCollaboratorResponse(_eventCollaboratorConfirmationDto);
 
         Assert.IsType<ObjectResult>(actionResult);
     }

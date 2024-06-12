@@ -9,12 +9,15 @@ public class RecurrencePatternDtoValidator : AbstractValidator<RecurrencePattern
     public RecurrencePatternDtoValidator()
     {
         RuleFor(e => e.EndDate)
-            .NotNull().DependentRules(() =>
-            {
-                RuleFor(e => e.StartDate)
-                  .NotEmpty()
-                  .GreaterThanOrEqualTo(e => e.EndDate);
-            });
+            .NotNull()
+            .NotEmpty();
+
+        RuleFor(e => e.StartDate)
+          .NotEmpty()
+          .NotEmpty();
+
+        RuleFor(e => e)
+            .Must(e => e.StartDate <= e.EndDate);
 
         RuleFor(e => e.Frequency)
             .NotEmpty()

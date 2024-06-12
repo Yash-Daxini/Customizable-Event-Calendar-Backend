@@ -5,9 +5,9 @@ using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using UnitTests.Infrastructure.Repositories;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
+using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Controllers.EventControllerTests;
 
@@ -16,24 +16,43 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
     private readonly IEventService _eventService;
     private readonly IMapper _mapper;
     private readonly EventController _eventController;
+    private readonly Event _eventObj;
+    private readonly NonRecurringEventRequestDto _nonRecurringEventRequestDto;
 
     public AddNonRecurringEvent(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
         _eventService = Substitute.For<IEventService>();
         _eventController = new(_eventService, _mapper);
+        _eventObj = Substitute.For<Event>();
+        _nonRecurringEventRequestDto = new NonRecurringEventRequestDto()
+        {
+            Title = "Test",
+            Location = "Test",
+            Description = "Test",
+            Duration = new()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            StartDate = new DateOnly(2024,4,1),
+            EndDate = new DateOnly(2024,5,1),
+            EventCollaborators = [
+                new() {
+                    Id = 1,
+                    UserId = 1,
+                    EventCollaboratorRole = "Organizer",
+                    ConfirmationStatus = "Accept"
+            }]
+        };
     }
 
     [Fact]
     public async Task Should_AddNonRecurringEvent_When_EventNotOverlaps()
     {
-        Event eventObj = Substitute.For<Event>();
+        _eventService.AddNonRecurringEvent(_eventObj, 1).ReturnsForAnyArgs(1);
 
-        NonRecurringEventRequestDto nonRecurringEventRequestDto = Substitute.For<NonRecurringEventRequestDto>();
-
-        _eventService.AddNonRecurringEvent(eventObj, 1).ReturnsForAnyArgs(1);
-
-        IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, nonRecurringEventRequestDto);
+        IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, _nonRecurringEventRequestDto);
 
         var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
 
@@ -43,13 +62,9 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnBadRequest_When_EventOverlaps()
     {
-        Event eventObj = Substitute.For<Event>();
+        _eventService.AddNonRecurringEvent(_eventObj, 1).ThrowsAsyncForAnyArgs<EventOverlapException>();
 
-        NonRecurringEventRequestDto nonRecurringEventRequestDto = Substitute.For<NonRecurringEventRequestDto>();
-
-        _eventService.AddNonRecurringEvent(eventObj, 1).ThrowsAsyncForAnyArgs<EventOverlapException>();
-
-        IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, nonRecurringEventRequestDto);
+        IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, _nonRecurringEventRequestDto);
 
         Assert.IsType<BadRequestObjectResult>(actionResult);
     }
@@ -57,13 +72,9 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
-        Event eventObj = Substitute.For<Event>();
+        _eventService.AddNonRecurringEvent(_eventObj, 1).ThrowsAsyncForAnyArgs<Exception>();
 
-        NonRecurringEventRequestDto nonRecurringEventRequestDto = Substitute.For<NonRecurringEventRequestDto>();
-
-        _eventService.AddNonRecurringEvent(eventObj, 1).ThrowsAsyncForAnyArgs<Exception>();
-
-        IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, nonRecurringEventRequestDto);
+        IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, _nonRecurringEventRequestDto);
 
         Assert.IsType<ObjectResult>(actionResult);
     }

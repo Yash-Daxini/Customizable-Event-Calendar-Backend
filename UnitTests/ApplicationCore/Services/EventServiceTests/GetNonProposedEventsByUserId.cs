@@ -182,8 +182,8 @@ public class GetNonProposedEventsByUserId
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            ProposedDuration = null,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
+                            ProposedDuration = new (1,2),
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {

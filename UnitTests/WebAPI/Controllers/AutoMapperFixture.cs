@@ -18,7 +18,6 @@ public class AutoMapperFixture
             cfg.AddProfile<EventCollaborationRequestDtoProfile>();
             cfg.AddProfile<EventCollaboratorConfirmationDtoProfile>();
             cfg.AddProfile<EventCollaboratorRequestDtoProfile>();
-            cfg.AddProfile<EventCollaboratorResponseDtoProfile>();
             cfg.AddProfile<EventResponseDtoProfile>();
             cfg.AddProfile<NonRecurringEventRequestDtoProfile>();
             cfg.AddProfile<RecurrencePatternDtoProfile>();

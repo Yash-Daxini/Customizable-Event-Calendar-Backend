@@ -4,7 +4,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
+using Core.Exceptions;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 

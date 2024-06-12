@@ -20,26 +20,9 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
 
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-            EventDate = new DateOnly(),
-            EventId = 1,
-            User = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a",
-                Password = "a",
-            },
-            ProposedDuration = null
-        };
-
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
-        EventCollaborator? eventCollaboratorById =  await eventCollaboratorRepository.GetEventCollaboratorById(1);
+        EventCollaborator? eventCollaboratorById =  await eventCollaboratorRepository.GetEventCollaboratorById(3);
 
         Assert.NotNull(eventCollaboratorById);
     }

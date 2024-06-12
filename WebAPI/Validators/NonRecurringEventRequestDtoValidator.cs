@@ -26,12 +26,16 @@ public class NonRecurringEventRequestDtoValidator : AbstractValidator<NonRecurri
             .SetValidator(new DurationDtoValidator());
 
         RuleFor(e => e.EndDate)
-            .NotNull().DependentRules(() =>
-            {
-                RuleFor(e => e.StartDate)
-                  .NotEmpty()
-                  .GreaterThanOrEqualTo(e => e.EndDate);
-            });
+            .NotNull()
+            .NotEmpty();
+
+        RuleFor(e => e.StartDate)
+          .NotEmpty()
+          .NotEmpty();
+
+        RuleFor(e => e)
+            .Must(e => e.StartDate <= e.EndDate)
+            .WithMessage("Start date must less than or equal to end date");
 
         RuleForEach(e => e.EventCollaborators)
             .SetValidator(new EventCollaboratorRequestDtoValidator());

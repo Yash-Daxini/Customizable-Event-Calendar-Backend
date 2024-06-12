@@ -14,7 +14,7 @@ public class EventCollaboratorDataModel : IModel
     public int UserId { get; set; }
     public virtual UserDataModel User { get; set; }
 
-    public string ParticipantRole { get; set; }
+    public string EventCollaboratorRole { get; set; }
 
     public string ConfirmationStatus { get; set; }
 

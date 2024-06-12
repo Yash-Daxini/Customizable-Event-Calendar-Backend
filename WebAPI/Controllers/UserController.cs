@@ -101,10 +101,12 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("~/api/auth/login")]
-    public async Task<ActionResult> AuthenticateUser([FromBody] User user)
+    public async Task<ActionResult> AuthenticateUser([FromBody] AuthenticateRequestDto authenticateRequestDto)
     {
         try
         {
+            User user = _mapper.Map<User>(authenticateRequestDto);
+
             AuthenticateResponseDto authenticateResponseDto = _mapper.Map<AuthenticateResponseDto>(await _userAuthenticationService.Authenticate(user));
 
             return Ok(authenticateResponseDto);
