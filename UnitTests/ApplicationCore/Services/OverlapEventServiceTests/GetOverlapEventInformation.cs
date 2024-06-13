@@ -23,14 +23,11 @@ public class GetOverlapEventInformation
                     Description = "1",
                     Location = "1",
                     Duration = new (5,6),
-                    RecurrencePattern = new(){
+                    RecurrencePattern = new DailyRecurrencePattern(){
                         StartDate = new DateOnly(2024,5,30),
                         EndDate = new DateOnly(2024,6,2),
                         Frequency = Frequency.Daily,
                         ByWeekDay = [1,2,3,4,5,6,7],
-                        ByMonth = null,
-                        ByMonthDay = null,
-                        WeekOrder = null,
                         Interval = 1
                     },
                     DateWiseEventCollaborators =
@@ -132,15 +129,12 @@ public class GetOverlapEventInformation
             Description = "2",
             Location = "2",
             Duration = new(6,7),
-            RecurrencePattern = new()
+            RecurrencePattern = new DailyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 30),
                 EndDate = new DateOnly(2024, 6, 2),
                 Frequency = Frequency.Daily,
                 ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
-                ByMonth = null,
-                ByMonthDay = null,
-                WeekOrder = null,
                 Interval = 2
             },
             DateWiseEventCollaborators =
@@ -198,15 +192,12 @@ public class GetOverlapEventInformation
             Description = "3",
             Location = "3",
             Duration = new(6,7),
-            RecurrencePattern = new()
+            RecurrencePattern = new DailyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 6, 2),
                 EndDate = new DateOnly(2024, 6, 2),
                 Frequency = Frequency.None,
                 ByWeekDay = null,
-                ByMonth = null,
-                ByMonthDay = null,
-                WeekOrder = null,
                 Interval = 2
             },
             DateWiseEventCollaborators =
@@ -250,15 +241,12 @@ public class GetOverlapEventInformation
             Description = "2",
             Location = "2",
             Duration = new(5, 6),
-            RecurrencePattern = new()
+            RecurrencePattern = new DailyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 30),
                 EndDate = new DateOnly(2024, 6, 2),
                 Frequency = Frequency.Daily,
                 ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
-                ByMonth = null,
-                ByMonthDay = null,
-                WeekOrder = null,
                 Interval = 2
             },
             DateWiseEventCollaborators =
@@ -333,15 +321,12 @@ public class GetOverlapEventInformation
             Description = "4",
             Location = "4",
             Duration = new(6, 7),
-            RecurrencePattern = new()
+            RecurrencePattern = new DailyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 30),
                 EndDate = new DateOnly(2024, 6, 2),
                 Frequency = Frequency.Daily,
                 ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
-                ByMonth = null,
-                ByMonthDay = null,
-                WeekOrder = null,
                 Interval = 2
             },
             DateWiseEventCollaborators =
@@ -421,15 +406,12 @@ public class GetOverlapEventInformation
             Description = "2",
             Location = "2",
             Duration = new(6, 7),
-            RecurrencePattern = new()
+            RecurrencePattern = new DailyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 30),
                 EndDate = new DateOnly(2024, 6, 2),
                 Frequency = Frequency.Daily,
                 ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
-                ByMonth = null,
-                ByMonthDay = null,
-                WeekOrder = null,
                 Interval = 2
             },
             DateWiseEventCollaborators =

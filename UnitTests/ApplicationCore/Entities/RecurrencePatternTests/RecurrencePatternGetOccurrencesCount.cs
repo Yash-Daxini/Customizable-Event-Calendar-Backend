@@ -5,12 +5,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests;
 
 public class RecurrencePatternGetOccurrencesCount
 {
-    private readonly RecurrencePattern _recurrencePattern;
-
-    public RecurrencePatternGetOccurrencesCount()
-    {
-        _recurrencePattern = new RecurrencePattern();
-    }
+    private RecurrencePattern _recurrencePattern;
 
     [Theory]
     [InlineData(2024, 2024, 5, 6, 1, 2)]
@@ -20,10 +15,13 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData(2024, 2028, 1, 6, 5, 11)]
     public void Should_ReturnOccurrencesCountForMonthlyPattern_When_FrequencyIsMonthly(int startDateYear, int endDateYear, int startDateMonth, int endDateMonth, int interval, int expectedResult)
     {
-        _recurrencePattern.StartDate = new DateOnly(startDateYear, startDateMonth, 1);
-        _recurrencePattern.EndDate = new DateOnly(endDateYear, endDateMonth, 1);
-        _recurrencePattern.Interval = interval;
-        _recurrencePattern.Frequency = Frequency.Monthly;
+        _recurrencePattern = new MonthlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(startDateYear, startDateMonth, 1),
+            EndDate = new DateOnly(endDateYear, endDateMonth, 1),
+            Interval = interval,
+            Frequency = Frequency.Monthly
+        };
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
@@ -43,10 +41,13 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData(2024, 2030, 5, 2)]
     public void Should_ReturnOccurrencesCountForYearlyPattern_When_FrequencyIsYearly(int startDateYear, int endDateYear, int interval, int expectedResult)
     {
-        _recurrencePattern.StartDate = new DateOnly(startDateYear, 1, 1);
-        _recurrencePattern.EndDate = new DateOnly(endDateYear, 1, 1);
-        _recurrencePattern.Interval = interval;
-        _recurrencePattern.Frequency = Frequency.Yearly;
+        _recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(startDateYear, 1, 1),
+            EndDate = new DateOnly(endDateYear, 1, 1),
+            Interval = interval,
+            Frequency = Frequency.Yearly,
+        };
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
@@ -64,10 +65,13 @@ public class RecurrencePatternGetOccurrencesCount
                                                                                      int interval,
                                                                                      int expectedResult)
     {
-        _recurrencePattern.StartDate = DateOnly.Parse(startDate);
-        _recurrencePattern.EndDate = DateOnly.Parse(endDate);
-        _recurrencePattern.Interval = interval;
-        _recurrencePattern.Frequency = Frequency.Weekly;
+        _recurrencePattern = new WeeklyRecurrencePattern()
+        {
+            StartDate = DateOnly.Parse(startDate),
+            EndDate = DateOnly.Parse(endDate),
+            Interval = interval,
+            Frequency = Frequency.Weekly
+        };
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
@@ -85,10 +89,13 @@ public class RecurrencePatternGetOccurrencesCount
                                                                                    int interval,
                                                                                    int expectedResult)
     {
-        _recurrencePattern.StartDate = DateOnly.Parse(startDate);
-        _recurrencePattern.EndDate = DateOnly.Parse(endDate);
-        _recurrencePattern.Interval = interval;
-        _recurrencePattern.Frequency = Frequency.Daily;
+        _recurrencePattern = new DailyRecurrencePattern()
+        {
+            StartDate = DateOnly.Parse(startDate),
+            EndDate = DateOnly.Parse(endDate),
+            Interval = interval,
+            Frequency = Frequency.Daily
+        };
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
@@ -98,10 +105,15 @@ public class RecurrencePatternGetOccurrencesCount
     [Fact]
     public void Should_ReturnOccurrencesCountAsZero_When_FrequencyIsNone()
     {
-        _recurrencePattern.Frequency = Frequency.None;
+        _recurrencePattern = new SingleInstanceRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 4, 1),
+            EndDate = new DateOnly(2024, 4, 1),
+            Frequency = Frequency.None
+        };
 
         int expectedResult = _recurrencePattern.GetOccurrencesCount();
 
-        Assert.Equal(0,expectedResult);
+        Assert.Equal(1, expectedResult);
     }
 }

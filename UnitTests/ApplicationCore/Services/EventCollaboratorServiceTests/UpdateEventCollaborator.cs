@@ -39,7 +39,7 @@ public class UpdateEventCollaborator
         _eventCollaboratorRepository.GetEventCollaboratorById(1).Returns(eventCollaborator);
 
         await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
-        _eventCollaboratorRepository.Received().Update(eventCollaborator);
+        await _eventCollaboratorRepository.Received().Update(eventCollaborator);
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class UpdateEventCollaborator
 
         await Assert.ThrowsAsync<NotFoundException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
 
-        _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
+        await _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
     }
 
     [Fact]
@@ -72,6 +72,6 @@ public class UpdateEventCollaborator
 
         await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
 
-        _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
+        await _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
     }
 }

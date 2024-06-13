@@ -25,12 +25,12 @@ builder.Services.AddAutoMapper(typeof(Program),
                                typeof(SharedCalendarProfile),
                                typeof(UserProfile),
                                typeof(UserDtoProfile),
+                               typeof(RecurrencePatternDtoProfile),
                                typeof(RecurringEventRequestDtoProfile),
                                typeof(NonRecurringEventRequestDtoProfile),
                                typeof(EventResponseDtoProfile),
                                typeof(EventCollaboratorRequestDtoProfile),
                                typeof(EventCollaboratorConfirmationDto),
-                               typeof(RecurrencePatternDtoProfile),
                                typeof(DurationDtoProfile),
                                typeof(SharedCalendarDtoProfile));
 
@@ -48,7 +48,6 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<IEventCollaboratorService, EventCollaboratorService>();
 builder.Services.AddTransient<ISharedCalendarService, SharedCalendarService>();
-builder.Services.AddTransient<IRecurrenceService, RecurrenceService>();
 builder.Services.AddTransient<IOverlappingEventService, OverlapEventService>();
 builder.Services.AddTransient<IMultipleInviteesEventService, MultipleInviteesEventService>();
 builder.Services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();

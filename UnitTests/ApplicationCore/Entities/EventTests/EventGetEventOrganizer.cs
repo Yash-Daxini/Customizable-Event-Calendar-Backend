@@ -16,16 +16,13 @@ public class EventGetEventOrganizer
             Location = "event",
             Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(),
                 EndDate = new DateOnly(),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate

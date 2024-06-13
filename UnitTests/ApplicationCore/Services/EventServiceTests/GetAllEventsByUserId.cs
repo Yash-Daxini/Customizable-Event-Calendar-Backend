@@ -10,7 +10,6 @@ public class GetAllEventsByUserId
 {
     private readonly IEventRepository _eventRepository;
 
-    private readonly IRecurrenceService _recurrenceService;
     private readonly IEventCollaboratorService _eventCollaboratorService;
     private readonly IOverlappingEventService _overlappingEventService;
     private readonly ISharedCalendarService _sharedCalendarService;
@@ -20,11 +19,10 @@ public class GetAllEventsByUserId
     public GetAllEventsByUserId()
     {
         _eventRepository = Substitute.For<IEventRepository>();
-        _recurrenceService = Substitute.For<IRecurrenceService>();
         _eventCollaboratorService = Substitute.For<IEventCollaboratorService>();
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
-        _eventService = new EventService(_eventRepository, _recurrenceService, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
+        _eventService = new EventService(_eventRepository, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
         _events =
         [
             new()
@@ -34,16 +32,13 @@ public class GetAllEventsByUserId
             Location = "event",
             Description = "event",
             Duration = new Duration(1,2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -91,16 +86,13 @@ public class GetAllEventsByUserId
             Location = "event 1",
             Description = "event 1",
             Duration = new Duration(1,2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -148,16 +140,13 @@ public class GetAllEventsByUserId
             Location = "event 2",
             Description = "event 2",
             Duration = new Duration(1,2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate

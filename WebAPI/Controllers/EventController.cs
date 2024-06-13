@@ -29,7 +29,9 @@ public class EventController : ControllerBase
         {
             List<Event> events = await _eventService.GetAllEventsByUserId(userId);
 
-            return Ok(_mapper.Map<List<EventResponseDto>>(events));
+            var e = _mapper.Map<List<EventResponseDto>>(events);
+
+            return Ok(e);
         }
         catch (Exception ex)
         {

@@ -16,16 +16,13 @@ public class EventGetOverlapDate
             Location = "event",
             Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Frequency = Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -34,8 +31,8 @@ public class EventGetOverlapDate
                     EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
@@ -78,16 +75,13 @@ public class EventGetOverlapDate
             Location = "event",
             Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -144,16 +138,13 @@ public class EventGetOverlapDate
             Location = "event",
             Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate

@@ -9,8 +9,9 @@ public class EventResponseDtoProfile : Profile
     public EventResponseDtoProfile()
     {
         CreateMap<Event, EventResponseDto>()
+            .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom(src => src.RecurrencePattern))
             .ForMember(dest => dest.Occurrences,
                        opt => opt.MapFrom(src => src.DateWiseEventCollaborators
-                                                    .Select(eventCollaboratorByDate=>eventCollaboratorByDate.EventDate)));
+                                                    .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)));
     }
 }

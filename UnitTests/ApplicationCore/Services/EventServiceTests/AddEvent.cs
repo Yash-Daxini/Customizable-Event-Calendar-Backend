@@ -13,7 +13,6 @@ public class AddEvent
 {
     private readonly IEventRepository _eventRepository;
 
-    private readonly IRecurrenceService _recurrenceService;
     private readonly IEventCollaboratorService _eventCollaboratorService;
     private readonly IOverlappingEventService _overlappingEventService;
     private readonly ISharedCalendarService _sharedCalendarService;
@@ -23,11 +22,10 @@ public class AddEvent
     public AddEvent()
     {
         _eventRepository = Substitute.For<IEventRepository>();
-        _recurrenceService = Substitute.For<IRecurrenceService>();
         _eventCollaboratorService = Substitute.For<IEventCollaboratorService>();
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
-        _eventService = new EventService(_eventRepository, _recurrenceService, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
+        _eventService = new EventService(_eventRepository, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
         _events =
         [
             new()
@@ -37,16 +35,13 @@ public class AddEvent
             Location = "event",
             Description = "event",
             Duration = new Duration(1,2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -94,16 +89,13 @@ public class AddEvent
             Location = "event 1",
             Description = "event 1",
             Duration = new Duration(1,2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -151,16 +143,13 @@ public class AddEvent
             Location = "event 2",
             Description = "event 2",
             Duration = new Duration(1,2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -213,16 +202,13 @@ public class AddEvent
             Location = "event",
             Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -268,8 +254,6 @@ public class AddEvent
 
         _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsNullForAnyArgs();
 
-        _recurrenceService.GetOccurrencesOfEvent(eventObj.RecurrencePattern).Returns([new DateOnly(2024, 5, 31)]);
-
         _eventRepository.Add(eventObj).Returns(1);
 
         int id = await _eventService.AddEvent(eventObj, 48);
@@ -279,8 +263,6 @@ public class AddEvent
         await _eventRepository.Received().Add(eventObj);
 
         _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
-
-        _recurrenceService.Received().GetOccurrencesOfEvent(eventObj.RecurrencePattern);
     }
 
     [Fact]
@@ -292,16 +274,13 @@ public class AddEvent
             Location = "event",
             Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
@@ -347,8 +326,6 @@ public class AddEvent
 
         _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).Returns("Overlaps");
 
-        _recurrenceService.GetOccurrencesOfEvent(eventObj.RecurrencePattern).Returns([new DateOnly(2024, 5, 31)]);
-
         _eventRepository.Add(eventObj).Returns(1);
 
         await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.AddEvent(eventObj, 48));
@@ -356,29 +333,5 @@ public class AddEvent
         await _eventRepository.DidNotReceive().Add(eventObj);
 
         _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
-
-        _recurrenceService.Received().GetOccurrencesOfEvent(eventObj.RecurrencePattern);
-    }
-
-    [Fact]
-    public async Task Should_ThrowException_When_EventIsNull()
-    {
-        Event eventObj = null;
-
-        _eventService.GetAllEventsByUserId(48).Returns(_events);
-
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsNullForAnyArgs();
-
-        _recurrenceService.GetOccurrencesOfEvent(null).Returns([new DateOnly(2024, 5, 31)]);
-
-        _eventRepository.Add(eventObj).Returns(1);
-
-        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventService.AddEvent(eventObj, 48));
-
-        await _eventRepository.DidNotReceive().Add(eventObj);
-
-        _overlappingEventService.DidNotReceiveWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
-
-        _recurrenceService.DidNotReceive().GetOccurrencesOfEvent(null);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.DataModels;
 using Infrastructure.Repositories;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
@@ -29,15 +28,12 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
             Description = "Test2",
             Location = "Test2",
             Duration = new Duration(3, 4),
-            RecurrencePattern = new()
+            RecurrencePattern = new SingleInstanceRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 6, 8),
                 EndDate = new DateOnly(2024, 6, 8),
                 Frequency = Core.Entities.Enums.Frequency.None,
-                Interval = 1,
-                ByMonth = null,
-                ByMonthDay = null,
-                WeekOrder = null,
+                Interval = 1
             },
             DateWiseEventCollaborators =
             [

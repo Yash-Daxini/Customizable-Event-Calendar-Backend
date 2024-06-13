@@ -18,7 +18,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
 
     private readonly EventCollaborationController _eventCollaborationController;
 
-    private readonly EventCollaborationRequestDto _eventCollaborationRequestDto;
+    private readonly CollaborationRequestDto _collaborationRequestDto;
     private readonly EventCollaborator _eventCollaborator;
 
     public AddEventCollaboration(AutoMapperFixture autoMapperFixture)
@@ -26,12 +26,10 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
         _sharedEventCollaborationService = Substitute.For<ISharedEventCollaborationService>();
         _mapper = autoMapperFixture.Mapper;
         _eventCollaborationController = new EventCollaborationController(_sharedEventCollaborationService, _mapper);
-        _eventCollaborationRequestDto = new EventCollaborationRequestDto()
+        _collaborationRequestDto = new CollaborationRequestDto()
         {
             Id = 1,
             EventId = 1,
-            EventCollaboratorRole = "Organizer",
-            ConfirmationStatus = "Accept",
             EventDate = new DateOnly()
         };
         _eventCollaborator = new EventCollaborator()
@@ -55,7 +53,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnActionResultOk_When_CollaborationAddedSuccessfully()
     {
-        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_eventCollaborationRequestDto);
+        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
         Assert.IsType<OkObjectResult>(actionResult);
     }
@@ -65,7 +63,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     {
         _sharedEventCollaborationService.AddCollaborator(_eventCollaborator).ThrowsForAnyArgs<CollaborationOverlapException>();
 
-        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_eventCollaborationRequestDto);
+        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
         Assert.IsType<BadRequestObjectResult>(actionResult);
     }
@@ -75,7 +73,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     {
         _sharedEventCollaborationService.AddCollaborator(_eventCollaborator).ThrowsForAnyArgs<UserAlreadyCollaboratedException>();
 
-        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_eventCollaborationRequestDto);
+        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
         Assert.IsType<BadRequestObjectResult>(actionResult);
     }
@@ -85,7 +83,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     {
         _sharedEventCollaborationService.AddCollaborator(_eventCollaborator).ThrowsForAnyArgs<Exception>();
 
-        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_eventCollaborationRequestDto);
+        IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
         Assert.IsType<ObjectResult>(actionResult);
     }

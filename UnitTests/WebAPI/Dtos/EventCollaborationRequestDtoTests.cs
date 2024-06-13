@@ -6,19 +6,19 @@ namespace UnitTests.WebAPI.Dtos;
 public class EventCollaborationRequestDtoTests
 {
 
-    private readonly EventCollaborationRequestDtoValidator _eventCollaborationRequestDtoValidator;
+    private readonly CollaborationRequestDtoValidator _collaborationRequestDtoValidator;
 
     public EventCollaborationRequestDtoTests()
     {
-        _eventCollaborationRequestDtoValidator = new EventCollaborationRequestDtoValidator();
+        _collaborationRequestDtoValidator = new CollaborationRequestDtoValidator();
     }
 
     [Fact]
     public void Should_ReturnFalse_When_InvalidEventCollaborationRequestDto()
     {
-        EventCollaborationRequestDto eventCollaborationRequestDto = new();
+        CollaborationRequestDto collaborationRequestDto = new();
 
-        var result = _eventCollaborationRequestDtoValidator.Validate(eventCollaborationRequestDto);
+        var result = _collaborationRequestDtoValidator.Validate(collaborationRequestDto);
 
         Assert.False(result.IsValid);
     }
@@ -26,17 +26,15 @@ public class EventCollaborationRequestDtoTests
     [Fact]
     public void Should_ReturnTrue_When_ValidEventCollaborationRequestDto()
     {
-        EventCollaborationRequestDto eventCollaborationRequestDto = new()
+        CollaborationRequestDto collaborationRequestDto = new()
         {
             Id = 1,
             EventId = 1,
             UserId = 1,
             EventDate = new DateOnly(2024,2,1),
-            EventCollaboratorRole = "Organizer",
-            ConfirmationStatus = "Accept"
         };
 
-        var result = _eventCollaborationRequestDtoValidator.Validate(eventCollaborationRequestDto);
+        var result = _collaborationRequestDtoValidator.Validate(collaborationRequestDto);
 
         Assert.True(result.IsValid);
     }

@@ -114,8 +114,8 @@ public class Event : IEntity
                 EventDate = occurrence,
                 EventCollaborators = [..eventCollaborators.Select(eventCollaborator =>
                 {
-                    EventCollaborator newEventCollaborator = new() 
-                    { 
+                    EventCollaborator newEventCollaborator = new()
+                    {
                         Id = eventCollaborator.Id,
                         EventCollaboratorRole = eventCollaborator.EventCollaboratorRole,
                         ConfirmationStatus = eventCollaborator.ConfirmationStatus,
@@ -126,7 +126,7 @@ public class Event : IEntity
                     };
                     return newEventCollaborator;
                 })]
-        });
+            });
         }
 
         this.DateWiseEventCollaborators = eventCollaboratorsByDates;
@@ -151,15 +151,5 @@ public class Event : IEntity
 
         return eventCollaborators
                .Exists(eventCollaborator => eventCollaborator.User.Id == userId);
-    }
-
-    public void MakeNonRecurringEvent()
-    {
-        RecurrencePattern.Frequency = Frequency.None;
-        RecurrencePattern.Interval = 1;
-        RecurrencePattern.ByWeekDay = null;
-        RecurrencePattern.ByMonthDay = null;
-        RecurrencePattern.ByMonth = null;
-        RecurrencePattern.WeekOrder = null;
     }
 }

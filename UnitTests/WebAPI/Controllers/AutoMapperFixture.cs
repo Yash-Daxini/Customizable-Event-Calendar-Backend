@@ -15,7 +15,7 @@ public class AutoMapperFixture
         services.AddAutoMapper(cfg =>
         {
             cfg.AddProfile<DurationDtoProfile>();
-            cfg.AddProfile<EventCollaborationRequestDtoProfile>();
+            cfg.AddProfile<CollaborationRequestDtoProfile>();
             cfg.AddProfile<EventCollaboratorConfirmationDtoProfile>();
             cfg.AddProfile<EventCollaboratorRequestDtoProfile>();
             cfg.AddProfile<EventResponseDtoProfile>();
@@ -24,9 +24,8 @@ public class AutoMapperFixture
             cfg.AddProfile<RecurringEventRequestDtoProfile>();
             cfg.AddProfile<SharedCalendarDtoProfile>();
             cfg.AddProfile<UserDtoProfile>();
-        }, typeof(NonRecurringEventRecurrencePatternResolver).Assembly,
-           typeof(RecurringEventDateWiseEventCollaboratorsResolver).Assembly,
-           typeof(NonRecurringEventDateWiseEventCollaboratorsResolver).Assembly);
+        },typeof(RecurringEventDateWiseEventCollaboratorsResolver).Assembly,
+          typeof(NonRecurringEventDateWiseEventCollaboratorsResolver).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
 

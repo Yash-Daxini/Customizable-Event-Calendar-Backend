@@ -35,15 +35,12 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
             Description = "Test1",
             Location = "Test1",
             Duration = new Duration(3, 4),
-            RecurrencePattern = new()
+            RecurrencePattern = new SingleInstanceRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 6, 8),
                 EndDate = new DateOnly(2024, 6, 8),
                 Frequency = Core.Entities.Enums.Frequency.None,
-                Interval = 1,
-                ByMonth = null,
-                ByMonthDay = null,
-                WeekOrder = null,
+                Interval = 1
             },
             DateWiseEventCollaborators =
             [

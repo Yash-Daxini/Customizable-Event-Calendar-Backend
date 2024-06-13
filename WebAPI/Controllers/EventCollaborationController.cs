@@ -23,7 +23,7 @@ public class EventCollaborationController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> AddEventCollaboration([FromBody] EventCollaborationRequestDto eventCollaborationRequestDto)
+    public async Task<IActionResult> AddEventCollaboration([FromBody] CollaborationRequestDto eventCollaborationRequestDto)
     {
         try
         {

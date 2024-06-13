@@ -10,19 +10,16 @@ public class EventService : IEventService
 {
     private readonly IEventRepository _eventRepository;
 
-    private readonly IRecurrenceService _recurrenceService;
     private readonly IEventCollaboratorService _eventCollaboratorService;
     private readonly IOverlappingEventService _overlappingEventService;
     private readonly ISharedCalendarService _sharedCalendarService;
 
     public EventService(IEventRepository eventRepository,
-                        IRecurrenceService recurrenceService,
                         IEventCollaboratorService eventCollaboratorService,
                         IOverlappingEventService overlappingEventService,
                         ISharedCalendarService sharedCalendarService)
     {
         _eventRepository = eventRepository;
-        _recurrenceService = recurrenceService;
         _eventCollaboratorService = eventCollaboratorService;
         _overlappingEventService = overlappingEventService;
         _sharedCalendarService = sharedCalendarService;
@@ -50,10 +47,9 @@ public class EventService : IEventService
 
     public async Task<int> AddNonRecurringEvent(Event eventModel, int userId)
     {
-        if(eventModel is null)
+        if (eventModel is null)
             throw new NullArgumentException($" Event can't be null");
 
-        eventModel.MakeNonRecurringEvent();
         return await AddEvent(eventModel, userId);
     }
 
@@ -90,10 +86,10 @@ public class EventService : IEventService
 
     public async Task DeleteEvent(int eventId, int userId)
     {
-        if (eventId is <= 0 )
+        if (eventId is <= 0)
             throw new ArgumentException($"Invalid event id");
 
-        Event? eventObj = await _eventRepository.GetEventById(eventId) 
+        Event? eventObj = await _eventRepository.GetEventById(eventId)
                           ?? throw new NotFoundException($"Event with id ${eventId} not present");
 
         await _eventRepository.Delete(eventObj);
@@ -160,7 +156,7 @@ public class EventService : IEventService
 
     private async Task HandleEventOverlap(Event eventModel, int userId)
     {
-        List<Event> events = await _eventRepository.GetAllEventsByUserId(userId); 
+        List<Event> events = await _eventRepository.GetAllEventsByUserId(userId);
 
         events = [..events
                    .Where(eventObj => eventObj.Id != eventModel.Id)];
@@ -174,7 +170,7 @@ public class EventService : IEventService
 
     private void CreateDateWiseEventCollaboratorList(Event eventModel)
     {
-        List<DateOnly> occurrences = _recurrenceService.GetOccurrencesOfEvent(eventModel.RecurrencePattern);
+        List<DateOnly> occurrences = eventModel.RecurrencePattern.GetOccurrences();
 
         eventModel.CreateDateWiseEventCollaboratorsList(occurrences);
     }

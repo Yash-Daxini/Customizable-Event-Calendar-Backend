@@ -17,16 +17,13 @@ public class EventGetEventCollaboratorsForGivenDate
             Location = "event",
             Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new RecurrencePattern()
+            RecurrencePattern = new WeeklyRecurrencePattern()
             {
                 StartDate = new DateOnly(2024, 5, 31),
                 EndDate = new DateOnly(2024, 8, 25),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 2,
-                ByWeekDay = [2, 6],
-                WeekOrder = null,
-                ByMonthDay = null,
-                ByMonth = null
+                ByWeekDay = [2, 6]
             },
             DateWiseEventCollaborators = [
                 new EventCollaboratorsByDate
