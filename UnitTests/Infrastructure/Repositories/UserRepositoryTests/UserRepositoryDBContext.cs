@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
-public class UserRepositoryDBContext : IDisposable
+public class UserRepositoryDBContext
 {
     private readonly DbConnection _connection;
     public UserRepositoryDBContext()
@@ -13,8 +13,6 @@ public class UserRepositoryDBContext : IDisposable
         _connection = new SqliteConnection("Filename=:memory:");
         _connection.Open();
     }
-
-    public void Dispose() => _connection.Dispose();
 
     public async Task<DbContextEventCalendar> GetDatabaseContext()
     {

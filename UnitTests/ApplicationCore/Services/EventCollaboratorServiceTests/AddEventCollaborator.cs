@@ -52,8 +52,8 @@ public class AddEventCollaborator
 
             await _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
 
-            await _eventCollaboratorRepository.DidNotReceive().Add(eventCollaborator);
         });
+        await _eventCollaboratorRepository.DidNotReceive().Add(eventCollaborator);
 
     }
 }
