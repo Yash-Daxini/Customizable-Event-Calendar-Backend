@@ -22,9 +22,7 @@ public class RecurringEventRequestDtoProfile : Profile
 
     private Frequency MapFrequencyToEnum(string? frequency)
     {
-        return frequency is null
-               ? Frequency.None
-               : frequency.ToEnum<Frequency>();
+        return frequency.ToEnum<Frequency>();
     }
 
     private RecurrencePattern MapRecurrencePatternFromEventDataModel(RecurrencePatternDto recurrencePatternDto)

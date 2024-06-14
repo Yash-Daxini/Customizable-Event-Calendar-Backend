@@ -125,7 +125,11 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     {
         DateOnly eventDate = eventObj.RecurrencePattern.StartDate;
 
-        foreach (var eventCollaborator in eventObj.GetEventInvitees().Where(IsInviteePresentInEvent))
+        List<EventCollaborator> eventCollaborators = [.. eventObj
+                                                     .GetEventInvitees()
+                                                     .Where(IsInviteePresentInEvent)];
+
+        foreach (var eventCollaborator in eventCollaborators)
         {
             if (eventCollaborator.IsProposedStatus())
                 HandleInviteeThatProposedTime(eventObj, eventCollaborator);

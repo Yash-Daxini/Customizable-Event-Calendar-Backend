@@ -25,7 +25,7 @@ public class YearlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay()
     {
-        if (ByMonthDay is null || ByMonth is null)
+        if (ByMonth is null)
             return [];
 
         DateOnly startDateOfEvent = StartDate;
@@ -65,7 +65,7 @@ public class YearlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay()
     {
-        if (ByWeekDay is null || ByMonth is null)
+        if (ByWeekDay is null || ByMonth is null || WeekOrder is null || WeekOrder <= 0)
             return [];
 
         int weekDay = ByWeekDay[0] % 7;

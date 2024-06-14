@@ -23,9 +23,6 @@ public class MonthlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay()
     {
-        if (ByMonthDay is null)
-            return [];
-
         int month = StartDate.Month;
 
         DateOnly currentDate = new(StartDate.Year,

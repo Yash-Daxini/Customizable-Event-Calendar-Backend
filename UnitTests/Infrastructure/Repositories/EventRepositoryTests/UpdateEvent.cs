@@ -62,8 +62,8 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                             },new (){
                                 EventDate = new DateOnly(2024, 6, 7),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                                ProposedDuration = null,
+                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
+                                ProposedDuration = new Duration(1,2),
                                 User = new(){
                                     Id = 2,
                                     Name = "b",
@@ -84,9 +84,9 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         eventToUpdate.Id = 1;
 
-        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[0].Id = 4;
+        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[0].Id = 13;
         eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[0].EventId = 1;
-        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[1].Id = 5;
+        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[1].Id = 14;
         eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[1].EventId = 1;
 
         Assert.Equivalent(eventToUpdate, updatedEvent);

@@ -84,6 +84,44 @@ public class GetOccurrences
     }
 
     [Fact]
+    public void Should_ReturnEmptyList_When_ItIsWeeklyRecurringEventAndWeekDayIsEmpty()
+    {
+        RecurrencePattern recurrencePattern = new WeeklyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2024, 6, 20),
+            Frequency = Core.Entities.Enums.Frequency.Weekly,
+            ByWeekDay = [],
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsWeeklyRecurringEventAndWeekDayIsNull()
+    {
+        RecurrencePattern recurrencePattern = new WeeklyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2024, 6, 20),
+            Frequency = Core.Entities.Enums.Frequency.Weekly,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
     public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDayForLastDayOfMonth()
     {
         RecurrencePattern recurrencePattern = new MonthlyRecurrencePattern()
@@ -98,6 +136,27 @@ public class GetOccurrences
         };
 
         List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31), new DateOnly(2024, 7, 31), new DateOnly(2024, 9, 30)];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsMonthlyRecurringEventUsingMonthDayAndByMonthDayIsNull()
+    {
+        RecurrencePattern recurrencePattern = new MonthlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2024, 10, 20),
+            Frequency = Core.Entities.Enums.Frequency.Monthly,
+            WeekOrder = null,
+            ByMonthDay = null,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
 
         List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
 
@@ -201,6 +260,72 @@ public class GetOccurrences
     }
 
     [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingMonthDayAndByMonthDayIsNull()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = null,
+            ByMonth = 9,
+            ByMonthDay = null,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingMonthDayAndByMonthIsNull()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = null,
+            ByMonth = null,
+            ByMonthDay = 1,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingMonthDayAndByMonthAndByMonthDayAreNull()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = null,
+            ByMonth = null,
+            ByMonthDay = null,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
     public void Should_ReturnListOfOccurrences_When_ItIsYearlyRecurringEventUsingWeekOrder()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
@@ -216,6 +341,138 @@ public class GetOccurrences
         };
 
         List<DateOnly> expectedOutput = [new DateOnly(2024, 9, 29)];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderAndWeekOrderIsNull()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = null,
+            ByMonth = 9,
+            ByMonthDay = null,
+            ByWeekDay = [7],
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderAndWeekOrderIsZero()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = 0,
+            ByMonth = 9,
+            ByMonthDay = null,
+            ByWeekDay = [7],
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnListWithLastOccurrence_When_ItIsYearlyRecurringEventUsingWeekOrderAndWeekOrderIsGreaterThan5()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = 10,
+            ByMonth = 9,
+            ByMonthDay = null,
+            ByWeekDay = [7],
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [new DateOnly(2024, 9, 29)];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderAndByWeekDayIsNull()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = 5,
+            ByMonth = 9,
+            ByMonthDay = null,
+            ByWeekDay = null,
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderAndByMonthIsNull()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = 5,
+            ByMonth = null,
+            ByMonthDay = null,
+            ByWeekDay = [7],
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
+
+        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderAndWeekOrderAndByMonthIsNull()
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePattern()
+        {
+            StartDate = new DateOnly(2024, 5, 31),
+            EndDate = new DateOnly(2025, 5, 20),
+            Frequency = Core.Entities.Enums.Frequency.Yearly,
+            WeekOrder = null,
+            ByMonth = null,
+            ByMonthDay = null,
+            ByWeekDay = [7],
+            Interval = 2
+        };
+
+        List<DateOnly> expectedOutput = [];
 
         List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
 

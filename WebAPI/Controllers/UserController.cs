@@ -32,8 +32,6 @@ public class UserController : ControllerBase
         {
             User? user = _userService.GetUserById(userId).Result;
 
-            if (user is null) return NotFound();
-
             return Ok(_mapper.Map<UserDto>(user));
         }
         catch (NotFoundException ex)

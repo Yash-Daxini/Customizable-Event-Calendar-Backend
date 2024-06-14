@@ -120,7 +120,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
-        Event? actualResult = await eventRepository.GetEventById(3);
+        Event? actualResult = await eventRepository.GetEventById(10);
 
         Assert.Null(actualResult);
     }

@@ -1,9 +1,11 @@
-﻿using Core.Entities;
+﻿using System;
+using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using NullArgumentException = Core.Exceptions.NullArgumentException;
 
@@ -255,8 +257,6 @@ public class AddNonRecurringEvent
 
         _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsNullForAnyArgs();
 
-        
-
         _eventRepository.Add(eventObj).Returns(1);
 
         int id = await _eventService.AddNonRecurringEvent(eventObj, 48);
@@ -327,16 +327,32 @@ public class AddNonRecurringEvent
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).Returns("Overlaps");
+        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
 
-        
+        _eventRepository.Add(eventObj).Throws(new EventOverlapException("Overlap")); ;
 
-        _eventRepository.Add(eventObj).Returns(1);
-
-        await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.AddNonRecurringEvent(eventObj, 48));
+        var exception = await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.AddNonRecurringEvent(eventObj, 48));
 
         await _eventRepository.DidNotReceive().Add(eventObj);
 
+        Assert.Equivalent("Overlaps", exception.Message);
+
         _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EventIsNull()
+    {
+        Event eventObj = null;
+
+        _eventService.GetAllEventsByUserId(48).Returns(_events);
+
+        _eventRepository.Add(eventObj).Returns(1);
+
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventService.AddNonRecurringEvent(eventObj, 48));
+
+        await _eventRepository.DidNotReceive().Add(eventObj);
+
+        _overlappingEventService.DidNotReceive().GetOverlappedEventInformation(eventObj, _events);
     }
 }

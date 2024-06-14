@@ -4,6 +4,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
@@ -256,8 +257,6 @@ public class UpdateEvent
 
         _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsNullForAnyArgs();
 
-        
-
         await _eventService.UpdateEvent(eventObj, 48);
 
         await _eventRepository.Received().Update(eventObj);
@@ -327,14 +326,97 @@ public class UpdateEvent
 
         _eventService.GetEventById(1, 48).Returns(eventObj);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).Returns("Overlaps");
+        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
 
-        
-
-        await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.UpdateEvent(eventObj, 48));
+        var exception = await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.UpdateEvent(eventObj, 48));
 
         await _eventRepository.DidNotReceive().Update(eventObj);
 
+        Assert.Equivalent("Overlaps",exception.Message);
+
         _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EventOverlapsWithEmptyMessage()
+    {
+        Event eventObj = new()
+        {
+            Id = 1,
+            Title = "event",
+            Location = "event",
+            Description = "event",
+            Duration = new Duration(1, 2),
+            RecurrencePattern = new WeeklyRecurrencePattern()
+            {
+                StartDate = new DateOnly(2024, 5, 31),
+                EndDate = new DateOnly(2024, 8, 25),
+                Frequency = Core.Entities.Enums.Frequency.Weekly,
+                Interval = 2,
+                ByWeekDay = [2, 6]
+            },
+            DateWiseEventCollaborators = [
+                new EventCollaboratorsByDate
+                {
+                    EventDate = new DateOnly(2024, 5, 31),
+                    EventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 49,
+                                Name = "b",
+                                Email = "b@gmail.com",
+                                Password = "b"
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
+                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(2024, 5, 31),
+                            User = new User
+                            {
+                                Id = 48,
+                                Name = "a",
+                                Email = "a@gmail.com",
+                                Password = "a"
+                            },
+                            EventId = 47
+                        }
+                    ]
+                }
+            ]
+        };
+
+        _eventService.GetEventById(1, 48).Returns(eventObj);
+
+        _eventService.GetAllEventsByUserId(48).Returns(_events);
+
+        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("");
+
+        await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.UpdateEvent(eventObj, 48));
+    }
+
+    [Fact]
+    public async Task Should_ThrowException_When_EventIsNull()
+    {
+        Event eventObj = null;
+
+        _eventService.GetAllEventsByUserId(48).Returns(_events);
+
+        _eventRepository.Add(eventObj).Returns(1);
+
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventService.UpdateEvent(eventObj, 48));
+
+        await _eventRepository.DidNotReceive().Add(eventObj);
+
+        _overlappingEventService.DidNotReceive().GetOverlappedEventInformation(eventObj, _events);
     }
 }

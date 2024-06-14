@@ -137,8 +137,6 @@ public class EventController : ControllerBase
         {
             Event? eventModel = await _eventService.GetEventById(eventId, userId);
 
-            if (eventModel is null) return NotFound();
-
             return Ok(_mapper.Map<EventResponseDto>(eventModel));
         }
         catch (NotFoundException ex)

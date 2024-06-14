@@ -15,9 +15,6 @@ public class RecurrencePatternResolver : IValueResolver<EventDataModel, Event, R
 
     public RecurrencePattern Resolve(EventDataModel source, Event destination, RecurrencePattern destMember, ResolutionContext context)
     {
-        if (source.Frequency is null)
-            return _mapper.Map<SingleInstanceRecurrencePattern>(source);
-
         return source.Frequency switch
         {
             "Daily" => _mapper.Map<DailyRecurrencePattern>(source),

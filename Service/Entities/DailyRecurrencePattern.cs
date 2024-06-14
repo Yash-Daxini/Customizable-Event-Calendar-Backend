@@ -17,7 +17,7 @@ public class DailyRecurrencePattern : RecurrencePattern
 
         return [..Enumerable.Range(0, totalOccurrences)
                             .Select(weekOffset => startDateOfEvent.AddDays(weekOffset * interval))
-                            .Where(date => IsValidDateForDailyEvent(date, days, startDateOfEvent, endDateOfEvent))];
+                            .Where(date => IsValidDateForDailyEvent(date, days))];
     }
 
     public override int GetOccurrencesCount()
@@ -28,11 +28,8 @@ public class DailyRecurrencePattern : RecurrencePattern
         return ((int)difference.TotalDays / Interval) + 1;
     }
     private bool IsValidDateForDailyEvent(DateOnly date,
-                                          List<int> days,
-                                          DateOnly startDateOfEvent,
-                                          DateOnly endDateOfEvent)
+                                          List<int> days)
     {
-        return date.IsDateInRange(startDateOfEvent, endDateOfEvent)
-               && (days.Count == 0 || days.Contains(date.GetDayNumberFromWeekDay()));
+        return days.Count == 0 || days.Contains(date.GetDayNumberFromWeekDay());
     }
 }
