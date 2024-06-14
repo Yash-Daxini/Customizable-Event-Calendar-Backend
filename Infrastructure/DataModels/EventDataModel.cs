@@ -14,13 +14,13 @@ public class EventDataModel : IModel
 
     public string Description { get; set; }
 
-    public int EventStartHour { get; set; }
+    public int StartHour { get; set; }
 
-    public int EventEndHour { get; set; }
+    public int EndHour { get; set; }
 
-    public DateOnly EventStartDate { get; set; }
+    public DateOnly StartDate { get; set; }
 
-    public DateOnly EventEndDate { get; set; }
+    public DateOnly EndDate { get; set; }
 
     public string? Frequency { get; set; }
 

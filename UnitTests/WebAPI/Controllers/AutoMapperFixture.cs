@@ -20,8 +20,8 @@ public class AutoMapperFixture
             cfg.AddProfile<EventCollaboratorRequestDtoProfile>();
             cfg.AddProfile<EventResponseDtoProfile>();
             cfg.AddProfile<NonRecurringEventRequestDtoProfile>();
-            cfg.AddProfile<RecurrencePatternDtoProfile>();
             cfg.AddProfile<RecurringEventRequestDtoProfile>();
+            cfg.AddProfile<RecurrencePatternDtoProfile>();
             cfg.AddProfile<SharedCalendarDtoProfile>();
             cfg.AddProfile<UserDtoProfile>();
         },typeof(RecurringEventDateWiseEventCollaboratorsResolver).Assembly,

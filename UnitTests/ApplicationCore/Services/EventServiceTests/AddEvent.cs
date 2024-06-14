@@ -5,7 +5,6 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -324,7 +323,7 @@ public class AddEvent
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).Returns("Overlaps");
+        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
 
         _eventRepository.Add(eventObj).Returns(1);
 

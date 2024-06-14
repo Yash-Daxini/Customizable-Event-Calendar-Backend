@@ -40,7 +40,8 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                 StartDate = new DateOnly(2024, 6, 8),
                 EndDate = new DateOnly(2024, 6, 8),
                 Frequency = Core.Entities.Enums.Frequency.None,
-                Interval = 1
+                Interval = 1,
+                ByWeekDay = []
             },
             DateWiseEventCollaborators =
             [

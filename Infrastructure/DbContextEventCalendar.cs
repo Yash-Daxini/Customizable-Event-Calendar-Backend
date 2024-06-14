@@ -18,14 +18,14 @@ namespace Infrastructure
             var dateOnlyConverter = new DateOnlyConverter();
 
             modelBuilder.Entity<EventDataModel>()
-                .Property(e => e.EventEndDate)
+                .Property(e => e.EndDate)
                 .HasConversion(dateOnlyConverter);
 
             modelBuilder.Entity<EventDataModel>()
                 .HasKey(e => e.Id);
 
             modelBuilder.Entity<EventDataModel>()
-                .Property(e => e.EventStartDate)
+                .Property(e => e.StartDate)
                 .HasConversion(dateOnlyConverter);
 
             modelBuilder.Entity<EventCollaboratorDataModel>()

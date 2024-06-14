@@ -25,7 +25,8 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
                     StartDate = new DateOnly(2024, 6, 7),
                     EndDate = new DateOnly(2024, 6, 7),
                     Frequency = Core.Entities.Enums.Frequency.None,
-                    Interval = 1
+                    Interval = 1,
+                    ByWeekDay = []
                 },
                 DateWiseEventCollaborators = [
                     new (){
@@ -58,7 +59,8 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
                     StartDate = new DateOnly(2024, 6, 7),
                     EndDate = new DateOnly(2024, 6, 7),
                     Frequency = Core.Entities.Enums.Frequency.Daily,
-                    Interval = 1
+                    Interval = 1,
+                    ByWeekDay = []
                 },
                 DateWiseEventCollaborators = [
                     new (){
