@@ -4,6 +4,8 @@ using Infrastructure.Repositories;
 using Infrastructure;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
+using Infrastructure.DataModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -14,11 +16,15 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     private readonly IMapper _mapper;
 
     private readonly IConfiguration _configuration;
+    private readonly UserManager<UserDataModel> _userManager;
+    private readonly SignInManager<UserDataModel> _signInManager;
 
-    public AddUser(AutoMapperFixture autoMapperFixture)
+    public AddUser(AutoMapperFixture autoMapperFixture,UserManager<UserDataModel> userManager,SignInManager<UserDataModel> signInManager)
     {
         _mapper = autoMapperFixture.Mapper;
         _configuration = Substitute.For<IConfiguration>();
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     [Fact]
@@ -33,14 +39,18 @@ public class AddUser : IClassFixture<AutoMapperFixture>
             Email = "b",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration);
+        UserDataModel userDataModel = new()
+        {
+            UserName = "b",
+            Email = "b",
+        };
 
-        int id = await userRepository.Add(user);
+        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
 
-        user.Id = id;
+        _userManager.CreateAsync(userDataModel).ReturnsForAnyArgs(IdentityResult.Success);
 
-        User? addedUser = await userRepository.GetUserById(id);
+        var result = await userRepository.SignUp(user);
 
-        Assert.Equivalent(user, addedUser);
+        Assert.True(result.Succeeded);
     }
 }

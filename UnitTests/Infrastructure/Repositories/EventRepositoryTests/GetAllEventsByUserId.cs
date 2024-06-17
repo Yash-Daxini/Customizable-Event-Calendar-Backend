@@ -42,8 +42,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 1,
                                     Name = "a",
-                                    Email = "a",
-                                    Password = "a",
+                                    Email = "a"
                                 }
                             }
                             ]
@@ -76,8 +75,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 2,
                                     Name = "b",
-                                    Email = "b",
-                                    Password = "b",
+                                    Email = "b"
                                 }
                             },
                             new (){
@@ -90,8 +88,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 3,
                                     Name = "c",
-                                    Email = "c",
-                                    Password = "c",
+                                    Email = "c"
                                 }
                             }
                             ]

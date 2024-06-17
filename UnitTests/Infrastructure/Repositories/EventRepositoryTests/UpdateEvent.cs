@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.DataModels;
 using Infrastructure.Repositories;
-using NSubstitute;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -56,8 +54,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 1,
                                     Name = "a",
-                                    Email = "a",
-                                    Password = "a",
+                                    Email = "a"
                                 }
                             },new (){
                                 EventDate = new DateOnly(2024, 6, 7),
@@ -67,8 +64,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 2,
                                     Name = "b",
-                                    Email = "b",
-                                    Password = "b",
+                                    Email = "b"
                                 }
                             }
                             ]

@@ -54,9 +54,9 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Password = "c",
         };
 
-        _userAuthenticationService.Authenticate(user).ReturnsForAnyArgs(authenticateResponse);
+        _userAuthenticationService.LogIn(user).ReturnsForAnyArgs(authenticateResponse);
 
-        IActionResult actionResult = await _userController.AuthenticateUser(authenticateRequestDto);
+        IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
         var returnedResult = Assert.IsType<OkObjectResult>(actionResult);
 
@@ -81,9 +81,9 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Password = "c",
         };
 
-        _userAuthenticationService.Authenticate(user).ThrowsForAnyArgs<NotFoundException>();
+        _userAuthenticationService.LogIn(user).ThrowsForAnyArgs<NotFoundException>();
 
-        IActionResult actionResult = await _userController.AuthenticateUser(authenticateRequestDto);
+        IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
         Assert.IsType<NotFoundObjectResult>(actionResult);
     }
@@ -107,9 +107,9 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Password = "c",
         };
 
-        _userAuthenticationService.Authenticate(user).ThrowsForAnyArgs<AuthenticationFailedException>();
+        _userAuthenticationService.LogIn(user).ThrowsForAnyArgs<AuthenticationFailedException>();
 
-        IActionResult actionResult = await _userController.AuthenticateUser(authenticateRequestDto);
+        IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
         Assert.IsType<BadRequestObjectResult>(actionResult);
     }
@@ -132,9 +132,9 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Password = "c",
         };
 
-        _userAuthenticationService.Authenticate(user).ThrowsForAnyArgs<Exception>();
+        _userAuthenticationService.LogIn(user).ThrowsForAnyArgs<Exception>();
 
-        IActionResult actionResult = await _userController.AuthenticateUser(authenticateRequestDto);
+        IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
         Assert.IsType<ObjectResult>(actionResult);
     }

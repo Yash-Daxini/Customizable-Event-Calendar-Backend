@@ -20,15 +20,13 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
             {
                 Id = 1,
                 Name = "a",
-                Email = "a",
-                Password = "a"
+                Email = "a"
             },
             new User
             {
                 Id = 2,
                 Name = "b",
-                Email = "b",
-                Password = "b"
+                Email = "b"
             },
             new DateOnly(2024,6,7),
             new DateOnly(2024,6,7))

@@ -27,9 +27,9 @@ public class UserRepositoryDBContext
             dbContextEvent.Users.Add(new()
             {
                 Id = 1,
-                Name = "a",
+                UserName = "a",
                 Email = "a",
-                Password = "a",
+                //Password = "a",
             });
             dbContextEvent.SaveChanges();
         }

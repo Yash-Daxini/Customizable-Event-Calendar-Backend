@@ -3,27 +3,27 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Core.Interfaces.IRepositories;
 using Core.Entities;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity;
+using Core.Interfaces.IServices;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository : BaseRepository<User, UserDataModel>, IUserRepository
+public class UserRepository : IUserRepository
 {
     private readonly DbContextEventCalendar _dbContext;
 
     private readonly IMapper _mapper;
 
-    private readonly IConfiguration _configuration;
+    private readonly UserManager<UserDataModel> _userManager;
 
-    public UserRepository(DbContextEventCalendar dbContextEvent, IMapper mapper, IConfiguration configuration) : base(dbContextEvent, mapper)
+    private readonly SignInManager<UserDataModel> _signInManager;
+
+    public UserRepository(DbContextEventCalendar dbContextEvent, IMapper mapper, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
     {
         _dbContext = dbContextEvent;
         _mapper = mapper;
-        _configuration = configuration;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     public async Task<User?> GetUserById(int userId)
@@ -33,43 +33,35 @@ public class UserRepository : BaseRepository<User, UserDataModel>, IUserReposito
                                .FirstOrDefaultAsync());
     }
 
-    public async Task<AuthenticateResponse?> AuthenticateUser(User user) //Extra
+    public async Task<IdentityResult> Update(User user)
     {
-        UserDataModel? userDataModel = await _dbContext
-                                      .Users
-                                      .FirstOrDefaultAsync(userObj => userObj.Name == user.Name
-                                                                   && userObj.Password == user.Password);
+        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id + "");
 
-        User validatedUser = _mapper.Map<User>(userDataModel);
+        if (userDataModel is null)
+            return IdentityResult.Failed();
 
-        var token = "";
+        userDataModel.UserName = user.Name;
+        userDataModel.Email = user.Email;
 
-        if (validatedUser is not null)
-        {
-            token = await GenerateJwtToken(validatedUser);
-        }
-
-        return new AuthenticateResponse(validatedUser, token);
+        return await _userManager.UpdateAsync(userDataModel);
     }
 
-    private async Task<string> GenerateJwtToken(User user)
+    public async Task<IdentityResult> Delete(User user)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = await Task.Run(() =>
-        {
+        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id + "");
 
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]));
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Issuer = _configuration["JWT:ValidIssuer"],
-                Audience = _configuration["JWT:ValidAudience"],
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
-            };
-            return tokenHandler.CreateToken(tokenDescriptor);
-        });
+        return await _userManager.DeleteAsync(userDataModel);
+    }
 
-        return tokenHandler.WriteToken(token);
+    public async Task<IdentityResult> SignUp(User user)
+    {
+        UserDataModel userDataModel = _mapper.Map<UserDataModel>(user);
+
+        return await _userManager.CreateAsync(userDataModel, user.Password);
+    }
+
+    public async Task<SignInResult> LogIn(User user)
+    {
+        return await _signInManager.PasswordSignInAsync(user.Email, user.Password, false, false);
     }
 }

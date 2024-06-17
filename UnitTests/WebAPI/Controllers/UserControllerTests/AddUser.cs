@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.IServices;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -37,13 +38,11 @@ public class AddUser : IClassFixture<AutoMapperFixture>
             Password = "b"
         };
 
-        _userService.AddUser(user).ReturnsForAnyArgs(1);
+        _userService.SignUp(user).ReturnsForAnyArgs(IdentityResult.Success);
 
         IActionResult actionResult = await _userController.AddUser(userDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedUserId = 1 }, returnedResult.Value);
+        Assert.IsType<OkObjectResult>(actionResult);
     }
 
     [Fact]
@@ -53,7 +52,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
 
         User user = Substitute.For<User>();
 
-        _userService.AddUser(user).ThrowsForAnyArgs<Exception>();
+        _userService.SignUp(user).ThrowsForAnyArgs<Exception>();
 
         IActionResult actionResult = await _userController.AddUser(userDto);
 

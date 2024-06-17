@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Core.Interfaces.IServices;
 
@@ -6,9 +7,9 @@ public interface IUserService
 {
     public Task<User> GetUserById(int userId);
 
-    public Task<int> AddUser(User userModel);
+    public Task<IdentityResult> SignUp(User user);
 
-    public Task UpdateUser(User userModel);
+    public Task<IdentityResult> UpdateUser(User user);
 
-    public Task DeleteUser(int userId);
+    public Task<IdentityResult> DeleteUser(int userId);
 }

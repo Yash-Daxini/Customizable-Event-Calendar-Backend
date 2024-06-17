@@ -1,20 +1,27 @@
 ﻿using Infrastructure.DataModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class DbContextEventCalendar : DbContext
+    public class DbContextEventCalendar : IdentityDbContext<UserDataModel, IdentityRole<int>, int>
     {
         public DbContextEventCalendar(DbContextOptions<DbContextEventCalendar> options) : base(options)
         {
 
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
+
         public DbSet<EventDataModel> Events { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             var dateOnlyConverter = new DateOnlyConverter();
 
             modelBuilder.Entity<EventDataModel>()
@@ -44,6 +51,23 @@ namespace Infrastructure
                 .Property(e => e.EventDate)
                 .HasConversion(dateOnlyConverter);
 
+            modelBuilder.Entity<SharedCalendarDataModel>().
+                HasKey(e => new { e.SenderId, e.ReceiverId });
+
+            modelBuilder.Entity<SharedCalendarDataModel>()
+                .HasOne(e => e.Sender)
+                .WithMany()
+                .HasForeignKey(e => e.SenderId)
+                .IsRequired()   
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<SharedCalendarDataModel>()
+                .HasOne(e => e.Receiver)
+                .WithMany()
+                .HasForeignKey(e => e.ReceiverId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
             modelBuilder.Entity<SharedCalendarDataModel>()
                 .Property(e => e.FromDate)
                 .HasConversion(dateOnlyConverter);
@@ -53,7 +77,6 @@ namespace Infrastructure
                 .HasConversion(dateOnlyConverter);
 
             base.OnModelCreating(modelBuilder);
-
 
         }
 

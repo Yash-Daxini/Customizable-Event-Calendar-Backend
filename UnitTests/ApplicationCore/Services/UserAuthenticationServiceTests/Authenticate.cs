@@ -38,11 +38,11 @@ public class Authenticate
 
         _userRepository.GetUserById(1).Returns(user);
 
-        _userRepository.AuthenticateUser(user).Returns(authenticateResponse);
+        _userRepository.LogIn(user).Returns(authenticateResponse);
 
-        AuthenticateResponse? auth = await _userAuthenticationService.Authenticate(user);
+        AuthenticateResponse? auth = await _userAuthenticationService.LogIn(user);
 
-        await _userRepository.Received().AuthenticateUser(user);
+        await _userRepository.Received().LogIn(user);
 
         await _multipleInviteesEventService.Received().StartSchedulingProcessOfProposedEvent(1);
 
@@ -62,11 +62,11 @@ public class Authenticate
 
         _userRepository.GetUserById(1).Returns(user);
 
-        _userRepository.AuthenticateUser(user).ReturnsNull();
+        _userRepository.LogIn(user).ReturnsNull();
 
-        await Assert.ThrowsAsync<AuthenticationFailedException>(async () => await _userAuthenticationService.Authenticate(user));
+        await Assert.ThrowsAsync<AuthenticationFailedException>(async () => await _userAuthenticationService.LogIn(user));
 
-        await _userRepository.Received().AuthenticateUser(user);
+        await _userRepository.Received().LogIn(user);
     }
 
     [Fact]
@@ -76,10 +76,10 @@ public class Authenticate
 
         _userRepository.GetUserById(1).Returns(user);
 
-        _userRepository.AuthenticateUser(new User()).ReturnsNull();
+        _userRepository.LogIn(new User()).ReturnsNull();
 
-        await Assert.ThrowsAsync<NullArgumentException>(async () => await _userAuthenticationService.Authenticate(user));
+        await Assert.ThrowsAsync<NullArgumentException>(async () => await _userAuthenticationService.LogIn(user));
 
-        await _userRepository.DidNotReceive().AuthenticateUser(user);
+        await _userRepository.DidNotReceive().LogIn(user);
     }
 }

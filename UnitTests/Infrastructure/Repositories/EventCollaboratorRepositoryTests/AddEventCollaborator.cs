@@ -31,8 +31,7 @@ public class AddEventCollaborator : IClassFixture<AutoMapperFixture>
             {
                 Id = 1,
                 Name = "a",
-                Email = "a",
-                Password = "a",
+                Email = "a"
             },
             ProposedDuration = null
         };

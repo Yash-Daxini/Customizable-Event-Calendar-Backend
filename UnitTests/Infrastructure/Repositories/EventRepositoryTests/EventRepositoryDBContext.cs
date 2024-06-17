@@ -318,23 +318,23 @@ public class EventRepositoryDBContext
             dbContextEvent.Users.Add(new()
             {
                 Id = 1,
-                Name = "a",
+                UserName = "a",
                 Email = "a",
-                Password = "a",
+                //Password = "a",
             });
             dbContextEvent.Users.Add(new()
             {
                 Id = 2,
-                Name = "b",
+                UserName = "b",
                 Email = "b",
-                Password = "b",
+                //Password = "b",
             });
             dbContextEvent.Users.Add(new()
             {
                 Id = 3,
-                Name = "c",
+                UserName = "c",
                 Email = "c",
-                Password = "c",
+                //Password = "c",
             });
             dbContextEvent.SharedCalendars.Add(new()
             {

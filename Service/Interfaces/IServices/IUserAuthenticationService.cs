@@ -4,5 +4,5 @@ namespace Core.Interfaces.IServices;
 
 public interface IUserAuthenticationService
 {
-    public Task<AuthenticateResponse?> Authenticate(User user);
+    public Task<AuthenticateResponse?> LogIn(User user);
 }

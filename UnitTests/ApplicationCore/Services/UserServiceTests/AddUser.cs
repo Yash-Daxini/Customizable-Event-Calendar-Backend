@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using NullArgumentException = Core.Exceptions.NullArgumentException;
 
@@ -31,13 +32,13 @@ public class AddUser
             Password = "password",
         };
 
-        _userRepository.Add(user).Returns(1);
+        _userRepository.SignUp(user).Returns(IdentityResult.Success);
 
-        int userId = await _userService.AddUser(user);
+        var result = await _userService.SignUp(user);
 
-        Assert.Equal(1, userId);
+        await _userRepository.Received().SignUp(user);
 
-        await _userRepository.Received().Add(user);
+        Assert.True(result.Succeeded);
     }
 
     [Fact]
@@ -45,10 +46,10 @@ public class AddUser
     {
         User user = null;
 
-        _userRepository.Add(user).Returns(1);
+        _userRepository.SignUp(user).Returns(IdentityResult.Failed());
 
-        await Assert.ThrowsAsync<NullArgumentException>(async() => await _userService.AddUser(user));
+        await Assert.ThrowsAsync<NullArgumentException>(async() => await _userService.SignUp(user));
 
-        await _userRepository.DidNotReceive().Add(user);
+        await _userRepository.DidNotReceive().SignUp(user);
     }
 }

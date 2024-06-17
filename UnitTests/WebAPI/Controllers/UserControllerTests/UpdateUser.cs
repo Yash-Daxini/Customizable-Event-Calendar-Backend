@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -28,13 +29,17 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateUserAndReturnActionResult_When_CallsTheMethod()
     {
-        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
+        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com" };
+
+        User user = new() { Id = userDto.Id, Name = userDto.Name, Email = userDto.Email };
+
+        _userService.UpdateUser(user).ReturnsForAnyArgs(IdentityResult.Success);
 
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 
-        Assert.IsType<CreatedAtActionResult>(actionResult);
+        Assert.IsType<OkObjectResult>(actionResult);
     }
-    
+
     [Fact]
     public async Task Should_ReturnBadRequest_When_UserNotAvailableWithId()
     {
@@ -48,7 +53,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         Assert.IsType<NotFoundObjectResult>(actionResult);
     }
-    
+
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {

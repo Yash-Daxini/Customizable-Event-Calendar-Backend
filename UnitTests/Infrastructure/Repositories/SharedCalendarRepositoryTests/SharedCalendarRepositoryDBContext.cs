@@ -28,23 +28,20 @@ public class SharedCalendarRepositoryDBContext
             dbContextEvent.Users.Add(new()
             {
                 Id = 1,
-                Name = "a",
-                Email = "a",
-                Password = "a",
+                UserName = "a",
+                Email = "a"
             });
             dbContextEvent.Users.Add(new()
             {
                 Id = 2,
-                Name = "b",
-                Email = "b",
-                Password = "b",
+                UserName = "b",
+                Email = "b"
             });
             dbContextEvent.Users.Add(new()
             {
                 Id = 3,
-                Name = "c",
-                Email = "c",
-                Password = "c",
+                UserName = "c",
+                Email = "c"
             });
             dbContextEvent.SharedCalendars.Add(new()
             {

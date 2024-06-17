@@ -4,6 +4,8 @@ using Infrastructure.Repositories;
 using Infrastructure;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
+using Microsoft.AspNetCore.Identity;
+using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -15,10 +17,15 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
     private readonly IConfiguration _configuration;
 
-    public UpdateUser(AutoMapperFixture autoMapperFixture)
+    private readonly UserManager<UserDataModel> _userManager;
+    private readonly SignInManager<UserDataModel> _signInManager;
+
+    public UpdateUser(AutoMapperFixture autoMapperFixture, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
     {
         _mapper = autoMapperFixture.Mapper;
         _configuration = Substitute.For<IConfiguration>();
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     [Fact]
@@ -34,7 +41,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
             Email = "b",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration);
+        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
 
         await userRepository.Update(user);
 

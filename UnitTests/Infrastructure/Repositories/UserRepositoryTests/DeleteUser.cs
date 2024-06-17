@@ -4,6 +4,8 @@ using Infrastructure.Repositories;
 using Infrastructure;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
+using Infrastructure.DataModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -15,10 +17,16 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
     private readonly IConfiguration _configuration;
 
-    public DeleteUser(AutoMapperFixture autoMapperFixture)
+    private readonly UserManager<UserDataModel> _userManager;
+
+    private readonly SignInManager<UserDataModel> _signInManager;
+
+    public DeleteUser(AutoMapperFixture autoMapperFixture, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
     {
         _mapper = autoMapperFixture.Mapper;
         _configuration = Substitute.For<IConfiguration>();
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     [Fact]
@@ -34,7 +42,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
             Email = "a",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration);
+        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
 
         await userRepository.Delete(user);
 

@@ -30,7 +30,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            User? user = _userService.GetUserById(userId).Result;
+            User? user = await _userService.GetUserById(userId);
 
             return Ok(_mapper.Map<UserDto>(user));
         }
@@ -50,8 +50,11 @@ public class UserController : ControllerBase
         try
         {
             User user = _mapper.Map<User>(userDto);
-            int addedUserId = await _userService.AddUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { userId = addedUserId, controller = "user" }, new { addedUserId });
+            var result = await _userService.SignUp(user);
+            if (result.Succeeded)
+                return Ok(new { message = "Successfully SingUp !" });
+            else
+                return BadRequest(result.Errors);
         }
         catch (Exception ex)
         {
@@ -60,14 +63,19 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
-    [HttpPut]
+    [HttpPatch]
     public async Task<ActionResult> UpdateUser([FromBody] UserDto userDto)
     {
         try
         {
             User user = _mapper.Map<User>(userDto);
-            await _userService.UpdateUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { userId = user.Id, controller = "user" }, new { user.Id });
+
+            var result = await _userService.UpdateUser(user);
+
+            if (result.Succeeded)
+                return Ok(new { message = "Successfully Updated User" });
+            else
+                return BadRequest(result.Errors);
         }
         catch (NotFoundException ex)
         {
@@ -85,8 +93,12 @@ public class UserController : ControllerBase
     {
         try
         {
-            await _userService.DeleteUser(userId);
-            return Ok();
+            var result = await _userService.DeleteUser(userId);
+
+            if (result.Succeeded)
+                return Ok(new { message = "Successfully Deleted User" });
+            else
+                return BadRequest(result.Errors);
         }
         catch (NotFoundException ex)
         {
@@ -99,13 +111,13 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("~/api/auth/login")]
-    public async Task<ActionResult> AuthenticateUser([FromBody] AuthenticateRequestDto authenticateRequestDto)
+    public async Task<ActionResult> LogIn([FromBody] AuthenticateRequestDto authenticateRequestDto)
     {
         try
         {
             User user = _mapper.Map<User>(authenticateRequestDto);
 
-            AuthenticateResponseDto authenticateResponseDto = _mapper.Map<AuthenticateResponseDto>(await _userAuthenticationService.Authenticate(user));
+            AuthenticateResponseDto authenticateResponseDto = _mapper.Map<AuthenticateResponseDto>(await _userAuthenticationService.LogIn(user));
 
             return Ok(authenticateResponseDto);
         }

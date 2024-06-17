@@ -42,8 +42,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 1,
                                     Name = "a",
-                                    Email = "a",
-                                    Password = "a",
+                                    Email = "a"
                                 }
                             }
                             ]
@@ -76,8 +75,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 2,
                                     Name = "b",
-                                    Email = "b",
-                                    Password = "b",
+                                    Email = "b"
                                 }
                             },
                             new (){
@@ -90,8 +88,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                                 User = new(){
                                     Id = 3,
                                     Name = "c",
-                                    Email = "c",
-                                    Password = "c",
+                                    Email = "c"
                                 }
                             }
                             ]
@@ -115,15 +112,13 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
             {
                 Id = 1,
                 Name = "a",
-                Email = "a@gmail.com",
-                Password = "a"
+                Email = "a@gmail.com"
             },
             new User
             {
                 Id = 2,
                 Name = "b",
-                Email = "b@gmail.com",
-                Password = "b"
+                Email = "b@gmail.com"
             },
             new DateOnly(2024, 6, 7),
             new DateOnly(2024, 6, 7));

@@ -1,13 +1,16 @@
 using System.Text;
+using Core.Constants;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure;
+using Infrastructure.DataModels;
 using Infrastructure.Profiles;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.Dtos;
@@ -51,6 +54,12 @@ builder.Services.AddTransient<IOverlappingEventService, OverlapEventService>();
 builder.Services.AddTransient<IMultipleInviteesEventService, MultipleInviteesEventService>();
 builder.Services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
 builder.Services.AddTransient<ISharedEventCollaborationService, SharedEventCollaborationService>();
+builder.Services.AddTransient<ITokenClaimService, TokenClaimService>();
+
+//Identity
+builder.Services.AddIdentity<UserDataModel, IdentityRole<int>>()
+    .AddEntityFrameworkStores<DbContextEventCalendar>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddDbContext<DbContextEventCalendar>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("connectionString")));
@@ -67,12 +76,10 @@ builder.Services.AddAuthentication(options =>
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            ValidAudience = builder.Configuration["JWT:ValidAudience"],
-            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthorizationConstants.JWT_SECRET_KEY)),
         };
     });
 

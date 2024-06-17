@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using UnitTests.Infrastructure.Repositories;
 using WebAPI.Controllers;
 
 namespace UnitTests.WebAPI.Controllers.UserControllerTests;
@@ -27,9 +27,11 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteUserAndReturnActionResult_When_UserAvailableWithId()
     {
+        _userService.DeleteUser(1).Returns(IdentityResult.Success);
+
         IActionResult actionResult = await _userController.DeleteUser(1);
 
-        Assert.IsType<OkResult>(actionResult);
+        Assert.IsType<OkObjectResult>(actionResult);
     }
     
     [Fact]

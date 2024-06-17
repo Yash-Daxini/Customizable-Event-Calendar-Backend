@@ -2,8 +2,6 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
-using NSubstitute;
-using Infrastructure.DataModels;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -35,8 +33,7 @@ public class UpdateEventCollaborator : IClassFixture<AutoMapperFixture>
             {
                 Id = 1,
                 Name = "a",
-                Email = "a",
-                Password = "a",
+                Email = "a"
             },
             ProposedDuration = null
         };
