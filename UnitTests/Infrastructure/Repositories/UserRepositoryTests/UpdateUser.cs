@@ -6,47 +6,85 @@ using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.DataModels;
+using Microsoft.AspNetCore.Http;
+using NSubstitute.ReturnsExtensions;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
 public class UpdateUser : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContext;
-
     private readonly IMapper _mapper;
-
-    private readonly IConfiguration _configuration;
 
     private readonly UserManager<UserDataModel> _userManager;
     private readonly SignInManager<UserDataModel> _signInManager;
 
-    public UpdateUser(AutoMapperFixture autoMapperFixture, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
+    public UpdateUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _configuration = Substitute.For<IConfiguration>();
-        _userManager = userManager;
-        _signInManager = signInManager;
+        var userStoreSubstitute = Substitute.For<IUserStore<UserDataModel>>();
+
+        _userManager = Substitute.For<UserManager<UserDataModel>>(
+            userStoreSubstitute, null, null, null, null, null, null, null, null);
+
+        var contextAccessorSubstitute = Substitute.For<IHttpContextAccessor>();
+        var userClaimsPrincipalFactorySubstitute = Substitute.For<IUserClaimsPrincipalFactory<UserDataModel>>();
+
+        _signInManager = Substitute.For<SignInManager<UserDataModel>>(
+            _userManager, contextAccessorSubstitute, userClaimsPrincipalFactorySubstitute, null, null, null, null);
     }
 
     [Fact]
-    public async Task Should_UpdateUser_When_UserWithIdAvailable()
+    public async Task Should_UpdateUserAndReturnSuccess_When_UserWithIdAvailable()
     {
-        _dbContext = await new UserRepositoryDBContext().GetDatabaseContext();
+        User expectedResult = new()
+        {
+            Id = 1,
+            Name = "b",
+            Email = "b",
+        };
 
+        UserDataModel userDataModel = new()
+        {
+            Id = 1,
+            UserName = "b",
+            Email = "b",
+        };
+
+        UserRepository userRepository = new(_mapper, _userManager, _signInManager);
+
+        _userManager.UpdateAsync(userDataModel).Returns(IdentityResult.Success);
+
+        _userManager.FindByIdAsync("1").Returns(userDataModel);
+
+        await userRepository.Update(expectedResult);
+
+        User? updatedUser = await userRepository.GetUserById(1);
+
+        Assert.Equivalent(expectedResult, updatedUser);
+    }
+
+    [Fact]
+    public async Task Should_ReturnFailed_When_UserWithIdNotAvailable()
+    {
         User user = new()
         {
             Id = 1,
             Name = "b",
-            Password = "b",
             Email = "b",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
+        UserDataModel userDataModel = null;
+
+        UserRepository userRepository = new(_mapper, _userManager, _signInManager);
+
+        _userManager.UpdateAsync(userDataModel).Returns(IdentityResult.Failed());
+
+        _userManager.FindByIdAsync("1").ReturnsNull();
 
         await userRepository.Update(user);
 
         User? updatedUser = await userRepository.GetUserById(1);
 
-        Assert.Equivalent(user, updatedUser);
+        Assert.Null(updatedUser);
     }
 }

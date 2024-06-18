@@ -26,9 +26,16 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnSharedCalendar_When_SharedCalendarAvailableWithId()
     {
-        SharedCalendarDto sharedCalendarDto = Substitute.For<SharedCalendarDto>();
+        SharedCalendarDto sharedCalendarDto = new()
+        {
+            Id = 1,
+            SenderUserId = 48,
+            ReceiverUserId = 49,
+            FromDate = new(),
+            ToDate = new()
+        };
 
-        SharedCalendar sharedCalendar = new(0, 
+        SharedCalendar sharedCalendar = new(1, 
                                             new User 
                                             { 
                                                 Id = 48, 

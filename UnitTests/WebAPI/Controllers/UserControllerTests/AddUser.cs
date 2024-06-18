@@ -46,6 +46,20 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
+    public async Task Should_ReturnBadRequest_When_AddOperationFailed()
+    {
+        UserDto userDto = Substitute.For<UserDto>();
+
+        User user = Substitute.For<User>();
+
+        _userService.SignUp(user).ReturnsForAnyArgs(IdentityResult.Failed());
+
+        IActionResult actionResult = await _userController.AddUser(userDto);
+
+        Assert.IsType<BadRequestObjectResult>(actionResult);
+    }
+
+    [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         UserDto userDto = Substitute.For<UserDto>();

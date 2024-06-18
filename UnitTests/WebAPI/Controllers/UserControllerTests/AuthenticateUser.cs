@@ -48,9 +48,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
 
         AuthenticateRequestDto authenticateRequestDto = new()
         {
-            Id = 1,
             Name = "a",
-            Email = "b",
             Password = "c",
         };
 
@@ -77,7 +75,6 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
         AuthenticateRequestDto authenticateRequestDto = new()
         {
             Name = "a",
-            Email = "b",
             Password = "c",
         };
 
@@ -103,7 +100,6 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
         AuthenticateRequestDto authenticateRequestDto = new()
         {
             Name = "a",
-            Email = "b",
             Password = "c",
         };
 
@@ -128,7 +124,6 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
         AuthenticateRequestDto authenticateRequestDto = new()
         {
             Name = "a",
-            Email = "b",
             Password = "c",
         };
 

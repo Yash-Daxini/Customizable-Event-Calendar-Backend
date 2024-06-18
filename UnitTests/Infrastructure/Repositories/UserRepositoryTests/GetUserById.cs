@@ -6,46 +6,57 @@ using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
 public class GetUserById : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContext;
-
     private readonly IMapper _mapper;
-
-    private readonly IConfiguration _configuration;
 
     private readonly UserManager<UserDataModel> _userManager;
     private readonly SignInManager<UserDataModel> _signInManager;
 
-    public GetUserById(AutoMapperFixture autoMapperFixture, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
+    public GetUserById(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _configuration = Substitute.For<IConfiguration>();
-        _userManager = userManager;
-        _signInManager = signInManager;
+        var userStoreSubstitute = Substitute.For<IUserStore<UserDataModel>>();
+
+        _userManager = Substitute.For<UserManager<UserDataModel>>(
+            userStoreSubstitute, null, null, null, null, null, null, null, null);
+
+        var contextAccessorSubstitute = Substitute.For<IHttpContextAccessor>();
+        var userClaimsPrincipalFactorySubstitute = Substitute.For<IUserClaimsPrincipalFactory<UserDataModel>>();
+
+        _signInManager = Substitute.For<SignInManager<UserDataModel>>(
+            _userManager, contextAccessorSubstitute, userClaimsPrincipalFactorySubstitute, null, null, null, null);
     }
 
     [Fact]
     public async Task Should_ReturnUser_When_UserWithIdAvailable()
     {
-        _dbContext = await new UserRepositoryDBContext().GetDatabaseContext();
-
-        User user = new()
+        User expectedResult = new()
         {
 
             Id = 1,
             Name = "a",
-            Password = "a",
             Email = "a",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
+        UserDataModel userDataModel = new()
+        {
 
-        User? userById = await userRepository.GetUserById(1);
+            Id = 1,
+            UserName = "a",
+            Email = "a",
+        };
 
-        Assert.Equivalent(user, userById);
+        UserRepository userRepository = new(_mapper, _userManager, _signInManager);
+
+        _userManager.FindByIdAsync("1").Returns(userDataModel);
+
+        User? actualResult = await userRepository.GetUserById(1);
+
+        Assert.Equivalent(expectedResult, actualResult);
     }
 }

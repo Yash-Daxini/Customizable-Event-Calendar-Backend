@@ -51,15 +51,16 @@ namespace Infrastructure
                 .Property(e => e.EventDate)
                 .HasConversion(dateOnlyConverter);
 
-            modelBuilder.Entity<SharedCalendarDataModel>().
-                HasKey(e => new { e.SenderId, e.ReceiverId });
-
             modelBuilder.Entity<SharedCalendarDataModel>()
                 .HasOne(e => e.Sender)
                 .WithMany()
                 .HasForeignKey(e => e.SenderId)
                 .IsRequired()   
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            //Set Primary Key
+            modelBuilder.Entity<SharedCalendarDataModel>()
+                .HasKey(e => e.Id);
 
             modelBuilder.Entity<SharedCalendarDataModel>()
                 .HasOne(e => e.Receiver)

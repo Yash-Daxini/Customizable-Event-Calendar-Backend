@@ -1,39 +1,41 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using Infrastructure;
-using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using NSubstitute.ReturnsExtensions;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
 public class DeleteUser : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContext;
-
     private readonly IMapper _mapper;
-
-    private readonly IConfiguration _configuration;
 
     private readonly UserManager<UserDataModel> _userManager;
 
     private readonly SignInManager<UserDataModel> _signInManager;
 
-    public DeleteUser(AutoMapperFixture autoMapperFixture, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
+    public DeleteUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _configuration = Substitute.For<IConfiguration>();
-        _userManager = userManager;
-        _signInManager = signInManager;
+
+        var userStoreSubstitute = Substitute.For<IUserStore<UserDataModel>>();
+
+        _userManager = Substitute.For<UserManager<UserDataModel>>(
+            userStoreSubstitute, null, null, null, null, null, null, null, null);
+
+        var contextAccessorSubstitute = Substitute.For<IHttpContextAccessor>();
+        var userClaimsPrincipalFactorySubstitute = Substitute.For<IUserClaimsPrincipalFactory<UserDataModel>>();
+
+        _signInManager = Substitute.For<SignInManager<UserDataModel>>(
+            _userManager, contextAccessorSubstitute, userClaimsPrincipalFactorySubstitute, null, null, null, null);
     }
 
     [Fact]
     public async Task Should_DeleteUser_When_UserWithIdAvailable()
     {
-        _dbContext = await new UserRepositoryDBContext().GetDatabaseContext();
-
         User user = new()
         {
             Id = 1,
@@ -42,12 +44,25 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
             Email = "a",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
+        UserDataModel userDataModel = new()
+        {
+            Id = 1,
+            UserName = "a",
+            Email = "a",
+        };
 
-        await userRepository.Delete(user);
+        UserRepository userRepository = new(_mapper, _userManager, _signInManager);
+
+        _userManager.FindByIdAsync("1").ReturnsNull();
+
+        _userManager.DeleteAsync(userDataModel).ReturnsForAnyArgs(IdentityResult.Success);
+
+        IdentityResult identityResult = await userRepository.Delete(user);
 
         User? deletedUser = await userRepository.GetUserById(1);
 
         Assert.Null(deletedUser);
+
+        Assert.Equal(IdentityResult.Success,identityResult);
     }
 }

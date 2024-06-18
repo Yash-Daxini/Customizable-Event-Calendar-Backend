@@ -6,33 +6,35 @@ using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
 public class LogIn : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContext;
-
     private readonly IMapper _mapper;
-
-    private readonly IConfiguration _configuration;
 
     private readonly UserManager<UserDataModel> _userManager;
     private readonly SignInManager<UserDataModel> _signInManager;
 
-    public LogIn(AutoMapperFixture autoMapperFixture, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
+    public LogIn(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _configuration = Substitute.For<IConfiguration>();
-        _userManager = userManager;
-        _signInManager = signInManager;
+        var userStoreSubstitute = Substitute.For<IUserStore<UserDataModel>>();
+
+        _userManager = Substitute.For<UserManager<UserDataModel>>(
+            userStoreSubstitute, null, null, null, null, null, null, null, null);
+
+        var contextAccessorSubstitute = Substitute.For<IHttpContextAccessor>();
+        var userClaimsPrincipalFactorySubstitute = Substitute.For<IUserClaimsPrincipalFactory<UserDataModel>>();
+
+        _signInManager = Substitute.For<SignInManager<UserDataModel>>(
+            _userManager, contextAccessorSubstitute, userClaimsPrincipalFactorySubstitute, null, null, null, null);
     }
 
     [Fact]
-    public async Task Should_ReturnAuthenticationResponse_When_UserWithValidCredentials()
+    public async Task Should_ReturnSuccessResult_When_UserWithValidCredentials()
     {
-        _dbContext = await new UserRepositoryDBContext().GetDatabaseContext();
-
         User user = new()
         {
             Id = 1,
@@ -41,20 +43,18 @@ public class LogIn : IClassFixture<AutoMapperFixture>
             Email = "a",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
+        UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 
-        _configuration["JWT:Secret"].Returns("ADSJIDJFIEKNFIOJVNBOIEDFEW90432jkj");
+        _signInManager.PasswordSignInAsync(user.Name,user.Password,false,false).Returns(SignInResult.Success);
 
-        AuthenticateResponse? authenticatedUser = await userRepository.LogIn(user);
+        SignInResult authResult = await userRepository.LogIn(user);
 
-        Assert.Equivalent(user.Name, authenticatedUser.Name);
+        Assert.Equal(SignInResult.Success, authResult);
     }
 
     [Fact]
-    public async Task Should_ReturnNull_When_UserWithInValidCredentials()
+    public async Task Should_ReturnFailedResult_When_UserWithInValidCredentials()
     {
-        _dbContext = await new UserRepositoryDBContext().GetDatabaseContext();
-
         User user = new()
         {
             Id = 5,
@@ -63,12 +63,12 @@ public class LogIn : IClassFixture<AutoMapperFixture>
             Email = "b",
         };
 
-        UserRepository userRepository = new(_dbContext, _mapper, _configuration, _userManager, _signInManager);
+        UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 
-        _configuration["JWT:Secret"].Returns("ADSJIDJFIEKNFIOJVNBOIEDFEW90432jkj");
+        _signInManager.PasswordSignInAsync(user.Name, user.Password, false, false).Returns(SignInResult.Failed);
 
-        AuthenticateResponse? authenticatedUser = await userRepository.LogIn(user);
+        SignInResult authResponse = await userRepository.LogIn(user);
 
-        Assert.Null(authenticatedUser);
+        Assert.Equal(SignInResult.Failed, authResponse);
     }
 }

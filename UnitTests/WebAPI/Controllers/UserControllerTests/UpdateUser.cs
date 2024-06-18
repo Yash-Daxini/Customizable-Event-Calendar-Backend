@@ -55,6 +55,20 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
+    public async Task Should_ReturnBadRequest_When_UpdateOperationFailed()
+    {
+        UserDto userDto = Substitute.For<UserDto>();
+
+        User user = Substitute.For<User>();
+
+        _userService.UpdateUser(user).ReturnsForAnyArgs(IdentityResult.Failed());
+
+        IActionResult actionResult = await _userController.UpdateUser(userDto);
+
+        Assert.IsType<BadRequestObjectResult>(actionResult);
+    }
+
+    [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
         UserDto userDto = Substitute.For<UserDto>();

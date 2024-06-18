@@ -43,7 +43,17 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
         Assert.IsType<NotFoundObjectResult>(actionResult);
     }
-    
+
+    [Fact]
+    public async Task Should_ReturnBadRequest_When_DeleteOperationFailed()
+    {
+        _userService.DeleteUser(1).Returns(IdentityResult.Failed());
+
+        IActionResult actionResult = await _userController.DeleteUser(1);
+
+        Assert.IsType<BadRequestObjectResult>(actionResult);
+    }
+
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {

@@ -11,11 +11,6 @@ public class AuthenticateRequestDtoValidator : AbstractValidator<AuthenticateReq
             .NotNull()
             .NotEmpty();
 
-        RuleFor(e => e.Email)
-            .NotNull()
-            .NotEmpty()
-            .EmailAddress();
-
         RuleFor(e => e.Password)
             .NotEmpty()
             .NotNull();

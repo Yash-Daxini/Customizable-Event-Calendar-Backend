@@ -3,24 +3,26 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.UserAuthenticationServiceTests;
 
-public class Authenticate
+public class LogIn
 {
 
     private readonly IMultipleInviteesEventService _multipleInviteesEventService;
     private readonly IUserRepository _userRepository;
     private readonly IUserAuthenticationService _userAuthenticationService;
+    private readonly ITokenClaimService _tokenClaimService;
 
-    public Authenticate()
+    public LogIn()
     {
         _userRepository = Substitute.For<IUserRepository>();
         _multipleInviteesEventService = Substitute.For<IMultipleInviteesEventService>();
-        _userAuthenticationService = new UserAuthenticationService(_userRepository, _multipleInviteesEventService);
+        _tokenClaimService = Substitute.For<ITokenClaimService>();  
+        _userAuthenticationService = new UserAuthenticationService(_userRepository, _multipleInviteesEventService,_tokenClaimService);
     }
 
     [Fact]
@@ -38,7 +40,9 @@ public class Authenticate
 
         _userRepository.GetUserById(1).Returns(user);
 
-        _userRepository.LogIn(user).Returns(authenticateResponse);
+        _userRepository.LogIn(user).Returns(SignInResult.Success);
+
+        _tokenClaimService.GetJWToken(user).Returns("auth");
 
         AuthenticateResponse? auth = await _userAuthenticationService.LogIn(user);
 
@@ -62,7 +66,7 @@ public class Authenticate
 
         _userRepository.GetUserById(1).Returns(user);
 
-        _userRepository.LogIn(user).ReturnsNull();
+        _userRepository.LogIn(user).Returns(SignInResult.Failed);
 
         await Assert.ThrowsAsync<AuthenticationFailedException>(async () => await _userAuthenticationService.LogIn(user));
 

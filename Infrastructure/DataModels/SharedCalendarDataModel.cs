@@ -9,11 +9,9 @@ public class SharedCalendarDataModel : IModel
     public int Id { get; set; }
 
     public int SenderId { get; set; }
-    [ForeignKey("SenderId")]
     public virtual UserDataModel Sender { get; set; } = null!;
 
     public int ReceiverId { get; set; }
-    [ForeignKey("ReceiverId")]
     public virtual UserDataModel Receiver { get; set; } = null!;
 
     public DateOnly FromDate { get; set; }

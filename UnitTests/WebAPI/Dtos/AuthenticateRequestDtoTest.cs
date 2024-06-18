@@ -12,11 +12,12 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidAuthenticateReqeustDto()
+    public void Should_ReturnFalse_When_InvalidAuthenticateRequestDto()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
-            Id = 1
+            Name = "",
+            Password = ""
         };
 
         var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);
@@ -27,14 +28,12 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidAuthenticateReqeustDto()
+    public void Should_ReturnTrue_When_ValidAuthenticateRequestDto()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
-            Id = 1,
             Name = "a",
-            Email = "b@gmail.com",    
-            Password = "c", 
+            Password = "c",
         };
 
         var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);

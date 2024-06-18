@@ -1,26 +1,21 @@
 ﻿using Infrastructure.DataModels;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Core.Interfaces.IRepositories;
 using Core.Entities;
 using Microsoft.AspNetCore.Identity;
-using Core.Interfaces.IServices;
 
 namespace Infrastructure.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly DbContextEventCalendar _dbContext;
-
     private readonly IMapper _mapper;
 
     private readonly UserManager<UserDataModel> _userManager;
 
     private readonly SignInManager<UserDataModel> _signInManager;
 
-    public UserRepository(DbContextEventCalendar dbContextEvent, IMapper mapper, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
+    public UserRepository(IMapper mapper, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager)
     {
-        _dbContext = dbContextEvent;
         _mapper = mapper;
         _userManager = userManager;
         _signInManager = signInManager;
@@ -28,14 +23,12 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserById(int userId)
     {
-        return _mapper.Map<User>(await _dbContext.Users
-                               .Where(user => user.Id == userId)
-                               .FirstOrDefaultAsync());
+        return _mapper.Map<User>(await _userManager.FindByIdAsync(userId.ToString()));
     }
 
     public async Task<IdentityResult> Update(User user)
     {
-        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id + "");
+        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id.ToString());
 
         if (userDataModel is null)
             return IdentityResult.Failed();
@@ -48,7 +41,7 @@ public class UserRepository : IUserRepository
 
     public async Task<IdentityResult> Delete(User user)
     {
-        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id + "");
+        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id.ToString());
 
         return await _userManager.DeleteAsync(userDataModel);
     }
@@ -62,6 +55,6 @@ public class UserRepository : IUserRepository
 
     public async Task<SignInResult> LogIn(User user)
     {
-        return await _signInManager.PasswordSignInAsync(user.Email, user.Password, false, false);
+        return await _signInManager.PasswordSignInAsync(user.Name, user.Password, false, false);
     }
 }

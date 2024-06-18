@@ -50,6 +50,7 @@ public class UserController : ControllerBase
         try
         {
             User user = _mapper.Map<User>(userDto);
+
             var result = await _userService.SignUp(user);
             if (result.Succeeded)
                 return Ok(new { message = "Successfully SingUp !" });
