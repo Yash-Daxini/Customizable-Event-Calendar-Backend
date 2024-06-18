@@ -2,7 +2,6 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
-using ArgumentNullException = Core.Exceptions.NullArgumentException;
 
 namespace Core.Services;
 
@@ -20,7 +19,7 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
     public async Task AddCollaborator(EventCollaborator eventCollaborator)
     {
         if (eventCollaborator is null)
-            throw new ArgumentNullException($" Event collaborator can't be null");
+            throw new NullArgumentException($" Event collaborator can't be null");
 
         bool isAlreadyCollaborated = await IsEventAlreadyCollaborated(eventCollaborator);
 

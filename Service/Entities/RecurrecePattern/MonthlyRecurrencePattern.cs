@@ -1,13 +1,10 @@
-﻿
-namespace Core.Entities;
+﻿namespace Core.Entities.RecurrecePattern;
 
-public class YearlyRecurrencePattern : RecurrencePattern
+public class MonthlyRecurrencePattern : RecurrencePattern
 {
     public int? WeekOrder { get; set; }
 
     public int? ByMonthDay { get; set; }
-
-    public int? ByMonth { get; set; }
 
     public bool IsMonthDayNull() => ByMonthDay == null;
 
@@ -20,21 +17,18 @@ public class YearlyRecurrencePattern : RecurrencePattern
 
     public override int GetOccurrencesCount()
     {
-        return ((EndDate.Year - StartDate.Year) / Interval) + 1;
+        return ((EndDate.Year - StartDate.Year) * 12 + (EndDate.Month - StartDate.Month)) / Interval + 1;
     }
 
     private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay()
     {
-        if (ByMonth is null)
-            return [];
+        int month = StartDate.Month;
 
-        DateOnly startDateOfEvent = StartDate;
-
-        DateOnly currentDate = new(startDateOfEvent.Year, 
-                                  (int)ByMonth , 
-                                  GetMinimumDayFromGivenMonthAndDay((int)ByMonthDay,
-                                                                    (int)ByMonth,
-                                                                    startDateOfEvent.Year));
+        DateOnly currentDate = new(StartDate.Year,
+                                   month,
+                                   GetMinimumDateFromGivenMonthAndDay((int)ByMonthDay,
+                                                                      month,
+                                                                      StartDate.Year));
 
         int totalOccurrences = GetOccurrencesCount();
 
@@ -47,16 +41,16 @@ public class YearlyRecurrencePattern : RecurrencePattern
         return [..Enumerable.Range(0, totalOccurrences)
                                   .Select(weekOffset =>
                                   {
-                                      DateOnly date = currentDate.AddYears(weekOffset*Interval);
+                                      DateOnly date = currentDate.AddMonths(weekOffset* Interval);
                                       return new DateOnly(date.Year,
                                                           date.Month,
-                                                          GetMinimumDayFromGivenMonthAndDay((int)ByMonthDay,
-                                                                                            date.Month,
-                                                                                            date.Year));
+                                                          GetMinimumDateFromGivenMonthAndDay((int)ByMonthDay,
+                                                                                             date.Month,
+                                                                                             date.Year));
                                   } )];
     }
 
-    private static int GetMinimumDayFromGivenMonthAndDay(int day, int month, int year)
+    private static int GetMinimumDateFromGivenMonthAndDay(int day, int month, int year)
     {
         int daysInMonth = DateTime.DaysInMonth(year, month);
 
@@ -65,15 +59,13 @@ public class YearlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay()
     {
-        if (ByWeekDay is null || ByMonth is null || WeekOrder is null || WeekOrder <= 0)
+        if (WeekOrder is null || ByWeekDay is null)
             return [];
 
         int weekDay = ByWeekDay[0] % 7;
         DayOfWeek dayOfWeek = (DayOfWeek)weekDay;
 
-        int month = (int)ByMonth;
-
-        DateOnly currentDate = new(StartDate.Year, month, 1);
+        DateOnly currentDate = new(StartDate.Year, StartDate.Month, 1);
 
         int totalOccurrences = GetOccurrencesCount();
 
@@ -81,13 +73,13 @@ public class YearlyRecurrencePattern : RecurrencePattern
     }
 
     private List<DateOnly> GetOccurrencesUsingWeekOrderAndWeekDay(DayOfWeek dayOfWeek,
-                                                                  DateOnly currentDate,
-                                                                  int totalOccurrences)
+                                                                         DateOnly currentDate,
+                                                                         int totalOccurrences)
     {
         return [..Enumerable.Range(0, totalOccurrences)
                                 .Select(weekOffset =>
                                 {
-                                      DateOnly date = currentDate.AddYears(weekOffset* Interval);
+                                      DateOnly date = currentDate.AddMonths(weekOffset*Interval);
                                       return GetNthWeekDayDate(date.Year,date.Month,dayOfWeek);
                                 } )];
     }

@@ -1,6 +1,6 @@
 ﻿using Core.Entities.Enums;
 
-namespace Core.Entities;
+namespace Core.Entities.RecurrecePattern;
 
 abstract public class RecurrencePattern
 {

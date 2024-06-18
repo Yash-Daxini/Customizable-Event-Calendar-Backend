@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Core.Entities.Enums;
-using Core.Entities;
 using Infrastructure.DataModels;
 using Infrastructure.Extensions;
+using Core.Entities.RecurrecePattern;
 
 namespace Infrastructure.Profiles;
 

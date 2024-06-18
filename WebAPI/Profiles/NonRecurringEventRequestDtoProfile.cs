@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Entities.RecurrecePattern;
 using WebAPI.Dtos;
 
 namespace WebAPI.Profiles;

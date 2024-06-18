@@ -19,42 +19,32 @@ public class EventCollaborator : IEntity
 
     public DateOnly EventDate { get; set; }
 
-    public bool IsPendingStatus() => ConfirmationStatus == ConfirmationStatus.Pending;
+    public bool IsStatusPending() => ConfirmationStatus == ConfirmationStatus.Pending;
 
-    public bool IsProposedStatus() => ConfirmationStatus == ConfirmationStatus.Proposed;
+    public bool IsStatusProposed() => ConfirmationStatus == ConfirmationStatus.Proposed;
 
-    public bool IsAcceptStatus() => ConfirmationStatus == ConfirmationStatus.Accept;
+    public bool IsStatusAccept() => ConfirmationStatus == ConfirmationStatus.Accept;
 
-    public bool IsMaybeStatus() => ConfirmationStatus == ConfirmationStatus.Maybe;
+    public bool IsStatusMaybe() => ConfirmationStatus == ConfirmationStatus.Maybe;
 
-    public bool IsEventOrganizer() => EventCollaboratorRole == EventCollaboratorRole.Organizer;
+    public bool IsOrganizer() => EventCollaboratorRole == EventCollaboratorRole.Organizer;
 
-    public bool IsEventParticipant() => EventCollaboratorRole == EventCollaboratorRole.Participant;
+    public bool IsParticipant() => EventCollaboratorRole == EventCollaboratorRole.Participant;
 
-    public bool IsNullProposedDuration() => ProposedDuration == null;
+    public bool IsProposedDurationNull() => ProposedDuration == null;
 
-    public void SetProposedDurationNull()
+    public void ResetProposedDuration()
     {
         ProposedDuration = null;
-    }
-
-    public void AcceptConfirmationStatus()
-    {
-        ConfirmationStatus = ConfirmationStatus.Accept;
-    }
-
-    public void RejectConfirmationStatus()
-    {
-        ConfirmationStatus = ConfirmationStatus.Reject;
-    }
-
-    public void SetConfirmationStatusPending()
-    {
-        ConfirmationStatus = ConfirmationStatus.Pending;
     }
 
     public void SetEventCollaboratorRoleAsParticipant()
     {
         EventCollaboratorRole = EventCollaboratorRole.Participant;
+    }
+
+    public void SetConfirmationStatus(ConfirmationStatus status)
+    {
+        ConfirmationStatus = status;
     }
 }

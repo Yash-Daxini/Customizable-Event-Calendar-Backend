@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure;
 using Infrastructure.Repositories;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 

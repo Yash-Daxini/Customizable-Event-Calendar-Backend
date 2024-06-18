@@ -20,38 +20,17 @@ public class DurationGetStartHourIn12HourFormat
     }
 
     [Theory]
-    [InlineData(2)]
-    [InlineData(1)]
-    [InlineData(12)]
-    [InlineData(13)]
-    [InlineData(22)]
-    public void Should_ReturnValid12HourFormat_When_Valid24HourFormat(int hour)
+    [InlineData(2, "2 AM")]
+    [InlineData(1, "1 AM")]
+    [InlineData(12, "12 PM")]
+    [InlineData(13, "1 PM")]
+    [InlineData(22, "10 PM")]
+    public void Should_ReturnValid12HourFormat_When_Valid24HourFormat(int hour, string expectedResult)
     {
         Duration duration = new(hour, 23);
 
-        string actualResult = "";
+        string? actualResult = duration.GetStartHourIn12HourFormat();
 
-        switch (hour)
-        {
-            case 2:
-                actualResult = "2 AM";
-                break;
-            case 1:
-                actualResult = "1 AM";
-                break;
-            case 12:
-                actualResult = "12 PM";
-                break;
-            case 13:
-                actualResult = "1 PM";
-                break;
-            case 22:
-                actualResult = "10 PM";
-                break;
-        }
-
-        string? result = duration.GetStartHourIn12HourFormat();
-
-        Assert.Equal(result, actualResult);
+        Assert.Equal(expectedResult, actualResult);
     }
 }

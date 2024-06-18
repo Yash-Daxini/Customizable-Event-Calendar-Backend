@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Entities.Enums;
 using Core.Interfaces.IServices;
 using Core.Services;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Services.OverlapEventServiceTests;
 

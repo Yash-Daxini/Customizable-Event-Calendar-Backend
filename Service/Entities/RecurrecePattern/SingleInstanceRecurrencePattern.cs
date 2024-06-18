@@ -1,5 +1,4 @@
-﻿
-namespace Core.Entities;
+﻿namespace Core.Entities.RecurrecePattern;
 
 public class SingleInstanceRecurrencePattern : RecurrencePattern
 {

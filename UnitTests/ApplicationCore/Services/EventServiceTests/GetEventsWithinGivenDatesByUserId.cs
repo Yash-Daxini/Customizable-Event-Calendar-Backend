@@ -1,9 +1,9 @@
 ﻿using Core.Entities;
-using Core.Extensions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 

@@ -3,34 +3,34 @@ using Core.Entities;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
-public class EventCollaboratorIsProposedStatus
+public class EventCollaboratorIsStatusAccept
 {
     [Fact]
-    public void Should_ReturnsTrue_When_EventCollaboratorWithProposedStatus()
+    public void Should_ReturnTrue_When_StatusIsAccept()
     {
         EventCollaborator eventCollaborator = new()
         {
-            ConfirmationStatus = ConfirmationStatus.Proposed,
+            ConfirmationStatus = ConfirmationStatus.Accept,
         };
 
-        bool result = eventCollaborator.IsProposedStatus();
+        bool result = eventCollaborator.IsStatusAccept();
 
         Assert.True(result);
     }
 
     [Theory]
     [InlineData(ConfirmationStatus.Reject)]
-    [InlineData(ConfirmationStatus.Accept)]
+    [InlineData(ConfirmationStatus.Proposed)]
     [InlineData(ConfirmationStatus.Pending)]
     [InlineData(ConfirmationStatus.Maybe)]
-    public void Should_ReturnsFalse_When_EventCollaboratorNotWithProposedStatus(ConfirmationStatus confirmationStatus)
+    public void Should_ReturnFalse_When_StatusIsNotAccept(ConfirmationStatus confirmationStatus)
     {
         EventCollaborator eventCollaborator = new()
         {
             ConfirmationStatus = confirmationStatus,
         };
 
-        bool result = eventCollaborator.IsProposedStatus();
+        bool result = eventCollaborator.IsStatusAccept();
 
         Assert.False(result);
     }

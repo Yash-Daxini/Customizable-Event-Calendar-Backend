@@ -3,7 +3,7 @@ using Core.Entities;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
-public class EventCollaboratorIsEventParticipant
+public class EventCollaboratorIsParticipant
 {
     [Fact]
     public void Should_ReturnsTrue_When_EventCollaboratorIsParticipant()
@@ -13,7 +13,7 @@ public class EventCollaboratorIsEventParticipant
             EventCollaboratorRole = EventCollaboratorRole.Participant,
         };
 
-        bool result = eventCollaborator.IsEventParticipant();
+        bool result = eventCollaborator.IsParticipant();
 
         Assert.True(result);
     }
@@ -28,7 +28,7 @@ public class EventCollaboratorIsEventParticipant
             EventCollaboratorRole = eventCollaboratorRole,
         };
 
-        bool result = eventCollaborator.IsEventParticipant();
+        bool result = eventCollaborator.IsParticipant();
 
         Assert.False(result);
     }

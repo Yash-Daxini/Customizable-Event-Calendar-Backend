@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Entities.Enums;
+using Core.Entities.RecurrecePattern;
 using Infrastructure.Extensions;
 using WebAPI.Dtos;
 

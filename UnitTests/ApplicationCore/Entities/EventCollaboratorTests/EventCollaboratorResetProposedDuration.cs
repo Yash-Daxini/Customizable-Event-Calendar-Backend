@@ -2,7 +2,7 @@
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
-public class EventCollaboratorSetProposedDurationNull
+public class EventCollaboratorResetProposedDuration
 {
     [Fact]
     public void Should_SetProposedDurationNull_When_ProposedDurationIsAlreadyNull()
@@ -12,9 +12,9 @@ public class EventCollaboratorSetProposedDurationNull
             ProposedDuration = null,
         };
 
-        eventCollaborator.SetProposedDurationNull();
+        eventCollaborator.ResetProposedDuration();
 
-        bool result = eventCollaborator.IsNullProposedDuration();
+        bool result = eventCollaborator.IsProposedDurationNull();
 
         Assert.True(result);
     }
@@ -27,9 +27,9 @@ public class EventCollaboratorSetProposedDurationNull
             ProposedDuration = new(5, 6),
         };
 
-        eventCollaborator.SetProposedDurationNull();
+        eventCollaborator.ResetProposedDuration();
 
-        bool result = eventCollaborator.IsNullProposedDuration();
+        bool result = eventCollaborator.IsProposedDurationNull();
 
         Assert.True(result);
     }

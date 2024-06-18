@@ -1,4 +1,4 @@
-﻿using Core.Entities.Enums;
+﻿using Core.Entities.RecurrecePattern;
 using Core.Interfaces;
 
 namespace Core.Entities;
@@ -28,16 +28,10 @@ public class Event : IEntity
         List<EventCollaborator>? eventCollaborators = DateWiseEventCollaborators.First()
                                                      .EventCollaborators;
 
-        if (eventCollaborators is null)
-            return null;
-
         EventCollaborator? eventCollaborator = eventCollaborators
-                                              .FirstOrDefault(eventCollaborator => eventCollaborator.IsEventOrganizer());
+                                              ?.FirstOrDefault(eventCollaborator => eventCollaborator.IsOrganizer());
 
-        if (eventCollaborator is null)
-            return null;
-
-        return eventCollaborator.User;
+        return eventCollaborator?.User;
     }
 
     public List<EventCollaborator> GetEventInvitees()
@@ -50,31 +44,28 @@ public class Event : IEntity
             return [];
 
         return [.. DateWiseEventCollaborators[0].EventCollaborators
-                                                .Where(eventCollaborator => eventCollaborator.IsEventParticipant())];
+                                                .Where(eventCollaborator => eventCollaborator.IsParticipant())];
     }
 
     public bool HasPendingResponseFromUser(int userId)
     {
         return GetEventInvitees()
                .Exists(eventCollaborator => eventCollaborator.User.Id == userId
-                                         && eventCollaborator.IsPendingStatus());
+                                         && eventCollaborator.IsStatusPending());
     }
 
     public bool IsProposedEvent()
     {
         return GetEventInvitees()
-               .Exists(eventCollaborator => eventCollaborator.IsPendingStatus()
-                                            || eventCollaborator.IsProposedStatus());
+               .Exists(eventCollaborator => eventCollaborator.IsStatusPending()
+                                            || eventCollaborator.IsStatusProposed());
     }
 
     public bool IsEventOverlappingWith(Event eventObj, DateOnly? matchedDate)
     {
         if (matchedDate is null || eventObj is null) return false;
 
-        if (this.Duration.IsOverlappingWith(eventObj.Duration))
-            return true;
-
-        return false;
+        return Duration.IsOverlappingWith(eventObj.Duration);
     }
 
     public DateOnly? GetOverlapDate(Event currentEvent)
@@ -97,7 +88,7 @@ public class Event : IEntity
                : matchedDate;
     }
 
-    public void CreateDateWiseEventCollaboratorsList(List<DateOnly> occurrences)
+    public void CreateDateWiseEventCollaboratorList(List<DateOnly> occurrences)
     {
         EventCollaboratorsByDate? eventCollaboratorsByDate = DateWiseEventCollaborators.FirstOrDefault();
 
@@ -112,9 +103,7 @@ public class Event : IEntity
             eventCollaboratorsByDates.Add(new EventCollaboratorsByDate()
             {
                 EventDate = occurrence,
-                EventCollaborators = [..eventCollaborators.Select(eventCollaborator =>
-                {
-                    EventCollaborator newEventCollaborator = new()
+                EventCollaborators = [..eventCollaborators.Select(eventCollaborator => new EventCollaborator()
                     {
                         Id = eventCollaborator.Id,
                         EventCollaboratorRole = eventCollaborator.EventCollaboratorRole,
@@ -122,10 +111,8 @@ public class Event : IEntity
                         ProposedDuration = eventCollaborator.ProposedDuration,
                         EventDate = occurrence,
                         EventId = eventCollaborator.EventId,
-                        User = eventCollaborator.User,
-                    };
-                    return newEventCollaborator;
-                })]
+                        User = eventCollaborator.User
+                    })]
             });
         }
 

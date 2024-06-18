@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests;
 

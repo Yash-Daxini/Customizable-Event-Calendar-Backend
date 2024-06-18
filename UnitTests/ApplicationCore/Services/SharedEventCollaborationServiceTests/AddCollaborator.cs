@@ -3,7 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Services.SharedEventCollaborationServiceTests;
 

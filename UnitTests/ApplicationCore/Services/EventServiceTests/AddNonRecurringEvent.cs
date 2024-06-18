@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Entities;
+﻿using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
@@ -7,7 +6,7 @@ using Core.Services;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -329,7 +328,7 @@ public class AddNonRecurringEvent
 
         _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
 
-        _eventRepository.Add(eventObj).Throws(new EventOverlapException("Overlap")); ;
+        _eventRepository.Add(eventObj).Throws(new EventOverlapException("Overlap"));
 
         var exception = await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.AddNonRecurringEvent(eventObj, 48));
 

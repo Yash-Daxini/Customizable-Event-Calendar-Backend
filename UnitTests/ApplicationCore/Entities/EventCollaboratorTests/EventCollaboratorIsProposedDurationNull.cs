@@ -1,9 +1,8 @@
-﻿using Core.Entities.Enums;
-using Core.Entities;
+﻿using Core.Entities;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
-public class EventCollaboratorIsNullProposedDuration
+public class EventCollaboratorIsProposedDurationNull
 {
     [Fact]
     public void Should_ReturnsTrue_When_ProposedDurationIsNull()
@@ -13,7 +12,7 @@ public class EventCollaboratorIsNullProposedDuration
             ProposedDuration = null
         };
 
-        bool result = eventCollaborator.IsNullProposedDuration();
+        bool result = eventCollaborator.IsProposedDurationNull();
 
         Assert.True(result);
     }
@@ -26,7 +25,7 @@ public class EventCollaboratorIsNullProposedDuration
             ProposedDuration = new Duration(5,6)
         };
 
-        bool result = eventCollaborator.IsNullProposedDuration();
+        bool result = eventCollaborator.IsProposedDurationNull();
 
         Assert.False(result);
     }

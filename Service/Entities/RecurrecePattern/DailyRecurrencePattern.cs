@@ -1,7 +1,6 @@
-﻿
-using Core.Extensions;
+﻿using Core.Extensions;
 
-namespace Core.Entities;
+namespace Core.Entities.RecurrecePattern;
 
 public class DailyRecurrencePattern : RecurrencePattern
 {
@@ -9,14 +8,12 @@ public class DailyRecurrencePattern : RecurrencePattern
     {
         List<int> days = [.. ByWeekDay ?? ([])];
 
-        DateOnly startDateOfEvent = StartDate;
-        DateOnly endDateOfEvent = EndDate;
         int interval = Interval;
 
         int totalOccurrences = GetOccurrencesCount();
 
         return [..Enumerable.Range(0, totalOccurrences)
-                            .Select(weekOffset => startDateOfEvent.AddDays(weekOffset * interval))
+                            .Select(weekOffset => StartDate.AddDays(weekOffset * interval))
                             .Where(date => IsValidDateForDailyEvent(date, days))];
     }
 
@@ -25,8 +22,9 @@ public class DailyRecurrencePattern : RecurrencePattern
         TimeSpan difference = EndDate.ConvertToDateTime()
                             - StartDate.ConvertToDateTime();
 
-        return ((int)difference.TotalDays / Interval) + 1;
+        return (int)difference.TotalDays / Interval + 1;
     }
+
     private bool IsValidDateForDailyEvent(DateOnly date,
                                           List<int> days)
     {

@@ -1,5 +1,5 @@
-﻿using Core.Entities;
-using Core.Entities.Enums;
+﻿using Core.Entities.Enums;
+using Core.Entities;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -15,7 +15,7 @@ public class EventCollaboratorSetEventCollaboratorRoleAsParticipant
 
         eventCollaborator.SetEventCollaboratorRoleAsParticipant();
 
-        bool result = eventCollaborator.IsEventParticipant();
+        bool result = eventCollaborator.IsParticipant();
 
         Assert.True(result);
     }
@@ -32,7 +32,7 @@ public class EventCollaboratorSetEventCollaboratorRoleAsParticipant
 
         eventCollaborator.SetEventCollaboratorRoleAsParticipant();
 
-        bool result = eventCollaborator.IsEventParticipant();
+        bool result = eventCollaborator.IsParticipant();
 
         Assert.True(result);
     }

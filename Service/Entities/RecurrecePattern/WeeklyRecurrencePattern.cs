@@ -1,7 +1,6 @@
-﻿
-using Core.Extensions;
+﻿using Core.Extensions;
 
-namespace Core.Entities;
+namespace Core.Entities.RecurrecePattern;
 
 public class WeeklyRecurrencePattern : RecurrencePattern
 {
@@ -28,7 +27,7 @@ public class WeeklyRecurrencePattern : RecurrencePattern
         TimeSpan difference = EndDate.ConvertToDateTime()
                             - StartDate.ConvertToDateTime();
 
-        return ((int)difference.TotalDays / (7 * Interval)) + 1;
+        return (int)difference.TotalDays / (7 * Interval) + 1;
     }
 
     private List<DateOnly> GetOccurrencesOfWeekDay(DateOnly startDateOfWeek, int item)

@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -159,7 +160,7 @@ public class EventCreateDateWiseEventCollaboratorsList
             }]
         };
 
-        eventObj.CreateDateWiseEventCollaboratorsList(occurrences);
+        eventObj.CreateDateWiseEventCollaboratorList(occurrences);
 
         Assert.Equivalent(eventObj.DateWiseEventCollaborators, _event.DateWiseEventCollaborators);
     }
@@ -188,7 +189,7 @@ public class EventCreateDateWiseEventCollaboratorsList
             DateWiseEventCollaborators = []
         };
 
-        eventObj.CreateDateWiseEventCollaboratorsList(occurrences);
+        eventObj.CreateDateWiseEventCollaboratorList(occurrences);
 
         Assert.Equivalent(new List<EventCollaboratorsByDate>(), eventObj.DateWiseEventCollaborators);
     }
@@ -216,7 +217,7 @@ public class EventCreateDateWiseEventCollaboratorsList
             DateWiseEventCollaborators = []
         };
 
-        eventObj.CreateDateWiseEventCollaboratorsList(occurrences);
+        eventObj.CreateDateWiseEventCollaboratorList(occurrences);
 
         Assert.Equivalent(new List<EventCollaboratorsByDate>(), eventObj.DateWiseEventCollaborators);
     }

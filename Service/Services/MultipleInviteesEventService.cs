@@ -47,7 +47,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     private static bool IsAnyInviteeWithPendingStatus(Event eventObj)
     {
         return eventObj.GetEventInvitees()
-                       .Exists(eventCollaborator => eventCollaborator.IsPendingStatus());
+                       .Exists(eventCollaborator => eventCollaborator.IsStatusPending());
     }
 
     private static int CalculateDayDifference(DateTime firstDate, DateTime secondDate)
@@ -61,7 +61,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
         foreach (var eventCollaborator in GetInviteesWithProposedStatus(eventObj))
         {
-            if (!eventCollaborator.IsNullProposedDuration())
+            if (!eventCollaborator.IsProposedDurationNull())
                 CountProposedHours(eventCollaborator.ProposedDuration.StartHour,
                                   eventCollaborator.ProposedDuration.EndHour,
                                   ref proposedHours);
@@ -74,7 +74,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     private IEnumerable<EventCollaborator> GetInviteesWithProposedStatus(Event eventObj)
     {
         return eventObj.GetEventInvitees()
-                       .Where(eventCollaborator => eventCollaborator.IsProposedStatus());
+                       .Where(eventCollaborator => eventCollaborator.IsStatusProposed());
     }
 
     private static void CountProposedHours(int startHour, int endHour, ref int[] proposedHours)
@@ -131,10 +131,10 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
         foreach (var eventCollaborator in eventCollaborators)
         {
-            if (eventCollaborator.IsProposedStatus())
+            if (eventCollaborator.IsStatusProposed())
                 HandleInviteeThatProposedTime(eventObj, eventCollaborator);
 
-            eventCollaborator.SetProposedDurationNull();
+            eventCollaborator.ResetProposedDuration();
             eventCollaborator.EventDate = eventDate;
             _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
         }
@@ -143,9 +143,9 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     private static void HandleInviteeThatProposedTime(Event eventObj, EventCollaborator eventCollaborator)
     {
         if (IsEventTimeWithInProposedTime(eventObj, eventCollaborator))
-            eventCollaborator.AcceptConfirmationStatus();
+            eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Accept);
         else
-            eventCollaborator.RejectConfirmationStatus();
+            eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Reject);
     }
 
     private static bool IsEventTimeWithInProposedTime(Event eventObj, EventCollaborator eventCollaborator)
@@ -156,20 +156,20 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private static bool IsInviteePresentInEvent(EventCollaborator eventCollaborator)
     {
-        return eventCollaborator.IsAcceptStatus()
-               || eventCollaborator.IsMaybeStatus()
-               || eventCollaborator.IsProposedStatus();
+        return eventCollaborator.IsStatusAccept()
+               || eventCollaborator.IsStatusMaybe()
+               || eventCollaborator.IsStatusProposed();
     }
 
     private void UpdateEventCollaboratorsStatus(Event eventObj)
     {
         foreach (var eventCollaborator in eventObj.GetEventInvitees())
         {
-            if (!eventCollaborator.IsEventOrganizer())
+            if (!eventCollaborator.IsOrganizer())
             {
                 eventCollaborator.ConfirmationStatus = ConfirmationStatus.Pending;
             }
-            eventCollaborator.SetProposedDurationNull();
+            eventCollaborator.ResetProposedDuration();
             _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
         }
     }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure;
-using Infrastructure.DataModels;
 using Infrastructure.Repositories;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;

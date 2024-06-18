@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -146,7 +147,7 @@ public class EventGetEventOrganizer
     {
         _event.DateWiseEventCollaborators = [];
 
-        User? expectedUser = _event.GetEventOrganizer();
+        User? expectedUser = _event.GetEventOrganizer();    
 
         Assert.Equivalent(expectedUser, null);
     }

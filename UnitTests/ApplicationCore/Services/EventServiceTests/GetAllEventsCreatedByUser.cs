@@ -3,6 +3,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
+using Core.Entities.RecurrecePattern;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -362,11 +363,6 @@ public class GetAllEventsCreatedByUser
                 }
             ]
         }];
-
-        if (userId == 49)
-            Assert.Equal(1, events.Count);
-        else
-            Assert.Equal(2, events.Count);
 
         Assert.Equivalent(expected, events);
     }
