@@ -8,7 +8,7 @@ public class EventCreateDateWiseEventCollaboratorsList
     private readonly Event _event;
     public EventCreateDateWiseEventCollaboratorsList()
     {
-        _event = _event = new()
+        _event = new()
         {
             Id = 2205,
             Title = "event",

@@ -8,6 +8,9 @@ public class DailyRecurrencePattern : RecurrencePattern
     {
         List<int> days = [.. ByWeekDay ?? ([])];
 
+        if (Interval == 0)
+            return [];
+
         int interval = Interval;
 
         int totalOccurrences = GetOccurrencesCount();
@@ -19,6 +22,9 @@ public class DailyRecurrencePattern : RecurrencePattern
 
     public override int GetOccurrencesCount()
     {
+        if (Interval <= 0)
+            return 0;
+
         TimeSpan difference = EndDate.ConvertToDateTime()
                             - StartDate.ConvertToDateTime();
 

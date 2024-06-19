@@ -19,6 +19,9 @@ public class YearlyRecurrencePattern : RecurrencePattern
 
     public override int GetOccurrencesCount()
     {
+        if(Interval <= 0)
+            return 0;
+
         return (EndDate.Year - StartDate.Year) / Interval + 1;
     }
 

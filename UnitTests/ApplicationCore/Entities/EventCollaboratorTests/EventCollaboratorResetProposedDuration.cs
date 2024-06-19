@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -7,10 +8,9 @@ public class EventCollaboratorResetProposedDuration
     [Fact]
     public void Should_SetProposedDurationNull_When_ProposedDurationIsAlreadyNull()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ProposedDuration = null,
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithProposedDuration(null)
+                                              .Build();
 
         eventCollaborator.ResetProposedDuration();
 
@@ -22,10 +22,9 @@ public class EventCollaboratorResetProposedDuration
     [Fact]
     public void Should_SetProposedDurationNull_When_ProposedDurationIsNotAlreadyNull()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ProposedDuration = new(5, 6),
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithProposedDuration(new Duration(5, 6))
+                                              .Build();
 
         eventCollaborator.ResetProposedDuration();
 

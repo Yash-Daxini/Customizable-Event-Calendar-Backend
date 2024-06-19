@@ -1,5 +1,6 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -8,10 +9,9 @@ public class EventCollaboratorIsOrganizer
     [Fact]
     public void Should_ReturnsTrue_When_EventCollaboratorIsOrganizer()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .Build();
 
         bool result = eventCollaborator.IsOrganizer();
 
@@ -23,10 +23,9 @@ public class EventCollaboratorIsOrganizer
     [InlineData(EventCollaboratorRole.Collaborator)]
     public void Should_ReturnsFalse_When_EventCollaboratorIsNotOrganizer(EventCollaboratorRole eventCollaboratorRole)
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            EventCollaboratorRole = eventCollaboratorRole,
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithEventCollaboratorRole(eventCollaboratorRole)
+                                              .Build();
 
         bool result = eventCollaborator.IsOrganizer();
 

@@ -17,6 +17,9 @@ public class MonthlyRecurrencePattern : RecurrencePattern
 
     public override int GetOccurrencesCount()
     {
+        if(Interval <=  0)
+            return 0;
+
         return ((EndDate.Year - StartDate.Year) * 12 + (EndDate.Month - StartDate.Month)) / Interval + 1;
     }
 
@@ -59,7 +62,7 @@ public class MonthlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay()
     {
-        if (WeekOrder is null || ByWeekDay is null)
+        if (WeekOrder is null || ByWeekDay is null || WeekOrder is null || WeekOrder <= 0)
             return [];
 
         int weekDay = ByWeekDay[0] % 7;
@@ -81,7 +84,8 @@ public class MonthlyRecurrencePattern : RecurrencePattern
                                 {
                                       DateOnly date = currentDate.AddMonths(weekOffset*Interval);
                                       return GetNthWeekDayDate(date.Year,date.Month,dayOfWeek);
-                                } )];
+                                } )
+                                .Where(date => date >= StartDate && date <= EndDate)];
     }
 
     private DateOnly GetNthWeekDayDate(int year, int month, DayOfWeek dayOfWeek)

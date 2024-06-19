@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -8,10 +9,9 @@ public class EventCollaboratorIsStatusPending
     [Fact]
     public void Should_ReturnsTrue_When_EventCollaboratorWithPendingStatus()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = ConfirmationStatus.Pending,
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(ConfirmationStatus.Pending)
+                                              .Build();
 
         bool result = eventCollaborator.IsStatusPending();
 
@@ -25,10 +25,9 @@ public class EventCollaboratorIsStatusPending
     [InlineData(ConfirmationStatus.Maybe)]
     public void Should_ReturnsFalse_When_EventCollaboratorNotWithPendingStatus(ConfirmationStatus confirmationStatus)
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = confirmationStatus,
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(confirmationStatus)
+                                              .Build();
 
         bool result = eventCollaborator.IsStatusPending();
 

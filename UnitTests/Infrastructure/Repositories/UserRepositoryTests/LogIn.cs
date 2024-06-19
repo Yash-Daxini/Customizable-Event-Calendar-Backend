@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using Infrastructure;
-using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;

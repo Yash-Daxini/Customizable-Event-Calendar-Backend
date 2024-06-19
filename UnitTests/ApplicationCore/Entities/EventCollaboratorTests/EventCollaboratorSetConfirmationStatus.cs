@@ -1,5 +1,6 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -8,10 +9,9 @@ public class EventCollaboratorSetConfirmationStatus
     [Fact]
     public void Should_SetConfirmationStatusReject_When_ConfirmationStatusIsAlreadyReject()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = ConfirmationStatus.Reject
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(ConfirmationStatus.Reject)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Reject);
 
@@ -28,10 +28,9 @@ public class EventCollaboratorSetConfirmationStatus
     [InlineData(ConfirmationStatus.Pending)]
     public void Should_SetConfirmationStatusReject_When_ConfirmationStatusIsNotAlreadyReject(ConfirmationStatus confirmationStatus)
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = confirmationStatus
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(confirmationStatus)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Reject);
 
@@ -43,10 +42,9 @@ public class EventCollaboratorSetConfirmationStatus
     [Fact]
     public void Should_SetConfirmationStatusPending_When_ConfirmationStatusIsAlreadyPending()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = ConfirmationStatus.Pending,
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(ConfirmationStatus.Pending)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Pending);
 
@@ -63,10 +61,9 @@ public class EventCollaboratorSetConfirmationStatus
     [InlineData(ConfirmationStatus.Reject)]
     public void Should_SetConfirmationStatusPending_When_ConfirmationStatusIsNotAlreadyPending(ConfirmationStatus confirmationStatus)
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = confirmationStatus
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(confirmationStatus)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Pending);
 
@@ -78,10 +75,9 @@ public class EventCollaboratorSetConfirmationStatus
     [Fact]
     public void Should_SetConfirmationStatusAccept_When_ConfirmationStatusIsAlreadyAccept()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = ConfirmationStatus.Accept
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Accept);
 
@@ -98,10 +94,9 @@ public class EventCollaboratorSetConfirmationStatus
     [InlineData(ConfirmationStatus.Pending)]
     public void Should_SetConfirmationStatusAccept_When_ConfirmationStatusIsNotAlreadyAccept(ConfirmationStatus confirmationStatus)
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = confirmationStatus
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(confirmationStatus)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Accept);
 
@@ -114,10 +109,9 @@ public class EventCollaboratorSetConfirmationStatus
     [Fact]
     public void Should_SetConfirmationStatusProposed_When_ConfirmationStatusIsAlreadyProposed()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = ConfirmationStatus.Proposed
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(ConfirmationStatus.Proposed)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Proposed);
 
@@ -134,10 +128,9 @@ public class EventCollaboratorSetConfirmationStatus
     [InlineData(ConfirmationStatus.Pending)]
     public void Should_SetConfirmationStatusProposed_When_ConfirmationStatusIsNotAlreadyProposed(ConfirmationStatus confirmationStatus)
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = confirmationStatus
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(confirmationStatus)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Proposed);
 
@@ -149,10 +142,9 @@ public class EventCollaboratorSetConfirmationStatus
     [Fact]
     public void Should_SetConfirmationStatusMaybe_When_ConfirmationStatusIsAlreadyMaybe()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = ConfirmationStatus.Maybe
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(ConfirmationStatus.Maybe)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Maybe);
 
@@ -169,10 +161,9 @@ public class EventCollaboratorSetConfirmationStatus
     [InlineData(ConfirmationStatus.Pending)]
     public void Should_SetConfirmationStatusMaybe_When_ConfirmationStatusIsNotAlreadyMaybe(ConfirmationStatus confirmationStatus)
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            ConfirmationStatus = confirmationStatus
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithConfirmationStatus(confirmationStatus)
+                                              .Build();
 
         eventCollaborator.SetConfirmationStatus(ConfirmationStatus.Maybe);
 
