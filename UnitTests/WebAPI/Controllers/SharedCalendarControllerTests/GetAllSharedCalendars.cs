@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using WebAPI.Controllers;
-using WebAPI.Dtos;
 
 namespace UnitTests.WebAPI.Controllers.SharedCalendarControllerTests;
 
@@ -30,26 +30,18 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
 
         _sharedCalendarService.GetAllSharedCalendars().Returns(sharedCalendars);
 
-        List<SharedCalendarDto> sharedCalendarDtos = Substitute.For<List<SharedCalendarDto>>();
-
         IActionResult actionResult = await _sharedCalendarController.GetAllSharedCalendars();
 
-        var returedResult = Assert.IsType<OkObjectResult>(actionResult);
-
-        Assert.Equivalent(sharedCalendarDtos,returedResult.Value);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
     
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
-        List<SharedCalendar> sharedCalendars = Substitute.For<List<SharedCalendar>>();
-
         _sharedCalendarService.GetAllSharedCalendars().Throws<Exception>();
-
-        List<SharedCalendarDto> sharedCalendarDtos = Substitute.For<List<SharedCalendarDto>>();
 
         IActionResult actionResult = await _sharedCalendarController.GetAllSharedCalendars();
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

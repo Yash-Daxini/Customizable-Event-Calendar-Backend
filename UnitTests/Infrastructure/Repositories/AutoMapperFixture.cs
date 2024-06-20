@@ -18,8 +18,7 @@ public class AutoMapperFixture
             cfg.AddProfile<EventCollaboratorProfile>();
             cfg.AddProfile<SharedCalendarProfile>();
             cfg.AddProfile<UserProfile>();
-        },typeof(DateWiseEventCollaboratorsResolver).Assembly,
-          typeof(EventCollaboratorResolver).Assembly);
+        });
 
         var serviceProvider = services.BuildServiceProvider();
 

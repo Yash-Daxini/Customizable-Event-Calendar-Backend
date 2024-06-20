@@ -4,9 +4,9 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -32,13 +32,13 @@ public class UpdateEventCollaborator
             EventDate = new DateOnly(2024, 6, 2),
             EventId = 1,
             ProposedDuration = null,
-            User = new User() { Id = 1, Name = "Test", Email = "Test@gmail.com", Password = "Password" }
-
+            User = new User() { Id = 1 }
         };
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).Returns(eventCollaborator);
 
         await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
+
         await _eventCollaboratorRepository.Received().Update(eventCollaborator);
     }
 
@@ -53,12 +53,14 @@ public class UpdateEventCollaborator
             EventDate = new DateOnly(2024, 6, 2),
             EventId = 1,
             ProposedDuration = null,
-            User = new User() { Id = 1, Name = "Test", Email = "Test@gmail.com", Password = "Password" }
+            User = new User() { Id = 1 }
         };
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
+        var action = async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
+
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
     }
@@ -70,7 +72,9 @@ public class UpdateEventCollaborator
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();
 
-        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator));
+        var action = async () => await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
+
+        await action.Should().ThrowAsync<NullArgumentException>();
 
         await _eventCollaboratorRepository.DidNotReceive().Update(eventCollaborator);
     }

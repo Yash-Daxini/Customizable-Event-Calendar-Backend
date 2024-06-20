@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
@@ -15,7 +16,7 @@ public class EventCollaboratorIsStatusPending
 
         bool result = eventCollaborator.IsStatusPending();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Theory]
@@ -31,6 +32,6 @@ public class EventCollaboratorIsStatusPending
 
         bool result = eventCollaborator.IsStatusPending();
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 }

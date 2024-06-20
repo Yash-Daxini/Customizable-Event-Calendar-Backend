@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -43,6 +44,6 @@ public class DeleteEventCollaborator : IClassFixture<AutoMapperFixture>
 
         EventCollaborator? deletedEventCollaborator = await eventCollaboratorRepository.GetEventCollaboratorById(1);
 
-        Assert.Null(deletedEventCollaborator);
+        deletedEventCollaborator.Should().BeNull(); 
     }
 }

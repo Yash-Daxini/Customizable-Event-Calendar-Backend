@@ -2,6 +2,7 @@
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using NSubstitute;
 
 namespace UnitTests.ApplicationCore.Services.SharedCalendarServiceTests;
@@ -38,11 +39,11 @@ public class GetAllSharedCalendars
     public async Task Should_ReturnListOfSharedCalendars_When_SharedCalendarsAvailable()
     {
         _sharedCalendarRepository.GetAllSharedCalendars().Returns(_sharedCalendars);
+
         List<SharedCalendar> sharedCalendars = await _sharedCalendarService.GetAllSharedCalendars();
 
-        _sharedCalendarRepository.Received().GetAllSharedCalendars();
+        await _sharedCalendarRepository.Received().GetAllSharedCalendars();
 
-        Assert.Equal(sharedCalendars[0], _sharedCalendars[0]);
-        Assert.Equal(sharedCalendars[1], _sharedCalendars[1]);
+        sharedCalendars.Should().BeEquivalentTo(_sharedCalendars);
     }
 }

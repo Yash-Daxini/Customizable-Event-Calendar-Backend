@@ -3,6 +3,7 @@ using Core.Entities;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -10,12 +11,12 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContextEvent;
     private readonly IMapper _mapper;
-    private readonly List<Event> _events;
+    private readonly List<Event> _expectedResult;
 
     public GetSharedEvents(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _events = [
+        _expectedResult = [
             new() {
                 Id = 1,
                 Title = "Test",
@@ -29,10 +30,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                     Interval = 1,
                     ByWeekDay = []
                 },
-                DateWiseEventCollaborators = [
-                    new (){
-                        EventDate = new DateOnly(2024, 6, 7),
-                        EventCollaborators = [
+                EventCollaborators = [
                             new (){
                                 Id = 1,
                                 EventDate = new DateOnly(2024, 6, 7),
@@ -47,9 +45,8 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                                 }
                             }
                             ]
-                    }
-                    ]
-        },new() {
+        },
+            new() {
                 Id = 2,
                 Title = "Test1",
                 Description = "Test1",
@@ -62,10 +59,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                     Interval = 1,
                     ByWeekDay = []
                 },
-                DateWiseEventCollaborators = [
-                    new (){
-                        EventDate = new DateOnly(2024, 6, 7),
-                        EventCollaborators = [
+                EventCollaborators = [
                             new (){
                                 Id = 2,
                                 EventDate = new DateOnly(2024, 6, 7),
@@ -93,8 +87,6 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                                 }
                             }
                             ]
-                    }
-                    ]
         }
             ];
     }
@@ -105,7 +97,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
         //Arrange
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
-        _events.RemoveAt(1);
+        _expectedResult.RemoveAt(1);
 
         SharedCalendar sharedCalendar = new(
             1,
@@ -130,6 +122,6 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
         List<Event> actualResult = await eventRepository.GetSharedEvents(sharedCalendar);
 
         //Assert
-        Assert.Equivalent(_events, actualResult);
+        actualResult.Should().BeEquivalentTo(_expectedResult);
     }
 }

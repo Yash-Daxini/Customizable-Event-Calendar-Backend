@@ -1,5 +1,5 @@
 ﻿using Core.Entities;
-using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -10,92 +10,47 @@ public class EventIsUserCollaboratedOnGivenDate
     {
         _event = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(),
-                EndDate = new DateOnly(),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 30),
-                    EventCollaborators = [
+            EventCollaborators = [
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 30),
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
-                            EventId = 47
                         },
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 30),
                             User = new User
                             {
                                 Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
                             },
-                            EventId = 47
                         },
-                    ]
-                },
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
-                            EventId = 47
                         },
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                             ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            ProposedDuration = null,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {
                                 Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
                             },
-                            EventId = 47
                         },
-                    ]
-                }
             ]
         };
     }
@@ -109,58 +64,58 @@ public class EventIsUserCollaboratedOnGivenDate
 
         bool result = _event.IsUserCollaboratedOnGivenDate(48, date);
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(2024, 5, 29, 50)]
     [InlineData(2024, 10, 1, 51)]
-    public void Should_ReturnsFalse_When_DateAndUserAreNotPresentInEvent(int year, int month, int day, int userId)
+    public void Should_ReturnsFalse_When_DateAndUserIsNotPresentInEvent(int year, int month, int day, int userId)
     {
-        DateOnly date = new (year, month, day);
+        DateOnly date = new(year, month, day);
 
         bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
     [Theory]
     [InlineData(2024, 5, 30, 48)]
     [InlineData(2024, 5, 31, 48)]
-    public void Should_ReturnsTrue_When_DateAndUserArePresentInEvent(int year, int month, int day, int userId)
+    public void Should_ReturnsTrue_When_DateAndUserIsPresentInEvent(int year, int month, int day, int userId)
     {
-        DateOnly date = new (year, month, day);
+        DateOnly date = new(year, month, day);
 
         bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
 
-        Assert.True(result);
-    }
-    
-    [Theory]
-    [InlineData(2024, 5, 30, 48)]
-    [InlineData(2024, 5, 31, 48)]
-    public void Should_ReturnsFalse_When_DateWiseEventCollaboratorsIsNull(int year, int month, int day, int userId)
-    {
-        DateOnly date = new DateOnly(year, month, day);
-
-        _event.DateWiseEventCollaborators = null;
-
-        bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
-
-        Assert.False(result);
+        result.Should().BeTrue();
     }
 
     [Theory]
     [InlineData(2024, 5, 30, 48)]
     [InlineData(2024, 5, 31, 48)]
-    public void Should_ReturnsFalse_When_DateWiseEventCollaboratorsIsEmpty(int year, int month, int day, int userId)
+    public void Should_ReturnsFalse_When_EventCollaboratorsIsNull(int year, int month, int day, int userId)
     {
-        DateOnly date = new DateOnly(year, month, day);
+        DateOnly date = new(year, month, day);
 
-        _event.DateWiseEventCollaborators = [];
+        _event.EventCollaborators = null;
 
         bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
 
-        Assert.False(result);
+        result.Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData(2024, 5, 30, 48)]
+    [InlineData(2024, 5, 31, 48)]
+    public void Should_ReturnsFalse_When_EventCollaboratorsIsEmpty(int year, int month, int day, int userId)
+    {
+        DateOnly date = new(year, month, day);
+
+        _event.EventCollaborators = [];
+
+        bool result = _event.IsUserCollaboratedOnGivenDate(userId, date);
+
+        result.Should().BeFalse();
     }
 }

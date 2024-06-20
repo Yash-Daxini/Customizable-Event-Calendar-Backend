@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using FluentAssertions;
 using Infrastructure;
 using Infrastructure.Repositories;
 
@@ -24,7 +25,7 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
 
         EventCollaborator? eventCollaboratorById =  await eventCollaboratorRepository.GetEventCollaboratorById(3);
 
-        Assert.NotNull(eventCollaboratorById);
+        eventCollaboratorById.Should().NotBeNull();
     }
     
     [Fact]
@@ -36,6 +37,6 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
 
         EventCollaborator? eventCollaborator =  await eventCollaboratorRepository.GetEventCollaboratorById(5);
 
-        Assert.Null(eventCollaborator);
+        eventCollaborator.Should().BeNull();
     }
 }

@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -20,7 +21,7 @@ public class EventCollaborationRequestDtoTests
 
         var result = _collaborationRequestDtoValidator.Validate(collaborationRequestDto);
 
-        Assert.False(result.IsValid);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -36,6 +37,6 @@ public class EventCollaborationRequestDtoTests
 
         var result = _collaborationRequestDtoValidator.Validate(collaborationRequestDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

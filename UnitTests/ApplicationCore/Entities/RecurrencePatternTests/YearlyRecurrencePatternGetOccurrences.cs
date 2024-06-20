@@ -1,4 +1,5 @@
 ﻿using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests;
@@ -19,11 +20,11 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay(null)
                                               .Build();
 
-        List<DateOnly> expectedOutput = [new DateOnly(2024, 9, 30)];
+        List<DateOnly> expectedResult = [new DateOnly(2024, 9, 30)];
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 
 
@@ -46,11 +47,11 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay(null)
                                               .Build();
 
-        List<DateOnly> expectedOutput = [new DateOnly(2024, 9, monthDay)];
+        List<DateOnly> expectedResult = [new DateOnly(2024, 9, monthDay)];
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
@@ -67,11 +68,9 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay(null)
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEmpty();
     }
 
     [Fact]
@@ -88,11 +87,9 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay(null)
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEmpty();
     }
 
     [Fact]
@@ -109,11 +106,9 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay(null)
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEmpty();
     }
 
     [Fact]
@@ -130,11 +125,11 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay([7])
                                               .Build();
 
-        List<DateOnly> expectedOutput = [new DateOnly(2024, 9, 29)];
+        List<DateOnly> expectedResult = [new DateOnly(2024, 9, 29)];
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
@@ -151,11 +146,11 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay([7])
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> expectedResult = [];
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
@@ -172,11 +167,9 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay([7])
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEmpty();
     }
 
     [Fact]
@@ -193,11 +186,11 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay([7])
                                               .Build();
 
-        List<DateOnly> expectedOutput = [new DateOnly(2024, 9, 29)];
+        List<DateOnly> expectedResult = [new DateOnly(2024, 9, 29)];
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
@@ -214,11 +207,9 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay(null)
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEmpty();
     }
 
     [Fact]
@@ -235,11 +226,9 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay([7])
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEmpty();
     }
 
     [Fact]
@@ -256,10 +245,8 @@ public class YearlyRecurrencePatternGetOccurrences
                                               .WithByWeekDay([7])
                                               .Build();
 
-        List<DateOnly> expectedOutput = [];
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-        List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-        Assert.Equal(expectedOutput, actualOutput);
+        actualResult.Should().BeEmpty();
     }
 }

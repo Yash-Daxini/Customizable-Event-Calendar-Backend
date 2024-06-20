@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
-using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -12,56 +12,28 @@ public class EventIsOverlappingWith
     {
         _event = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
+            EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
-                            EventId = 47
                         },
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
+                            EventCollaboratorRole = EventCollaboratorRole.Participant,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {
                                 Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
                             },
-                            EventId = 47
-                        },
-                    ]
-                }
+                        }
             ]
         };
     }
@@ -71,47 +43,24 @@ public class EventIsOverlappingWith
     {
         Event eventToCheckOverlap = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
             Duration = new Duration(1, 4),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(),
-                    EventCollaborators = [
-                        new EventCollaborator
+            EventCollaborators = [
+                   new EventCollaborator
                         {
                             EventCollaboratorRole = EventCollaboratorRole.Organizer,
                             ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
                             EventDate = new DateOnly(),
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
-                            EventId = 47
                         }
-                    ]
-                }
             ]
         };
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, null);
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
     [Fact]
@@ -119,47 +68,24 @@ public class EventIsOverlappingWith
     {
         Event eventToCheckOverlap = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
             Duration = new Duration(2, 3),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(),
-                    EventCollaborators = [
-                        new EventCollaborator
+            EventCollaborators = [
+                     new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             EventDate = new DateOnly(),
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
-                            EventId = 47
                         }
-                    ]
-                }
             ]
         };
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly());
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
     [Fact]
@@ -167,47 +93,24 @@ public class EventIsOverlappingWith
     {
         Event eventToCheckOverlap = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
             Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(),
-                    EventCollaborators = [
-                        new EventCollaborator
+            EventCollaborators = [
+                     new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             EventDate = new DateOnly(),
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
-                            EventId = 47
-                        }
-                    ]
                 }
             ]
         };
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 5, 31));
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -215,55 +118,32 @@ public class EventIsOverlappingWith
     {
         Event eventToCheckOverlap = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
             Duration = new Duration(1, 4),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(),
-                    EventCollaborators = [
-                        new EventCollaborator
+            EventCollaborators = [
+                     new EventCollaborator
                         {
                             EventCollaboratorRole = EventCollaboratorRole.Organizer,
                             ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
                             EventDate = new DateOnly(),
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
-                            EventId = 47
-                        }
-                    ]
                 }
             ]
         };
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 5, 31));
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
     public void Should_ReturnFalse_When_MatchedDateAndEventAreNull()
     {
-        bool result = _event.IsEventOverlappingWith(null,null);
+        bool result = _event.IsEventOverlappingWith(null, null);
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
 }

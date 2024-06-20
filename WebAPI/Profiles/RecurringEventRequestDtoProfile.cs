@@ -13,7 +13,7 @@ public class RecurringEventRequestDtoProfile : Profile
     {
         CreateMap<RecurringEventRequestDto, Event>()
             .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom(src => MapRecurrencePatternFromEventDataModel(src.RecurrencePattern)))
-            .ForMember(dest => dest.DateWiseEventCollaborators, opt => opt.MapFrom<RecurringEventDateWiseEventCollaboratorsResolver>());
+            .ForMember(dest => dest.EventCollaborators, opt => opt.MapFrom(src => src.EventCollaborators));
     }
 
     private static List<int>? MapWeekDayIntoList(List<int>? byWeekDay)

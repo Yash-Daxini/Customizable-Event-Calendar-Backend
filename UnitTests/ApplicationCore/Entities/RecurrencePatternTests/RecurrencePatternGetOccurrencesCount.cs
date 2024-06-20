@@ -1,5 +1,6 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests;
@@ -16,7 +17,12 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData(2024, 2028, 1, 6, 5, 11)]
     [InlineData(2024, 2028, 1, 6, 0, 0)]
     [InlineData(2024, 2028, 1, 6, -5, 0)]
-    public void Should_ReturnOccurrencesCountForMonthlyPattern_When_FrequencyIsMonthly(int startDateYear, int endDateYear, int startDateMonth, int endDateMonth, int interval, int expectedResult)
+    public void Should_ReturnOccurrencesCountForMonthlyPattern_When_FrequencyIsMonthly(int startDateYear,
+                                                                                       int endDateYear,
+                                                                                       int startDateMonth,
+                                                                                       int endDateMonth,
+                                                                                       int interval,
+                                                                                       int expectedResult)
     {
         _recurrencePattern = new MonthlyRecurrencePatternBuilder()
                              .WithStartDate(new DateOnly(startDateYear, startDateMonth, 1))
@@ -27,7 +33,7 @@ public class RecurrencePatternGetOccurrencesCount
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
-        Assert.Equal(expectedResult, actualResult);
+        actualResult.Should().Be(expectedResult);
     }
 
     [Theory]
@@ -43,7 +49,10 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData(2024, 2030, 5, 2)]
     [InlineData(2024, 2030, 0, 0)]
     [InlineData(2024, 2030, -4, 0)]
-    public void Should_ReturnOccurrencesCountForYearlyPattern_When_FrequencyIsYearly(int startDateYear, int endDateYear, int interval, int expectedResult)
+    public void Should_ReturnOccurrencesCountForYearlyPattern_When_FrequencyIsYearly(int startDateYear,
+                                                                                     int endDateYear,
+                                                                                     int interval,
+                                                                                     int expectedResult)
     {
         _recurrencePattern = new YearlyRecurrencePatternBuilder()
                              .WithStartDate(new DateOnly(startDateYear, 1, 1))
@@ -54,7 +63,7 @@ public class RecurrencePatternGetOccurrencesCount
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
-        Assert.Equal(expectedResult, actualResult);
+        actualResult.Should().Be(expectedResult);
     }
 
     [Theory]
@@ -79,7 +88,7 @@ public class RecurrencePatternGetOccurrencesCount
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
-        Assert.Equal(expectedResult, actualResult);
+        actualResult.Should().Be(expectedResult);
     }
 
     [Theory]
@@ -104,7 +113,7 @@ public class RecurrencePatternGetOccurrencesCount
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
 
-        Assert.Equal(expectedResult, actualResult);
+        actualResult.Should().Be(expectedResult);
     }
 
     [Fact]
@@ -116,8 +125,8 @@ public class RecurrencePatternGetOccurrencesCount
                              .WithFrequency()
                              .Build();
 
-        int expectedResult = _recurrencePattern.GetOccurrencesCount();
+        int actualResult = _recurrencePattern.GetOccurrencesCount();
 
-        Assert.Equal(1, expectedResult);
+        actualResult.Should().Be(1);
     }
 }

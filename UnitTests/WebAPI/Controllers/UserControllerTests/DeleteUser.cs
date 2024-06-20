@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -31,7 +32,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.DeleteUser(1);
 
-        Assert.IsType<OkObjectResult>(actionResult);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
     
     [Fact]
@@ -41,7 +42,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.DeleteUser(1);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
 
     [Fact]
@@ -51,7 +52,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.DeleteUser(1);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]
@@ -61,6 +62,6 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.DeleteUser(1);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

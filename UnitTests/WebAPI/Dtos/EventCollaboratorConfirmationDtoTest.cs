@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -22,7 +23,7 @@ public class EventCollaboratorConfirmationDtoTest
 
         var result = _eventCollaboratorConfirmationDtoValidator.Validate(eventCollaboratorConfirmationDto);
 
-        Assert.False(result.IsValid);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -39,6 +40,6 @@ public class EventCollaboratorConfirmationDtoTest
 
         var result = _eventCollaboratorConfirmationDtoValidator.Validate(eventCollaboratorConfirmationDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

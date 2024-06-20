@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
@@ -16,7 +17,7 @@ public class EventCollaboratorResetProposedDuration
 
         bool result = eventCollaborator.IsProposedDurationNull();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -30,6 +31,6 @@ public class EventCollaboratorResetProposedDuration
 
         bool result = eventCollaborator.IsProposedDurationNull();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 }

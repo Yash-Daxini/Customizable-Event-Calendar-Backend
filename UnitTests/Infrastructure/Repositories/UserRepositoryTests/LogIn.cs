@@ -5,6 +5,7 @@ using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -47,7 +48,7 @@ public class LogIn : IClassFixture<AutoMapperFixture>
 
         SignInResult authResult = await userRepository.LogIn(user);
 
-        Assert.Equal(SignInResult.Success, authResult);
+        authResult.Should().Be(SignInResult.Success);
     }
 
     [Fact]
@@ -67,6 +68,6 @@ public class LogIn : IClassFixture<AutoMapperFixture>
 
         SignInResult authResponse = await userRepository.LogIn(user);
 
-        Assert.Equal(SignInResult.Failed, authResponse);
+        authResponse.Should().Be(SignInResult.Failed);
     }
 }

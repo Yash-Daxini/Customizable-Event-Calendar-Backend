@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -19,7 +20,7 @@ public class SharedCalendarDtoTests
 
         var result = _validator.Validate(sharedCalendarDto);
 
-        Assert.False(result.IsValid);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -36,6 +37,6 @@ public class SharedCalendarDtoTests
 
         var result = _validator.Validate(sharedCalendarDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

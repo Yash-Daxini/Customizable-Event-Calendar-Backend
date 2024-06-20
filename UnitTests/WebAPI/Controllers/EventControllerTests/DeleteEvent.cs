@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -27,7 +28,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
     {
         IActionResult actionResult = await _eventController.DeleteEvent(1, 1);
 
-        Assert.IsType<OkResult>(actionResult);
+        actionResult.Should().BeOfType<OkResult>();
     }
     
     [Fact]
@@ -37,7 +38,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.DeleteEvent(1, 1);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
     
     [Fact]
@@ -47,7 +48,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.DeleteEvent(1, 1);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 
 }

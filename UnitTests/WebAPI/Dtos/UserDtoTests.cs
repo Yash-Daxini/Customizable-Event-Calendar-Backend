@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -19,7 +20,7 @@ public class UserDtoTests
 
         var result = _validator.Validate(userDto);
 
-        Assert.False(result.IsValid);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -35,6 +36,6 @@ public class UserDtoTests
 
         var result = _validator.Validate(userDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
@@ -19,11 +20,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
 
         [Fact]
@@ -39,11 +38,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
 
         [Fact]
@@ -59,11 +56,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
 
         [Fact]
@@ -79,11 +74,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
 
         [Theory]
@@ -103,11 +96,11 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 5, monthDay), new DateOnly(2024, 7, monthDay), new DateOnly(2024, 9, monthDay)];
+            List<DateOnly> expectedResult = [new DateOnly(2024, 5, monthDay), new DateOnly(2024, 7, monthDay), new DateOnly(2024, 9, monthDay)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
         [Fact]
         public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDayForLastDayOfMonth()
@@ -122,11 +115,11 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31), new DateOnly(2024, 7, 31), new DateOnly(2024, 9, 30)];
+            List<DateOnly> expectedResult = [new DateOnly(2024, 5, 31), new DateOnly(2024, 7, 31), new DateOnly(2024, 9, 30)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
@@ -142,11 +135,11 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 7, 28), new DateOnly(2024, 9, 29)];
+            List<DateOnly> expectedResult = [new DateOnly(2024, 7, 28), new DateOnly(2024, 9, 29)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
@@ -162,11 +155,11 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(1)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 6, 30), new DateOnly(2024, 7, 28)];
+            List<DateOnly> expectedResult = [new DateOnly(2024, 6, 30), new DateOnly(2024, 7, 28)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

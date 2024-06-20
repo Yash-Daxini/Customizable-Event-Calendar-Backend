@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -19,7 +20,7 @@ public class RecurrencePatternDtoTests
 
         var result = _validator.Validate(recurrencePatternDto);
 
-        Assert.False(result.IsValid);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -39,6 +40,6 @@ public class RecurrencePatternDtoTests
 
         var result = _validator.Validate(recurrencePatternDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

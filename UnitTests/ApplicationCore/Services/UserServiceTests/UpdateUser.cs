@@ -3,9 +3,9 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -42,14 +42,16 @@ public class UpdateUser
     [Fact]
     public async Task Should_ThrowException_When_UserWithIdNotAvailable()
     {
-        User user = new User()
+        User user = new()
         {
             Id = 1,
         };
 
         _userRepository.GetUserById(1).ReturnsNull();
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _userService.UpdateUser(user));
+        Action action = async () => await _userService.UpdateUser(user);
+
+        action.Should().Throw<NotFoundException>();
 
         await _userRepository.DidNotReceive().Update(user);
     }
@@ -61,7 +63,9 @@ public class UpdateUser
 
         _userRepository.GetUserById(1).ReturnsNull();
 
-        await Assert.ThrowsAsync<NullArgumentException>(async () => await _userService.UpdateUser(user));
+        Action action = async () => await _userService.UpdateUser(user);
+
+        action.Should().Throw<NullArgumentException>();
 
         await _userRepository.DidNotReceive().Update(user);
     }

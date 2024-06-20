@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using FluentAssertions;
 using Infrastructure;
 using Infrastructure.Repositories;
 
@@ -9,12 +10,12 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
 {
     private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
-    private readonly List<SharedCalendar> _sharedCalendars;
+    private readonly List<SharedCalendar> _expectedResult;
 
     public GetAllSharedCalendars(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _sharedCalendars = [new(
+        _expectedResult = [new(
             1,
             new User
             {
@@ -42,6 +43,6 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
 
         List<SharedCalendar> sharedCalendars = await sharedCalendarRepository.GetAllSharedCalendars();
 
-        Assert.Equivalent(_sharedCalendars, sharedCalendars);
+        sharedCalendars.Should().BeEquivalentTo(_expectedResult);
     }
 }

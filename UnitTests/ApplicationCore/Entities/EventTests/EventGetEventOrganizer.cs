@@ -1,35 +1,16 @@
 ﻿using Core.Entities;
-using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
 public class EventGetEventOrganizer
 {
-
-    private readonly Event _event;
-
-    public EventGetEventOrganizer()
+    [Fact]
+    public void Should_ReturnOrganizerOfEvent_When_MultipleEventCollaboratorsPresent()
     {
-        _event = new()
+        Event eventObj = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(),
-                EndDate = new DateOnly(),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(),
-                    EventCollaborators = [
+            EventCollaborators = [
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
@@ -59,17 +40,11 @@ public class EventGetEventOrganizer
                                 Password = "b"
                             },
                             EventId = 47
-                        },
-                    ]
-                }
+                        }
             ]
         };
-    }
 
-    [Fact]
-    public void Should_ReturnOrganizerOfEvent_When_MultipleEventCollaboratorsPresent()
-    {
-        User actualUser = new User
+        User actualUser = new()
         {
             Id = 48,
             Name = "a",
@@ -77,19 +52,17 @@ public class EventGetEventOrganizer
             Password = "a"
         };
 
-        User? expectedUser = _event.GetEventOrganizer();
+        User? expectedUser = eventObj.GetEventOrganizer();
 
-        Assert.Equivalent(expectedUser, actualUser);
+        actualUser.Should().BeEquivalentTo(expectedUser);
     }
 
     [Fact]
     public void Should_ReturnOrganizerOfEvent_When_OnlyOrganizerPresent()
     {
-        _event.DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(),
-                    EventCollaborators = [
+        Event eventObj = new()
+        {
+            EventCollaborators = [
                         new EventCollaborator
                         {
                             EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
@@ -105,11 +78,10 @@ public class EventGetEventOrganizer
                             },
                             EventId = 47
                         }
-                    ]
-                }
-            ];
+            ]
+        };
 
-        User actualUser = new User
+        User expectedUser = new()
         {
             Id = 48,
             Name = "a",
@@ -117,48 +89,28 @@ public class EventGetEventOrganizer
             Password = "a"
         };
 
-        User? expectedUser = _event.GetEventOrganizer();
+        User? actualUser = eventObj.GetEventOrganizer();
 
-        Assert.Equivalent(expectedUser, actualUser);
-    }
-
-    [Fact]
-    public void Should_ReturnOrganizerOfEventAsNull_When_DateWiseEventCollaboratorsIsNull()
-    {
-        _event.DateWiseEventCollaborators = null;
-
-        User? expectedUser = _event.GetEventOrganizer();
-
-        Assert.Equivalent(expectedUser, null);
+        actualUser.Should().BeEquivalentTo(expectedUser);
     }
 
     [Fact]
     public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsNull()
     {
-        _event.DateWiseEventCollaborators[0].EventCollaborators = null;
+        Event eventObj = new() { EventCollaborators = null };
 
-        User? expectedUser = _event.GetEventOrganizer();
+        User? actualResult = eventObj.GetEventOrganizer();
 
-        Assert.Equivalent(expectedUser, null);
-    }
-
-    [Fact]
-    public void Should_ReturnOrganizerOfEventAsNull_When_DateWiseEventCollaboratorsIsEmpty()
-    {
-        _event.DateWiseEventCollaborators = [];
-
-        User? expectedUser = _event.GetEventOrganizer();    
-
-        Assert.Equivalent(expectedUser, null);
+        actualResult.Should().BeNull();
     }
 
     [Fact]
     public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsEmpty()
     {
-        _event.DateWiseEventCollaborators[0].EventCollaborators = [];
+        Event eventObj = new() { EventCollaborators = [] };
 
-        User? expectedUser = _event.GetEventOrganizer();
+        User? actualResult = eventObj.GetEventOrganizer();
 
-        Assert.Equivalent(expectedUser, null);
+        actualResult.Should().BeNull();
     }
 }

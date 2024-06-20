@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Entities.Enums;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -55,7 +56,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     {
         IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
-        Assert.IsType<OkObjectResult>(actionResult);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -65,7 +66,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]
@@ -75,7 +76,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
     
     [Fact]
@@ -85,7 +86,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 
 

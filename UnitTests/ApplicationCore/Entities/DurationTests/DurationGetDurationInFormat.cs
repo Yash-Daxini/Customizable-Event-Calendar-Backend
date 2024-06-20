@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.DurationTests;
 
@@ -10,10 +11,12 @@ public class DurationGetDurationInFormat
     [InlineData(-10, -25)]
     public void Should_ThrowException_When_InvalidStartHourAndInValidEndHour(int startHour, int endHour)
     {
-        Assert.Throws<InvalidDurationException>(() =>
+        Action action = () =>
         {
             Duration duration = new(startHour, endHour);
-        });
+        };
+
+        action.Should().Throw<InvalidDurationException>();
     }
 
     [Theory]
@@ -21,10 +24,12 @@ public class DurationGetDurationInFormat
     [InlineData(25, 23)]
     public void Should_ThrowException_When_InvalidStartHourAndValidEndHour(int startHour, int endHour)
     {
-        Assert.Throws<InvalidDurationException>(() =>
+        Action action = () =>
         {
             Duration duration = new(startHour, endHour);
-        });
+        };
+
+        action.Should().Throw<InvalidDurationException>();
     }
 
     [Theory]
@@ -32,10 +37,12 @@ public class DurationGetDurationInFormat
     [InlineData(3, -4)]
     public void Should_ThrowException_When_ValidStartHourAndInvalidEndHour(int startHour, int endHour)
     {
-        Assert.Throws<InvalidDurationException>(() =>
+        Action action = () =>
         {
             Duration duration = new(startHour, endHour);
-        });
+        };
+
+        action.Should().Throw<InvalidDurationException>();
     }
 
     [Theory]
@@ -50,6 +57,6 @@ public class DurationGetDurationInFormat
 
         string? actualResult = duration.GetDurationInFormat();
 
-        Assert.Equal(expectedResult, actualResult);
+        actualResult.Should().Be(expectedResult);
     }
 }

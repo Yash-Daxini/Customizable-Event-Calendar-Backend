@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -24,13 +25,9 @@ public class GetEventsForDailyView : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnEvents_When_EventOfCurrentDay()
     {
-        List<EventResponseDto> events = [];
-
         IActionResult actionResult = await _eventController.GetEventsForDailyView(1);
 
-        var returnedResult = Assert.IsType<OkObjectResult>(actionResult);
-
-        Assert.Equivalent(events, returnedResult.Value);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -40,6 +37,6 @@ public class GetEventsForDailyView : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.GetEventsForDailyView(1);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 }

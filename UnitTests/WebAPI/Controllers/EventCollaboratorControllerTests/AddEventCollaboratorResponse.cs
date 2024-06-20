@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -36,7 +37,7 @@ public class AddEventCollaboratorResponse : IClassFixture<AutoMapperFixture>
     {
         IActionResult actionResult  = await _eventCollaboratorController.AddEventCollaboratorResponse(_eventCollaboratorConfirmationDto);
 
-        Assert.IsType<OkObjectResult>(actionResult);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
     
     [Fact]
@@ -48,7 +49,7 @@ public class AddEventCollaboratorResponse : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult  = await _eventCollaboratorController.AddEventCollaboratorResponse(_eventCollaboratorConfirmationDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 
 

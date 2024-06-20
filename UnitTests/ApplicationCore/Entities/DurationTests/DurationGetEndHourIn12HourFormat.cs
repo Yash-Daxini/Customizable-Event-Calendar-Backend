@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.DurationTests;
 
@@ -12,10 +13,12 @@ public class DurationGetEndHourIn12HourFormat
     [InlineData(-4)]
     public void Should_ThrowException_When_Invalid24HourFormat(int hour)
     {
-        Assert.Throws<InvalidDurationException>(() =>
+        Action action = () =>
         {
             Duration duration = new(hour, hour);
-        });
+        };
+
+        action.Should().Throw<InvalidDurationException>();
     }
 
     [Theory]
@@ -30,6 +33,6 @@ public class DurationGetEndHourIn12HourFormat
 
         string? actualResult = duration.GetEndHourIn12HourFormat();
 
-        Assert.Equal(expectedResult, actualResult);
+        actualResult.Should().Be(expectedResult);
     }
 }

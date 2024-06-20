@@ -1,13 +1,14 @@
 ﻿using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
 {
-    public class DailyRecurrecePatternGetOccurrences
+    public class DailyRecurrencePatternGetOccurrences
     {
 
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsDailyRecurringEventAndIntervalIs0()
+        public void Should_ReturnEmptyList_When_ItIsDailyRecurringEventAndIntervalIs0()
         {
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -17,11 +18,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(0)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
 
         [Fact]
@@ -35,13 +34,13 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31), new DateOnly(2024, 6, 2), new DateOnly(2024, 6, 4), new DateOnly(2024, 6, 6),
+            List<DateOnly> expectedResult = [new DateOnly(2024, 5, 31), new DateOnly(2024, 6, 2), new DateOnly(2024, 6, 4), new DateOnly(2024, 6, 6),
                                          new DateOnly(2024, 6, 8),new DateOnly(2024, 6, 10),new DateOnly(2024, 6, 12),new DateOnly(2024, 6, 14),
                                          new DateOnly(2024, 6, 16),new DateOnly(2024, 6, 18),new DateOnly(2024, 6, 20)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
         [Fact]
         public void Should_ReturnListOfOccurrences_When_ItIsDailyRecurringEventAndWeekDayIsNull()
@@ -54,13 +53,13 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31), new DateOnly(2024, 6, 2), new DateOnly(2024, 6, 4), new DateOnly(2024, 6, 6),
+            List<DateOnly> expectedResult = [new DateOnly(2024, 5, 31), new DateOnly(2024, 6, 2), new DateOnly(2024, 6, 4), new DateOnly(2024, 6, 6),
                                          new DateOnly(2024, 6, 8),new DateOnly(2024, 6, 10),new DateOnly(2024, 6, 12),new DateOnly(2024, 6, 14),
                                          new DateOnly(2024, 6, 16),new DateOnly(2024, 6, 18),new DateOnly(2024, 6, 20)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
@@ -74,13 +73,13 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(3)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31), new DateOnly(2024, 6, 3), new DateOnly(2024, 6, 6),
+            List<DateOnly> expectedResult = [new DateOnly(2024, 5, 31), new DateOnly(2024, 6, 3), new DateOnly(2024, 6, 6),
                                          new DateOnly(2024, 6, 9),new DateOnly(2024, 6, 12),new DateOnly(2024, 6, 15),
                                          new DateOnly(2024, 6, 18)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
@@ -94,11 +93,11 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(1)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31)];
+            List<DateOnly> expectedResult = [new DateOnly(2024, 5, 31)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
@@ -112,11 +111,11 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithInterval(2)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 6, 2), new DateOnly(2024, 6, 8), new DateOnly(2024, 6, 16)];
+            List<DateOnly> expectedResult = [new DateOnly(2024, 6, 2), new DateOnly(2024, 6, 8), new DateOnly(2024, 6, 16)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

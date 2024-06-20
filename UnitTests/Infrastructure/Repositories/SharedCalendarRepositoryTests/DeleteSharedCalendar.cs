@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -33,6 +34,6 @@ public class DeleteSharedCalendar : IClassFixture<AutoMapperFixture>
 
         SharedCalendar? updatedSharedCalendar = await sharedCalendarRepository.GetSharedCalendarById(1);
 
-        Assert.Null(updatedSharedCalendar);
+        updatedSharedCalendar.Should().BeNull();
     }
 }

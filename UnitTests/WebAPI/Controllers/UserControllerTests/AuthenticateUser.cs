@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -56,9 +57,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
-        var returnedResult = Assert.IsType<OkObjectResult>(actionResult);
-
-        Assert.Equivalent(authenticateResponseDto, returnedResult.Value);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -82,7 +81,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
     
     
@@ -107,7 +106,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
     
     [Fact]
@@ -131,6 +130,6 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

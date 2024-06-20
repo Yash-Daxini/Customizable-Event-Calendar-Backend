@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -42,6 +43,6 @@ public class UpdateEventCollaborator : IClassFixture<AutoMapperFixture>
 
         EventCollaborator? updatedEventCollaborator = await eventCollaboratorRepository.GetEventCollaboratorById(1);
 
-        Assert.Equivalent(eventCollaborator,updatedEventCollaborator);
+        updatedEventCollaborator.Should().BeEquivalentTo(eventCollaborator);
     }
 }

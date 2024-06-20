@@ -5,6 +5,7 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using Core.Exceptions;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -36,9 +37,10 @@ public class AddEventCollaborator
         _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
 
         int result = await _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
-        _eventCollaboratorRepository.Received().Add(eventCollaborator);
 
-        Assert.Equivalent(result, 1);
+        await _eventCollaboratorRepository.Received().Add(eventCollaborator);
+
+        result.Should().Be(1);
     }
 
     [Fact]
@@ -46,14 +48,15 @@ public class AddEventCollaborator
     {
         EventCollaborator eventCollaborator = null;
 
-        await Assert.ThrowsAsync<NullArgumentException>(async () =>
+        Action action = () =>
         {
-            _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
+           _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
 
-            await _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
+           _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
+        };
 
-        });
+        action.Should().Throw<NullArgumentException>();
+
         await _eventCollaboratorRepository.DidNotReceive().Add(eventCollaborator);
-
     }
 }

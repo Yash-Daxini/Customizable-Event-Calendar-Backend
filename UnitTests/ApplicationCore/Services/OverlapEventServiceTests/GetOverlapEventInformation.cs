@@ -4,6 +4,7 @@ using Core.Entities.Enums;
 using Core.Interfaces.IServices;
 using Core.Services;
 using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Services.OverlapEventServiceTests;
 
@@ -31,204 +32,120 @@ public class GetOverlapEventInformation
                         ByWeekDay = [1,2,3,4,5,6,7],
                         Interval = 1
                     },
-                    DateWiseEventCollaborators =
+                    EventCollaborators =
                     [
-                        new (){
-                            EventDate = new DateOnly(2024,5,30),
-                            EventCollaborators =
-                            [
-                                new()
-                                {
-                                    Id = 1,
-                                    EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                                    ConfirmationStatus = ConfirmationStatus.Accept,
-                                    EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
-                                    User = new User()
-                                    {
-                                        Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
-                                    }
-                                }
-                            ]
+                        new()
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
+                            EventDate = new DateOnly(2024, 6, 2),
+                            User = new User()
+                            {
+                                Id = 1,
+                            }
                         },
-                        new (){
-                            EventDate = new DateOnly(2024,5,31),
-                            EventCollaborators =
-                            [
-                                new()
-                                {
-                                    Id = 1,
-                                    EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                                    ConfirmationStatus = ConfirmationStatus.Accept,
-                                    EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
-                                    User = new User()
-                                    {
-                                        Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
-                                    }
-                                }
-                            ]
+                        new()
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
+                            EventDate = new DateOnly(2024, 6, 2),
+                            User = new User()
+                            {
+                                Id = 1,
+                            }
                         },
-                        new (){
-                            EventDate = new DateOnly(2024,6,1),
-                            EventCollaborators =
-                            [
-                                new()
-                                {
-                                    Id = 1,
-                                    EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                                    ConfirmationStatus = ConfirmationStatus.Accept,
-                                    EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
-                                    User = new User()
-                                    {
-                                        Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
-                                    }
-                                }
-                            ]
+                        new()
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
+                            EventDate = new DateOnly(2024, 6, 2),
+                            User = new User()
+                            {
+                                Id = 1,
+                            }
                         },
-                        new (){
-                            EventDate = new DateOnly(2024,6,2),
-                            EventCollaborators =
-                            [
-                                new()
-                                {
-                                    Id = 1,
-                                    EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                                    ConfirmationStatus = ConfirmationStatus.Accept,
-                                    EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
-                                    User = new User()
-                                    {
-                                        Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
-                                    }
-                                }
-                            ]
+                        new()
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
+                            EventDate = new DateOnly(2024, 6, 2),
+                            User = new User()
+                            {
+                                Id = 1,
+                            }
                         }
-                    ]
+                    ],
                 },
                 new()
-        {
-            Id = 2,
-            Title = "2",
-            Description = "2",
-            Location = "2",
-            Duration = new(6,7),
-            RecurrencePattern = new DailyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 30),
-                EndDate = new DateOnly(2024, 6, 2),
-                Frequency = Frequency.Daily,
-                ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
-                Interval = 2
-            },
-            DateWiseEventCollaborators =
-                    [
-                        new (){
-                            EventDate = new DateOnly(2024,5,2),
-                            EventCollaborators =
+                {
+                    Id = 2,
+                    Title = "2",
+                    Description = "2",
+                    Location = "2",
+                    Duration = new (6,7),
+                    RecurrencePattern = new DailyRecurrencePattern()
+                    {
+                        StartDate = new DateOnly(2024, 5, 30),
+                        EndDate = new DateOnly(2024, 6, 2),
+                        Frequency = Frequency.Daily,
+                        ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
+                        Interval = 2
+                    },
+                    EventCollaborators =
                             [
-                                new()
-                                {
-                                    Id = 1,
-                                    EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                                    ConfirmationStatus = ConfirmationStatus.Accept,
-                                    EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
-                                    User = new User()
-                                    {
-                                        Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
-                                    }
-                                }
-                            ]
-                        },
-                        new (){
-                            EventDate = new DateOnly(2024,6,2),
-                            EventCollaborators =
-                            [
-                                new()
-                                {
-                                    Id = 1,
-                                    EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                                    ConfirmationStatus = ConfirmationStatus.Accept,
-                                    EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
-                                    User = new User()
-                                    {
-                                        Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
-                                    }
-                                }
-                            ]
-                        }
-                    ]
+                                        new()
+                                        {
+                                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                                            ConfirmationStatus = ConfirmationStatus.Accept,
+                                            EventDate = new DateOnly(2024, 6, 2),
+                                            User = new User()
+                                            {
+                                                Id = 1,
+                                            }
         },
+                                        new()
+                                        {
+                                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                                            ConfirmationStatus = ConfirmationStatus.Accept,
+                                            EventDate = new DateOnly(2024, 6, 2),
+                                            User = new User()
+                                            {
+                                                Id = 1,
+                                            }
+                                        }
+                            ]
+                },
                 new()
-        {
-            Id = 3,
-            Title = "3",
-            Description = "3",
-            Location = "3",
-            Duration = new(6,7),
-            RecurrencePattern = new DailyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 6, 2),
-                EndDate = new DateOnly(2024, 6, 2),
-                Frequency = Frequency.None,
-                ByWeekDay = null,
-                Interval = 2
-            },
-            DateWiseEventCollaborators =
+                {
+                    Id = 3,
+                    Title = "3",
+                    Description = "3",
+                    Location = "3",
+                    Duration = new(6, 7),
+                    RecurrencePattern = new DailyRecurrencePattern()
+                    {
+                        StartDate = new DateOnly(2024, 6, 2),
+                        EndDate = new DateOnly(2024, 6, 2),
+                        Frequency = Frequency.None,
+                        ByWeekDay = null,
+                        Interval = 2
+                    },
+                    EventCollaborators =
                     [
-                        new (){
-                            EventDate = new DateOnly(2024,6,2),
-                            EventCollaborators =
-                            [
-                                new()
+                         new()
                                 {
-                                    Id = 1,
                                     EventCollaboratorRole = EventCollaboratorRole.Organizer,
                                     ConfirmationStatus = ConfirmationStatus.Accept,
                                     EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
                                     User = new User()
                                     {
                                         Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
                                     }
                                 }
-                            ]
-                        }
                     ]
-        }
+                }
+             ];
 
-            ];
         _overlappingEventService = new OverlapEventService();
     }
 
@@ -250,52 +167,28 @@ public class GetOverlapEventInformation
                 ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
                 Interval = 2
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
                     [
-                        new (){
-                            EventDate = new DateOnly(2024,5,30),
-                            EventCollaborators =
-                            [
                                 new()
                                 {
-                                    Id = 1,
                                     EventCollaboratorRole = EventCollaboratorRole.Organizer,
                                     ConfirmationStatus = ConfirmationStatus.Accept,
                                     EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
                                     User = new User()
                                     {
                                         Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
                                     }
-                                }
-                            ]
-                        },
-                        new (){
-                            EventDate = new DateOnly(2024,6,2),
-                            EventCollaborators =
-                            [
+                                },
                                 new()
                                 {
-                                    Id = 1,
                                     EventCollaboratorRole = EventCollaboratorRole.Organizer,
                                     ConfirmationStatus = ConfirmationStatus.Accept,
                                     EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
                                     User = new User()
                                     {
                                         Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
                                     }
                                 }
-                            ]
-                        }
                     ]
         };
 
@@ -307,9 +200,9 @@ public class GetOverlapEventInformation
 
         string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
 
-        Assert.NotNull(message);
+        message.Should().NotBeNull();
 
-        Assert.Equal(expectedMessage.ToString(), message);
+        message.Should().Be(expectedMessage.ToString());
     }
 
     [Fact]
@@ -330,52 +223,28 @@ public class GetOverlapEventInformation
                 ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
                 Interval = 2
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
                     [
-                        new (){
-                            EventDate = new DateOnly(2024,6,2),
-                            EventCollaborators =
-                            [
                                 new()
                                 {
-                                    Id = 1,
                                     EventCollaboratorRole = EventCollaboratorRole.Organizer,
                                     ConfirmationStatus = ConfirmationStatus.Accept,
                                     EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
                                     User = new User()
                                     {
                                         Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
                                     }
-                                }
-                            ]
-                        },
-                        new (){
-                            EventDate = new DateOnly(2024,6,2),
-                            EventCollaborators =
-                            [
+                                },
                                 new()
                                 {
-                                    Id = 1,
                                     EventCollaboratorRole = EventCollaboratorRole.Organizer,
                                     ConfirmationStatus = ConfirmationStatus.Accept,
                                     EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
                                     User = new User()
                                     {
                                         Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
                                     }
                                 }
-                            ]
-                        }
                     ]
         };
 
@@ -392,9 +261,9 @@ public class GetOverlapEventInformation
 
         string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
 
-        Assert.NotNull(message);
+        message.Should().NotBeNull();
 
-        Assert.Equal(expectedMessage.ToString(), message);
+        message.Should().Be(expectedMessage.ToString());
     }
 
     [Fact]
@@ -415,36 +284,24 @@ public class GetOverlapEventInformation
                 ByWeekDay = [1, 2, 3, 4, 5, 6, 7],
                 Interval = 2
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
                     [
-                        new (){
-                            EventDate = new DateOnly(2024,5,30),
-                            EventCollaborators =
-                            [
-                                new()
+                       new()
                                 {
-                                    Id = 1,
                                     EventCollaboratorRole = EventCollaboratorRole.Organizer,
                                     ConfirmationStatus = ConfirmationStatus.Accept,
                                     EventDate = new DateOnly(2024, 6, 2),
-                                    EventId = 1,
-                                    ProposedDuration = null,
                                     User = new User()
                                     {
                                         Id = 1,
-                                        Name = "Test",
-                                        Email = "Test@gmail.com",
-                                        Password = "Password",
                                     }
-                                }
-                            ]
-                        },
+                                },
                     ]
         };
 
         string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
 
-        Assert.Null(message);
+        message.Should().BeNull();
     }
 
     [Fact]
@@ -452,7 +309,7 @@ public class GetOverlapEventInformation
     {
         string? message = _overlappingEventService.GetOverlappedEventInformation(null, _events);
 
-        Assert.Null(message);
+        message.Should().BeNull();
     }
 
     [Fact]
@@ -460,6 +317,6 @@ public class GetOverlapEventInformation
     {
         string? message = _overlappingEventService.GetOverlappedEventInformation(null, []);
 
-        Assert.Null(message);
+        message.Should().BeNull();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities;
 using UnitTests.Builders;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -17,7 +18,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.ConfirmationStatus == ConfirmationStatus.Reject;
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
 
@@ -36,7 +37,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.ConfirmationStatus == ConfirmationStatus.Reject;
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -50,7 +51,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.IsStatusPending();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
 
@@ -69,7 +70,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.IsStatusPending();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -83,7 +84,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.IsStatusAccept();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
 
@@ -102,7 +103,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.IsStatusAccept();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
 
@@ -117,7 +118,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.ConfirmationStatus == ConfirmationStatus.Proposed;
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
 
@@ -136,7 +137,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.ConfirmationStatus == ConfirmationStatus.Proposed;
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -150,7 +151,7 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.ConfirmationStatus == ConfirmationStatus.Maybe;
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
 
@@ -169,6 +170,6 @@ public class EventCollaboratorSetConfirmationStatus
 
         bool result = eventCollaborator.ConfirmationStatus == ConfirmationStatus.Maybe;
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 }

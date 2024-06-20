@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities;
 using UnitTests.Builders;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -15,7 +16,7 @@ public class EventCollaboratorIsParticipant
 
         bool result = eventCollaborator.IsParticipant();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Theory]
@@ -29,6 +30,6 @@ public class EventCollaboratorIsParticipant
 
         bool result = eventCollaborator.IsParticipant();
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 }

@@ -43,9 +43,9 @@ public class EventBuilder
         return this;
     }
 
-    public EventBuilder WithDateWiseEventCollaborators(List<EventCollaboratorsByDate> dateWiseEventCollaborators)
+    public EventBuilder WithEventCollaborators(List<EventCollaborator> eventCollaborators)
     {
-        _eventObj.DateWiseEventCollaborators = dateWiseEventCollaborators;
+        _eventObj.EventCollaborators= eventCollaborators;
         return this;
     }
 

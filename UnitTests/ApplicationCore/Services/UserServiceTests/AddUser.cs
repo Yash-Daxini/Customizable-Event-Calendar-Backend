@@ -3,9 +3,9 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
-using NullArgumentException = Core.Exceptions.NullArgumentException;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -38,7 +38,7 @@ public class AddUser
 
         await _userRepository.Received().SignUp(user);
 
-        Assert.True(result.Succeeded);
+        result.Succeeded.Should().BeTrue();
     }
 
     [Fact]
@@ -48,7 +48,9 @@ public class AddUser
 
         _userRepository.SignUp(user).Returns(IdentityResult.Failed());
 
-        await Assert.ThrowsAsync<NullArgumentException>(async() => await _userService.SignUp(user));
+        Action action = async () => await _userService.SignUp(user);
+
+        action.Should().Throw<NullArgumentException>();
 
         await _userRepository.DidNotReceive().SignUp(user);
     }

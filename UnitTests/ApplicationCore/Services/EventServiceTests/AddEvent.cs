@@ -6,6 +6,8 @@ using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Core.Entities.RecurrecePattern;
+using FluentAssertions;
+using Core.Entities.Enums;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -29,167 +31,21 @@ public class AddEvent
         _events =
         [
             new()
-        {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1,2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
             {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
+                Title = "event",
+                EventCollaborators = [
                         new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
                             {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        }
-                    ]
-                }
-            ]
-        },
-            new()
-        {
-            Id = 2205,
-            Title = "event 1",
-            Location = "event 1",
-            Description = "event 1",
-            Duration = new Duration(1,2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                    ]
-                }
-            ]
-        },
-            new()
-        {
-            Id = 2205,
-            Title = "event 2",
-            Location = "event 2",
-            Description = "event 2",
-            Duration = new Duration(1,2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                    ]
-                }
-            ]
-        }
+                                EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                                ConfirmationStatus = ConfirmationStatus.Accept,
+                                EventDate = new DateOnly(2024, 5, 31),
+                                User = new User
+                                {
+                                    Id = 49,
+                                },
+                            }
+                ]
+            }
         ];
     }
 
@@ -199,54 +55,18 @@ public class AddEvent
         Event eventObj = new()
         {
             Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Daily,
-                Interval = 2,
-                ByWeekDay = null
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
+            RecurrencePattern = new DailyRecurrencePattern(),
+            EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {
                                 Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
                             },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
                         }
-                    ]
-                }
             ]
         };
 
@@ -258,7 +78,7 @@ public class AddEvent
 
         int id = await _eventService.AddEvent(eventObj, 48);
 
-        Assert.Equal(1, id);
+        id.Should().Be(1);
 
         await _eventRepository.Received().Add(eventObj);
 
@@ -271,54 +91,18 @@ public class AddEvent
         Event eventObj = new()
         {
             Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
+            RecurrencePattern = new DailyRecurrencePattern(),
+            EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {
                                 Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
                             },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
                         }
-                    ]
-                }
             ]
         };
 
@@ -326,7 +110,9 @@ public class AddEvent
 
         _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
 
-        await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.AddEvent(eventObj, 48));
+        var action = async () => await _eventService.AddEvent(eventObj, 48);
+
+        await action.Should().ThrowAsync<EventOverlapException>();
     }
 
     [Fact]
@@ -335,54 +121,18 @@ public class AddEvent
         Event eventObj = new()
         {
             Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(2024, 5, 31),
-                    EventCollaborators = [
+            RecurrencePattern = new DailyRecurrencePattern(),
+            EventCollaborators = [
                         new EventCollaborator
                         {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
                             EventDate = new DateOnly(2024, 5, 31),
                             User = new User
                             {
                                 Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
                             },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
                         }
-                    ]
-                }
             ]
         };
 
@@ -390,7 +140,9 @@ public class AddEvent
 
         _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("");
 
-        await Assert.ThrowsAsync<EventOverlapException>(async () => await _eventService.AddEvent(eventObj, 48));
+        var action = async () => await _eventService.AddEvent(eventObj, 48);
+
+        await action.Should().ThrowAsync<EventOverlapException>();
     }
 
     [Fact]
@@ -402,7 +154,9 @@ public class AddEvent
 
         _eventRepository.Add(eventObj).Returns(1);
 
-        await Assert.ThrowsAsync<NullArgumentException>(async () => await _eventService.AddEvent(eventObj, 48));
+        var action = async () => await _eventService.AddEvent(eventObj, 48);
+
+        await action.Should().ThrowAsync<NullArgumentException>();
 
         await _eventRepository.DidNotReceive().Add(eventObj);
 

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using WebAPI.Controllers;
-using WebAPI.Dtos;
 
 namespace UnitTests.WebAPI.Controllers.EventControllerTests;
 
@@ -24,13 +24,9 @@ public class GetProposedEvents : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnEvents_When_ProposedEventsAvailable()
     {
-        List<EventResponseDto> events = [];
-
         IActionResult actionResult = await _eventController.GetProposedEvents(1);
 
-        var returnedResult = Assert.IsType<OkObjectResult>(actionResult);
-
-        Assert.Equivalent(events, returnedResult.Value);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -40,6 +36,6 @@ public class GetProposedEvents : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.GetProposedEvents(1);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

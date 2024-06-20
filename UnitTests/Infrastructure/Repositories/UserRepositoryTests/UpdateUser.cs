@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using Infrastructure;
-using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Http;
 using NSubstitute.ReturnsExtensions;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -60,7 +59,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         User? updatedUser = await userRepository.GetUserById(1);
 
-        Assert.Equivalent(expectedResult, updatedUser);
+        updatedUser.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
@@ -85,6 +84,6 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         User? updatedUser = await userRepository.GetUserById(1);
 
-        Assert.Null(updatedUser);
+        updatedUser.Should().BeNull();
     }
 }

@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -31,7 +32,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
 
         SharedCalendar? sharedCalendarById = await sharedCalendarRepository.GetSharedCalendarById(1);
 
-        Assert.Equivalent(sharedCalendar, sharedCalendarById);
+        sharedCalendarById.Should().BeEquivalentTo(sharedCalendar);
     }
 
     [Fact]
@@ -43,6 +44,6 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
 
         SharedCalendar? sharedCalendarById = await sharedCalendarRepository.GetSharedCalendarById(2);
 
-        Assert.Null(sharedCalendarById);
+        sharedCalendarById.Should().BeNull();
     }
 }

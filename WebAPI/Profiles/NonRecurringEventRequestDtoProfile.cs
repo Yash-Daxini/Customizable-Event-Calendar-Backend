@@ -18,6 +18,6 @@ public class NonRecurringEventRequestDtoProfile : Profile
                 Interval = 1,
                 ByWeekDay = null,
             }))
-            .ForMember(dest => dest.DateWiseEventCollaborators, opt => opt.MapFrom<NonRecurringEventDateWiseEventCollaboratorsResolver>());
+            .ForMember(dest => dest.EventCollaborators, opt => opt.MapFrom(src => src.EventCollaborators));
     }
 }

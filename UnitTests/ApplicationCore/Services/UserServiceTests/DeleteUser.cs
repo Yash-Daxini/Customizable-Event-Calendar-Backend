@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 
@@ -41,14 +42,16 @@ public class DeleteUser
     [Fact]
     public async Task Should_Throw_When_UserWithIdNotAvailable()
     {
-        User user = new User()
+        User user = new()
         {
             Id = 1,
         };
 
         _userRepository.GetUserById(1).ReturnsNull();
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _userService.DeleteUser(user.Id));
+        Action action = async () => await _userService.DeleteUser(user.Id);
+
+        action.Should().Throw<NotFoundException>();
 
         await _userRepository.DidNotReceive().Delete(user);
     }
@@ -60,7 +63,9 @@ public class DeleteUser
 
         _userRepository.GetUserById(-1).ReturnsNull();
 
-        await Assert.ThrowsAsync<ArgumentException>(async () => await _userService.DeleteUser(-1));
+        Action action = async () => await _userService.DeleteUser(-1);
+
+        action.Should().Throw<ArgumentException>();
 
         await _userRepository.DidNotReceive().Delete(user);
     }

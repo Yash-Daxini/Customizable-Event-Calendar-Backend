@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -30,7 +31,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
 
-        Assert.IsType<CreatedAtActionResult>(actionResult);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -44,7 +45,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
     
     [Fact]
@@ -58,7 +59,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
 
     [Fact]
@@ -72,6 +73,6 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

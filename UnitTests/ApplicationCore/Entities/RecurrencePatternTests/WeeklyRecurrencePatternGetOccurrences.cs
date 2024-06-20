@@ -1,4 +1,5 @@
 ﻿using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
@@ -17,11 +18,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .SetByWeekDay([])
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
 
         [Fact]
@@ -35,11 +34,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .SetByWeekDay(null)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
 
         [Fact]
@@ -53,11 +50,9 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .SetByWeekDay(null)
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [];
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
-
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEmpty();
         }
         [Fact]
         public void Should_ReturnListOfOccurrences_When_ItIsWeeklyRecurringEventWithNotNullByWeekDay()
@@ -70,12 +65,12 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .SetByWeekDay([6, 7])
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 6, 1), new DateOnly(2024, 6, 2),
+            List<DateOnly> expectedResult = [new DateOnly(2024, 6, 1), new DateOnly(2024, 6, 2),
                                          new DateOnly(2024, 6, 15), new DateOnly(2024, 6, 16)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

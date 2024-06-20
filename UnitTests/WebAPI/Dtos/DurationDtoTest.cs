@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -27,7 +28,7 @@ public class DurationDtoTest
 
         bool result = _durationDtoValidator.Validate(durationDto).IsValid;
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
     
     [Theory]
@@ -44,6 +45,6 @@ public class DurationDtoTest
 
         var result = _durationDtoValidator.Validate(durationDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

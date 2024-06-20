@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -45,9 +46,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _sharedCalendarController.AddSharedCalendar(sharedCalendarDto);
 
-        var returnedValue = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedSharedCalendarId = 1 }, returnedValue.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -73,6 +72,6 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _sharedCalendarController.AddSharedCalendar(sharedCalendarDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

@@ -3,6 +3,7 @@ using Core.Entities;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -37,13 +38,9 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                 Interval = 1,
                 ByWeekDay = null
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
             [
-                    new()
-                    {
-                        EventDate = new DateOnly(2024, 6, 8),
-                        EventCollaborators = [
-                            new()
+                new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
@@ -56,7 +53,8 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Email = "c",
                                     Password = "c",
                                 }
-                            }, new()
+                            },
+                new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
@@ -70,8 +68,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Password = "b",
                                 }
                             }
-                            ]
-                    }
             ]
         };
 
@@ -79,9 +75,9 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        Assert.True(eventId > 0);
+        eventToAdd.Should().Be(eventId > 0);
     }
-    
+
     [Fact]
     public async Task Should_AddEventAndReturnEventId_When_EventIsDailyRecurring()
     {
@@ -103,12 +99,8 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                 Interval = 1,
                 ByWeekDay = null,
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
             [
-                    new()
-                    {
-                        EventDate = new DateOnly(2024, 6, 8),
-                        EventCollaborators = [
                             new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
@@ -122,7 +114,8 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Email = "c",
                                     Password = "c",
                                 }
-                            }, new()
+                            },
+                            new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
@@ -136,8 +129,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Password = "b",
                                 }
                             }
-                            ]
-                    }
             ]
         };
 
@@ -145,7 +136,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        Assert.True(eventId > 0);
+        eventToAdd.Should().Be(eventId > 0);
     }
 
     [Fact]
@@ -167,15 +158,11 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                 EndDate = new DateOnly(2024, 6, 8),
                 Frequency = Core.Entities.Enums.Frequency.Weekly,
                 Interval = 1,
-                ByWeekDay = [1,2],
+                ByWeekDay = [1, 2],
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
             [
-                    new()
-                    {
-                        EventDate = new DateOnly(2024, 6, 8),
-                        EventCollaborators = [
-                            new()
+                new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
@@ -188,7 +175,8 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Email = "c",
                                     Password = "c",
                                 }
-                            }, new()
+                            },
+                new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
@@ -202,8 +190,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Password = "b",
                                 }
                             }
-                            ]
-                    }
             ]
         };
 
@@ -211,7 +197,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        Assert.True(eventId > 0);
+        eventToAdd.Should().Be(eventId > 0);
     }
 
     [Fact]
@@ -237,13 +223,9 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                 ByMonthDay = 31,
                 WeekOrder = null,
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
             [
-                    new()
-                    {
-                        EventDate = new DateOnly(2024, 6, 8),
-                        EventCollaborators = [
-                            new()
+               new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
@@ -256,7 +238,8 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Email = "c",
                                     Password = "c",
                                 }
-                            }, new()
+                            },
+               new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
@@ -270,8 +253,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Password = "b",
                                 }
                             }
-                            ]
-                    }
             ]
         };
 
@@ -279,7 +260,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        Assert.True(eventId > 0);
+        eventToAdd.Should().Be(eventId > 0);
     }
 
     [Fact]
@@ -306,13 +287,9 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                 WeekOrder = null,
                 ByMonth = 12
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
             [
-                    new()
-                    {
-                        EventDate = new DateOnly(2024, 6, 8),
-                        EventCollaborators = [
-                            new()
+                new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
@@ -325,7 +302,8 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Email = "c",
                                     Password = "c",
                                 }
-                            }, new()
+                            },
+                new()
                             {
                                 EventDate = new DateOnly(2024, 6, 8),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
@@ -339,8 +317,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                     Password = "b",
                                 }
                             }
-                            ]
-                    }
             ]
         };
 
@@ -348,7 +324,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        Assert.True(eventId > 0);
+        eventToAdd.Should().Be(eventId > 0);
     }
 
 }

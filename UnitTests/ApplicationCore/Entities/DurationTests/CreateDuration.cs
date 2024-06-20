@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.DurationTests;
 
@@ -11,10 +12,12 @@ public class CreateDuration
 
     public void Should_ThrowException_When_StartHourIsNotInRange(int startHour, int endHour)
     {
-        Assert.Throws<InvalidDurationException>(() =>
+        Action action = () =>
         {
             Duration duration = new(startHour, endHour);
-        });
+        };
+
+        action.Should().Throw<InvalidDurationException>();
     }
 
     [Theory]
@@ -23,10 +26,12 @@ public class CreateDuration
 
     public void Should_ThrowException_When_EndHourIsNotInRange(int startHour, int endHour)
     {
-        Assert.Throws<InvalidDurationException>(() =>
+        Action action = () =>
         {
             Duration duration = new(startHour, endHour);
-        });
+        };
+
+        action.Should().Throw<InvalidDurationException>();
     }
 
     [Theory]
@@ -37,10 +42,12 @@ public class CreateDuration
 
     public void Should_ThrowException_When_StartHourAndEndHourAreNotInRange(int startHour, int endHour)
     {
-        Assert.Throws<InvalidDurationException>(() =>
+        Action action = () =>
         {
             Duration duration = new(startHour, endHour);
-        });
+        };
+
+        action.Should().Throw<InvalidDurationException>();
     }
 
     [Theory]
@@ -52,7 +59,8 @@ public class CreateDuration
     public void Should_NotThrowException_When_StartHourAndEndHourAreInRange(int startHour, int endHour)
     {
         Duration duration = new(startHour, endHour);
-        Assert.True(duration.StartHour == startHour);
-        Assert.True(duration.EndHour == endHour);
+
+        duration.StartHour.Should().Be(startHour);
+        duration.EndHour.Should().Be(endHour);
     }
 }

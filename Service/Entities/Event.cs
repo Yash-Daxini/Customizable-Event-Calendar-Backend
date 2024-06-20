@@ -17,18 +17,11 @@ public class Event : IEntity
 
     public RecurrencePattern RecurrencePattern { get; set; }
 
-    public List<EventCollaboratorsByDate> DateWiseEventCollaborators { get; set; } = [];
+    public List<EventCollaborator> EventCollaborators { get; set; }
 
     public User? GetEventOrganizer()
     {
-        if (DateWiseEventCollaborators is null
-            || DateWiseEventCollaborators.Count is 0)
-            return null;
-
-        List<EventCollaborator>? eventCollaborators = DateWiseEventCollaborators.First()
-                                                     .EventCollaborators;
-
-        EventCollaborator? eventCollaborator = eventCollaborators
+        EventCollaborator? eventCollaborator = EventCollaborators
                                               ?.FirstOrDefault(eventCollaborator => eventCollaborator.IsOrganizer());
 
         return eventCollaborator?.User;
@@ -36,15 +29,12 @@ public class Event : IEntity
 
     public List<EventCollaborator> GetEventInvitees()
     {
-        if (DateWiseEventCollaborators is null
-            || DateWiseEventCollaborators.Count is 0)
+        if (EventCollaborators is null)
             return [];
 
-        if (DateWiseEventCollaborators[0].EventCollaborators is null)
-            return [];
-
-        return [.. DateWiseEventCollaborators[0].EventCollaborators
-                                                .Where(eventCollaborator => eventCollaborator.IsParticipant())];
+        return [.. EventCollaborators
+                  .Where(eventCollaborator => eventCollaborator.IsParticipant())
+                  .DistinctBy(eventCollaborator => eventCollaborator.User.Id)];
     }
 
     public bool HasPendingResponseFromUser(int userId)
@@ -73,11 +63,11 @@ public class Event : IEntity
         if (currentEvent is null)
             return null;
 
-        List<DateOnly> eventDates = DateWiseEventCollaborators
-                                    .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)
+        List<DateOnly> eventDates = EventCollaborators
+                                    .Select(eventCollaborator => eventCollaborator.EventDate)
                                     .ToList();
 
-        List<DateOnly> currentEventDates = currentEvent.DateWiseEventCollaborators
+        List<DateOnly> currentEventDates = currentEvent.EventCollaborators
                                                        .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)
                                                        .ToList();
 
@@ -88,48 +78,13 @@ public class Event : IEntity
                : matchedDate;
     }
 
-    public void CreateDateWiseEventCollaboratorList(List<DateOnly> occurrences)
-    {
-        EventCollaboratorsByDate? eventCollaboratorsByDate = DateWiseEventCollaborators.FirstOrDefault();
-
-        if (eventCollaboratorsByDate is null) return;
-
-        List<EventCollaborator> eventCollaborators = eventCollaboratorsByDate.EventCollaborators;
-
-        List<EventCollaboratorsByDate> eventCollaboratorsByDates = [];
-
-        foreach (DateOnly occurrence in occurrences)
-        {
-            eventCollaboratorsByDates.Add(new EventCollaboratorsByDate()
-            {
-                EventDate = occurrence,
-                EventCollaborators = [..eventCollaborators.Select(eventCollaborator => new EventCollaborator()
-                    {
-                        Id = eventCollaborator.Id,
-                        EventCollaboratorRole = eventCollaborator.EventCollaboratorRole,
-                        ConfirmationStatus = eventCollaborator.ConfirmationStatus,
-                        ProposedDuration = eventCollaborator.ProposedDuration,
-                        EventDate = occurrence,
-                        EventId = eventCollaborator.EventId,
-                        User = eventCollaborator.User
-                    })]
-            });
-        }
-
-        this.DateWiseEventCollaborators = eventCollaboratorsByDates;
-    }
-
     public List<EventCollaborator> GetEventCollaboratorsForGivenDate(DateOnly eventDate)
     {
-        if (DateWiseEventCollaborators is null)
+        if (EventCollaborators is null)
             return [];
 
-        EventCollaboratorsByDate? eventCollaboratorsByDate = DateWiseEventCollaborators
-                                                             .FirstOrDefault(eventCollaboratorByDate => eventCollaboratorByDate.EventDate
-                                                                                               == eventDate);
-        return eventCollaboratorsByDate is null
-               ? []
-               : eventCollaboratorsByDate.EventCollaborators;
+        return [.. EventCollaborators
+                  .Where(eventCollaborator => eventCollaborator.EventDate == eventDate)];
     }
 
     public bool IsUserCollaboratedOnGivenDate(int userId, DateOnly eventDate)
@@ -138,5 +93,26 @@ public class Event : IEntity
 
         return eventCollaborators
                .Exists(eventCollaborator => eventCollaborator.User.Id == userId);
+    }
+
+    public void PrepareCollaboratorsFromOccurrences(List<DateOnly> occurrences)
+    {
+        List<EventCollaborator> eventCollaborators = [];
+
+        foreach (var occurrence in occurrences)
+        {
+            eventCollaborators.AddRange(EventCollaborators.Select(eventCollaborator => new EventCollaborator()
+            {
+                Id = eventCollaborator.Id,
+                EventId = eventCollaborator.EventId,
+                EventDate = occurrence,
+                User = eventCollaborator.User,
+                EventCollaboratorRole = eventCollaborator.EventCollaboratorRole,
+                ConfirmationStatus = eventCollaborator.ConfirmationStatus,
+                ProposedDuration = eventCollaborator.ProposedDuration,
+            }));
+        }
+
+        this.EventCollaborators = eventCollaborators;
     }
 }

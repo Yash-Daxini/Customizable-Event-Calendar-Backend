@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -57,9 +58,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _sharedCalendarController.GetSharedCalendarById(1);
 
-        var returedResult = Assert.IsType<OkObjectResult>(actionResult);
-
-        Assert.Equivalent(sharedCalendarDto,returedResult.Value);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -69,7 +68,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _sharedCalendarController.GetSharedCalendarById(1);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
     
     [Fact]
@@ -79,7 +78,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _sharedCalendarController.GetSharedCalendarById(1);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 
 }

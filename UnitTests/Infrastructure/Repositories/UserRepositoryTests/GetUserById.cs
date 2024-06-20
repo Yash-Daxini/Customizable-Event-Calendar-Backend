@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using Infrastructure;
-using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -57,6 +56,6 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
 
         User? actualResult = await userRepository.GetUserById(1);
 
-        Assert.Equivalent(expectedResult, actualResult);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 }

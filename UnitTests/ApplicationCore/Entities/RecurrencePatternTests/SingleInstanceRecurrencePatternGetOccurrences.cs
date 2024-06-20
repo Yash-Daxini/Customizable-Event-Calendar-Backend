@@ -1,4 +1,5 @@
 ﻿using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
@@ -16,11 +17,11 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithByWeekDay()
                                                   .Build();
 
-            List<DateOnly> expectedOutput = [new DateOnly(2024, 5, 31)];
+            List<DateOnly> expectedResult = [new DateOnly(2024, 5, 31)];
 
-            List<DateOnly> actualOutput = recurrencePattern.GetOccurrences();
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
 
-            Assert.Equal(expectedOutput, actualOutput);
+            actualResult.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

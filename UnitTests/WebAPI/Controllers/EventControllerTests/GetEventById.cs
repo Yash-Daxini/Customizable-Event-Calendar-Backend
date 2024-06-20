@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -32,7 +33,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.GetEventById(1, 1);
 
-        Assert.IsType<OkObjectResult>(actionResult);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.GetEventById(1, 1);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
 
     [Fact]
@@ -52,6 +53,6 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.GetEventById(1, 1);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

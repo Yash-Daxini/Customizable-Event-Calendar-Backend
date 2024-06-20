@@ -12,7 +12,7 @@ public class EventProfile : Profile
         CreateMap<EventDataModel, Event>()
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => new Duration(src.StartHour, src.EndHour)))
                 .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom<RecurrencePatternResolver>())
-                .ForMember(dest => dest.DateWiseEventCollaborators, opt => opt.MapFrom<DateWiseEventCollaboratorsResolver>());
+                .ForMember(dest => dest.EventCollaborators, opt => opt.MapFrom(src => src.EventCollaborators));
 
         CreateMap<Event, EventDataModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.GetEventOrganizer().Id))
@@ -23,7 +23,7 @@ public class EventProfile : Profile
                 .ForMember(dest => dest.Frequency, opt => opt.MapFrom(src => MapEnumToFrequency(src.RecurrencePattern.Frequency)))
                 .ForMember(dest => dest.Interval, opt => opt.MapFrom(src => src.RecurrencePattern.Interval))
                 .ForMember(dest => dest.ByWeekDay, opt => opt.MapFrom(src => MapWeekDayListToString(src.RecurrencePattern.ByWeekDay)))
-                .ForMember(dest => dest.EventCollaborators, opt => opt.MapFrom<EventCollaboratorResolver>())
+                .ForMember(dest => dest.EventCollaborators, opt => opt.MapFrom(src => src.EventCollaborators))
                 .ForMember(dest => dest.ByMonthDay, opt => opt.MapFrom(src => MapMonthDay(src.RecurrencePattern)))
                 .ForMember(dest => dest.WeekOrder, opt => opt.MapFrom(src => MapWeekOrder(src.RecurrencePattern)))
                 .ForMember(dest => dest.ByMonth, opt => opt.MapFrom(src => MapMonth(src.RecurrencePattern)));
@@ -44,7 +44,7 @@ public class EventProfile : Profile
 
         return null;
     }
-    
+
     private int? MapMonth(dynamic recurrencePattern)
     {
         if (recurrencePattern.Frequency == Frequency.Yearly)
@@ -55,8 +55,8 @@ public class EventProfile : Profile
 
     private static string? MapWeekDayListToString(List<int>? weekDay)
     {
-        return weekDay == null || weekDay.Count == 0 
-               ? null 
+        return weekDay == null || weekDay.Count == 0
+               ? null
                : string.Join(",", weekDay);
     }
 

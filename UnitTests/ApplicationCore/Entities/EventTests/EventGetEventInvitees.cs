@@ -1,72 +1,38 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
-using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
 public class EventGetEventInvitees
 {
-    private readonly Event _event;
 
-    private readonly List<EventCollaborator> _eventCollaborators;
-
-    public EventGetEventInvitees()
+    [Fact]
+    public void Should_ReturnEmptyList_When_EventCollaboratorsIsNull()
     {
-        _event = new()
+        Event eventObj = new () { EventCollaborators = null };
+
+        List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
+
+        actualResult.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Should_ReturnEmptyList_When_EventCollaboratorsIsEmpty()
+    {
+        Event eventObj = new () { EventCollaborators = [] };
+
+        List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
+
+        actualResult.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Should_ReturnListOfEventCollaborators_When_EventCollaboratorsAvailable()
+    {
+        Event eventObj = new()
         {
-            Id = 2205,
-            Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(),
-                EndDate = new DateOnly(),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            DateWiseEventCollaborators = [
-                new EventCollaboratorsByDate
-                {
-                    EventDate = new DateOnly(),
-                    EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                    ]
-                }
-            ]
-        };
-        _eventCollaborators = [
+            EventCollaborators = [
                         new EventCollaborator
                         {
                             EventCollaboratorRole = EventCollaboratorRole.Organizer,
@@ -76,9 +42,6 @@ public class EventGetEventInvitees
                             User = new User
                             {
                                 Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
                             },
                             EventId = 47
                         },
@@ -90,104 +53,96 @@ public class EventGetEventInvitees
                             EventDate = new DateOnly(),
                             User = new User
                             {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
+                                Id = 49
+                            },
+                            EventId = 47
+                        }
+            ]
+        };
+
+        List<EventCollaborator> eventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Participant,
+                            ConfirmationStatus = ConfirmationStatus.Pending,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(),
+                            User = new User
+                            {
+                                Id = 49
+                            },
+                            EventId = 47
+                        }
+                        ];
+
+
+        List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
+
+        actualResult.Should().BeEquivalentTo(eventCollaborators);
+    }
+
+    [Fact]
+    public void Should_ReturnListOfEventCollaborators_When_EventCollaboratorsContainsCollaborator()
+    {
+        Event eventObj = new()
+        {
+            EventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(),
+                            User = new User
+                            {
+                                Id = 48,
                             },
                             EventId = 47
                         },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Participant,
+                            ConfirmationStatus = ConfirmationStatus.Pending,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(),
+                            User = new User
+                            {
+                                Id = 49
+                            },
+                            EventId = 47
+                        },
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Collaborator,
+                            ConfirmationStatus = ConfirmationStatus.Accept,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(),
+                            User = new User
+                            {
+                                Id = 50
+                            },
+                            EventId = 47
+                        }
+            ]
+        };
+
+        List<EventCollaborator> eventCollaborators = [
+                        new EventCollaborator
+                        {
+                            EventCollaboratorRole = EventCollaboratorRole.Participant,
+                            ConfirmationStatus = ConfirmationStatus.Pending,
+                            ProposedDuration = null,
+                            EventDate = new DateOnly(),
+                            User = new User
+                            {
+                                Id = 49
+                            },
+                            EventId = 47
+                        }
                         ];
 
-    }
+        List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
 
-    [Fact]
-    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsIsNull()
-    {
-        _event.DateWiseEventCollaborators = null;
-
-        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
-
-        Assert.Equivalent(expectedInvitees, new List<EventCollaborator>());
-    }
-
-    [Fact]
-    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsIsEmpty()
-    {
-        _event.DateWiseEventCollaborators = [];
-
-        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
-
-        Assert.Equivalent(expectedInvitees, new List<EventCollaborator>());
-    }
-
-    [Fact]
-    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsDoesNotContainsAnyParticipants()
-    {
-        _event.DateWiseEventCollaborators[0].EventCollaborators = [];
-
-        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
-
-        Assert.Equivalent(expectedInvitees, new List<EventCollaborator>());
-    }
-
-    [Fact]
-    public void Should_ReturnEmptyList_When_DateWiseEventCollaboratorsContainsNullCollaborators()
-    {
-        _event.DateWiseEventCollaborators[0].EventCollaborators = null;
-
-        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
-
-        Assert.Equivalent(expectedInvitees, new List<EventCollaborator>());
-    }
-
-    [Fact]
-    public void Should_ReturnListOfEventCollaborators_When_DateWiseEventCollaboratorsIsPresent()
-    {
-        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
-
-        Assert.Equivalent(expectedInvitees, _eventCollaborators);
-    }
-
-    [Fact]
-    public void Should_ReturnListOfEventCollaborators_When_DateWiseEventCollaboratorsContainsCollaborator()
-    {
-        _event.DateWiseEventCollaborators[0].EventCollaborators.Add(
-            new EventCollaborator
-            {
-                EventCollaboratorRole = EventCollaboratorRole.Collaborator,
-                ConfirmationStatus = ConfirmationStatus.Accept,
-                ProposedDuration = null,
-                EventDate = new DateOnly(),
-                User = new User
-                {
-                    Id = 50,
-                    Name = "c",
-                    Email = "c@gmail.com",
-                    Password = "c"
-                },
-                EventId = 47
-            });
-
-        _eventCollaborators.Add(
-            new EventCollaborator
-            {
-                EventCollaboratorRole = EventCollaboratorRole.Collaborator,
-                ConfirmationStatus = ConfirmationStatus.Accept,
-                ProposedDuration = null,
-                EventDate = new DateOnly(),
-                User = new User
-                {
-                    Id = 50,
-                    Name = "c",
-                    Email = "c@gmail.com",
-                    Password = "c"
-                },
-                EventId = 47
-            });
-
-        List<EventCollaborator> expectedInvitees = _event.GetEventInvitees();
-
-        Assert.Equivalent(expectedInvitees, _eventCollaborators);
+        actualResult.Should().BeEquivalentTo(eventCollaborators);
     }
 }

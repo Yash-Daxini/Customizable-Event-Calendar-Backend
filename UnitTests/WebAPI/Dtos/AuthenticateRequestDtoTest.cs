@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -22,9 +23,9 @@ public class AuthenticateRequestDtoTest
 
         var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);
 
-        Assert.False(result.IsValid);
+        result.IsValid.Should().BeFalse();
 
-        Assert.True(result.Errors.Count != 0);
+        result.Errors.Count.Should().Be(0);
     }
 
     [Fact]
@@ -38,6 +39,6 @@ public class AuthenticateRequestDtoTest
 
         var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

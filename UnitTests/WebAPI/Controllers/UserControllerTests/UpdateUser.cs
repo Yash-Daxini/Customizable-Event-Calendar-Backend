@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -37,7 +38,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 
-        Assert.IsType<OkObjectResult>(actionResult);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -51,7 +52,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
 
     [Fact]
@@ -65,7 +66,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]
@@ -79,6 +80,6 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

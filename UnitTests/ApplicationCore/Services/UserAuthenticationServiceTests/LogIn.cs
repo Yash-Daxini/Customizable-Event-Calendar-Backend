@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
@@ -50,7 +51,7 @@ public class LogIn
 
         await _multipleInviteesEventService.Received().StartSchedulingProcessOfProposedEvent(1);
 
-        Assert.Equivalent(authenticateResponse, auth);  
+        auth.Should().BeEquivalentTo(authenticateResponse);  
     }
 
     [Fact]
@@ -68,7 +69,9 @@ public class LogIn
 
         _userRepository.LogIn(user).Returns(SignInResult.Failed);
 
-        await Assert.ThrowsAsync<AuthenticationFailedException>(async () => await _userAuthenticationService.LogIn(user));
+        Action action = async () => await _userAuthenticationService.LogIn(user);
+
+        action.Should().Throw<AuthenticationFailedException>();
 
         await _userRepository.Received().LogIn(user);
     }
@@ -82,7 +85,9 @@ public class LogIn
 
         _userRepository.LogIn(new User()).ReturnsNull();
 
-        await Assert.ThrowsAsync<NullArgumentException>(async () => await _userAuthenticationService.LogIn(user));
+        Action action = async () => await _userAuthenticationService.LogIn(user);
+
+        action.Should().Throw<NullArgumentException>();
 
         await _userRepository.DidNotReceive().LogIn(user);
     }

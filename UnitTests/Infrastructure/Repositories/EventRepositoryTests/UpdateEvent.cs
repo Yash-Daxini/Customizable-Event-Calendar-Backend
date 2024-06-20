@@ -3,6 +3,7 @@ using Core.Entities;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -42,12 +43,9 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                 Interval = 1,
                 ByWeekDay = []
             },
-            DateWiseEventCollaborators =
+            EventCollaborators =
             [
-                    new (){
-                        EventDate = new DateOnly(2024, 6, 7),
-                        EventCollaborators = [
-                            new (){
+                new (){
                                 EventDate = new DateOnly(2024, 6, 7),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
                                 ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
@@ -57,7 +55,8 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                                     Name = "a",
                                     Email = "a"
                                 }
-                            },new (){
+                            },
+                new (){
                                 EventDate = new DateOnly(2024, 6, 7),
                                 EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
                                 ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
@@ -68,8 +67,6 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                                     Email = "b"
                                 }
                             }
-                            ]
-                    }
             ]
         };
 
@@ -81,11 +78,11 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         eventToUpdate.Id = 1;
 
-        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[0].Id = 13;
-        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[0].EventId = 1;
-        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[1].Id = 14;
-        eventToUpdate.DateWiseEventCollaborators[0].EventCollaborators[1].EventId = 1;
+        eventToUpdate.EventCollaborators[0].Id = 13;
+        eventToUpdate.EventCollaborators[0].EventId = 1;
+        eventToUpdate.EventCollaborators[1].Id = 14;
+        eventToUpdate.EventCollaborators[1].EventId = 1;
 
-        Assert.Equivalent(eventToUpdate, updatedEvent);
+        updatedEvent.Should().BeEquivalentTo(eventToUpdate);
     }
 }

@@ -172,6 +172,6 @@ public class EventService : IEventService
     {
         List<DateOnly> occurrences = eventModel.RecurrencePattern.GetOccurrences();
 
-        eventModel.CreateDateWiseEventCollaboratorList(occurrences);
+        eventModel.PrepareCollaboratorsFromOccurrences(occurrences);
     }
 }

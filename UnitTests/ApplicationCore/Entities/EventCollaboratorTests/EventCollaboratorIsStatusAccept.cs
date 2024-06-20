@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities;
 using UnitTests.Builders;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 
@@ -15,7 +16,7 @@ public class EventCollaboratorIsStatusAccept
 
         bool result = eventCollaborator.IsStatusAccept();
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Theory]
@@ -31,6 +32,6 @@ public class EventCollaboratorIsStatusAccept
 
         bool result = eventCollaborator.IsStatusAccept();
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 }

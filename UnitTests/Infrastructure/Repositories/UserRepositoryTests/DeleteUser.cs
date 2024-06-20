@@ -6,6 +6,7 @@ using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using NSubstitute.ReturnsExtensions;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -61,8 +62,8 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
         User? deletedUser = await userRepository.GetUserById(1);
 
-        Assert.Null(deletedUser);
+        deletedUser.Should().BeNull();
 
-        Assert.Equal(IdentityResult.Success,identityResult);
+        identityResult.Should().Be(IdentityResult.Success);
     }
 }

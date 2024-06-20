@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using WebAPI.Controllers;
-using WebAPI.Dtos;
 
 namespace UnitTests.WebAPI.Controllers.EventControllerTests;
 
@@ -25,13 +25,9 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
     [Fact]
     public async Task Should_ReturnEvents_When_SharedCalendarAvailableWithId()
     {
-        List<EventResponseDto> events = [];
-
         IActionResult actionResult = await _eventController.GetSharedEventsFromSharedCalendarId(1);
 
-        var returnedResult = Assert.IsType<OkObjectResult>(actionResult);
-
-        Assert.Equivalent(events, returnedResult.Value);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
     
     [Fact]
@@ -41,7 +37,7 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
 
         IActionResult actionResult = await _eventController.GetSharedEventsFromSharedCalendarId(1);
 
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
     
     [Fact]
@@ -51,6 +47,6 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
 
         IActionResult actionResult = await _eventController.GetSharedEventsFromSharedCalendarId(1);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using FluentAssertions;
 using Infrastructure;
 using Infrastructure.Repositories;
 
@@ -42,6 +43,6 @@ public class DeleteEventCollaboratorsByEventId : IClassFixture<AutoMapperFixture
 
         bool isContains = _dbContext.EventCollaborators.Any(e => e.EventId == 1);
 
-        Assert.False(isContains);
+        isContains.Should().BeFalse();
     }
 }

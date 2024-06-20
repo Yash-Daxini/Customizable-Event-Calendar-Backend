@@ -2,6 +2,7 @@
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using NSubstitute;
 using NullArgumentException = Core.Exceptions.NullArgumentException;
 
@@ -31,9 +32,9 @@ public class AddSharedCalendar
 
         int id = await _sharedCalendarService.AddSharedCalendar(sharedCalendar);
 
-        Assert.Equal(1, id);
+        id.Should().Be(1);
 
-        _sharedCalendarRepository.Received().Add(sharedCalendar);
+        await _sharedCalendarRepository.Received().Add(sharedCalendar);
     }
 
     [Fact]
@@ -43,8 +44,10 @@ public class AddSharedCalendar
 
         _sharedCalendarRepository.Add(sharedCalendar).Returns(1);
 
-        await Assert.ThrowsAsync<NullArgumentException>(async () => await _sharedCalendarService.AddSharedCalendar(sharedCalendar));
+        Action action = async () => await _sharedCalendarService.AddSharedCalendar(sharedCalendar);
 
-        _sharedCalendarRepository.DidNotReceive().Add(sharedCalendar);
+        action.Should().Throw<NullArgumentException>();
+
+        await _sharedCalendarRepository.DidNotReceive().Add(sharedCalendar);
     }
 }

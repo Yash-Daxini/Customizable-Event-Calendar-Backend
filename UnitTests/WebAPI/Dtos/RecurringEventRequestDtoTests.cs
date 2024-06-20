@@ -1,4 +1,5 @@
-﻿using WebAPI.Dtos;
+﻿using FluentAssertions;
+using WebAPI.Dtos;
 using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
@@ -19,7 +20,7 @@ public class RecurringEventRequestDtoTests
 
         var result = _validator.Validate(recurringEventRequestDto);
 
-        Assert.False(result.IsValid);
+        result.IsValid.Should().BeFalse();
     }
 
     [Fact]
@@ -57,6 +58,6 @@ public class RecurringEventRequestDtoTests
 
         var result = _validator.Validate(recurringEventRequestDto);
 
-        Assert.True(result.IsValid);
+        result.IsValid.Should().BeTrue();
     }
 }

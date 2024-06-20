@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using FluentAssertions;
 using Infrastructure;
 using Infrastructure.Repositories;
 
@@ -44,6 +45,7 @@ public class AddEventCollaborator : IClassFixture<AutoMapperFixture>
         bool isContains = _dbContext.EventCollaborators.Any(e => e.Id == id);
 
         //Assert
-        Assert.True(id > 0 && isContains);
+        id.Should().BeGreaterThan(0);
+        isContains.Should().BeTrue();
     }
 }

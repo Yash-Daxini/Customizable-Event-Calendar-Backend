@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 
@@ -34,7 +35,7 @@ public class GetUserById
 
         User? userById = await _userService.GetUserById(1);
 
-        Assert.Equal(user, userById);
+        user.Should().BeEquivalentTo(userById);
 
         await _userRepository.Received().GetUserById(1);
     }
@@ -44,7 +45,9 @@ public class GetUserById
     {
         _userRepository.GetUserById(1).ReturnsNull();
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _userService.GetUserById(1));
+        Action action = async () => await _userService.GetUserById(1);
+
+        action.Should().Throw<NotFoundException>();
 
         await _userRepository.Received().GetUserById(1);
     }
@@ -54,7 +57,9 @@ public class GetUserById
     {
         _userRepository.GetUserById(-11).ReturnsNull();
 
-        await Assert.ThrowsAsync<ArgumentException>(async () => await _userService.GetUserById(-11));
+        Action action = async () => await _userService.GetUserById(-11);
+
+        action.Should().Throw<ArgumentException>();
 
         await _userRepository.DidNotReceive().GetUserById(-1);
     }

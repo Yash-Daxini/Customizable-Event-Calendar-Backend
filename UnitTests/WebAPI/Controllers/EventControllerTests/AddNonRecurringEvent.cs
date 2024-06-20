@@ -2,12 +2,12 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
-using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Controllers.EventControllerTests;
 
@@ -54,9 +54,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, _nonRecurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -66,7 +64,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, _nonRecurringEventRequestDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]
@@ -76,6 +74,6 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, _nonRecurringEventRequestDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

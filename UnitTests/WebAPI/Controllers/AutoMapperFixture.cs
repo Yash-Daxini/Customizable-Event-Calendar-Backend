@@ -24,8 +24,7 @@ public class AutoMapperFixture
             cfg.AddProfile<RecurrencePatternDtoProfile>();
             cfg.AddProfile<SharedCalendarDtoProfile>();
             cfg.AddProfile<UserDtoProfile>();
-        },typeof(RecurringEventDateWiseEventCollaboratorsResolver).Assembly,
-          typeof(NonRecurringEventDateWiseEventCollaboratorsResolver).Assembly);
+        });
 
         var serviceProvider = services.BuildServiceProvider();
 

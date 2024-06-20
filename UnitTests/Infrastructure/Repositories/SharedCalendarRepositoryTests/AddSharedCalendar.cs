@@ -2,6 +2,7 @@
 using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -35,6 +36,6 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
 
         SharedCalendar? addedSharedCalendar = await sharedCalendarRepository.GetSharedCalendarById(id);
 
-        Assert.Equivalent(sharedCalendar, addedSharedCalendar);
+        addedSharedCalendar.Should().BeEquivalentTo(sharedCalendar);
     }
 }

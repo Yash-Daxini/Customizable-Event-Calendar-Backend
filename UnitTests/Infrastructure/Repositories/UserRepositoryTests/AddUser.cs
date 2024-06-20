@@ -5,6 +5,7 @@ using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using FluentAssertions;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -53,6 +54,6 @@ public class AddUser : IClassFixture<AutoMapperFixture>
 
         var result = await userRepository.SignUp(user);
 
-        Assert.True(result.Succeeded);
+        result.Succeeded.Should().BeTrue();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -42,7 +43,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.AddUser(userDto);
 
-        Assert.IsType<OkObjectResult>(actionResult);
+        actionResult.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -56,7 +57,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.AddUser(userDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]
@@ -70,6 +71,6 @@ public class AddUser : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _userController.AddUser(userDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

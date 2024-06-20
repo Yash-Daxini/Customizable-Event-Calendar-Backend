@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using FluentAssertions;
 using Infrastructure;
 using Infrastructure.Repositories;
 
@@ -30,7 +31,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
 
         Event? deletedEvent = await eventRepository.GetEventById(1);
 
-        Assert.Null(deletedEvent);
+        deletedEvent.Should().BeNull();
     }
 
 }

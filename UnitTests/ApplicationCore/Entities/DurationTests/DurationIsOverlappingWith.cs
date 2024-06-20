@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using FluentAssertions;
 
 namespace UnitTests.ApplicationCore.Entities.DurationTests;
 
@@ -13,7 +14,7 @@ public class DurationIsOverlappingWith
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
     [Theory]
@@ -28,7 +29,7 @@ public class DurationIsOverlappingWith
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
     [Theory]
@@ -41,7 +42,7 @@ public class DurationIsOverlappingWith
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Theory]
@@ -54,7 +55,7 @@ public class DurationIsOverlappingWith
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
-        Assert.True(result);
+        result.Should().BeTrue();
 
     }
 
@@ -68,7 +69,7 @@ public class DurationIsOverlappingWith
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Theory]
@@ -85,6 +86,6 @@ public class DurationIsOverlappingWith
 
         bool result = firstDuration.IsOverlappingWith(secondDuration);
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 }

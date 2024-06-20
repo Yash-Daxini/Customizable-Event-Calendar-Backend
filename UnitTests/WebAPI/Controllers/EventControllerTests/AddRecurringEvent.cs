@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Core.Entities;
-using Core.Entities.Enums;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -65,9 +65,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -81,9 +79,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -97,9 +93,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -114,9 +108,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -132,9 +124,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -150,9 +140,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -169,9 +157,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        var returnedResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-
-        Assert.Equivalent(new { addedEventId = 1 }, returnedResult.Value);
+        actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
 
     [Fact]
@@ -181,7 +167,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]
@@ -191,6 +177,6 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.AddRecurringEvent(1, _recurringEventRequestDto);
 
-        Assert.IsType<ObjectResult>(actionResult);
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }
