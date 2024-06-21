@@ -18,7 +18,7 @@ public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
     }
 
     [Theory]
-    [InlineData("6-6-24", "10-6-24", 2)]
+    [InlineData("6-6-24", "10-6-24", 1)]
     public async Task Should_ReturnListOfEvents_When_EventOccurWithInGivenDate(string startDate, string endDate, int userId)
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();

@@ -49,9 +49,9 @@ public class UpdateUser
 
         _userRepository.GetUserById(1).ReturnsNull();
 
-        Action action = async () => await _userService.UpdateUser(user);
+        var action = async () => await _userService.UpdateUser(user);
 
-        action.Should().Throw<NotFoundException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _userRepository.DidNotReceive().Update(user);
     }
@@ -63,9 +63,9 @@ public class UpdateUser
 
         _userRepository.GetUserById(1).ReturnsNull();
 
-        Action action = async () => await _userService.UpdateUser(user);
+        var action = async () => await _userService.UpdateUser(user);
 
-        action.Should().Throw<NullArgumentException>();
+        await action.Should().ThrowAsync<NullArgumentException>();
 
         await _userRepository.DidNotReceive().Update(user);
     }

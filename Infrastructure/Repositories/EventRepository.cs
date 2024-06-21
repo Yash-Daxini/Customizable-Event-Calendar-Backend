@@ -53,8 +53,8 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
                                                                         .EventCollaborators
                                                                         .Where(eventCollaborator => eventCollaborator.EventDate >= startDate
                                                                                && eventCollaborator.EventDate <= endDate)
-                                                      .Select(eventCollaborator => eventCollaborator.EventId)
-                                                      .Contains(eventObj.Id))
+                                                      .Select(eventCollaborator => eventCollaborator.UserId)
+                                                      .Contains(userId))
                                                       .ToListAsync();
 
         return _mapper.Map<List<Event>>(events);

@@ -49,9 +49,9 @@ public class DeleteUser
 
         _userRepository.GetUserById(1).ReturnsNull();
 
-        Action action = async () => await _userService.DeleteUser(user.Id);
+        var action = async () => await _userService.DeleteUser(user.Id);
 
-        action.Should().Throw<NotFoundException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _userRepository.DidNotReceive().Delete(user);
     }
@@ -63,9 +63,9 @@ public class DeleteUser
 
         _userRepository.GetUserById(-1).ReturnsNull();
 
-        Action action = async () => await _userService.DeleteUser(-1);
+        var action = async () => await _userService.DeleteUser(-1);
 
-        action.Should().Throw<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>();
 
         await _userRepository.DidNotReceive().Delete(user);
     }

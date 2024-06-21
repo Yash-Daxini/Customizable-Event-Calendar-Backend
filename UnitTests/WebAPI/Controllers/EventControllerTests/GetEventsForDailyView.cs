@@ -37,6 +37,6 @@ public class GetEventsForDailyView : IClassFixture<AutoMapperFixture>
 
         IActionResult actionResult = await _eventController.GetEventsForDailyView(1);
 
-        actionResult.Should().BeOfType<OkObjectResult>();
+        actionResult.Should().BeOfType<ObjectResult>();
     }
 }

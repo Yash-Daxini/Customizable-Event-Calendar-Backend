@@ -195,7 +195,7 @@ public class GetOverlapEventInformation
         StringBuilder expectedMessage = new($"2 overlaps with following events at {eventToCheckOverlap.Duration.GetDurationInFormat()} :-  ");
 
         expectedMessage.AppendLine($"Event Name : 1 , " +
-                                   $"Date : {new DateOnly(2024, 5, 30)} , " +
+                                   $"Date : {new DateOnly(2024, 6, 2)} , " +
                                    $"Duration : 5 AM - 6 AM");
 
         string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
@@ -290,7 +290,7 @@ public class GetOverlapEventInformation
                                 {
                                     EventCollaboratorRole = EventCollaboratorRole.Organizer,
                                     ConfirmationStatus = ConfirmationStatus.Accept,
-                                    EventDate = new DateOnly(2024, 6, 2),
+                                    EventDate = new DateOnly(2024, 6, 3),
                                     User = new User()
                                     {
                                         Id = 1,

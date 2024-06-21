@@ -69,9 +69,9 @@ public class LogIn
 
         _userRepository.LogIn(user).Returns(SignInResult.Failed);
 
-        Action action = async () => await _userAuthenticationService.LogIn(user);
+        var action = async () => await _userAuthenticationService.LogIn(user);
 
-        action.Should().Throw<AuthenticationFailedException>();
+        await action.Should().ThrowAsync<AuthenticationFailedException>();
 
         await _userRepository.Received().LogIn(user);
     }
@@ -85,9 +85,9 @@ public class LogIn
 
         _userRepository.LogIn(new User()).ReturnsNull();
 
-        Action action = async () => await _userAuthenticationService.LogIn(user);
+        var action = async () => await _userAuthenticationService.LogIn(user);
 
-        action.Should().Throw<NullArgumentException>();
+        await action.Should().ThrowAsync<NullArgumentException>();
 
         await _userRepository.DidNotReceive().LogIn(user);
     }

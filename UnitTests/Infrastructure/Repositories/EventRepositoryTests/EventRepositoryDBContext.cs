@@ -286,7 +286,7 @@ public class EventRepositoryDBContext
             {
                 Id = 10,
                 EventId = 8,
-                UserId = 1,
+                UserId = 2,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = 3,
@@ -308,7 +308,7 @@ public class EventRepositoryDBContext
             {
                 Id = 12,
                 EventId = 9,
-                UserId = 1,
+                UserId = 2,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = 3,

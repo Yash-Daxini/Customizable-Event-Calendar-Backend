@@ -25,7 +25,7 @@ public class AuthenticateRequestDtoTest
 
         result.IsValid.Should().BeFalse();
 
-        result.Errors.Count.Should().Be(0);
+        result.Errors.Count.Should().NotBe(0);
     }
 
     [Fact]

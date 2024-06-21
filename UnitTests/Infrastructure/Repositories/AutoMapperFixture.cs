@@ -18,7 +18,7 @@ public class AutoMapperFixture
             cfg.AddProfile<EventCollaboratorProfile>();
             cfg.AddProfile<SharedCalendarProfile>();
             cfg.AddProfile<UserProfile>();
-        });
+        },typeof(RecurrencePatternResolver).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
 

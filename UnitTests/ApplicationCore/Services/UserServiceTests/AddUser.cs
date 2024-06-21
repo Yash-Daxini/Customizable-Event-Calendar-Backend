@@ -48,9 +48,9 @@ public class AddUser
 
         _userRepository.SignUp(user).Returns(IdentityResult.Failed());
 
-        Action action = async () => await _userService.SignUp(user);
+        var action = async () => await _userService.SignUp(user);
 
-        action.Should().Throw<NullArgumentException>();
+        await action.Should().ThrowAsync<NullArgumentException>();
 
         await _userRepository.DidNotReceive().SignUp(user);
     }

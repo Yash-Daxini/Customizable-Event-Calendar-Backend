@@ -29,14 +29,6 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnAuthenticationResponse_When_UserWithValidCredentials()
     {
-        AuthenticateResponseDto authenticateResponseDto = new()
-        {
-            Id = 1,
-            Name = "a",
-            Email = "b",
-            Token = "c",
-        };
-
         User user = new()
         {
             Id = 1,

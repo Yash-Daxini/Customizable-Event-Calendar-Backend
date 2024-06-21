@@ -26,6 +26,7 @@ public class AddCollaborator
         [
             new()
         {
+            Duration = new Duration(1,2),
             EventCollaborators = [
                    new EventCollaborator
                         {
@@ -51,6 +52,7 @@ public class AddCollaborator
         },
             new()
             {
+                Duration = new Duration(1,2),
                 EventCollaborators = [
                         new EventCollaborator
                         {
@@ -212,9 +214,9 @@ public class AddCollaborator
 
         _eventService.GetNonProposedEventsByUserId(50).Returns(_events);
 
-        Action action = async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);
+        var action = async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);
 
-        action.Should().Throw<CollaborationOverlapException>();
+        await action.Should().ThrowAsync<CollaborationOverlapException>();
 
         await _eventCollaboratorService.DidNotReceive().AddEventCollaborator(eventCollaborator);
     }
@@ -309,9 +311,9 @@ public class AddCollaborator
 
         _eventService.GetNonProposedEventsByUserId(50).Returns(_events);
 
-        Action action = async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);
+        var action = async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);
 
-        action.Should().Throw<UserAlreadyCollaboratedException>();
+        await action.Should().ThrowAsync<UserAlreadyCollaboratedException>();
 
         await _eventCollaboratorService.DidNotReceive().AddEventCollaborator(eventCollaborator);
     }
@@ -391,9 +393,9 @@ public class AddCollaborator
 
         _eventService.GetNonProposedEventsByUserId(50).Returns(_events);
 
-        Action action = async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);
+        var action = async () => await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);
 
-        action.Should().Throw<NullArgumentException>();
+        await action.Should().ThrowAsync<NullArgumentException>();
 
         await _eventCollaboratorService.DidNotReceive().AddEventCollaborator(eventCollaborator);
     }

@@ -75,7 +75,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        eventToAdd.Should().Be(eventId > 0);
+        eventId.Should().BeGreaterThan(0);
     }
 
     [Fact]
@@ -136,7 +136,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        eventToAdd.Should().Be(eventId > 0);
+        eventId.Should().BeGreaterThan(0);
     }
 
     [Fact]
@@ -197,7 +197,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        eventToAdd.Should().Be(eventId > 0);
+        eventId.Should().BeGreaterThan(0);
     }
 
     [Fact]
@@ -260,7 +260,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        eventToAdd.Should().Be(eventId > 0);
+        eventId.Should().BeGreaterThan(0);
     }
 
     [Fact]
@@ -324,7 +324,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         eventToAdd.Id = eventId;
 
-        eventToAdd.Should().Be(eventId > 0);
+        eventId.Should().BeGreaterThan(0);
     }
 
 }

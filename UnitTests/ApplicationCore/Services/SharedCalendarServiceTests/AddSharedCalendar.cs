@@ -44,9 +44,9 @@ public class AddSharedCalendar
 
         _sharedCalendarRepository.Add(sharedCalendar).Returns(1);
 
-        Action action = async () => await _sharedCalendarService.AddSharedCalendar(sharedCalendar);
+        var action = async () => await _sharedCalendarService.AddSharedCalendar(sharedCalendar);
 
-        action.Should().Throw<NullArgumentException>();
+        await action.Should().ThrowAsync<NullArgumentException>();
 
         await _sharedCalendarRepository.DidNotReceive().Add(sharedCalendar);
     }

@@ -45,9 +45,9 @@ public class GetUserById
     {
         _userRepository.GetUserById(1).ReturnsNull();
 
-        Action action = async () => await _userService.GetUserById(1);
+        var action = async () => await _userService.GetUserById(1);
 
-        action.Should().Throw<NotFoundException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _userRepository.Received().GetUserById(1);
     }
@@ -57,9 +57,9 @@ public class GetUserById
     {
         _userRepository.GetUserById(-11).ReturnsNull();
 
-        Action action = async () => await _userService.GetUserById(-11);
+        var action = async () => await _userService.GetUserById(-11);
 
-        action.Should().Throw<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>();
 
         await _userRepository.DidNotReceive().GetUserById(-1);
     }

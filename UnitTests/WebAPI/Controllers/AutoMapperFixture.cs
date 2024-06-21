@@ -24,6 +24,8 @@ public class AutoMapperFixture
             cfg.AddProfile<RecurrencePatternDtoProfile>();
             cfg.AddProfile<SharedCalendarDtoProfile>();
             cfg.AddProfile<UserDtoProfile>();
+            cfg.AddProfile<AuthenticateRequestDtoProfile>();
+            cfg.AddProfile<AuthenticateResponseDtoProfile>();
         });
 
         var serviceProvider = services.BuildServiceProvider();

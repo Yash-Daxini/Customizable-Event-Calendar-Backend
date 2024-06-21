@@ -45,9 +45,9 @@ public class GetSharedCalendarById
     {
         _sharedCalendarRepository.GetSharedCalendarById(1).ReturnsNull();
 
-        Action action = () => _sharedCalendarService.GetSharedCalendarById(1);
+        var action = async () => await _sharedCalendarService.GetSharedCalendarById(1);
 
-        action.Should().Throw<NotFoundException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _sharedCalendarRepository.Received().GetSharedCalendarById(1);
     }
@@ -57,9 +57,9 @@ public class GetSharedCalendarById
     {
         _sharedCalendarRepository.GetSharedCalendarById(-11).ReturnsNull();
 
-        Action action = () => _sharedCalendarService.GetSharedCalendarById(-11);
+        var action = async () => await _sharedCalendarService.GetSharedCalendarById(-11);
 
-        action.Should().Throw<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>();
 
         await _sharedCalendarRepository.DidNotReceive().GetSharedCalendarById(1);
     }
