@@ -6,6 +6,8 @@ using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using FluentAssertions;
+using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -19,16 +21,25 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     public GetUserById(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        var userStoreSubstitute = Substitute.For<IUserStore<UserDataModel>>();
+        var dbContext = new UserRepositoryDBContext().GetDatabaseContext();
 
-        _userManager = Substitute.For<UserManager<UserDataModel>>(
-            userStoreSubstitute, null, null, null, null, null, null, null, null);
+        var services = new ServiceCollection();
 
-        var contextAccessorSubstitute = Substitute.For<IHttpContextAccessor>();
-        var userClaimsPrincipalFactorySubstitute = Substitute.For<IUserClaimsPrincipalFactory<UserDataModel>>();
+        services.AddSingleton(dbContext);
 
-        _signInManager = Substitute.For<SignInManager<UserDataModel>>(
-            _userManager, contextAccessorSubstitute, userClaimsPrincipalFactorySubstitute, null, null, null, null);
+        services.AddIdentity<UserDataModel, IdentityRole<int>>()
+            .AddEntityFrameworkStores<DbContextEventCalendar>()
+            .AddDefaultTokenProviders();
+
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services.AddLogging();
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        _userManager = serviceProvider.GetRequiredService<UserManager<UserDataModel>>();
+
+        _signInManager = serviceProvider.GetRequiredService<SignInManager<UserDataModel>>();
     }
 
     [Fact]
@@ -39,20 +50,10 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
 
             Id = 1,
             Name = "a",
-            Email = "a",
-        };
-
-        UserDataModel userDataModel = new()
-        {
-
-            Id = 1,
-            UserName = "a",
-            Email = "a",
+            Email = "abc@gmail.com",
         };
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
-
-        _userManager.FindByIdAsync("1").Returns(userDataModel);
 
         User? actualResult = await userRepository.GetUserById(1);
 

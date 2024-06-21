@@ -6,6 +6,8 @@ using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using FluentAssertions;
+using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -19,16 +21,26 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     public LogIn(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        var userStoreSubstitute = Substitute.For<IUserStore<UserDataModel>>();
 
-        _userManager = Substitute.For<UserManager<UserDataModel>>(
-            userStoreSubstitute, null, null, null, null, null, null, null, null);
+        var dbContext = new UserRepositoryDBContext().GetDatabaseContext();
 
-        var contextAccessorSubstitute = Substitute.For<IHttpContextAccessor>();
-        var userClaimsPrincipalFactorySubstitute = Substitute.For<IUserClaimsPrincipalFactory<UserDataModel>>();
+        var services = new ServiceCollection();
 
-        _signInManager = Substitute.For<SignInManager<UserDataModel>>(
-            _userManager, contextAccessorSubstitute, userClaimsPrincipalFactorySubstitute, null, null, null, null);
+        services.AddSingleton(dbContext);
+
+        services.AddIdentity<UserDataModel, IdentityRole<int>>()
+            .AddEntityFrameworkStores<DbContextEventCalendar>()
+            .AddDefaultTokenProviders();
+
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services.AddLogging();
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        _userManager = serviceProvider.GetRequiredService<UserManager<UserDataModel>>();
+
+        _signInManager = serviceProvider.GetRequiredService<SignInManager<UserDataModel>>();
     }
 
     [Fact]
@@ -37,14 +49,12 @@ public class LogIn : IClassFixture<AutoMapperFixture>
         User user = new()
         {
             Id = 1,
-            Name = "a",
-            Password = "a",
-            Email = "a",
+            Name = "A",
+            Password = "aaAA@1",
+            Email = "abc@gmail.com",
         };
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
-
-        _signInManager.PasswordSignInAsync(user.Name,user.Password,false,false).Returns(SignInResult.Success);
 
         SignInResult authResult = await userRepository.LogIn(user);
 
@@ -63,8 +73,6 @@ public class LogIn : IClassFixture<AutoMapperFixture>
         };
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
-
-        _signInManager.PasswordSignInAsync(user.Name, user.Password, false, false).Returns(SignInResult.Failed);
 
         SignInResult authResponse = await userRepository.LogIn(user);
 

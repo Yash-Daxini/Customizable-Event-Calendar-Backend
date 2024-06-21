@@ -4,6 +4,8 @@ using Infrastructure;
 using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
+using UnitTests.Builders;
+using Core.Entities.Enums;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -24,52 +26,39 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
-        Event eventToAdd = new()
-        {
-            Title = "Test2",
-            Description = "Test2",
-            Location = "Test2",
-            Duration = new Duration(3, 4),
-            RecurrencePattern = new SingleInstanceRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 6, 8),
-                EndDate = new DateOnly(2024, 6, 8),
-                Frequency = Core.Entities.Enums.Frequency.None,
-                Interval = 1,
-                ByWeekDay = null
-            },
-            EventCollaborators =
-            [
-                new()
-                            {
-                                EventDate = new DateOnly(2024, 6, 8),
-                                EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                                ProposedDuration = null,
-                                User = new()
-                                {
-                                    Id = 3,
-                                    Name = "c",
-                                    Email = "c",
-                                    Password = "c",
-                                }
-                            },
-                new()
-                            {
-                                EventDate = new DateOnly(2024, 6, 8),
-                                EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                                ProposedDuration = null,
-                                User = new()
-                                {
-                                    Id = 2,
-                                    Name = "b",
-                                    Email = "b",
-                                    Password = "b",
-                                }
-                            }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder()
+                                                   .WithOrganizer(new()
+                                                   {
+                                                       Id = 3,
+                                                       Name = "c",
+                                                       Email = "c",
+                                                       Password = "c",
+                                                   }, new DateOnly(2024, 6, 8))
+                                                   .WithParticipant(new()
+                                                   {
+                                                       Id = 2,
+                                                       Name = "b",
+                                                       Email = "b",
+                                                       Password = "b",
+                                                   }, ConfirmationStatus.Pending, new DateOnly(2024, 6, 8))
+                                                   .Build();
+
+        SingleInstanceRecurrencePattern singleInstanceRecurrencePattern = new SingleInstanceRecurrencePatternBuilder()
+                                                  .WithFrequency()
+                                                  .WithStartDate(new DateOnly(2024, 6, 8))
+                                                  .WithEndDate(new DateOnly(2024, 6, 8))
+                                                  .WithInterval(1)
+                                                  .WithByWeekDay()
+                                                  .Build();
+
+        Event eventToAdd = new EventBuilder()
+                           .WithTitle("Test2")
+                           .WithDescription("Test2")
+                           .WithLocation("Test2")
+                           .WithDuration(new Duration(3, 4))
+                           .WithRecurrencePattern(singleInstanceRecurrencePattern)
+                           .WithEventCollaborators(eventCollaborators)
+                           .Build();
 
         int eventId = await eventRepository.Add(eventToAdd);
 

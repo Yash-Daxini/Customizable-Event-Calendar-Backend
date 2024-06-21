@@ -7,6 +7,8 @@ using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Http;
 using NSubstitute.ReturnsExtensions;
 using FluentAssertions;
+using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -20,16 +22,26 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     public UpdateUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        var userStoreSubstitute = Substitute.For<IUserStore<UserDataModel>>();
 
-        _userManager = Substitute.For<UserManager<UserDataModel>>(
-            userStoreSubstitute, null, null, null, null, null, null, null, null);
+        var dbContext = new UserRepositoryDBContext().GetDatabaseContext();
 
-        var contextAccessorSubstitute = Substitute.For<IHttpContextAccessor>();
-        var userClaimsPrincipalFactorySubstitute = Substitute.For<IUserClaimsPrincipalFactory<UserDataModel>>();
+        var services = new ServiceCollection();
 
-        _signInManager = Substitute.For<SignInManager<UserDataModel>>(
-            _userManager, contextAccessorSubstitute, userClaimsPrincipalFactorySubstitute, null, null, null, null);
+        services.AddSingleton(dbContext);
+
+        services.AddIdentity<UserDataModel, IdentityRole<int>>()
+            .AddEntityFrameworkStores<DbContextEventCalendar>()
+            .AddDefaultTokenProviders();
+
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services.AddLogging();
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        _userManager = serviceProvider.GetRequiredService<UserManager<UserDataModel>>();
+
+        _signInManager = serviceProvider.GetRequiredService<SignInManager<UserDataModel>>();
     }
 
     [Fact]
@@ -38,22 +50,11 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
         User expectedResult = new()
         {
             Id = 1,
-            Name = "b",
-            Email = "b",
-        };
-
-        UserDataModel userDataModel = new()
-        {
-            Id = 1,
-            UserName = "b",
-            Email = "b",
+            Name = "a",
+            Email = "a",
         };
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
-
-        _userManager.UpdateAsync(userDataModel).Returns(IdentityResult.Success);
-
-        _userManager.FindByIdAsync("1").Returns(userDataModel);
 
         await userRepository.Update(expectedResult);
 
@@ -67,22 +68,16 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     {
         User user = new()
         {
-            Id = 1,
+            Id = 2,
             Name = "b",
             Email = "b",
         };
 
-        UserDataModel userDataModel = null;
-
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
-
-        _userManager.UpdateAsync(userDataModel).Returns(IdentityResult.Failed());
-
-        _userManager.FindByIdAsync("1").ReturnsNull();
 
         await userRepository.Update(user);
 
-        User? updatedUser = await userRepository.GetUserById(1);
+        User? updatedUser = await userRepository.GetUserById(2);
 
         updatedUser.Should().BeNull();
     }
