@@ -5,6 +5,11 @@ namespace UnitTests.Builders;
 
 public class EventBuilder
 {
+    //public EventBuilder(int Id,)
+    //{
+        
+    //}
+
     private readonly Event _eventObj = new();
 
     public EventBuilder WithId(int id)

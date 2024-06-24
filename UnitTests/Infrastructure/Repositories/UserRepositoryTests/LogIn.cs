@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -32,7 +33,17 @@ public class LogIn : IClassFixture<AutoMapperFixture>
             .AddEntityFrameworkStores<DbContextEventCalendar>()
             .AddDefaultTokenProviders();
 
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        var httpContext = Substitute.For<HttpContext>();
+
+        httpContext.RequestServices.GetService(typeof(IAuthenticationService))
+                   .Returns(Substitute.For<IAuthenticationService>());
+
+        var httpContextAccessor = new HttpContextAccessor
+        {
+            HttpContext = httpContext
+        };
+
+        services.AddSingleton<IHttpContextAccessor>(httpContextAccessor);
 
         services.AddLogging();
 
@@ -48,7 +59,6 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     {
         User user = new()
         {
-            Id = 1,
             Name = "A",
             Password = "aaAA@1",
             Email = "abc@gmail.com",
