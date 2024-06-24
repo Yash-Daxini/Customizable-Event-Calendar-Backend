@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -10,53 +11,31 @@ public class EventIsOverlappingWith
 
     public EventIsOverlappingWith()
     {
-        _event = new()
-        {
-            Duration = new Duration(1, 2),
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
+                                     .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                      ConfirmationStatus.Proposed,
+                                                      new DateOnly(),
+                                                      null)
+                                     .Build();
+
+        _event = new EventBuilder()
+                 .WithDuration(new Duration(1, 2))
+                 .WithEventCollaborators(eventCollaborators)
+                 .Build();
     }
 
     [Fact]
     public void Should_ReturnsFalse_When_EventOccurOnDifferentDates()
     {
-        Event eventToCheckOverlap = new()
-        {
-            Duration = new Duration(1, 4),
-            EventCollaborators = [
-                   new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
+                                                     .Build();
+
+        Event eventToCheckOverlap = new EventBuilder()
+                                    .WithDuration(new Duration(1, 4))
+                                    .WithEventCollaborators(eventCollaborators)
+                                    .Build();
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, null);
 
@@ -66,22 +45,14 @@ public class EventIsOverlappingWith
     [Fact]
     public void Should_ReturnsFalse_When_EventOccurOnDifferentDuration()
     {
-        Event eventToCheckOverlap = new()
-        {
-            Duration = new Duration(2, 3),
-            EventCollaborators = [
-                     new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
+                                                     .Build();
+
+        Event eventToCheckOverlap = new EventBuilder()
+                                    .WithDuration(new Duration(2, 3))
+                                    .WithEventCollaborators(eventCollaborators)
+                                    .Build();
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly());
 
@@ -91,22 +62,14 @@ public class EventIsOverlappingWith
     [Fact]
     public void Should_ReturnsTrue_When_EventOccurOnSameDuration()
     {
-        Event eventToCheckOverlap = new()
-        {
-            Duration = new Duration(1, 2),
-            EventCollaborators = [
-                     new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
+                                                     .Build();
+
+        Event eventToCheckOverlap = new EventBuilder()
+                                    .WithDuration(new Duration(1, 2))
+                                    .WithEventCollaborators(eventCollaborators)
+                                    .Build(); ;
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 5, 31));
 
@@ -116,22 +79,14 @@ public class EventIsOverlappingWith
     [Fact]
     public void Should_ReturnsTrue_When_EventOccurWithOverlapDuration()
     {
-        Event eventToCheckOverlap = new()
-        {
-            Duration = new Duration(1, 4),
-            EventCollaborators = [
-                     new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
+                                                     .Build();
+
+        Event eventToCheckOverlap = new EventBuilder()
+                                    .WithDuration(new Duration(1, 4))
+                                    .WithEventCollaborators(eventCollaborators)
+                                    .Build();
 
         bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 5, 31));
 

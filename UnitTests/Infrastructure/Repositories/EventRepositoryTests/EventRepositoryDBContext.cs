@@ -347,6 +347,8 @@ public class EventRepositoryDBContext
             dbContextEvent.SaveChanges();
         }
 
+        dbContextEvent.ChangeTracker.Clear();
+
         return dbContextEvent;
     }
 }

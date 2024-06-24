@@ -9,6 +9,7 @@ using NSubstitute.ReturnsExtensions;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -48,13 +49,12 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteUser_When_UserWithIdAvailable()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "a",
-            Password = "a",
-            Email = "a",
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("a")
+                    .WithPassword("a")
+                    .WithEmail("a")
+                    .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

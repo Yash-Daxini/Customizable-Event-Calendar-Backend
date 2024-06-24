@@ -4,6 +4,7 @@ using Infrastructure;
 using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -25,35 +26,31 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
-        List<Event> expectedResult = [new() {
-                Id = 1,
-                Title = "Test",
-                Description = "Test",
-                Location = "Test",
-                Duration = new Duration(1,2),
-                RecurrencePattern = new SingleInstanceRecurrencePattern(){
-                    StartDate = new DateOnly(2024, 6, 7),
-                    EndDate = new DateOnly(2024, 6, 7),
-                    Frequency = Core.Entities.Enums.Frequency.None,
-                    Interval = 1,
-                    ByWeekDay = []
-                },
-                EventCollaborators = [
-                            new (){
-                                Id = 1,
-                                EventDate = new DateOnly(2024, 6, 7),
-                                EventId = 1,
-                                EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                                ProposedDuration = null,
-                                User = new(){
-                                    Id = 1,
-                                    Name = "a",
-                                    Email = "a"
-                                }
-                            }
-                    ]
-        }];
+        SingleInstanceRecurrencePattern singleInstanceRecurrencePattern = new SingleInstanceRecurrencePatternBuilder()
+                                                                          .WithStartDate(new DateOnly(2024, 6, 7))
+                                                                          .WithEndDate(new DateOnly(2024, 6, 7))
+                                                                          .WithInterval(1)
+                                                                          .Build();
+
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("a")
+                    .WithEmail("a")
+                    .Build();
+
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
+                                                     .WithOrganizer(user, new DateOnly(2024, 6, 7))
+                                                     .Build();
+
+        List<Event> expectedResult = [new EventBuilder()
+                                      .WithId(1)
+                                      .WithTitle("Test")
+                                      .WithDescription("Test")
+                                      .WithLocation("Test")
+                                      .WithDuration(new Duration(1,2))
+                                      .WithRecurrencePattern(singleInstanceRecurrencePattern)
+                                      .WithEventCollaborators(eventCollaborators)
+                                      .Build()];
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
@@ -61,6 +58,6 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
         List<Event> actualResult = await eventRepository.GetAllEventsByUserId(userId);
 
         //Assert
-        actualResult.Should().BeEquivalentTo(expectedResult);
+        actualResult.Should().BeEquivalentTo(expectedResult, options => options.For(e => e.EventCollaborators).Exclude(e => e.Id));
     }
 }

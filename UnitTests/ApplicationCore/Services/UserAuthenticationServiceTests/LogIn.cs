@@ -7,6 +7,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.UserAuthenticationServiceTests;
 
@@ -29,13 +30,12 @@ public class LogIn
     [Fact]
     public async Task Should_LogIn_When_ValidUser()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "Test",
-            Email = "Test@gmail.com",
-            Password = "password",
-        };
+        User user = new UserBuilder()
+            .WithId(1)
+            .WithName("Test")
+            .WithEmail("Test@gmail.com")
+            .WithPassword("password")
+            .Build();
 
         AuthenticateResponse authenticateResponse = new (user,"auth");
 
@@ -57,13 +57,12 @@ public class LogIn
     [Fact]
     public async Task Should_ThrowException_When_InValidUser()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "Test",
-            Email = "Test@gmail.com",
-            Password = "password",
-        };
+        User user = new UserBuilder()
+            .WithId(1)
+            .WithName("Test")
+            .WithEmail("Test@gmail.com")
+            .WithPassword("password")
+            .Build();
 
         _userRepository.GetUserById(1).Returns(user);
 

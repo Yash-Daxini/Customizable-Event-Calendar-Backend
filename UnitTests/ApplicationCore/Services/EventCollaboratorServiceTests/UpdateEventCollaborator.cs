@@ -7,6 +7,7 @@ using Core.Services;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -24,16 +25,15 @@ public class UpdateEventCollaborator
     [Fact]
     public async Task Should_UpdateEventCollaborator_When_CallsRepositoryMethod()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-            ConfirmationStatus = ConfirmationStatus.Accept,
-            EventDate = new DateOnly(2024, 6, 2),
-            EventId = 1,
-            ProposedDuration = null,
-            User = new User() { Id = 1 }
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithId(1)
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithEventDate(new DateOnly(2024,6,2))
+                                              .WithEventId(1)
+                                              .WithProposedDuration(null)
+                                              .WithUser(new UserBuilder().WithId(1).Build())
+                                              .Build();
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).Returns(eventCollaborator);
 
@@ -45,16 +45,15 @@ public class UpdateEventCollaborator
     [Fact]
     public async Task Should_ThrowException_When_EventCollaboratorIdIsNotPresent()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-            ConfirmationStatus = ConfirmationStatus.Accept,
-            EventDate = new DateOnly(2024, 6, 2),
-            EventId = 1,
-            ProposedDuration = null,
-            User = new User() { Id = 1 }
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithId(1)
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithEventDate(new DateOnly(2024, 6, 2))
+                                              .WithEventId(1)
+                                              .WithProposedDuration(null)
+                                              .WithUser(new UserBuilder().WithId(1).Build())
+                                              .Build();
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();
 

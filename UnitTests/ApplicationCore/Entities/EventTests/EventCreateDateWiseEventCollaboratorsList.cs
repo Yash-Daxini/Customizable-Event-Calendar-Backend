@@ -1,5 +1,7 @@
 ﻿using Core.Entities;
+using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -8,87 +10,37 @@ public class EventCreateDateWiseEventCollaboratorsList
     [Fact]
     public void Should_PrepareEventCollaboratorsListFromOccurrences_When_EventCollaboratorsAvailable()
     {
-        List<EventCollaborator> expectedResult = [
-                    new EventCollaborator
-                    {
-                        EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                        ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                        ProposedDuration = null,
-                        EventDate = new DateOnly(2024, 5, 31),
-                        User = new User
-                        {
-                            Id = 48
-                        },
-                        EventId = 47
-                    },
-                    new EventCollaborator
-                    {
-                        EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                        ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                        ProposedDuration = null,
-                        EventDate = new DateOnly(2024, 5, 31),
-                        User = new User
-                        {
-                            Id = 49
-                        },
-                        EventId = 47
-                    },
-                    new EventCollaborator
-                    {
-                        EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                        ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                        ProposedDuration = null,
-                        EventDate = new DateOnly(2024, 6, 1),
-                        User = new User
-                        {
-                            Id = 48
-                        },
-                        EventId = 47
-                    },
-                    new EventCollaborator
-                    {
-                        EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                        ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                        ProposedDuration = null,
-                        EventDate = new DateOnly(2024, 6, 1),
-                        User = new User
-                        {
-                            Id = 49
-                        },
-                        EventId = 47
-                    }
-        ];
+        List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
+                                                 .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                                new DateOnly(2024, 5, 31))
+                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                  ConfirmationStatus.Pending,
+                                                                  new DateOnly(2024, 5, 31),
+                                                                  null)
+                                                 .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                                new DateOnly(2024, 6, 1))
+                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                  ConfirmationStatus.Pending,
+                                                                  new DateOnly(2024, 6, 1),
+                                                                  null)
+                                                 .Build();
+        ;
 
         List<DateOnly> occurrences = [new DateOnly(2024, 5, 31),
                                       new DateOnly(2024, 6, 1)];
 
-        Event eventObj = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                            EventId = 47
-                        },
-                    ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                    .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                                   new DateOnly())
+                                                    .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                     ConfirmationStatus.Pending,
+                                                                     new DateOnly(),
+                                                                     null)
+                                                    .Build();
+
+        Event eventObj = new EventBuilder()
+                        .WithEventCollaborators(eventCollaborators)
+                        .Build();
 
         eventObj.PrepareCollaboratorsFromOccurrences(occurrences);
 
@@ -116,33 +68,18 @@ public class EventCreateDateWiseEventCollaboratorsList
     {
         List<DateOnly> occurrences = [];
 
-        Event eventObj = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                            EventId = 47
-                        },
-                    ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                    .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                                   new DateOnly())
+                                                    .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                     ConfirmationStatus.Pending,
+                                                                     new DateOnly(),
+                                                                     null)
+                                                    .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         eventObj.PrepareCollaboratorsFromOccurrences(occurrences);
 
@@ -154,10 +91,9 @@ public class EventCreateDateWiseEventCollaboratorsList
     {
         List<DateOnly> occurrences = [];
 
-        Event eventObj = new()
-        {
-            EventCollaborators = null
-        };
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(null)
+                         .Build();
 
         eventObj.PrepareCollaboratorsFromOccurrences(occurrences);
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -45,13 +46,11 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnUser_When_UserWithIdAvailable()
     {
-        User expectedResult = new()
-        {
-
-            Id = 1,
-            Name = "a",
-            Email = "abc@gmail.com",
-        };
+        User expectedResult = new UserBuilder()
+                    .WithId(1)
+                    .WithName("a")
+                    .WithEmail("abc@gmail.com")
+                    .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

@@ -1,5 +1,7 @@
 ﻿using Core.Entities;
+using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -8,51 +10,22 @@ public class EventIsUserCollaboratedOnGivenDate
     private readonly Event _event;
     public EventIsUserCollaboratedOnGivenDate()
     {
-        _event = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 30),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            EventDate = new DateOnly(2024, 5, 30),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly(2024, 5, 30))
+                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 30),
+                                                              null)
+                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly(2024, 5, 31))
+                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                             .Build();
+
+        _event = new EventBuilder()
+                 .WithEventCollaborators(eventCollaborators)
+                 .Build();
     }
 
     [Theory]

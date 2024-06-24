@@ -9,6 +9,7 @@ using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -57,12 +58,11 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnSuccessResult_When_UserWithValidCredentials()
     {
-        User user = new()
-        {
-            Name = "A",
-            Password = "aaAA@1",
-            Email = "abc@gmail.com",
-        };
+        User user = new UserBuilder()
+                    .WithName("a")
+                    .WithPassword("aaAA@1")
+                    .WithEmail("abc@gmail.com")
+                    .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 
@@ -74,13 +74,12 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnFailedResult_When_UserWithInValidCredentials()
     {
-        User user = new()
-        {
-            Id = 5,
-            Name = "b",
-            Password = "b",
-            Email = "b",
-        };
+        User user = new UserBuilder()
+                    .WithId(5)
+                    .WithName("a")
+                    .WithPassword("b")   
+                    .WithEmail("b")
+                    .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

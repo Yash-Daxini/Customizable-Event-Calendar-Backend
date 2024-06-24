@@ -6,6 +6,7 @@ using Core.Services;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -23,13 +24,12 @@ public class GetUserById
     [Fact]
     public async Task Should_ReturnUserWithGivenId_When_UserWithGivenUserIdAvailable()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "Test",
-            Email = "Test@gmail.com",
-            Password = "password",
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("Test")
+                    .WithEmail("Test@gmail.com")
+                    .WithPassword("password")
+                    .Build();
 
         _userRepository.GetUserById(1).Returns(user);
 

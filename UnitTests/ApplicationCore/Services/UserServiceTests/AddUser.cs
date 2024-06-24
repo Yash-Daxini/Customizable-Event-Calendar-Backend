@@ -6,6 +6,7 @@ using Core.Services;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -24,13 +25,12 @@ public class AddUser
     [Fact]
     public async Task Should_ReturnUserIdAfterAddOperation_When_CallsRepositoryMethod()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "Test",
-            Email = "Test@gmail.com",
-            Password = "password",
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("Test")
+                    .WithEmail("Test@gmail.com")
+                    .WithPassword("password")
+                    .Build();
 
         _userRepository.SignUp(user).Returns(IdentityResult.Success);
 

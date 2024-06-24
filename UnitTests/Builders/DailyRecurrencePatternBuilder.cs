@@ -7,6 +7,11 @@ public class DailyRecurrencePatternBuilder
 {
     private readonly DailyRecurrencePattern _recurrencePattern = new();
 
+    public DailyRecurrencePatternBuilder()
+    {
+        _recurrencePattern.Frequency = Frequency.Daily;
+    }
+
     public DailyRecurrencePatternBuilder WithStartDate(DateOnly startDate)
     {
         _recurrencePattern.StartDate = startDate;
@@ -22,12 +27,6 @@ public class DailyRecurrencePatternBuilder
     public DailyRecurrencePatternBuilder WithInterval(int interval)
     {
         _recurrencePattern.Interval = interval;
-        return this;
-    }
-
-    public DailyRecurrencePatternBuilder WithFrequency()
-    {
-        _recurrencePattern.Frequency = Frequency.Daily;
         return this;
     }
 

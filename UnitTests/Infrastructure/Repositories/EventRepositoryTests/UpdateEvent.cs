@@ -4,6 +4,8 @@ using Infrastructure;
 using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
+using UnitTests.Builders;
+using Core.Entities.Enums;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -28,47 +30,43 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         _dbContextEvent.ChangeTracker.Clear();
 
-        Event eventToUpdate = new()
-        {
-            Id = 1,
-            Title = "Test1",
-            Description = "Test1",
-            Location = "Test1",
-            Duration = new Duration(3, 4),
-            RecurrencePattern = new SingleInstanceRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 6, 8),
-                EndDate = new DateOnly(2024, 6, 8),
-                Frequency = Core.Entities.Enums.Frequency.None,
-                Interval = 1,
-                ByWeekDay = []
-            },
-            EventCollaborators =
-            [
-                new (){
-                                EventDate = new DateOnly(2024, 6, 7),
-                                EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                                ProposedDuration = null,
-                                User = new(){
-                                    Id = 1,
-                                    Name = "a",
-                                    Email = "a"
-                                }
-                            },
-                new (){
-                                EventDate = new DateOnly(2024, 6, 7),
-                                EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Proposed,
-                                ProposedDuration = new Duration(1,2),
-                                User = new(){
-                                    Id = 2,
-                                    Name = "b",
-                                    Email = "b"
-                                }
-                            }
-            ]
-        };
+        User user1 = new UserBuilder()
+                     .WithId(1)
+                     .WithName("a")
+                     .WithEmail("a")
+                     .Build();
+
+        User user2 = new UserBuilder()
+                     .WithId(2)
+                     .WithName("b")
+                     .WithEmail("b")
+                     .Build();
+
+        SingleInstanceRecurrencePattern singleInstanceRecurrencePattern = new SingleInstanceRecurrencePatternBuilder()
+                                                                          .WithStartDate(new DateOnly(2024, 6, 7))
+                                                                          .WithEndDate(new DateOnly(2024, 6, 7))
+                                                                          .WithInterval(1)
+                                                                          .Build();
+
+        List<EventCollaborator> eventCollaborators1 = new EventCollaboratorListBuilder(1)
+                                                      .WithOrganizer(user1, new DateOnly(2024, 6, 7))
+                                                      .WithParticipant(user2,
+                                                                       ConfirmationStatus.Proposed,
+                                                                       new DateOnly(2024, 6, 7),
+                                                                       new Duration(1, 2))
+                                                      .Build();
+
+
+        Event eventToUpdate = new EventBuilder()
+                              .WithId(1)
+                              .WithTitle("Test1")
+                              .WithDescription("Test1")
+                              .WithLocation("Test1")
+                              .WithDuration(new Duration(3, 4))
+                              .WithRecurrencePattern(singleInstanceRecurrencePattern)
+                              .WithEventCollaborators(eventCollaborators1)
+                              .Build();
+
 
         await eventCollaboratorRepository.DeleteEventCollaboratorsByEventId(1);
 
@@ -78,11 +76,6 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         eventToUpdate.Id = 1;
 
-        eventToUpdate.EventCollaborators[0].Id = 13;
-        eventToUpdate.EventCollaborators[0].EventId = 1;
-        eventToUpdate.EventCollaborators[1].Id = 14;
-        eventToUpdate.EventCollaborators[1].EventId = 1;
-
-        updatedEvent.Should().BeEquivalentTo(eventToUpdate);
+        updatedEvent.Should().BeEquivalentTo(eventToUpdate, option => option.For(e => e.EventCollaborators).Exclude(e => e.Id));
     }
 }

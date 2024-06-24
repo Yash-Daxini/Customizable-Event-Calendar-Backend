@@ -7,6 +7,11 @@ public class WeeklyRecurrencePatternBuilder
 {
     private readonly WeeklyRecurrencePattern _recurrencePattern = new ();
 
+    public WeeklyRecurrencePatternBuilder()
+    {
+        _recurrencePattern.Frequency = Frequency.Weekly;
+    }
+
     public WeeklyRecurrencePatternBuilder WithStartDate(DateOnly startDate)
     {
         _recurrencePattern.StartDate = startDate;
@@ -25,13 +30,7 @@ public class WeeklyRecurrencePatternBuilder
         return this;
     }
 
-    public WeeklyRecurrencePatternBuilder WithFrequency()
-    {
-        _recurrencePattern.Frequency = Frequency.Weekly;
-        return this;
-    }
-
-    public WeeklyRecurrencePatternBuilder SetByWeekDay(List<int>? byWeekDay)
+    public WeeklyRecurrencePatternBuilder WithByWeekDay(List<int>? byWeekDay)
     {
         _recurrencePattern.ByWeekDay = byWeekDay;
         return this;

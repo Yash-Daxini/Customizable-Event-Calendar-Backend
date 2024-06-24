@@ -16,17 +16,14 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     private readonly IMapper _mapper;
     private readonly SharedCalendarController _sharedCalendarController;
 
+    private readonly SharedCalendar _sharedCalendar;
+
     public AddSharedCalendar(AutoMapperFixture autoMapperFixture)
     {
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
         _mapper = autoMapperFixture.Mapper;
         _sharedCalendarController = new SharedCalendarController(_sharedCalendarService, _mapper);
-    }
-
-    [Fact]
-    public async Task Should_ReturnIActionResult_When_SharedCalendarAdded()
-    {
-        SharedCalendar sharedCalendar = new(1, new User
+        _sharedCalendar = new(1, new User
         {
             Id = 48,
             Name = "a",
@@ -39,8 +36,12 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
             Email = "b@gmail.com",
             Password = "b"
         }, new DateOnly(), new DateOnly());
+    }
 
-        _sharedCalendarService.AddSharedCalendar(sharedCalendar).ReturnsForAnyArgs(1);
+    [Fact]
+    public async Task Should_ReturnIActionResult_When_SharedCalendarAdded()
+    {
+        _sharedCalendarService.AddSharedCalendar(_sharedCalendar).ReturnsForAnyArgs(1);
 
         SharedCalendarDto sharedCalendarDto = Substitute.For<SharedCalendarDto>();
 
@@ -52,21 +53,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
-        SharedCalendar sharedCalendar = new(1, new User
-        {
-            Id = 48,
-            Name = "a",
-            Email = "a@gmail.com",
-            Password = "a"
-        }, new User
-        {
-            Id = 49,
-            Name = "b",
-            Email = "b@gmail.com",
-            Password = "b"
-        }, new DateOnly(), new DateOnly());
-
-        _sharedCalendarService.AddSharedCalendar(sharedCalendar).ThrowsAsyncForAnyArgs<Exception>();
+        _sharedCalendarService.AddSharedCalendar(_sharedCalendar).ThrowsAsyncForAnyArgs<Exception>();
 
         SharedCalendarDto sharedCalendarDto = Substitute.For<SharedCalendarDto>();
 

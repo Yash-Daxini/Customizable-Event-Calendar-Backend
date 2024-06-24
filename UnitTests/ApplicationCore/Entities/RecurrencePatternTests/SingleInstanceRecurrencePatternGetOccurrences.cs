@@ -13,8 +13,6 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 5, 1))
                                                   .WithInterval(1)
-                                                  .WithFrequency()
-                                                  .WithByWeekDay()
                                                   .Build();
 
             List<DateOnly> expectedResult = [new DateOnly(2024, 5, 31)];

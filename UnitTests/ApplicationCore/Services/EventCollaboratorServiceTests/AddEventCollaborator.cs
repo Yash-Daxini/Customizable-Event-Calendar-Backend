@@ -6,6 +6,7 @@ using Core.Services;
 using NSubstitute;
 using Core.Exceptions;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 
@@ -23,16 +24,21 @@ public class AddEventCollaborator
     [Fact]
     public async Task Should_ReturnsAddedEventCollaboratorId_When_CallsRepositoryMethod()
     {
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-            ConfirmationStatus = ConfirmationStatus.Accept,
-            EventDate = new DateOnly(2024, 6, 2),
-            EventId = 1,
-            ProposedDuration = null,
-            User = new User() { Id = 1, Name = "Test", Email = "Test@gmail.com", Password = "Password" }
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("Test")
+                    .WithEmail("Test@gmail.com")
+                    .WithPassword("Password")
+                    .Build();
+
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithId(1)
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithEventDate(new DateOnly(2024, 6, 2))
+                                              .WithEventId(1)
+                                              .WithUser(user)
+                                              .Build();
 
         _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
 
@@ -50,9 +56,9 @@ public class AddEventCollaborator
 
         Action action = () =>
         {
-           _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
+            _eventCollaboratorRepository.Add(eventCollaborator).Returns(1);
 
-           _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
+            _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
         };
 
         action.Should().Throw<NullArgumentException>();

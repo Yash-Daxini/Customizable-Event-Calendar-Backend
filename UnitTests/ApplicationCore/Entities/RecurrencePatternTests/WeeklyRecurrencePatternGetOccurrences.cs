@@ -14,8 +14,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
                                                   .WithInterval(2)
-                                                  .WithFrequency()
-                                                  .SetByWeekDay([])
+                                                  .WithByWeekDay([])
                                                   .Build();
 
             List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
@@ -30,8 +29,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
                                                   .WithInterval(2)
-                                                  .WithFrequency()
-                                                  .SetByWeekDay(null)
+                                                  .WithByWeekDay(null)
                                                   .Build();
 
             List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
@@ -46,8 +44,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
                                                   .WithInterval(0)
-                                                  .WithFrequency()
-                                                  .SetByWeekDay(null)
+                                                  .WithByWeekDay(null)
                                                   .Build();
 
             List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
@@ -61,8 +58,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
                                                   .WithInterval(2)
-                                                  .WithFrequency()
-                                                  .SetByWeekDay([6, 7])
+                                                  .WithByWeekDay([6, 7])
                                                   .Build();
 
             List<DateOnly> expectedResult = [new DateOnly(2024, 6, 1), new DateOnly(2024, 6, 2),

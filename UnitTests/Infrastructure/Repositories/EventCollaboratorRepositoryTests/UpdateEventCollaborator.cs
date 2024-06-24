@@ -3,6 +3,9 @@ using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
 using FluentAssertions;
+using Core.Entities.Enums;
+using Microsoft.AspNet.Identity;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -23,21 +26,21 @@ public class UpdateEventCollaborator : IClassFixture<AutoMapperFixture>
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-            EventDate = new DateOnly(),
-            EventId = 1,
-            User = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a"
-            },
-            ProposedDuration = null
-        };
+        User user = new UserBuilder()
+            .WithId(1)
+            .WithName("a")
+            .WithEmail("a")
+            .Build();
+
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithId(1)
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithEventDate(new DateOnly())
+                                              .WithProposedDuration(null)
+                                              .WithUser(user)
+                                              .WithEventId(1)
+                                              .Build();
 
         await eventCollaboratorRepository.Update(eventCollaborator);
 

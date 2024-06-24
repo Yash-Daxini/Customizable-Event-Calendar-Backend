@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -10,7 +11,9 @@ public class EventGetEventInvitees
     [Fact]
     public void Should_ReturnEmptyList_When_EventCollaboratorsIsNull()
     {
-        Event eventObj = new () { EventCollaborators = null };
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(null)
+                         .Build();
 
         List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
 
@@ -20,7 +23,9 @@ public class EventGetEventInvitees
     [Fact]
     public void Should_ReturnEmptyList_When_EventCollaboratorsIsEmpty()
     {
-        Event eventObj = new () { EventCollaborators = [] };
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators([])
+                         .Build();
 
         List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
 
@@ -30,119 +35,58 @@ public class EventGetEventInvitees
     [Fact]
     public void Should_ReturnListOfEventCollaborators_When_EventCollaboratorsAvailable()
     {
-        Event eventObj = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49
-                            },
-                            EventId = 47
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                                     new DateOnly())
+                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                       ConfirmationStatus.Accept,
+                                                                       new DateOnly(),
+                                                                       null)
+                                                      .Build();       
 
-        List<EventCollaborator> eventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49
-                            },
-                            EventId = 47
-                        }
-                        ];
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
+
+        List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
+                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                       ConfirmationStatus.Accept,
+                                                                       new DateOnly(),
+                                                                       null)
+                                                 .Build();
 
 
         List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
 
-        actualResult.Should().BeEquivalentTo(eventCollaborators);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
     public void Should_ReturnListOfEventCollaborators_When_EventCollaboratorsContainsCollaborator()
     {
-        Event eventObj = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Collaborator,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 50
-                            },
-                            EventId = 47
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                                     new DateOnly())
+                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                       ConfirmationStatus.Accept,
+                                                                       new DateOnly(),
+                                                                       null)
+                                                      .WithCollaborator(new UserBuilder().WithId(50).Build(),new DateOnly())
+                                                      .Build();
 
-        List<EventCollaborator> eventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49
-                            },
-                            EventId = 47
-                        }
-                        ];
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
+
+        List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
+                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                                       ConfirmationStatus.Accept,
+                                                                       new DateOnly(),
+                                                                       null)
+                                                 .Build();
 
         List<EventCollaborator> actualResult = eventObj.GetEventInvitees();
 
-        actualResult.Should().BeEquivalentTo(eventCollaborators);
+        actualResult.Should().BeEquivalentTo(expectedResult);
     }
 }

@@ -7,6 +7,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using UnitTests.Builders;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
 
@@ -27,28 +28,30 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
         _sharedEventCollaborationService = Substitute.For<ISharedEventCollaborationService>();
         _mapper = autoMapperFixture.Mapper;
         _eventCollaborationController = new EventCollaborationController(_sharedEventCollaborationService, _mapper);
+
         _collaborationRequestDto = new CollaborationRequestDto()
         {
             Id = 1,
             EventId = 1,
             EventDate = new DateOnly()
         };
-        _eventCollaborator = new EventCollaborator()
-        {
-            Id = 1,
-            EventId = 1,
-            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-            ConfirmationStatus = ConfirmationStatus.Accept,
-            EventDate = new DateOnly(),
-            ProposedDuration = null,
-            User = new()
-            {
-                Id = 1,
-                Name = "Test",
-                Email = "Test",
-                Password = "Test",
-            }
-        };
+
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("Test")
+                    .WithEmail("Test")
+                    .WithPassword("Test")
+                    .Build();
+
+        _eventCollaborator = new EventCollaboratorBuilder()
+                             .WithId(1)
+                             .WithEventId(1)
+                             .WithEventDate(new DateOnly())
+                             .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                             .WithConfirmationStatus(ConfirmationStatus.Accept)
+                             .WithProposedDuration(null)
+                             .WithUser(user)
+                             .Build();
     }
 
     [Fact]

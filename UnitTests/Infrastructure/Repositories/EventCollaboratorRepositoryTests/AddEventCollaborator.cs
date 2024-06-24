@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Entities.Enums;
 using FluentAssertions;
 using Infrastructure;
 using Infrastructure.Repositories;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -22,20 +24,20 @@ public class AddEventCollaborator : IClassFixture<AutoMapperFixture>
         //Arrange
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
 
-        EventCollaborator eventCollaborator = new()
-        {
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-            EventDate = new DateOnly(),
-            EventId = 1,
-            User = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a"
-            },
-            ProposedDuration = null
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("a")
+                    .WithEmail("a")
+                    .Build();
+
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)    
+                                              .WithEventDate(new DateOnly())
+                                              .WithProposedDuration(null)
+                                              .WithUser(user)
+                                              .WithEventId(1)
+                                              .Build();
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 

@@ -7,6 +7,11 @@ public class YearlyRecurrencePatternBuilder
 {
     private readonly YearlyRecurrencePattern _recurrencePattern = new();
 
+    public YearlyRecurrencePatternBuilder()
+    {
+        _recurrencePattern.Frequency = Frequency.Yearly;
+    }
+
     public YearlyRecurrencePatternBuilder WithStartDate(DateOnly startDate)
     {
         _recurrencePattern.StartDate = startDate;
@@ -22,12 +27,6 @@ public class YearlyRecurrencePatternBuilder
     public YearlyRecurrencePatternBuilder WithInterval(int interval)
     {
         _recurrencePattern.Interval = interval;
-        return this;
-    }
-
-    public YearlyRecurrencePatternBuilder WithFrequency()
-    {
-        _recurrencePattern.Frequency = Frequency.Monthly;
         return this;
     }
 

@@ -13,7 +13,6 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
-                                                  .WithFrequency()
                                                   .WithByWeekDay(null)
                                                   .WithInterval(0)
                                                   .Build();
@@ -29,7 +28,6 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
-                                                  .WithFrequency()
                                                   .WithByWeekDay([])
                                                   .WithInterval(2)
                                                   .Build();
@@ -48,7 +46,6 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
-                                                  .WithFrequency()
                                                   .WithByWeekDay(null)
                                                   .WithInterval(2)
                                                   .Build();
@@ -68,7 +65,6 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
-                                                  .WithFrequency()
                                                   .WithByWeekDay(null)
                                                   .WithInterval(3)
                                                   .Build();
@@ -88,7 +84,6 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 5, 31))
-                                                  .WithFrequency()
                                                   .WithByWeekDay(null)
                                                   .WithInterval(1)
                                                   .Build();
@@ -106,7 +101,6 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
                                                   .WithEndDate(new DateOnly(2024, 6, 20))
-                                                  .WithFrequency()
                                                   .WithByWeekDay([6, 7])
                                                   .WithInterval(2)
                                                   .Build();

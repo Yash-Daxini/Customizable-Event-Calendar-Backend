@@ -6,6 +6,7 @@ using Core.Services;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 
@@ -24,13 +25,12 @@ public class UpdateUser
     [Fact]
     public async Task Should_UpdateUser_When_UserWithIdAvailable()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "Test",
-            Email = "Test@gmail.com",
-            Password = "password",
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("Test")
+                    .WithEmail("Test@gmail.com")
+                    .WithPassword("password")
+                    .Build();
 
         _userRepository.GetUserById(1).Returns(user);
 
@@ -42,10 +42,9 @@ public class UpdateUser
     [Fact]
     public async Task Should_ThrowException_When_UserWithIdNotAvailable()
     {
-        User user = new()
-        {
-            Id = 1,
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .Build();
 
         _userRepository.GetUserById(1).ReturnsNull();
 

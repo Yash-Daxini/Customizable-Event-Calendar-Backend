@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using System;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -49,12 +50,11 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_AddUserAndReturnUserId_When_CallsTheRepositoryMethod()
     {
-        User user = new()
-        {
-            Name = "b",
-            Password = "b@BB@11",
-            Email = "b",
-        };
+        User user = new UserBuilder()
+                    .WithName("b")
+                    .WithPassword("bbBB@1")
+                    .WithEmail("b@gmail.com")
+                    .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

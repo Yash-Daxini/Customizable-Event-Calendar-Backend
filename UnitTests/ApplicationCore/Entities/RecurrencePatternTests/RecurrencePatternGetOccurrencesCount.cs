@@ -1,5 +1,4 @@
-﻿using Core.Entities.Enums;
-using Core.Entities.RecurrecePattern;
+﻿using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders;
 
@@ -28,7 +27,6 @@ public class RecurrencePatternGetOccurrencesCount
                              .WithStartDate(new DateOnly(startDateYear, startDateMonth, 1))
                              .WithEndDate(new DateOnly(endDateYear, endDateMonth, 1))
                              .WithInterval(interval)
-                             .WithFrequency()
                              .Build();
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
@@ -58,7 +56,6 @@ public class RecurrencePatternGetOccurrencesCount
                              .WithStartDate(new DateOnly(startDateYear, 1, 1))
                              .WithEndDate(new DateOnly(endDateYear, 1, 1))
                              .WithInterval(interval)
-                             .WithFrequency()
                              .Build();
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
@@ -83,7 +80,6 @@ public class RecurrencePatternGetOccurrencesCount
                              .WithStartDate(DateOnly.Parse(startDate))
                              .WithEndDate(DateOnly.Parse(endDate))
                              .WithInterval(interval)
-                             .WithFrequency()
                              .Build();
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
@@ -108,7 +104,6 @@ public class RecurrencePatternGetOccurrencesCount
                              .WithStartDate(DateOnly.Parse(startDate))
                              .WithEndDate(DateOnly.Parse(endDate))
                              .WithInterval(interval)
-                             .WithFrequency()
                              .Build();
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();
@@ -122,7 +117,6 @@ public class RecurrencePatternGetOccurrencesCount
         _recurrencePattern = new SingleInstanceRecurrencePatternBuilder()
                              .WithStartDate(new DateOnly(2024, 4, 1))
                              .WithEndDate(new DateOnly(2024, 4, 1))
-                             .WithFrequency()
                              .Build();
 
         int actualResult = _recurrencePattern.GetOccurrencesCount();

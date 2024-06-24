@@ -3,6 +3,9 @@ using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
 using FluentAssertions;
+using Core.Entities.Enums;
+using Microsoft.AspNet.Identity;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 
@@ -21,22 +24,21 @@ public class DeleteEventCollaborator : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
 
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-            EventDate = new DateOnly(),
-            EventId = 1,
-            User = new()
-            {
-                Id = 1,
-                Name = "a",
-                Email = "a",
-                Password = "a",
-            },
-            ProposedDuration = null
-        };
+        User user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("a")
+                    .WithEmail("a")
+                    .Build();
+
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithId(1)
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithEventDate(new DateOnly())
+                                              .WithProposedDuration(null)
+                                              .WithUser(user)
+                                              .WithEventId(1)
+                                              .Build();
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
@@ -44,6 +46,6 @@ public class DeleteEventCollaborator : IClassFixture<AutoMapperFixture>
 
         EventCollaborator? deletedEventCollaborator = await eventCollaboratorRepository.GetEventCollaboratorById(1);
 
-        deletedEventCollaborator.Should().BeNull(); 
+        deletedEventCollaborator.Should().BeNull();
     }
 }

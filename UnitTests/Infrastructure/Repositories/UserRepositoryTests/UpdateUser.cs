@@ -9,6 +9,7 @@ using NSubstitute.ReturnsExtensions;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -47,12 +48,11 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateUserAndReturnSuccess_When_UserWithIdAvailable()
     {
-        User expectedResult = new()
-        {
-            Id = 1,
-            Name = "a",
-            Email = "a",
-        };
+        User expectedResult = new UserBuilder()
+                              .WithId(1)
+                              .WithName("a")
+                              .WithEmail("a")
+                              .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 
@@ -66,12 +66,11 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnFailed_When_UserWithIdNotAvailable()
     {
-        User user = new()
-        {
-            Id = 2,
-            Name = "b",
-            Email = "b",
-        };
+        User user = new UserBuilder()
+                              .WithId(2)
+                              .WithName("b")
+                              .WithEmail("b")
+                              .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

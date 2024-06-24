@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using WebAPI.Controllers;
-using WebAPI.Dtos;
 
 namespace UnitTests.WebAPI.Controllers.SharedCalendarControllerTests;
 
@@ -27,15 +26,6 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnSharedCalendar_When_SharedCalendarAvailableWithId()
     {
-        SharedCalendarDto sharedCalendarDto = new()
-        {
-            Id = 1,
-            SenderUserId = 48,
-            ReceiverUserId = 49,
-            FromDate = new(),
-            ToDate = new()
-        };
-
         SharedCalendar sharedCalendar = new(1, 
                                             new User 
                                             { 

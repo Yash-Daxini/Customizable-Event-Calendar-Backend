@@ -7,6 +7,12 @@ public class MonthlyRecurrencePatternBuilder
 {
     private readonly MonthlyRecurrencePattern _recurrencePattern = new();
 
+    public MonthlyRecurrencePatternBuilder()
+    {
+        _recurrencePattern.Frequency = Frequency.Monthly;    
+    }
+
+
     public MonthlyRecurrencePatternBuilder WithStartDate(DateOnly startDate)
     {
         _recurrencePattern.StartDate = startDate;
@@ -22,12 +28,6 @@ public class MonthlyRecurrencePatternBuilder
     public MonthlyRecurrencePatternBuilder WithInterval(int interval)
     {
         _recurrencePattern.Interval = interval;
-        return this;
-    }
-
-    public MonthlyRecurrencePatternBuilder WithFrequency()
-    {
-        _recurrencePattern.Frequency = Frequency.Monthly;
         return this;
     }
 

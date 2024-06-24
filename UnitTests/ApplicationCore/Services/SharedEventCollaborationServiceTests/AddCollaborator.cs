@@ -6,6 +6,7 @@ using NSubstitute;
 using Core.Entities.RecurrecePattern;
 using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.SharedEventCollaborationServiceTests;
 
@@ -22,108 +23,66 @@ public class AddCollaborator
         _eventCollaboratorService = Substitute.For<IEventCollaboratorService>();
         _eventService = Substitute.For<IEventService>();
         _sharedEventCollaborationService = new SharedEventCollaborationService(_eventCollaboratorService, _eventService);
+
+        List<EventCollaborator> eventCollaborators1 = new EventCollaboratorListBuilder(47)
+                                                      .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
+                                                      .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                                      .Build();
+
+        List<EventCollaborator> eventCollaborators2 = new EventCollaboratorListBuilder(47)
+                                                      .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
+                                                      .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                                      .Build();
+
         _events =
         [
-            new()
-        {
-            Duration = new Duration(1,2),
-            EventCollaborators = [
-                   new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                   new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        }
-            ]
-        },
-            new()
-            {
-                Duration = new Duration(1,2),
-                EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        }
-                    ]
-            },
+            new EventBuilder()
+            .WithDuration(new Duration(1,2))
+            .WithEventCollaborators(eventCollaborators1)
+            .Build(),
+            new EventBuilder()
+            .WithDuration(new Duration(1,2))
+            .WithEventCollaborators(eventCollaborators2)
+            .Build(),
         ];
     }
 
     [Fact]
     public async Task Should_AddCollaborator_When_NotOverlapAndNotAlreadyCollaborated()
     {
-        Event eventObj = new()
-        {
-            EventCollaborators = [
-                   new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                   new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                      .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
+                                                      .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                                      .Build();
 
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Collaborator,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-            EventDate = new DateOnly(2024, 5, 31),
-            EventId = 1,
-            User = new()
-            {
-                Id = 50,
-                Name = "c",
-                Email = "c@gmail.com",
-                Password = "c"
-            },
-            ProposedDuration = null
-        };
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
+
+        User user = new UserBuilder()
+                    .WithId(50)
+                    .WithName("c")
+                    .WithEmail("c@gmail.com")
+                    .WithPassword("c")
+                    .Build();
+
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithId(1)
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithEventDate(new DateOnly(2024, 5, 31))
+                                              .WithEventId(1)
+                                              .WithUser(user)
+                                              .Build();
 
         _eventService.GetEventById(1, 50).Returns(eventObj);
 
@@ -137,78 +96,35 @@ public class AddCollaborator
     [Fact]
     public async Task Should_ThrowException_When_CollaborationOverlap()
     {
-        Event eventObj = new()
-        {
-            Id = 1,
-            Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        }
-                    ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                              .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
+                                              .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                                ConfirmationStatus.Accept,
+                                                                new DateOnly(2024, 5, 31),
+                                                                null)
+                                              .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithDuration(new Duration(1, 2))
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _events[1].EventCollaborators.Add(
-            new EventCollaborator
-            {
-                EventCollaboratorRole = EventCollaboratorRole.Participant,
-                ConfirmationStatus = ConfirmationStatus.Accept,
-                EventDate = new DateOnly(2024, 5, 31),
-                User = new User
-                {
-                    Id = 50,
-                },
-            });
+                                            new EventCollaboratorBuilder()
+                                            .WithEventCollaboratorRole(EventCollaboratorRole.Participant)
+                                            .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                            .WithEventDate(new DateOnly(2024, 5, 31))
+                                            .WithUser(new UserBuilder().WithId(50).Build())
+                                            .Build()
+                                         );
 
-        EventCollaborator eventCollaborator = new()
-        {
-            EventCollaboratorRole = EventCollaboratorRole.Collaborator,
-            ConfirmationStatus = ConfirmationStatus.Accept,
-            EventDate = new DateOnly(2024, 5, 31),
-            EventId = 1,
-            User = new()
-            {
-                Id = 50,
-            },
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                            .WithEventCollaboratorRole(EventCollaboratorRole.Collaborator)
+                                            .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                            .WithEventDate(new DateOnly(2024, 5, 31))
+                                            .WithUser(new UserBuilder().WithId(50).Build())
+                                            .WithEventId(1)
+                                            .Build();
 
         _eventService.GetEventById(1, 50).Returns(eventObj);
 
@@ -224,69 +140,21 @@ public class AddCollaborator
     [Fact]
     public async Task Should_ThrowException_When_AlreadyCollaborated()
     {
-        Event eventObj = new()
-        {
-            Id = 1,
-            Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Core.Entities.Enums.Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 50,
-                                Name = "c",
-                                Email = "c@gmail.com",
-                                Password = "c"
-                            },
-                            EventId = 47
-                        }
-                    ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                              .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
+                                              .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                      ConfirmationStatus.Accept,
+                                                      new DateOnly(2024, 5, 31),
+                                                      null)
+                                              .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                                      ConfirmationStatus.Accept,
+                                                      new DateOnly(2024, 5, 31),
+                                                      null)
+                                              .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _events.Add(eventObj);
 
@@ -321,69 +189,21 @@ public class AddCollaborator
     [Fact]
     public async Task Should_ThrowException_When_EventCollaboratorIsNull()
     {
-        Event eventObj = new()
-        {
-            Id = 1,
-            Title = "event",
-            Location = "event",
-            Description = "event",
-            Duration = new Duration(1, 2),
-            RecurrencePattern = new WeeklyRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 8, 25),
-                Frequency = Frequency.Weekly,
-                Interval = 2,
-                ByWeekDay = [2, 6]
-            },
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-            {
-                EventCollaboratorRole = EventCollaboratorRole.Participant,
-                ConfirmationStatus = ConfirmationStatus.Accept,
-                ProposedDuration = null,
-                EventDate = new DateOnly(2024, 5, 31),
-                User = new User
-                {
-                    Id = 50,
-                    Name = "c",
-                    Email = "c@gmail.com",
-                    Password = "c"
-                },
-                EventId = 47
-            }
-                    ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                              .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
+                                              .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                      ConfirmationStatus.Accept,
+                                                      new DateOnly(2024, 5, 31),
+                                                      null)
+                                              .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                                      ConfirmationStatus.Accept,
+                                                      new DateOnly(2024, 5, 31),
+                                                      null)
+                                              .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _events.Add(eventObj);
 

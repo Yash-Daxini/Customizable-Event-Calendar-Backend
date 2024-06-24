@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using UnitTests.Builders;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
 
@@ -17,6 +18,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     private readonly IUserAuthenticationService _userAuthenticationService;
     private readonly IMapper _mapper;
     private readonly UserController _userController;
+    private readonly User _user;
 
     public AuthenticateUser(AutoMapperFixture autoMapperFixture)
     {
@@ -24,20 +26,19 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
         _userAuthenticationService = Substitute.For<IUserAuthenticationService>();
         _mapper = autoMapperFixture.Mapper;
         _userController = new UserController(_userService, _userAuthenticationService, _mapper);
+
+        _user = new UserBuilder()
+                    .WithId(1)
+                    .WithName("a")
+                    .WithEmail("b")
+                    .WithPassword("c")
+                    .Build();
     }
 
     [Fact]
     public async Task Should_ReturnAuthenticationResponse_When_UserWithValidCredentials()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "a",
-            Email = "b",
-            Password = "c",
-        };
-
-        AuthenticateResponse authenticateResponse = new(user, "c");
+        AuthenticateResponse authenticateResponse = new(_user, "c");
 
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -45,7 +46,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Password = "c",
         };
 
-        _userAuthenticationService.LogIn(user).ReturnsForAnyArgs(authenticateResponse);
+        _userAuthenticationService.LogIn(_user).ReturnsForAnyArgs(authenticateResponse);
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
@@ -55,21 +56,13 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnNotFoundResponse_When_UserNotAvailable()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "a",
-            Email = "b",
-            Password = "c",
-        };
-
         AuthenticateRequestDto authenticateRequestDto = new()
         {
             Name = "a",
             Password = "c",
         };
 
-        _userAuthenticationService.LogIn(user).ThrowsForAnyArgs<NotFoundException>();
+        _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs<NotFoundException>();
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
@@ -80,21 +73,13 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnAuthenticationFailedResponse_When_UserWithInvalidCredentials()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "a",
-            Email = "b",
-            Password = "c",
-        };
-
         AuthenticateRequestDto authenticateRequestDto = new()
         {
             Name = "a",
             Password = "c",
         };
 
-        _userAuthenticationService.LogIn(user).ThrowsForAnyArgs<AuthenticationFailedException>();
+        _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs<AuthenticationFailedException>();
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
@@ -104,21 +89,13 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnServerError_When_SomeErrorOccurred()
     {
-        User user = new()
-        {
-            Id = 1,
-            Name = "a",
-            Email = "b",
-            Password = "c",
-        };
-
         AuthenticateRequestDto authenticateRequestDto = new()
         {
             Name = "a",
             Password = "c",
         };
 
-        _userAuthenticationService.LogIn(user).ThrowsForAnyArgs<Exception>();
+        _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs<Exception>();
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 

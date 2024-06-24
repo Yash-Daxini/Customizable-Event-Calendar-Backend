@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using UnitTests.Builders;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
 
@@ -32,7 +33,12 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     {
         UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com" };
 
-        User user = new() { Id = userDto.Id, Name = userDto.Name, Email = userDto.Email };
+        User user = new UserBuilder()
+            .WithId(49)
+            .WithName("b")
+            .WithEmail("b@gmail.com")
+            .WithPassword("b")
+            .Build();
 
         _userService.UpdateUser(user).ReturnsForAnyArgs(IdentityResult.Success);
 

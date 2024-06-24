@@ -1,5 +1,7 @@
 ﻿using Core.Entities;
+using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
@@ -8,96 +10,66 @@ public class EventGetEventOrganizer
     [Fact]
     public void Should_ReturnOrganizerOfEvent_When_MultipleEventCollaboratorsPresent()
     {
-        Event eventObj = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        }
-            ]
-        };
+        User user1 =  new UserBuilder()
+                     .WithId(48)
+                     .WithName("a")
+                     .WithEmail("a@gmail.com")
+                     .WithPassword("a")
+                     .Build();
 
-        User actualUser = new()
-        {
-            Id = 48,
-            Name = "a",
-            Email = "a@gmail.com",
-            Password = "a"
-        };
+        User user2 = new UserBuilder()
+                     .WithId(48)
+                     .WithName("b")
+                     .WithEmail("b@gmail.com")
+                     .WithPassword("b")
+                     .Build();
 
-        User? expectedUser = eventObj.GetEventOrganizer();
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                      .WithOrganizer(user1,new DateOnly())
+                                                      .WithParticipant(user2,
+                                                                       ConfirmationStatus.Accept,
+                                                                       new DateOnly(),
+                                                                       null)
+                                                      .Build();
 
-        actualUser.Should().BeEquivalentTo(expectedUser);
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
+
+        User? actualUser = eventObj.GetEventOrganizer();
+
+        actualUser.Should().BeEquivalentTo(user1);
     }
 
     [Fact]
     public void Should_ReturnOrganizerOfEvent_When_OnlyOrganizerPresent()
     {
-        Event eventObj = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        }
-            ]
-        };
+        User user1 = new UserBuilder()
+                     .WithId(48)
+                     .WithName("a")
+                     .WithEmail("a@gmail.com")
+                     .WithPassword("a")
+                     .Build();
 
-        User expectedUser = new()
-        {
-            Id = 48,
-            Name = "a",
-            Email = "a@gmail.com",
-            Password = "a"
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                      .WithOrganizer(user1, new DateOnly())
+                                                      .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         User? actualUser = eventObj.GetEventOrganizer();
 
-        actualUser.Should().BeEquivalentTo(expectedUser);
+        actualUser.Should().BeEquivalentTo(user1);
     }
 
     [Fact]
     public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsNull()
     {
-        Event eventObj = new() { EventCollaborators = null };
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(null)
+                         .Build();
 
         User? actualResult = eventObj.GetEventOrganizer();
 
@@ -107,7 +79,9 @@ public class EventGetEventOrganizer
     [Fact]
     public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsEmpty()
     {
-        Event eventObj = new() { EventCollaborators = [] };
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators([])
+                         .Build();
 
         User? actualResult = eventObj.GetEventOrganizer();
 

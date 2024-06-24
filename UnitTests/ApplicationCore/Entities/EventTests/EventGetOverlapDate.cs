@@ -1,90 +1,59 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
 public class EventGetOverlapDate
 {
     private readonly Event _event;
+    private readonly User _user1;
+    private readonly User _user2;
 
     public EventGetOverlapDate()
     {
-        _event = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        }
-            ]
-        };
+        _user1 = new UserBuilder()
+             .WithId(48)
+             .WithName("a")
+             .WithEmail("a@gmail.com")
+             .WithPassword("a")
+             .Build();
+
+        _user2 = new UserBuilder()
+             .WithId(49)
+             .WithName("b")
+             .WithEmail("b@gmail.com")
+             .WithPassword("b")
+             .Build();
+
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                     .WithOrganizer(_user1, new DateOnly(2024, 5, 31))
+                                                     .WithParticipant(_user2,
+                                                                      ConfirmationStatus.Accept,
+                                                                      new DateOnly(2024, 5, 31),
+                                                                      null)
+                                                     .Build();
+
+        _event = new EventBuilder()
+                 .WithEventCollaborators(eventCollaborators)
+                 .Build();
     }
 
     [Fact]
     public void Should_ReturnsNull_When_OverlapNotOccur()
     {
-        Event eventToCheckOverlap = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 6, 1),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 6, 1),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                     .WithOrganizer(_user1, new DateOnly(2024, 6, 1))
+                                                     .WithParticipant(_user2,
+                                                                      ConfirmationStatus.Accept,
+                                                                      new DateOnly(2024, 6, 1),
+                                                                      null)
+                                                     .Build();
+
+        Event eventToCheckOverlap = new EventBuilder()
+                                    .WithEventCollaborators(eventCollaborators)
+                                    .Build();
 
         DateOnly? overlapDate = _event.GetOverlapDate(eventToCheckOverlap);
 
@@ -94,71 +63,22 @@ public class EventGetOverlapDate
     [Fact]
     public void Should_ReturnsOverlapDate_When_OverlapOccur()
     {
-        Event eventToCheckOverlap = new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 6, 1),
-                            User = new User
-                            {
-                                Id = 48,
-                                Name = "a",
-                                Email = "a@gmail.com",
-                                Password = "a"
-                            },
-                            EventId = 47
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Participant,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 6, 1),
-                            User = new User
-                            {
-                                Id = 49,
-                                Name = "b",
-                                Email = "b@gmail.com",
-                                Password = "b"
-                            },
-                            EventId = 47
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                             .WithOrganizer(_user1, new DateOnly(2024, 5, 31))
+                                             .WithParticipant(_user2,
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                             .WithOrganizer(_user1, new DateOnly(2024, 6, 1))
+                                             .WithParticipant(_user2,
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 6, 1),
+                                                              null)
+                                             .Build();
+
+        Event eventToCheckOverlap = new EventBuilder()
+                                    .WithEventCollaborators(eventCollaborators)
+                                    .Build();
 
         DateOnly? overlapDate = _event.GetOverlapDate(eventToCheckOverlap);
 

@@ -25,8 +25,6 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
 
         Event? eventObj = await eventRepository.GetEventById(1);
 
-        _dbContextEvent.ChangeTracker.Clear();
-
         await eventRepository.Delete(eventObj);
 
         Event? deletedEvent = await eventRepository.GetEventById(1);

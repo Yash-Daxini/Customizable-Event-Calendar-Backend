@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using UnitTests.Builders;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
 
@@ -31,13 +32,12 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     {
         UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
 
-        User user = new User
-        {
-            Id = 49,
-            Name = "b",
-            Email = "b@gmail.com",
-            Password = "b"
-        };
+        User user = new UserBuilder()
+                    .WithId(49)
+                    .WithName("b")
+                    .WithEmail("b@gmail.com")
+                    .WithPassword("b")
+                    .Build();
 
         _userService.SignUp(user).ReturnsForAnyArgs(IdentityResult.Success);
 
