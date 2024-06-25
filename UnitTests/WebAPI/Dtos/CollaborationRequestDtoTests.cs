@@ -4,12 +4,12 @@ using WebAPI.Validators;
 
 namespace UnitTests.WebAPI.Dtos;
 
-public class EventCollaborationRequestDtoTests
+public class CollaborationRequestDtoTests
 {
 
     private readonly CollaborationRequestDtoValidator _collaborationRequestDtoValidator;
 
-    public EventCollaborationRequestDtoTests()
+    public CollaborationRequestDtoTests()
     {
         _collaborationRequestDtoValidator = new CollaborationRequestDtoValidator();
     }
@@ -25,6 +25,38 @@ public class EventCollaborationRequestDtoTests
     }
 
     [Fact]
+    public void Should_ReturnFalse_When_EventDateIsEmpty()
+    {
+        CollaborationRequestDto collaborationRequestDto = new()
+        {
+            Id = 5,
+            EventId = 5,
+            UserId = 5,
+            EventDate = new DateOnly()
+        };
+
+        var result = _collaborationRequestDtoValidator.Validate(collaborationRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_EventIdIsLessThanZero()
+    {
+        CollaborationRequestDto collaborationRequestDto = new()
+        {
+            Id = 5,
+            EventId = -1,
+            UserId = 5,
+            EventDate = new DateOnly(2024, 5, 21)
+        };
+
+        var result = _collaborationRequestDtoValidator.Validate(collaborationRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
     public void Should_ReturnTrue_When_ValidEventCollaborationRequestDto()
     {
         CollaborationRequestDto collaborationRequestDto = new()
@@ -32,7 +64,7 @@ public class EventCollaborationRequestDtoTests
             Id = 1,
             EventId = 1,
             UserId = 1,
-            EventDate = new DateOnly(2024,2,1),
+            EventDate = new DateOnly(2024, 2, 1),
         };
 
         var result = _collaborationRequestDtoValidator.Validate(collaborationRequestDto);

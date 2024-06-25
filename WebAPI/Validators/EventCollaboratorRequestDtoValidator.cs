@@ -8,6 +8,9 @@ namespace WebAPI.Validators
     {
         public EventCollaboratorRequestDtoValidator()
         {
+            RuleFor(e => e.UserId)
+                .GreaterThanOrEqualTo(0);
+
             RuleFor(e => e.EventCollaboratorRole)
                 .NotEmpty()
                 .NotNull()

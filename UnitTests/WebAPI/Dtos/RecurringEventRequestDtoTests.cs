@@ -24,6 +24,132 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
+    public void Should_ReturnFalse_When_TitleIsEmpty()
+    {
+        RecurringEventRequestDto recurringEventRequestDto = new()
+        {
+            Title = "",
+            Description = "dfsa",
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(recurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_TitleIsNull()
+    {
+        RecurringEventRequestDto recurringEventRequestDto = new()
+        {
+            Title = null,
+            Description = "dfsa",
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(recurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_DescriptionIsEmpty()
+    {
+        RecurringEventRequestDto recurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = "",
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(recurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_DescriptionIsNull()
+    {
+        RecurringEventRequestDto recurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = null,
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(recurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_LocationIsEmpty()
+    {
+        RecurringEventRequestDto recurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = "fdsff",
+            Location = "",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(recurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_LocationIsNull()
+    {
+        RecurringEventRequestDto recurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = "fdsff",
+            Location = null,
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(recurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
     public void Should_ReturnTrue_When_ValidRecurringEventRequestDto()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()

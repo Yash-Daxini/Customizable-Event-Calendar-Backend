@@ -12,9 +12,7 @@ public class NonRecurringEventRequestDto
 
     public DurationDto Duration { get; set; }
 
-    public DateOnly StartDate { get; set; }
-
-    public DateOnly EndDate { get; set; }
+    public DateOnly EventDate { get; set; }
 
     public List<EventCollaboratorRequestDto> EventCollaborators { get; set; }
 }

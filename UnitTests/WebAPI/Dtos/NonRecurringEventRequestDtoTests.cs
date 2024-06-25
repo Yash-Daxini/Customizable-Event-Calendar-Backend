@@ -24,6 +24,138 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
+    public void Should_ReturnFalse_When_TitleIsEmpty()
+    {
+        NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
+        {
+            Title = "",
+            Description = "dfsa",
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventDate = new DateOnly(2024, 2, 1),
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(nonRecurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_TitleIsNull()
+    {
+        NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
+        {
+            Title = null,
+            Description = "dfsa",
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventDate = new DateOnly(2024, 2, 1),
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(nonRecurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_DescriptionIsEmpty()
+    {
+        NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = "",
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventDate = new DateOnly(2024, 2, 1),
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(nonRecurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_DescriptionIsNull()
+    {
+        NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = null,
+            Location = "fsdf",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventDate = new DateOnly(2024, 2, 1),
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(nonRecurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_LocationIsEmpty()
+    {
+        NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = "fdsff",
+            Location = "",
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventDate = new DateOnly(2024, 2, 1),
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(nonRecurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_LocationIsNull()
+    {
+        NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
+        {
+            Title = "fsdfds",
+            Description = "fdsff",
+            Location = null,
+            Duration = new DurationDto()
+            {
+                StartHour = 1,
+                EndHour = 2,
+            },
+            EventDate = new DateOnly(2024, 2, 1),
+            EventCollaborators = []
+        };
+
+        var result = _validator.Validate(nonRecurringEventRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
     public void Should_ReturnTrue_When_ValidNonRecurringEventRequestDto()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
@@ -37,8 +169,7 @@ public class NonRecurringEventRequestDtoTests
                 StartHour = 1,
                 EndHour = 2,
             },
-            StartDate = new DateOnly(2024,2,1),
-            EndDate = new DateOnly(2024,2,2),
+            EventDate = new DateOnly(2024, 2, 1),
             EventCollaborators = [new() {
                 Id = 1,
                 UserId = 1,

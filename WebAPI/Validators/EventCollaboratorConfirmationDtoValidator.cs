@@ -23,6 +23,13 @@ public class EventCollaboratorConfirmationDtoValidator : AbstractValidator<Event
                 .WithMessage("Only propose time when confirmation status is Proposed");
         });
 
+        When(e => e.ConfirmationStatus is not null && e.ConfirmationStatus.Equals("Proposed"), () =>
+        {
+            RuleFor(e => e.ProposedDuration)
+                .NotNull()
+                .WithMessage("Propose time can't be null");
+        });
+
         When(x => x.ProposedDuration != null, () =>
         {
             RuleFor(e => e.ProposedDuration)

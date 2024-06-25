@@ -12,8 +12,8 @@ public class NonRecurringEventRequestDtoProfile : Profile
         CreateMap<NonRecurringEventRequestDto, Event>()
             .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom(src => new SingleInstanceRecurrencePattern()
             {
-                StartDate = src.StartDate,
-                EndDate = src.EndDate,
+                StartDate = src.EventDate,
+                EndDate = src.EventDate,
                 Frequency = Core.Entities.Enums.Frequency.None,
                 Interval = 1,
                 ByWeekDay = null,

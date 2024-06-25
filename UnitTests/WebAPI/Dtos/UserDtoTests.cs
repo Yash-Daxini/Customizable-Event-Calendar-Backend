@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Xml;
+using FluentAssertions;
 using WebAPI.Dtos;
 using WebAPI.Validators;
 
@@ -17,6 +18,111 @@ public class UserDtoTests
     public void Should_ReturnFalse_When_InvalidUserDto()
     {
         UserDto userDto = new();
+
+        var result = _validator.Validate(userDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_NameIsEmpty()
+    {
+        UserDto userDto = new()
+        {
+            Name = "",
+            Email = "test@gmail.com",
+            Password = "abc"
+        };
+
+        var result = _validator.Validate(userDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_NameIsNull()
+    {
+        UserDto userDto = new()
+        {
+            Name = null,
+            Email = "test@gmail.com",
+            Password = "abc"
+        };
+
+        var result = _validator.Validate(userDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_EmailIsEmpty()
+    {
+        UserDto userDto = new()
+        {
+            Name = "fdfs",
+            Email = "",
+            Password = "abc"
+        };
+
+        var result = _validator.Validate(userDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_EmailIsNull()
+    {
+        UserDto userDto = new()
+        {
+            Name = "ddfsaf",
+            Email = null,
+            Password = "abc"
+        };
+
+        var result = _validator.Validate(userDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_EmailIsNotValid()
+    {
+        UserDto userDto = new()
+        {
+            Name = "ddfsaf",
+            Email = "ksfjlksdj j",
+            Password = "abc"
+        };
+
+        var result = _validator.Validate(userDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_PasswordIsEmpty()
+    {
+        UserDto userDto = new()
+        {
+            Name = "fdsf",
+            Email = "test@gmail.com",
+            Password = ""
+        };
+
+        var result = _validator.Validate(userDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_PasswordIsNull()
+    {
+        UserDto userDto = new()
+        {
+            Name = "dfdsf",
+            Email = "test@gmail.com",
+            Password = null
+        };
 
         var result = _validator.Validate(userDto);
 

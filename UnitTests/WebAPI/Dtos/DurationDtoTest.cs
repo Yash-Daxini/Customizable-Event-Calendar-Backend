@@ -14,11 +14,17 @@ public class DurationDtoTest
     }
 
     [Theory]
-    [InlineData(-1,-1)]
-    [InlineData(1,0)]
-    [InlineData(-1,0)]
-    [InlineData(23,24)]
-    public void Should_ReturnFalse_When_InvalidDuration(int startHour,int endHour)
+    [InlineData(-1, -1)]
+    [InlineData(-1, 0)]
+    [InlineData(23, 24)]
+    [InlineData(0, 24)]
+    [InlineData(-1, 24)]
+    [InlineData(2, 1)]
+    [InlineData(23, 0)]
+    [InlineData(23, 22)]
+    [InlineData(23, 23)]
+    [InlineData(21, 21)]
+    public void Should_ReturnFalse_When_InvalidDuration(int startHour, int endHour)
     {
         DurationDto durationDto = new DurationDto()
         {
@@ -30,14 +36,14 @@ public class DurationDtoTest
 
         result.Should().BeFalse();
     }
-    
+
     [Theory]
-    [InlineData(11,12)]
-    [InlineData(0,1)]
-    [InlineData(22,23)]
-    public void Should_ReturnTrue_When_ValidDuration(int startHour,int endHour)
+    [InlineData(11, 12)]
+    [InlineData(0, 1)]
+    [InlineData(22, 23)]
+    public void Should_ReturnTrue_When_ValidDuration(int startHour, int endHour)
     {
-        DurationDto durationDto = new ()
+        DurationDto durationDto = new()
         {
             StartHour = startHour,
             EndHour = endHour

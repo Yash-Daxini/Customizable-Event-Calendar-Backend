@@ -29,6 +29,62 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
+    public void Should_ReturnFalse_When_NameIsEmpty()
+    {
+        AuthenticateRequestDto authenticateRequestDto = new()
+        {
+            Name = "",
+            Password = "fadr"
+        };
+
+        var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_PasswordIsEmpty()
+    {
+        AuthenticateRequestDto authenticateRequestDto = new()
+        {
+            Name = "fdsfs",
+            Password = ""
+        };
+
+        var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_NameIsNull()
+    {
+        AuthenticateRequestDto authenticateRequestDto = new()
+        {
+            Name = null,
+            Password = "fadr"
+        };
+
+        var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_ReturnFalse_When_PasswordIsNull()
+    {
+        AuthenticateRequestDto authenticateRequestDto = new()
+        {
+            Name = "fdsfs",
+            Password = null
+        };
+
+        var result = _authenticateRequestDtoValidation.Validate(authenticateRequestDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
     public void Should_ReturnTrue_When_ValidAuthenticateRequestDto()
     {
         AuthenticateRequestDto authenticateRequestDto = new()

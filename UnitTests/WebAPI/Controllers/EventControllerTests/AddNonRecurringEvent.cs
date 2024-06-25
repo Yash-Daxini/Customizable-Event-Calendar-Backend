@@ -35,8 +35,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
                 StartHour = 1,
                 EndHour = 2,
             },
-            StartDate = new DateOnly(2024,4,1),
-            EndDate = new DateOnly(2024,5,1),
+            EventDate = new DateOnly(2024,4,1),
             EventCollaborators = [
                 new() {
                     Id = 1,
