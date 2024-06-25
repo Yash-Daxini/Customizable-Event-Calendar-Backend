@@ -48,8 +48,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateUserAndReturnSuccess_When_UserWithIdAvailable()
     {
-        User expectedResult = new UserBuilder()
-                              .WithId(1)
+        User expectedResult = new UserBuilder(1)
                               .WithName("a")
                               .WithEmail("a")
                               .Build();
@@ -66,11 +65,10 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnFailed_When_UserWithIdNotAvailable()
     {
-        User user = new UserBuilder()
-                              .WithId(2)
-                              .WithName("b")
-                              .WithEmail("b")
-                              .Build();
+        User user = new UserBuilder(2)
+                    .WithName("b")
+                    .WithEmail("b")
+                    .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

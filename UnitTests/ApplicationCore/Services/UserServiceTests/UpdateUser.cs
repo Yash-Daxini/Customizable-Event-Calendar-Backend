@@ -25,8 +25,7 @@ public class UpdateUser
     [Fact]
     public async Task Should_UpdateUser_When_UserWithIdAvailable()
     {
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("Test")
                     .WithEmail("Test@gmail.com")
                     .WithPassword("password")
@@ -42,8 +41,7 @@ public class UpdateUser
     [Fact]
     public async Task Should_ThrowException_When_UserWithIdNotAvailable()
     {
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .Build();
 
         _userRepository.GetUserById(1).ReturnsNull();

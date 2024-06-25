@@ -11,13 +11,13 @@ public class EventIsUserCollaboratedOnGivenDate
     public EventIsUserCollaboratedOnGivenDate()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly(2024, 5, 30))
-                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 30))
+                                             .WithParticipant(new UserBuilder(49).Build(),
                                                               ConfirmationStatus.Accept,
                                                               new DateOnly(2024, 5, 30),
                                                               null)
-                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly(2024, 5, 31))
-                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 31))
+                                             .WithParticipant(new UserBuilder(49).Build(),
                                                               ConfirmationStatus.Accept,
                                                               new DateOnly(2024, 5, 31),
                                                               null)

@@ -32,8 +32,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     {
         UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
 
-        User user = new UserBuilder()
-                    .WithId(49)
+        User user = new UserBuilder(49)
                     .WithName("b")
                     .WithEmail("b@gmail.com")
                     .WithPassword("b")

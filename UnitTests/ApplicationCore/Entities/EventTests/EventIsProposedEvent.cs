@@ -12,8 +12,8 @@ public class EventIsProposedEvent
     public void Should_ReturnsFalse_When_NotAnyEventCollaboratorWithProposedOrPendingStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                                     .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithParticipant(new UserBuilder(49).Build(),
                                                                       ConfirmationStatus.Accept,
                                                                       new DateOnly(),
                                                                       null)
@@ -31,8 +31,8 @@ public class EventIsProposedEvent
     public void Should_ReturnsTrue_When_AnyEventCollaboratorWithProposedStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                                     .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithParticipant(new UserBuilder(49).Build(),
                                                                       ConfirmationStatus.Proposed,
                                                                       new DateOnly(),
                                                                       null)
@@ -51,8 +51,8 @@ public class EventIsProposedEvent
     public void Should_ReturnsTrue_When_AnyEventCollaboratorWithPendingStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                                     .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithParticipant(new UserBuilder(49).Build(),
                                                                       ConfirmationStatus.Pending,
                                                                       new DateOnly(),
                                                                       null)
@@ -70,12 +70,12 @@ public class EventIsProposedEvent
     public void Should_ReturnsTrue_When_EventCollaboratorsWithPendingAndProposedStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                                     .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithParticipant(new UserBuilder(49).Build(),
                                                                       ConfirmationStatus.Proposed,
                                                                       new DateOnly(),
                                                                       null)
-                                                     .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                                     .WithParticipant(new UserBuilder(50).Build(),
                                                                       ConfirmationStatus.Pending,
                                                                       new DateOnly(),
                                                                       null)

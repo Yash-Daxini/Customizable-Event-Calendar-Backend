@@ -30,12 +30,12 @@ public class LogIn
     [Fact]
     public async Task Should_LogIn_When_ValidUser()
     {
-        User user = new UserBuilder()
-            .WithId(1)
-            .WithName("Test")
-            .WithEmail("Test@gmail.com")
-            .WithPassword("password")
-            .Build();
+        User user = new UserBuilder(1)
+                    .WithId(1)
+                    .WithName("Test")
+                    .WithEmail("Test@gmail.com")
+                    .WithPassword("password")
+                    .Build();
 
         AuthenticateResponse authenticateResponse = new (user,"auth");
 
@@ -57,12 +57,11 @@ public class LogIn
     [Fact]
     public async Task Should_ThrowException_When_InValidUser()
     {
-        User user = new UserBuilder()
-            .WithId(1)
-            .WithName("Test")
-            .WithEmail("Test@gmail.com")
-            .WithPassword("password")
-            .Build();
+        User user = new UserBuilder(1)
+                    .WithName("Test")
+                    .WithEmail("Test@gmail.com")
+                    .WithPassword("password")
+                    .Build();
 
         _userRepository.GetUserById(1).Returns(user);
 

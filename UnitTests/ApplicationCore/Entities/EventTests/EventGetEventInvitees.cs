@@ -36,9 +36,9 @@ public class EventGetEventInvitees
     public void Should_ReturnListOfEventCollaborators_When_EventCollaboratorsAvailable()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(48).Build(),
                                                                      new DateOnly())
-                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                      .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(),
                                                                        null)
@@ -49,7 +49,7 @@ public class EventGetEventInvitees
                          .Build();
 
         List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
-                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                 .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(),
                                                                        null)
@@ -65,13 +65,13 @@ public class EventGetEventInvitees
     public void Should_ReturnListOfEventCollaborators_When_EventCollaboratorsContainsCollaborator()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(48).Build(),
                                                                      new DateOnly())
-                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                      .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(),
                                                                        null)
-                                                      .WithCollaborator(new UserBuilder().WithId(50).Build(),new DateOnly())
+                                                      .WithCollaborator(new UserBuilder(50).Build(),new DateOnly())
                                                       .Build();
 
         Event eventObj = new EventBuilder()
@@ -79,7 +79,7 @@ public class EventGetEventInvitees
                          .Build();
 
         List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
-                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                 .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(),
                                                                        null)

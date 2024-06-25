@@ -24,8 +24,7 @@ public class AddEventCollaborator
     [Fact]
     public async Task Should_ReturnsAddedEventCollaboratorId_When_CallsRepositoryMethod()
     {
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("Test")
                     .WithEmail("Test@gmail.com")
                     .WithPassword("Password")

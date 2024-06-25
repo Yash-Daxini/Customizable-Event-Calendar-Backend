@@ -36,8 +36,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
             EventDate = new DateOnly()
         };
 
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("Test")
                     .WithEmail("Test")
                     .WithPassword("Test")

@@ -19,9 +19,9 @@ public class GetOverlapEventInformation
     public GetOverlapEventInformation()
     {
         List<EventCollaborator> eventCollaborators1 = new EventCollaboratorListBuilder(1)
-                                                      .WithOrganizer(new UserBuilder().WithId(1).Build(),
+                                                      .WithOrganizer(new UserBuilder(1).Build(),
                                                                      new DateOnly(2024, 6, 2))
-                                                      .WithParticipant(new UserBuilder().WithId(1).Build(),
+                                                      .WithParticipant(new UserBuilder(1).Build(),
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(2024, 6, 2),
                                                                        null)
@@ -37,9 +37,9 @@ public class GetOverlapEventInformation
                        .Build();
 
         List<EventCollaborator> eventCollaborators2 = new EventCollaboratorListBuilder(2)
-                                                      .WithOrganizer(new UserBuilder().WithId(1).Build(),
+                                                      .WithOrganizer(new UserBuilder(1).Build(),
                                                                      new DateOnly(2024, 6, 2))
-                                                      .WithParticipant(new UserBuilder().WithId(1).Build(),
+                                                      .WithParticipant(new UserBuilder(1).Build(),
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(2024, 6, 2),
                                                                        null)
@@ -55,7 +55,7 @@ public class GetOverlapEventInformation
                        .Build();
 
         List<EventCollaborator> eventCollaborators3 = new EventCollaboratorListBuilder(3)
-                                                      .WithOrganizer(new UserBuilder().WithId(1).Build(),
+                                                      .WithOrganizer(new UserBuilder(1).Build(),
                                                                      new DateOnly(2024, 6, 2))
                                                       .Build();
 
@@ -77,7 +77,7 @@ public class GetOverlapEventInformation
     public void Should_ReturnStringMessage_When_EventOverlap()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(2)
-                                                      .WithOrganizer(new UserBuilder().WithId(1).Build(),
+                                                      .WithOrganizer(new UserBuilder(1).Build(),
                                                                      new DateOnly(2024, 6, 2))
                                                       .Build();
 
@@ -107,7 +107,7 @@ public class GetOverlapEventInformation
     public void Should_ReturnStringMessage_When_EventOverlapWithMultipleEvents()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(2)
-                                                      .WithOrganizer(new UserBuilder().WithId(1).Build(),
+                                                      .WithOrganizer(new UserBuilder(1).Build(),
                                                                      new DateOnly(2024, 6, 2))
                                                       .Build();
 
@@ -142,7 +142,7 @@ public class GetOverlapEventInformation
     public void Should_ReturnNull_When_NonOverlapEvent()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(2)
-                                                      .WithOrganizer(new UserBuilder().WithId(1).Build(),
+                                                      .WithOrganizer(new UserBuilder(1).Build(),
                                                                      new DateOnly(2024, 6, 3))
                                                       .Build();
 

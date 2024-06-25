@@ -25,8 +25,7 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
-        User user = new UserBuilder()
-                    .WithId(3)
+        User user = new UserBuilder(3)
                     .WithName("c")
                     .WithEmail("c")
                     .Build();

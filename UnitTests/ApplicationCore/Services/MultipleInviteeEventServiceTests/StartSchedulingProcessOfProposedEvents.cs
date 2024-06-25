@@ -24,9 +24,9 @@ public class StartSchedulingProcessOfProposedEvents
         _multipleInviteesEventService = new MultipleInviteesEventService(_eventService, _eventCollaboratorService);
 
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
-                                                      .WithOrganizer(new UserBuilder().WithId(1).Build(),
+                                                      .WithOrganizer(new UserBuilder(1).Build(),
                                                                      new DateOnly(2024, 5, 31))
-                                                      .WithParticipant(new UserBuilder().WithId(1).Build(),
+                                                      .WithParticipant(new UserBuilder(1).Build(),
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(2024, 5, 31),
                                                                        null)
@@ -73,7 +73,7 @@ public class StartSchedulingProcessOfProposedEvents
                                               .WithEventCollaboratorRole(EventCollaboratorRole.Participant)
                                               .WithConfirmationStatus(ConfirmationStatus.Accept)
                                               .WithEventDate(new DateOnly(2024, 5, 31))
-                                              .WithUser(new UserBuilder().WithId(1).Build())
+                                              .WithUser(new UserBuilder(1).Build())
                                               .Build();
 
         _events[0].EventCollaborators.Add(new EventCollaboratorBuilder()
@@ -82,7 +82,7 @@ public class StartSchedulingProcessOfProposedEvents
                                           .WithConfirmationStatus(ConfirmationStatus.Accept)
                                           .WithEventDate(new DateOnly(2024, 5, 31))
                                           .WithProposedDuration(new Duration(1, 2))
-                                          .WithUser(new UserBuilder().WithId(1).Build())
+                                          .WithUser(new UserBuilder(1).Build())
                                           .Build());
 
         _eventService.GetProposedEventsByUserId(1).Returns(_events);
@@ -98,17 +98,17 @@ public class StartSchedulingProcessOfProposedEvents
     public async Task Should_StartSchedulingProcess_When_UsersWithProposedStatusAndMutualTimeBlockRequired()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
-                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(48).Build(),
                                                                      new DateOnly(2024, 6, 5))
-                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                      .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(1, 4))
-                                                      .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                                      .WithParticipant(new UserBuilder(50).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(2, 5))
-                                                      .WithParticipant(new UserBuilder().WithId(51).Build(),
+                                                      .WithParticipant(new UserBuilder(51).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(10, 15))
@@ -144,17 +144,17 @@ public class StartSchedulingProcessOfProposedEvents
     public async Task Should_StartSchedulingProcess_When_UsersWithProposedStatusAndMutualTimeBlockRequiredAndEventTimeLessThanOneDay()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
-                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(48).Build(),
                                                                      new DateOnly(2024, 6, 5))
-                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                      .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(1, 4))
-                                                      .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                                      .WithParticipant(new UserBuilder(50).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(2, 5))
-                                                      .WithParticipant(new UserBuilder().WithId(51).Build(),
+                                                      .WithParticipant(new UserBuilder(51).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(8, 9))
@@ -191,17 +191,17 @@ public class StartSchedulingProcessOfProposedEvents
     public async Task Should_StartSchedulingProcess_When_UsersTimeBlockIsLarge()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
-                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(48).Build(),
                                                                      new DateOnly(2024, 6, 5))
-                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                      .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(1, 4))
-                                                      .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                                      .WithParticipant(new UserBuilder(50).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(2, 5))
-                                                      .WithParticipant(new UserBuilder().WithId(51).Build(),
+                                                      .WithParticipant(new UserBuilder(51).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(8, 9))
@@ -237,17 +237,17 @@ public class StartSchedulingProcessOfProposedEvents
     public async Task Should_StartSchedulingProcess_When_ProposedStartIs0AndProposedEndHourIs23()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
-                                                      .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(48).Build(),
                                                                      new DateOnly(2024, 6, 5))
-                                                      .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                      .WithParticipant(new UserBuilder(49).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(0, 23))
-                                                      .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                                      .WithParticipant(new UserBuilder(50).Build(),
                                                                        ConfirmationStatus.Proposed,
                                                                        new DateOnly(2024, 6, 5),
                                                                        new Duration(0, 23))
-                                                      .WithParticipant(new UserBuilder().WithId(51).Build(),
+                                                      .WithParticipant(new UserBuilder(51).Build(),
                                                                        ConfirmationStatus.Maybe,
                                                                        new DateOnly(2024, 6, 5),
                                                                        null)

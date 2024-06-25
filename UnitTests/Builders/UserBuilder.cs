@@ -6,6 +6,11 @@ public class UserBuilder
 {
     private readonly User _user = new();
 
+    public UserBuilder(int id)
+    {
+        _user.Id = id;
+    }
+
     public UserBuilder WithId(int id)
     {
         _user.Id = id;

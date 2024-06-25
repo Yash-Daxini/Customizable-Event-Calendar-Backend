@@ -30,10 +30,7 @@ public class DeleteEvent
     [Fact]
     public async Task Should_DeleteEvent_When_EventWithIdAvailable()
     {
-        Event eventObj = new()
-        {
-            Title = "event"
-        };
+        Event eventObj = new();
 
         _eventRepository.GetEventById(1).Returns(eventObj);
 
@@ -45,10 +42,7 @@ public class DeleteEvent
     [Fact]
     public async Task Should_ThrowException_When_EventWithIdNotAvailable()
     {
-        Event eventObj = new()
-        {
-            Title = "event"
-        };
+        Event eventObj = new();
 
         _eventRepository.GetEventById(1).ReturnsNull();
 
@@ -62,10 +56,7 @@ public class DeleteEvent
     [Fact]
     public async Task Should_ThrowException_When_EventWithIdNotValid()
     {
-        Event eventObj = new()
-        {
-            Title = "event"
-        };
+        Event eventObj = new();
 
         _eventRepository.GetEventById(-1).ReturnsNull();
 

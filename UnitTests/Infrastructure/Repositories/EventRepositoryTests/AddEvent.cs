@@ -20,15 +20,13 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     public AddEvent(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _user1 = new UserBuilder()
-                     .WithId(3)
+        _user1 = new UserBuilder(3)
                      .WithName("c")
                      .WithEmail("c")
                      .WithPassword("c")
                      .Build();
 
-        _user2 = new UserBuilder()
-                     .WithId(2)
+        _user2 = new UserBuilder(2)
                      .WithName("b")
                      .WithEmail("b")
                      .WithPassword("b")

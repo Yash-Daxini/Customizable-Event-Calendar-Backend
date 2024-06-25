@@ -3,7 +3,6 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using Core.Entities.RecurrecePattern;
 using Core.Entities.Enums;
 using FluentAssertions;
 using UnitTests.Builders;
@@ -25,16 +24,16 @@ public class AddCollaborator
         _sharedEventCollaborationService = new SharedEventCollaborationService(_eventCollaboratorService, _eventService);
 
         List<EventCollaborator> eventCollaborators1 = new EventCollaboratorListBuilder(47)
-                                                      .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
-                                                      .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                      .WithParticipant(new UserBuilder(48).Build(),
                                                               ConfirmationStatus.Accept,
                                                               new DateOnly(2024, 5, 31),
                                                               null)
                                                       .Build();
 
         List<EventCollaborator> eventCollaborators2 = new EventCollaboratorListBuilder(47)
-                                                      .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
-                                                      .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                      .WithParticipant(new UserBuilder(48).Build(),
                                                               ConfirmationStatus.Accept,
                                                               new DateOnly(2024, 5, 31),
                                                               null)
@@ -57,8 +56,8 @@ public class AddCollaborator
     public async Task Should_AddCollaborator_When_NotOverlapAndNotAlreadyCollaborated()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                      .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
-                                                      .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                                      .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                      .WithParticipant(new UserBuilder(48).Build(),
                                                               ConfirmationStatus.Accept,
                                                               new DateOnly(2024, 5, 31),
                                                               null)
@@ -68,8 +67,7 @@ public class AddCollaborator
                          .WithEventCollaborators(eventCollaborators)
                          .Build();
 
-        User user = new UserBuilder()
-                    .WithId(50)
+        User user = new UserBuilder(50)
                     .WithName("c")
                     .WithEmail("c@gmail.com")
                     .WithPassword("c")
@@ -97,8 +95,8 @@ public class AddCollaborator
     public async Task Should_ThrowException_When_CollaborationOverlap()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                              .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
-                                              .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                              .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                              .WithParticipant(new UserBuilder(48).Build(),
                                                                 ConfirmationStatus.Accept,
                                                                 new DateOnly(2024, 5, 31),
                                                                 null)
@@ -114,7 +112,7 @@ public class AddCollaborator
                                             .WithEventCollaboratorRole(EventCollaboratorRole.Participant)
                                             .WithConfirmationStatus(ConfirmationStatus.Accept)
                                             .WithEventDate(new DateOnly(2024, 5, 31))
-                                            .WithUser(new UserBuilder().WithId(50).Build())
+                                            .WithUser(new UserBuilder(50).Build())
                                             .Build()
                                          );
 
@@ -122,7 +120,7 @@ public class AddCollaborator
                                             .WithEventCollaboratorRole(EventCollaboratorRole.Collaborator)
                                             .WithConfirmationStatus(ConfirmationStatus.Accept)
                                             .WithEventDate(new DateOnly(2024, 5, 31))
-                                            .WithUser(new UserBuilder().WithId(50).Build())
+                                            .WithUser(new UserBuilder(50).Build())
                                             .WithEventId(1)
                                             .Build();
 
@@ -141,12 +139,12 @@ public class AddCollaborator
     public async Task Should_ThrowException_When_AlreadyCollaborated()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                              .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
-                                              .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                              .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                              .WithParticipant(new UserBuilder(48).Build(),
                                                       ConfirmationStatus.Accept,
                                                       new DateOnly(2024, 5, 31),
                                                       null)
-                                              .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                              .WithParticipant(new UserBuilder(50).Build(),
                                                       ConfirmationStatus.Accept,
                                                       new DateOnly(2024, 5, 31),
                                                       null)
@@ -158,22 +156,14 @@ public class AddCollaborator
 
         _events.Add(eventObj);
 
-        EventCollaborator eventCollaborator = new()
-        {
-            Id = 1,
-            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Collaborator,
-            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-            EventDate = new DateOnly(2024, 5, 31),
-            EventId = 1,
-            User = new()
-            {
-                Id = 50,
-                Name = "c",
-                Email = "c@gmail.com",
-                Password = "c"
-            },
-            ProposedDuration = null
-        };
+        EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
+                                              .WithId(1)
+                                              .WithEventCollaboratorRole(EventCollaboratorRole.Collaborator)
+                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithEventId(1)
+                                              .WithEventDate(new DateOnly(2024, 5, 31))
+                                              .WithUser(new UserBuilder(50).Build())
+                                              .Build();
 
         _eventService.GetEventById(1, 50).Returns(eventObj);
 
@@ -190,12 +180,12 @@ public class AddCollaborator
     public async Task Should_ThrowException_When_EventCollaboratorIsNull()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                              .WithOrganizer(new UserBuilder().WithId(49).Build(), new DateOnly(2024, 5, 31))
-                                              .WithParticipant(new UserBuilder().WithId(48).Build(),
+                                              .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                              .WithParticipant(new UserBuilder(48).Build(),
                                                       ConfirmationStatus.Accept,
                                                       new DateOnly(2024, 5, 31),
                                                       null)
-                                              .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                              .WithParticipant(new UserBuilder(50).Build(),
                                                       ConfirmationStatus.Accept,
                                                       new DateOnly(2024, 5, 31),
                                                       null)

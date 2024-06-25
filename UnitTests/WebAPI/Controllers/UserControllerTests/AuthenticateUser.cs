@@ -27,8 +27,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
         _mapper = autoMapperFixture.Mapper;
         _userController = new UserController(_userService, _userAuthenticationService, _mapper);
 
-        _user = new UserBuilder()
-                    .WithId(1)
+        _user = new UserBuilder(1)
                     .WithName("a")
                     .WithEmail("b")
                     .WithPassword("c")

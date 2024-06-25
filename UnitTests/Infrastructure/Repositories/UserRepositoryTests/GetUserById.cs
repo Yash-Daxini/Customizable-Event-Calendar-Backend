@@ -46,11 +46,10 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnUser_When_UserWithIdAvailable()
     {
-        User expectedResult = new UserBuilder()
-                    .WithId(1)
-                    .WithName("a")
-                    .WithEmail("abc@gmail.com")
-                    .Build();
+        User expectedResult = new UserBuilder(1)
+                             .WithName("a")
+                             .WithEmail("abc@gmail.com")
+                             .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

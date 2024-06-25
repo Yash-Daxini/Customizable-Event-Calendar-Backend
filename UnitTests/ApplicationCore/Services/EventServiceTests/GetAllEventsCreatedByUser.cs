@@ -4,6 +4,8 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using FluentAssertions;
+using UnitTests.Builders;
+using Core.Entities.Enums;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -24,89 +26,35 @@ public class GetAllEventsCreatedByUser
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
         _eventService = new EventService(_eventRepository, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
+
+        List<EventCollaborator> eventCollaborators1 = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .WithParticipant(new UserBuilder(48).Build(),
+                                                                      ConfirmationStatus.Accept,
+                                                                      new DateOnly(2024, 5, 31),
+                                                                      null)
+                                                     .Build();
+
+        Event event1 = new EventBuilder()
+                       .WithEventCollaborators(eventCollaborators1)
+                       .Build();
+
+        List<EventCollaborator> eventCollaborators2 = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 31))
+                                                     .WithParticipant(new UserBuilder(49).Build(),
+                                                                      ConfirmationStatus.Accept,
+                                                                      new DateOnly(2024, 5, 31),
+                                                                      null)
+                                                     .Build();
+
+        Event event2 = new EventBuilder()
+                       .WithEventCollaborators(eventCollaborators2)
+                       .Build();
+
         _events =
         [
-            new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                        {
-                            Id = 48,
-                        },
-                        }
-                    ]
-        },
-            new()
-            {
-                EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                        {
-                            Id = 48,
-                        },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                    ]
-            },
-            new()
-            {
-                EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                        {
-                            Id = 48,
-                        },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                    ]
-            }
+            event1,
+            event2
         ];
     }
 
@@ -118,33 +66,19 @@ public class GetAllEventsCreatedByUser
 
         List<Event> events = await _eventService.GetAllEventCreatedByUser(userId);
 
-        List<Event> expected = [new()
-            {
-                EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                        {
-                            Id = 49,
-                        },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        },
-                    ]
-            } ];
+        List<EventCollaborator> eventCollaborators2 = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .WithParticipant(new UserBuilder(48).Build(),
+                                                                      ConfirmationStatus.Accept,
+                                                                      new DateOnly(2024, 5, 31),
+                                                                      null)
+                                                     .Build();
+
+        Event event2 = new EventBuilder()
+                       .WithEventCollaborators(eventCollaborators2)
+                       .Build();
+
+        List<Event> expected = [event2];
 
         events.Should().BeEquivalentTo(expected);
     }

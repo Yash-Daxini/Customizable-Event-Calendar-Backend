@@ -49,8 +49,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteUser_When_UserWithIdAvailable()
     {
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("a")
                     .WithPassword("a")
                     .WithEmail("a")

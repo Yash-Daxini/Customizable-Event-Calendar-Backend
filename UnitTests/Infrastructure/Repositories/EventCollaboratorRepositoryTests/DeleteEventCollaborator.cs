@@ -24,8 +24,7 @@ public class DeleteEventCollaborator : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
 
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("a")
                     .WithEmail("a")
                     .Build();

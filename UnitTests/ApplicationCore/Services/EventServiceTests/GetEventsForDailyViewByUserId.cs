@@ -5,6 +5,8 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using FluentAssertions;
+using Core.Entities.Enums;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -31,33 +33,19 @@ public class GetEventsForDailyViewByUserId
     {
         DateOnly date = DateTime.Now.ConvertToDateOnly();
 
-        List<Event> expected = [new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = DateTime.Now.ConvertToDateOnly(),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            ProposedDuration = null,
-                            EventDate = DateTime.Now.ConvertToDateOnly(),
-                            User = new User
-                        {
-                            Id = 48,
-                        },
-                        }
-                    ]
-        }];
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                             .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                             .WithParticipant(new UserBuilder(48).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                             .Build();
+
+        Event eventObj = new EventBuilder()
+                       .WithEventCollaborators(eventCollaborators)
+                       .Build();
+
+        List<Event> expected = [eventObj];
 
         _eventRepository.GetEventsWithinGivenDateByUserId(48, date, date).ReturnsForAnyArgs(expected);
 

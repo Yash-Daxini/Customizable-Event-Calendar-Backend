@@ -30,14 +30,12 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         _dbContextEvent.ChangeTracker.Clear();
 
-        User user1 = new UserBuilder()
-                     .WithId(1)
+        User user1 = new UserBuilder(1)
                      .WithName("a")
                      .WithEmail("a")
                      .Build();
 
-        User user2 = new UserBuilder()
-                     .WithId(2)
+        User user2 = new UserBuilder(2)
                      .WithName("b")
                      .WithEmail("b")
                      .Build();

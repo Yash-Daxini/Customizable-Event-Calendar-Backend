@@ -7,8 +7,8 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using Core.Entities.RecurrecePattern;
-using Core.Entities.Enums;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -30,63 +30,31 @@ public class AddNonRecurringEvent
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
         _eventService = new EventService(_eventRepository, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
+
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .Build();
+
         _events =
         [
-            new()
-            {
-                Title = "event",
-                Duration = new Duration(1,2),
-                RecurrencePattern = new SingleInstanceRecurrencePattern()
-                {
-                    StartDate = new DateOnly(2024, 5, 31),
-                    EndDate = new DateOnly(2024, 5, 31),
-                    Frequency = Frequency.None,
-                    Interval = 2,
-                    ByWeekDay = [2, 6]
-                },
-                EventCollaborators = [
-                            new EventCollaborator
-                            {
-                                EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                                ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                                EventDate = new DateOnly(2024, 5, 31),
-                                User = new User
-                                {
-                                    Id = 49,
-                                },
-                            }
-                        ]
-            },
+            new EventBuilder()
+            .WithRecurrencePattern(new SingleInstanceRecurrencePattern())
+            .WithEventCollaborators(eventCollaborators)
+            .Build()
         ];
     }
 
     [Fact]
     public async Task Should_ReturnAddedEventId_When_EventNotOverlaps()
     {
-        Event eventObj = new()
-        {
-            Title = "event",
-            RecurrencePattern = new SingleInstanceRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 5, 31),
-                Frequency = Frequency.None,
-                Interval = 1,
-                ByWeekDay = null
-            },
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        }
-                    ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithRecurrencePattern(new SingleInstanceRecurrencePattern())
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
@@ -106,30 +74,14 @@ public class AddNonRecurringEvent
     [Fact]
     public async Task Should_ThrowException_When_EventOverlaps()
     {
-        Event eventObj = new()
-        {
-            Title = "event",
-            RecurrencePattern = new SingleInstanceRecurrencePattern()
-            {
-                StartDate = new DateOnly(2024, 5, 31),
-                EndDate = new DateOnly(2024, 5, 31),
-                Frequency = Frequency.None,
-                Interval = 1,
-                ByWeekDay = null
-            },
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        }
-                    ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithRecurrencePattern(new SingleInstanceRecurrencePattern())
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 

@@ -7,7 +7,7 @@ using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
-using Core.Entities.Enums;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -28,47 +28,30 @@ public class AddEvent
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
         _eventService = new EventService(_eventRepository, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
+
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .Build();
+
         _events =
         [
-            new()
-            {
-                Title = "event",
-                EventCollaborators = [
-                        new EventCollaborator
-                            {
-                                EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                                ConfirmationStatus = ConfirmationStatus.Accept,
-                                EventDate = new DateOnly(2024, 5, 31),
-                                User = new User
-                                {
-                                    Id = 49,
-                                },
-                            }
-                ]
-            }
+            new EventBuilder()
+            .WithEventCollaborators(eventCollaborators)
+            .Build()
         ];
     }
 
     [Fact]
     public async Task Should_ReturnAddedEventId_When_EventNotOverlaps()
     {
-        Event eventObj = new()
-        {
-            Title = "event",
-            RecurrencePattern = new DailyRecurrencePattern(),
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithRecurrencePattern(new DailyRecurrencePattern())
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
@@ -88,23 +71,14 @@ public class AddEvent
     [Fact]
     public async Task Should_ThrowException_When_EventOverlaps()
     {
-        Event eventObj = new()
-        {
-            Title = "event",
-            RecurrencePattern = new DailyRecurrencePattern(),
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithRecurrencePattern(new DailyRecurrencePattern())
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
@@ -118,23 +92,14 @@ public class AddEvent
     [Fact]
     public async Task Should_ThrowException_When_EventOverlapsWithEmptyMessage()
     {
-        Event eventObj = new()
-        {
-            Title = "event",
-            RecurrencePattern = new DailyRecurrencePattern(),
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        }
-            ]
-        };
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                                     .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithRecurrencePattern(new DailyRecurrencePattern())
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 

@@ -32,8 +32,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
                                                                           .WithInterval(1)
                                                                           .Build();
 
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("a")
                     .WithEmail("a")
                     .Build();

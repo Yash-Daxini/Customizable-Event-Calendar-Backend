@@ -32,7 +32,7 @@ public class UpdateEventCollaborator
                                               .WithEventDate(new DateOnly(2024,6,2))
                                               .WithEventId(1)
                                               .WithProposedDuration(null)
-                                              .WithUser(new UserBuilder().WithId(1).Build())
+                                              .WithUser(new UserBuilder(1).Build())
                                               .Build();
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).Returns(eventCollaborator);
@@ -52,7 +52,7 @@ public class UpdateEventCollaborator
                                               .WithEventDate(new DateOnly(2024, 6, 2))
                                               .WithEventId(1)
                                               .WithProposedDuration(null)
-                                              .WithUser(new UserBuilder().WithId(1).Build())
+                                              .WithUser(new UserBuilder(1).Build())
                                               .Build();
 
         _eventCollaboratorRepository.GetEventCollaboratorById(1).ReturnsNull();

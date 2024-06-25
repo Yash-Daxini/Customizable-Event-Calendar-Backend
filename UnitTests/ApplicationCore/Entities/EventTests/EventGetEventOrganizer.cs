@@ -10,15 +10,13 @@ public class EventGetEventOrganizer
     [Fact]
     public void Should_ReturnOrganizerOfEvent_When_MultipleEventCollaboratorsPresent()
     {
-        User user1 =  new UserBuilder()
-                     .WithId(48)
+        User user1 =  new UserBuilder(48)
                      .WithName("a")
                      .WithEmail("a@gmail.com")
                      .WithPassword("a")
                      .Build();
 
-        User user2 = new UserBuilder()
-                     .WithId(48)
+        User user2 = new UserBuilder(49)
                      .WithName("b")
                      .WithEmail("b@gmail.com")
                      .WithPassword("b")
@@ -44,8 +42,7 @@ public class EventGetEventOrganizer
     [Fact]
     public void Should_ReturnOrganizerOfEvent_When_OnlyOrganizerPresent()
     {
-        User user1 = new UserBuilder()
-                     .WithId(48)
+        User user1 = new UserBuilder(48)
                      .WithName("a")
                      .WithEmail("a@gmail.com")
                      .WithPassword("a")

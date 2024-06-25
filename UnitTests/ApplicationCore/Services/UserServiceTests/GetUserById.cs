@@ -24,8 +24,7 @@ public class GetUserById
     [Fact]
     public async Task Should_ReturnUserWithGivenId_When_UserWithGivenUserIdAvailable()
     {
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("Test")
                     .WithEmail("Test@gmail.com")
                     .WithPassword("password")

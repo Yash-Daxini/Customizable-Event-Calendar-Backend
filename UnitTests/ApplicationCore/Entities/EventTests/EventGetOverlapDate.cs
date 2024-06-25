@@ -13,15 +13,13 @@ public class EventGetOverlapDate
 
     public EventGetOverlapDate()
     {
-        _user1 = new UserBuilder()
-             .WithId(48)
+        _user1 = new UserBuilder(48)
              .WithName("a")
              .WithEmail("a@gmail.com")
              .WithPassword("a")
              .Build();
 
-        _user2 = new UserBuilder()
-             .WithId(49)
+        _user2 = new UserBuilder(49)
              .WithName("b")
              .WithEmail("b@gmail.com")
              .WithPassword("b")

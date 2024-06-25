@@ -4,7 +4,6 @@ using Infrastructure.Repositories;
 using Infrastructure;
 using FluentAssertions;
 using Core.Entities.Enums;
-using Microsoft.AspNet.Identity;
 using UnitTests.Builders;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
@@ -26,11 +25,10 @@ public class UpdateEventCollaborator : IClassFixture<AutoMapperFixture>
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
-        User user = new UserBuilder()
-            .WithId(1)
-            .WithName("a")
-            .WithEmail("a")
-            .Build();
+        User user = new UserBuilder(1)
+                    .WithName("a")
+                    .WithEmail("a")
+                    .Build();
 
         EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
                                               .WithId(1)

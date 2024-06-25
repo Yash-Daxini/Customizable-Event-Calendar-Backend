@@ -4,6 +4,8 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using FluentAssertions;
+using Core.Entities.Enums;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -24,93 +26,51 @@ public class GetNonProposedEventsByUserId
         _overlappingEventService = Substitute.For<IOverlappingEventService>();
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
         _eventService = new EventService(_eventRepository, _eventCollaboratorService, _overlappingEventService, _sharedCalendarService);
-        _events =
-        [
-            new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        }
-            ]
-        },
-            new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Pending,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-            ]
-        }
-        ];
+
+        List<EventCollaborator> eventCollaborators1 = new EventCollaboratorListBuilder(0)
+                                             .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
+                                             .Build();
+
+        Event event1 = new EventBuilder()
+                       .WithEventCollaborators(eventCollaborators1)
+                       .Build();
+
+        List<EventCollaborator> eventCollaborators2 = new EventCollaboratorListBuilder(0)
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 31))
+                                             .WithParticipant(new UserBuilder(49).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                             .Build();
+
+        Event event2 = new EventBuilder()
+                       .WithEventCollaborators(eventCollaborators2)
+                       .Build();
+
+        _events = [event1, event2];
     }
 
     [Fact]
     public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
     {
-        _eventRepository.GetAllEventsByUserId(48).Returns(_events);
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 31))
+                                             .WithParticipant(new UserBuilder(49).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                             .Build();
+
+        Event eventObj = new EventBuilder()
+                       .WithEventCollaborators(eventCollaborators)
+                       .Build();
+
+        List<Event> expected = [eventObj];
+
+        _eventRepository.GetAllEventsByUserId(48).Returns(expected);
 
         List<Event> events = await _eventService.GetNonProposedEventsByUserId(48);
 
-        List<Event> expected = [new()
-        {
-            EventCollaborators = [
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Organizer,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 49,
-                            },
-                        },
-                        new EventCollaborator
-                        {
-                            EventCollaboratorRole = Core.Entities.Enums.EventCollaboratorRole.Participant,
-                            ConfirmationStatus = Core.Entities.Enums.ConfirmationStatus.Accept,
-                            EventDate = new DateOnly(2024, 5, 31),
-                            User = new User
-                            {
-                                Id = 48,
-                            },
-                        }
-            ]
-        }];
 
         events.Should().BeEquivalentTo(expected);
 

@@ -25,8 +25,7 @@ public class AddUser
     [Fact]
     public async Task Should_ReturnUserIdAfterAddOperation_When_CallsRepositoryMethod()
     {
-        User user = new UserBuilder()
-                    .WithId(1)
+        User user = new UserBuilder(1)
                     .WithName("Test")
                     .WithEmail("Test@gmail.com")
                     .WithPassword("password")

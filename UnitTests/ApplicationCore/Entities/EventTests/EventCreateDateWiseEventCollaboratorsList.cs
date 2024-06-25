@@ -11,15 +11,15 @@ public class EventCreateDateWiseEventCollaboratorsList
     public void Should_PrepareEventCollaboratorsListFromOccurrences_When_EventCollaboratorsAvailable()
     {
         List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
-                                                 .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                 .WithOrganizer(new UserBuilder(48).Build(),
                                                                 new DateOnly(2024, 5, 31))
-                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                 .WithParticipant(new UserBuilder(49).Build(),
                                                                   ConfirmationStatus.Pending,
                                                                   new DateOnly(2024, 5, 31),
                                                                   null)
-                                                 .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                 .WithOrganizer(new UserBuilder(48).Build(),
                                                                 new DateOnly(2024, 6, 1))
-                                                 .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                 .WithParticipant(new UserBuilder(49).Build(),
                                                                   ConfirmationStatus.Pending,
                                                                   new DateOnly(2024, 6, 1),
                                                                   null)
@@ -30,9 +30,9 @@ public class EventCreateDateWiseEventCollaboratorsList
                                       new DateOnly(2024, 6, 1)];
 
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                    .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                    .WithOrganizer(new UserBuilder(48).Build(),
                                                                    new DateOnly())
-                                                    .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                    .WithParticipant(new UserBuilder(49).Build(),
                                                                      ConfirmationStatus.Pending,
                                                                      new DateOnly(),
                                                                      null)
@@ -69,9 +69,9 @@ public class EventCreateDateWiseEventCollaboratorsList
         List<DateOnly> occurrences = [];
 
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                    .WithOrganizer(new UserBuilder().WithId(48).Build(),
+                                                    .WithOrganizer(new UserBuilder(48).Build(),
                                                                    new DateOnly())
-                                                    .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                                    .WithParticipant(new UserBuilder(49).Build(),
                                                                      ConfirmationStatus.Pending,
                                                                      new DateOnly(),
                                                                      null)

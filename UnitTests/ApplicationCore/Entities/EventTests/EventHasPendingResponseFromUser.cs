@@ -13,16 +13,16 @@ public class EventHasPendingResponseFromUser
     public void Should_ReturnsFalse_When_UserIsNotAvailableAsEventCollaborator(int userId)
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                             .WithParticipant(new UserBuilder(49).Build(),
                                                               ConfirmationStatus.Proposed,
                                                               new DateOnly(),
                                                               null)
                                              .Build();
 
         Event eventObj = new EventBuilder()
-                 .WithEventCollaborators(eventCollaborators)
-                 .Build();
+                        .WithEventCollaborators(eventCollaborators)
+                        .Build();
 
         bool result = eventObj.HasPendingResponseFromUser(userId);
 
@@ -35,9 +35,13 @@ public class EventHasPendingResponseFromUser
     public void Should_ReturnsFalse_When_UserHasNotPendingResponse(int userId)
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                             .WithParticipant(new UserBuilder(49).Build(),
                                                               ConfirmationStatus.Proposed,
+                                                              new DateOnly(),
+                                                              null)
+                                             .WithParticipant(new UserBuilder(49).Build(),
+                                                              ConfirmationStatus.Accept,
                                                               new DateOnly(),
                                                               null)
                                              .Build();
@@ -57,12 +61,12 @@ public class EventHasPendingResponseFromUser
     {
 
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                             .WithParticipant(new UserBuilder(49).Build(),
                                                               ConfirmationStatus.Proposed,
                                                               new DateOnly(),
                                                               null)
-                                             .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                             .WithParticipant(new UserBuilder(50).Build(),
                                                               ConfirmationStatus.Pending,
                                                               new DateOnly(),
                                                               null)
@@ -83,16 +87,16 @@ public class EventHasPendingResponseFromUser
     public void Should_ReturnsTrue_When_MultipleUserHasPendingResponse(int userId)
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                             .WithOrganizer(new UserBuilder().WithId(48).Build(), new DateOnly())
-                                             .WithParticipant(new UserBuilder().WithId(49).Build(),
+                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                             .WithParticipant(new UserBuilder(49).Build(),
                                                               ConfirmationStatus.Proposed,
                                                               new DateOnly(),
                                                               null)
-                                             .WithParticipant(new UserBuilder().WithId(50).Build(),
+                                             .WithParticipant(new UserBuilder(50).Build(),
                                                               ConfirmationStatus.Pending,
                                                               new DateOnly(),
                                                               null)
-                                             .WithParticipant(new UserBuilder().WithId(51).Build(),
+                                             .WithParticipant(new UserBuilder(51).Build(),
                                                               ConfirmationStatus.Pending,
                                                               new DateOnly(),
                                                               null)
