@@ -71,7 +71,7 @@ public class StartSchedulingProcessOfProposedEvents
         EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
                                               .WithEventId(1)
                                               .WithEventCollaboratorRole(EventCollaboratorRole.Participant)
-                                              .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                              .WithConfirmationStatus(ConfirmationStatus.Proposed)
                                               .WithEventDate(new DateOnly(2024, 5, 31))
                                               .WithUser(new UserBuilder(1).Build())
                                               .Build();
@@ -79,7 +79,7 @@ public class StartSchedulingProcessOfProposedEvents
         _events[0].EventCollaborators.Add(new EventCollaboratorBuilder()
                                           .WithEventId(1)
                                           .WithEventCollaboratorRole(EventCollaboratorRole.Participant)
-                                          .WithConfirmationStatus(ConfirmationStatus.Accept)
+                                          .WithConfirmationStatus(ConfirmationStatus.Proposed)
                                           .WithEventDate(new DateOnly(2024, 5, 31))
                                           .WithProposedDuration(new Duration(1, 2))
                                           .WithUser(new UserBuilder(1).Build())
@@ -117,7 +117,10 @@ public class StartSchedulingProcessOfProposedEvents
 
         Event eventObj = new EventBuilder()
                         .WithDuration(new Duration(1, 3))
-                        .WithRecurrencePattern(new SingleInstanceRecurrencePattern())
+                        .WithRecurrencePattern(new SingleInstanceRecurrencePatternBuilder()
+                                               .WithStartDate(DateTime.Now.ConvertToDateOnly())
+                                               .WithEndDate(DateTime.Now.ConvertToDateOnly())
+                                               .Build())
                         .WithEventCollaborators(eventCollaborators)
                         .Build();
 
@@ -210,7 +213,11 @@ public class StartSchedulingProcessOfProposedEvents
 
         Event eventObj = new EventBuilder()
                         .WithDuration(new Duration(10, 15))
-                        .WithRecurrencePattern(new SingleInstanceRecurrencePattern())
+                        .WithRecurrencePattern(new SingleInstanceRecurrencePatternBuilder()
+                                               .WithStartDate(DateTime.Now.ConvertToDateOnly())
+                                               .WithEndDate(DateTime.Now.ConvertToDateOnly())
+                                               .Build()
+                                   )
                         .WithEventCollaborators(eventCollaborators)
                         .Build();
 

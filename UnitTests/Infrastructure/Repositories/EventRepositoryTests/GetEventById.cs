@@ -42,9 +42,9 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
 
         Event expectedResult = new EventBuilder()
                                .WithId(1)
-                               .WithTitle("Test")
-                               .WithDescription("Test")
-                               .WithLocation("Test")
+                               .WithTitle("Test1")
+                               .WithDescription("Test1")
+                               .WithLocation("Test1")
                                .WithDuration(new Duration(1, 2))
                                .WithRecurrencePattern(singleInstanceRecurrencePattern)
                                .WithEventCollaborators(eventCollaborators)

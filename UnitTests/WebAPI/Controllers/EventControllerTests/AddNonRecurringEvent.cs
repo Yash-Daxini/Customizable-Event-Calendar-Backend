@@ -60,7 +60,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnBadRequest_When_EventOverlaps()
     {
-        _eventService.AddNonRecurringEvent(_eventObj, 1).ThrowsAsyncForAnyArgs<EventOverlapException>();
+        _eventService.AddNonRecurringEvent(_eventObj, 1).ThrowsAsyncForAnyArgs(new EventOverlapException("Overlap"));
 
         IActionResult actionResult = await _eventController.AddNonRecurringEvent(1, _nonRecurringEventRequestDto);
 

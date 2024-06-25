@@ -41,7 +41,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         RecurringEventRequestDto recurringEventRequestDto = Substitute.For<RecurringEventRequestDto>();
 
-        _eventService.UpdateEvent(eventObj, 1).ThrowsAsyncForAnyArgs<EventOverlapException>();
+        _eventService.UpdateEvent(eventObj, 1).ThrowsAsyncForAnyArgs(new EventOverlapException("Overlap"));
 
         IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
 

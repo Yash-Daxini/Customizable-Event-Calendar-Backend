@@ -30,9 +30,9 @@ public class EventRepositoryDBContext
             dbContextEvent.Events.Add(new()
             {
                 Id = 1,
-                Title = "Test",
-                Description = "Test",
-                Location = "Test",
+                Title = "Test1",
+                Description = "Test1",
+                Location = "Test1",
                 UserId = 1,
                 StartHour = 1,
                 EndHour = 2,
@@ -50,7 +50,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -67,7 +67,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -84,7 +84,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -101,7 +101,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -118,7 +118,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -135,7 +135,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -153,7 +153,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -171,7 +171,7 @@ public class EventRepositoryDBContext
                 Title = "Test1",
                 Description = "Test1",
                 Location = "Test1",
-                UserId = 2,
+                UserId = 1,
                 StartHour = 2,
                 EndHour = 3,
                 StartDate = new DateOnly(2024, 6, 7),
@@ -198,7 +198,7 @@ public class EventRepositoryDBContext
             {
                 Id = 2,
                 EventId = 2,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
@@ -209,7 +209,7 @@ public class EventRepositoryDBContext
             {
                 Id = 3,
                 EventId = 2,
-                UserId = 3,
+                UserId = 2,
                 EventCollaboratorRole = "Participant",
                 ConfirmationStatus = "Pending",
                 ProposedStartHour = null,
@@ -220,7 +220,7 @@ public class EventRepositoryDBContext
             {
                 Id = 4,
                 EventId = 3,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
@@ -231,7 +231,7 @@ public class EventRepositoryDBContext
             {
                 Id = 5,
                 EventId = 4,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
@@ -242,7 +242,7 @@ public class EventRepositoryDBContext
             {
                 Id = 6,
                 EventId = 5,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
@@ -253,7 +253,7 @@ public class EventRepositoryDBContext
             {
                 Id = 7,
                 EventId = 6,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
@@ -264,18 +264,7 @@ public class EventRepositoryDBContext
             {
                 Id = 8,
                 EventId = 7,
-                UserId = 2,
-                EventCollaboratorRole = "Organizer",
-                ConfirmationStatus = "Accept",
-                ProposedStartHour = null,
-                ProposedEndHour = null,
-                EventDate = new DateOnly(2024, 6, 7)
-            });
-            dbContextEvent.EventCollaborators.Add(new()
-            {
-                Id = 9,
-                EventId = 8,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
@@ -286,18 +275,7 @@ public class EventRepositoryDBContext
             {
                 Id = 10,
                 EventId = 8,
-                UserId = 2,
-                EventCollaboratorRole = "Organizer",
-                ConfirmationStatus = "Accept",
-                ProposedStartHour = 3,
-                ProposedEndHour = 4,
-                EventDate = new DateOnly(2024, 6, 7)
-            });
-            dbContextEvent.EventCollaborators.Add(new()
-            {
-                Id = 11,
-                EventId = 9,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
@@ -308,9 +286,20 @@ public class EventRepositoryDBContext
             {
                 Id = 12,
                 EventId = 9,
-                UserId = 2,
+                UserId = 1,
                 EventCollaboratorRole = "Organizer",
                 ConfirmationStatus = "Accept",
+                ProposedStartHour = null,
+                ProposedEndHour = null,
+                EventDate = new DateOnly(2024, 6, 7)
+            });
+            dbContextEvent.EventCollaborators.Add(new()
+            {
+                Id = 13,
+                EventId = 9,
+                UserId = 2,
+                EventCollaboratorRole = "Participant",
+                ConfirmationStatus = "Proposed",
                 ProposedStartHour = 3,
                 ProposedEndHour = 4,
                 EventDate = new DateOnly(2024, 6, 7)

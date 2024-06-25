@@ -98,6 +98,36 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
+    public async Task Should_AddEventAndReturnEventId_When_EventIsDailyRecurringWithWeekDay()
+    {
+        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+
+        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+
+        DailyRecurrencePattern dailyRecurrencePattern = new DailyRecurrencePatternBuilder()
+                                                        .WithStartDate(new DateOnly(2024, 6, 8))
+                                                        .WithEndDate(new DateOnly(2024, 6, 8))
+                                                        .WithInterval(1)
+                                                        .WithByWeekDay([1,2])
+                                                        .Build();
+
+        Event eventToAdd = new EventBuilder()
+                           .WithTitle("Test2")
+                           .WithDescription("Test2")
+                           .WithLocation("Test2")
+                           .WithDuration(new Duration(3, 4))
+                           .WithRecurrencePattern(dailyRecurrencePattern)
+                           .WithEventCollaborators(_eventCollaborators)
+                           .Build();
+
+        int eventId = await eventRepository.Add(eventToAdd);
+
+        eventToAdd.Id = eventId;
+
+        eventId.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
     public async Task Should_AddEventAndReturnEventId_When_EventIsWeeklyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
