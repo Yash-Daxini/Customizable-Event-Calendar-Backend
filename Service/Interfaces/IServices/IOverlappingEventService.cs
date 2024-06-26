@@ -4,5 +4,5 @@ namespace Core.Interfaces.IServices;
 
 public interface IOverlappingEventService
 {
-    public string? GetOverlappedEventInformation(Event eventForVerify, List<Event> events);
+    public void CheckOverlap(Event eventForVerify, List<Event> events);
 }

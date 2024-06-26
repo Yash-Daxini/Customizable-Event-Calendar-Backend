@@ -1,17 +1,18 @@
 ﻿using System.Text;
 using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.IServices;
 
 namespace Core.Services;
 
 public class OverlapEventService : IOverlappingEventService
 {
-    public string? GetOverlappedEventInformation(Event eventForVerify, List<Event> events)
+    public void CheckOverlap(Event eventForVerify, List<Event> events)
     {
         Dictionary<Event, DateOnly> overlapEventByDate = [];
 
-        if(eventForVerify is null || events.Count is 0)
-            return null;
+        if (eventForVerify is null || events.Count is 0)
+            return;
 
         foreach (var existingEvent in events)
         {
@@ -23,9 +24,10 @@ public class OverlapEventService : IOverlappingEventService
                 overlapEventByDate.Add(existingEvent, (DateOnly)matchedDate);
         }
 
-        return overlapEventByDate.Count == 0
-               ? null
-               : GetOverlapMessage(eventForVerify, overlapEventByDate);
+        string overlapInformation = GetOverlapMessage(eventForVerify, overlapEventByDate);
+
+        if (overlapEventByDate.Count is not 0)
+            throw new EventOverlapException($" {overlapInformation}");
     }
 
     private string GetOverlapMessage(Event CheckingEvent, Dictionary<Event, DateOnly> OverlappingEventsByDate)

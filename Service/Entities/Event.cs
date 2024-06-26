@@ -21,10 +21,10 @@ public class Event : IEntity
 
     public User? GetEventOrganizer()
     {
-        EventCollaborator? eventCollaborator = EventCollaborators
-                                              ?.FirstOrDefault(eventCollaborator => eventCollaborator.IsOrganizer());
-
-        return eventCollaborator?.User;
+        return EventCollaborators
+               ?.FirstOrDefault(eventCollaborator => eventCollaborator
+                                                     .IsOrganizer())
+               ?.User;
     }
 
     public List<EventCollaborator> GetEventInvitees()
@@ -64,14 +64,19 @@ public class Event : IEntity
             return null;
 
         List<DateOnly> eventDates = EventCollaborators
-                                    .Select(eventCollaborator => eventCollaborator.EventDate)
+                                    .Select(eventCollaborator => 
+                                            eventCollaborator.EventDate)
                                     .ToList();
 
-        List<DateOnly> currentEventDates = currentEvent.EventCollaborators
-                                                       .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)
-                                                       .ToList();
+        List<DateOnly> currentEventDates = currentEvent
+                                           .EventCollaborators
+                                           .Select(eventCollaboratorByDate => 
+                                                   eventCollaboratorByDate.EventDate)
+                                           .ToList();
 
-        DateOnly matchedDate = eventDates.Intersect(currentEventDates).FirstOrDefault();
+        DateOnly matchedDate = eventDates
+                               .Intersect(currentEventDates)
+                               .FirstOrDefault();
 
         return matchedDate == default
                ? null
@@ -84,7 +89,8 @@ public class Event : IEntity
             return [];
 
         return [.. EventCollaborators
-                  .Where(eventCollaborator => eventCollaborator.EventDate == eventDate)];
+                  .Where(eventCollaborator => eventCollaborator.EventDate
+                                              == eventDate)];
     }
 
     public bool IsUserCollaboratedOnGivenDate(int userId, DateOnly eventDate)
@@ -101,7 +107,8 @@ public class Event : IEntity
 
         foreach (var occurrence in occurrences)
         {
-            eventCollaborators.AddRange(EventCollaborators.Select(eventCollaborator => new EventCollaborator()
+            eventCollaborators.AddRange(EventCollaborators
+                              .Select(eventCollaborator => new EventCollaborator()
             {
                 Id = eventCollaborator.Id,
                 EventId = eventCollaborator.EventId,

@@ -28,7 +28,7 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnActionResultNotFound_When_UserWithIdNotAvailable()
     {
-        _userService.GetUserById(1).ThrowsForAnyArgs<NotFoundException>();
+        _userService.GetUserById(1).ThrowsForAnyArgs(new NotFoundException(""));
 
         IActionResult actionResult = await _userController.GetUserById(1);
 

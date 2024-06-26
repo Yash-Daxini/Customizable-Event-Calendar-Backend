@@ -9,6 +9,7 @@ using FluentAssertions;
 using Core.Entities.RecurrecePattern;
 using Core.Entities.Enums;
 using UnitTests.Builders;
+using NSubstitute.ExceptionExtensions;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -66,13 +67,11 @@ public class UpdateEvent
 
         _eventService.GetEventById(1, 48).Returns(eventObj);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsNullForAnyArgs();
-
         await _eventService.UpdateEvent(eventObj, 48);
 
         await _eventRepository.Received().Update(eventObj);
 
-        _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.ReceivedWithAnyArgs().CheckOverlap(eventObj, _events);
     }
 
     [Fact]
@@ -96,7 +95,8 @@ public class UpdateEvent
 
         _eventService.GetEventById(1, 48).Returns(eventObj);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
+        _overlappingEventService.WhenForAnyArgs(e => e.CheckOverlap(eventObj, _events))
+                     .Do(e => { throw new EventOverlapException("Overlaps"); });
 
         var action = async () => await _eventService.UpdateEvent(eventObj, 48);
 
@@ -104,7 +104,7 @@ public class UpdateEvent
 
         await _eventRepository.DidNotReceive().Update(eventObj);
 
-        _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.ReceivedWithAnyArgs().CheckOverlap(eventObj, _events);
     }
 
     [Fact]
@@ -128,7 +128,8 @@ public class UpdateEvent
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("");
+        _overlappingEventService.WhenForAnyArgs(e => e.CheckOverlap(eventObj, _events))
+                     .Do(e => { throw new EventOverlapException("Overlap"); });
 
         var action = async () => await _eventService.UpdateEvent(eventObj, 48);
 
@@ -150,6 +151,6 @@ public class UpdateEvent
 
         await _eventRepository.DidNotReceive().Add(eventObj);
 
-        _overlappingEventService.DidNotReceive().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.DidNotReceive().CheckOverlap(eventObj, _events);
     }
 }

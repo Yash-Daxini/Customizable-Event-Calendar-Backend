@@ -25,14 +25,17 @@ public class EventService : IEventService
         _sharedCalendarService = sharedCalendarService;
     }
 
-    public async Task<List<Event>> GetAllEventsByUserId(int userId) => await _eventRepository.GetAllEventsByUserId(userId);
+    public async Task<List<Event>> GetAllEventsByUserId(int userId)
+    {
+        return await _eventRepository.GetAllEventsByUserId(userId);
+    }
 
     public async Task<List<Event>> GetAllEventCreatedByUser(int userId)
     {
         List<Event> events = await _eventRepository.GetAllEventsByUserId(userId);
 
         return [..events
-                 .Where(eventObj => eventObj.GetEventOrganizer().Id == userId)];
+                 .Where(eventObj => eventObj.GetEventOrganizer()?.Id == userId)];
     }
 
     public async Task<Event> GetEventById(int eventId, int userId)
@@ -48,7 +51,7 @@ public class EventService : IEventService
     public async Task<int> AddNonRecurringEvent(Event eventModel, int userId)
     {
         if (eventModel is null)
-            throw new NullArgumentException($" Event can't be null");
+            throw new NullArgumentException($"Event can't be null");
 
         return await AddEvent(eventModel, userId);
     }
@@ -56,7 +59,7 @@ public class EventService : IEventService
     public async Task<int> AddEvent(Event eventModel, int userId)
     {
         if (eventModel is null)
-            throw new NullArgumentException($" Event can't be null");
+            throw new NullArgumentException($"Event can't be null");
 
         CreateDateWiseEventCollaboratorList(eventModel);
 
@@ -71,7 +74,7 @@ public class EventService : IEventService
     public async Task UpdateEvent(Event eventModel, int userId)
     {
         if (eventModel is null)
-            throw new NullArgumentException($" Event can't be null");
+            throw new NullArgumentException($"Event can't be null");
 
         await GetEventById(eventModel.Id, userId);
 
@@ -79,7 +82,8 @@ public class EventService : IEventService
 
         await HandleEventOverlap(eventModel, userId);
 
-        await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(eventModel.Id, userId);
+        await _eventCollaboratorService
+              .DeleteEventCollaboratorsByEventId(eventModel.Id, userId);
 
         await _eventRepository.Update(eventModel);
     }
@@ -90,7 +94,8 @@ public class EventService : IEventService
             throw new ArgumentException($"Invalid event id");
 
         Event? eventObj = await _eventRepository.GetEventById(eventId)
-                          ?? throw new NotFoundException($"Event with id ${eventId} not present");
+                          ?? throw new NotFoundException($"Event with " +
+                                       $"id ${eventId} not present");
 
         await _eventRepository.Delete(eventObj);
     }
@@ -111,19 +116,26 @@ public class EventService : IEventService
                      .ToList();
     }
 
-    public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate)
+    public async Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId,
+                                                                     DateOnly startDate,
+                                                                     DateOnly endDate)
     {
         if (startDate > endDate)
-            throw new ArgumentException("start date can't be greater than end date.");
+            throw new ArgumentException("start date can't be " +
+                      "greater than end date.");
 
-        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDate, endDate);
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId,
+                                                                       startDate,
+                                                                       endDate);
     }
 
     public async Task<List<Event>> GetEventsForDailyViewByUserId(int userId)
     {
         DateOnly today = DateTime.Today.ConvertToDateOnly();
 
-        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, today, today);
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId,
+                                                                       today,
+                                                                       today);
     }
 
     public async Task<List<Event>> GetEventsForWeeklyViewByUserId(int userId)
@@ -131,7 +143,9 @@ public class EventService : IEventService
         DateOnly startDateOfWeek = DateTime.Today.GetStartDateOfWeek();
         DateOnly endDateOfWeek = DateTime.Today.GetEndDateOfWeek();
 
-        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDateOfWeek, endDateOfWeek);
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId,
+                                                                       startDateOfWeek,
+                                                                       endDateOfWeek);
     }
 
     public async Task<List<Event>> GetEventsForMonthlyViewByUserId(int userId)
@@ -139,7 +153,9 @@ public class EventService : IEventService
         DateOnly startDateOfMonth = DateTime.Today.GetStartDateOfMonth();
         DateOnly endDateOfMonth = DateTime.Today.GetEndDateOfMonth();
 
-        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId, startDateOfMonth, endDateOfMonth);
+        return await _eventRepository.GetEventsWithinGivenDateByUserId(userId,
+                                                                       startDateOfMonth,
+                                                                       endDateOfMonth);
     }
 
     public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)
@@ -147,7 +163,8 @@ public class EventService : IEventService
         if (sharedCalendarId is <= 0)
             throw new ArgumentException($"Invalid shared calendar id");
 
-        SharedCalendar? sharedCalendar = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
+        SharedCalendar? sharedCalendar = await _sharedCalendarService
+                                               .GetSharedCalendarById(sharedCalendarId);
 
         if (sharedCalendar == null) return [];
 
@@ -161,11 +178,7 @@ public class EventService : IEventService
         events = [..events
                    .Where(eventObj => eventObj.Id != eventModel.Id)];
 
-        string? overlapEventInformation = _overlappingEventService
-                                          .GetOverlappedEventInformation(eventModel, events);
-
-        if (overlapEventInformation is not null)
-            throw new EventOverlapException($"{overlapEventInformation}");
+        _overlappingEventService.CheckOverlap(eventModel, events);
     }
 
     private void CreateDateWiseEventCollaboratorList(Event eventModel)

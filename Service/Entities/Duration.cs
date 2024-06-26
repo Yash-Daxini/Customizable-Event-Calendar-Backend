@@ -27,8 +27,13 @@ public class Duration
 
     private string? ConvertTo12HourFormat(int hour)
     {
-        string abbreviation = hour >= 12 && hour != 24 ? "PM" : "AM";
-        hour = hour % 12 == 0 ? 12 : hour % 12;
+        string abbreviation = hour >= 12 && hour != 24 
+                              ? "PM" 
+                              : "AM";
+
+        hour = hour % 12 == 0 
+               ? 12 
+               : hour % 12;
 
         return $"{hour} {abbreviation}";
     }
@@ -49,9 +54,13 @@ public class Duration
     {
         if (duration is null) return false;
 
-        return (this.StartHour >= duration.StartHour && this.StartHour < duration.EndHour)
-            || (this.EndHour > duration.StartHour && this.EndHour <= duration.EndHour)
-            || (duration.StartHour >= this.StartHour && duration.StartHour < this.EndHour)
-            || (duration.EndHour > this.StartHour && duration.EndHour <= this.EndHour);
+        return (this.StartHour >= duration.StartHour 
+                && this.StartHour < duration.EndHour)
+            || (this.EndHour > duration.StartHour 
+                && this.EndHour <= duration.EndHour)
+            || (duration.StartHour >= this.StartHour 
+                && duration.StartHour < this.EndHour)
+            || (duration.EndHour > this.StartHour 
+                && duration.EndHour <= this.EndHour);
     }
 }

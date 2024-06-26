@@ -4,7 +4,11 @@ namespace Core.Entities;
 
 public class SharedCalendar : IEntity
 {
-    public SharedCalendar(int Id, User Sender, User Receiver, DateOnly FromDate, DateOnly ToDate)
+    public SharedCalendar(int Id, 
+                          User Sender, 
+                          User Receiver, 
+                          DateOnly FromDate, 
+                          DateOnly ToDate)
     {
         if (!ValidateProperties(Id, Sender, Receiver, FromDate, ToDate))
             throw new ArgumentException("Invalid property !");
@@ -16,7 +20,11 @@ public class SharedCalendar : IEntity
         this.ToDate = ToDate;
     }
 
-    private bool ValidateProperties(int id, User sender, User receiver, DateOnly fromDate, DateOnly toDate)
+    private bool ValidateProperties(int id, 
+                                    User sender, 
+                                    User receiver, 
+                                    DateOnly fromDate, 
+                                    DateOnly toDate)
     {
         return id >= 0
             && sender is not null

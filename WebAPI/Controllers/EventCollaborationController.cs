@@ -27,7 +27,9 @@ public class EventCollaborationController : ControllerBase
     {
         try
         {
-            await _sharedEventCollaborationService.AddCollaborator(_mapper.Map<EventCollaborator>(eventCollaborationRequestDto));
+            EventCollaborator eventCollaborator = _mapper.Map<EventCollaborator>(eventCollaborationRequestDto);
+
+            await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);
 
             return Ok(new { message = "Successfully collaborated !" });
         }

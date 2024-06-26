@@ -10,14 +10,14 @@ public class WeeklyRecurrencePattern : RecurrencePattern
 
         List<int> weekDays = [.. ByWeekDay ?? ([])];
 
-        DateOnly startDateOfWeek = StartDate.GetStartDateOfWeek();
+        DateOnly startDateOfWeek = StartDate.ConvertToDateTime()
+                                            .GetStartDateOfWeek();
 
         foreach (var weekDay in weekDays)
         {
-            occurrences = [.. occurrences.Concat(GetOccurrencesOfWeekDay(startDateOfWeek, weekDay))];
+            occurrences.AddRange(GetOccurrencesOfWeekDay(startDateOfWeek,
+                                                         weekDay));
         }
-
-        occurrences.Sort();
 
         return occurrences;
     }
@@ -33,19 +33,18 @@ public class WeeklyRecurrencePattern : RecurrencePattern
         return (int)difference.TotalDays / (7 * Interval) + 1;
     }
 
-    private List<DateOnly> GetOccurrencesOfWeekDay(DateOnly startDateOfWeek, int weekDay)
+    private List<DateOnly> GetOccurrencesOfWeekDay(DateOnly startDateOfWeek,
+                                                   int weekDay)
     {
-        DateOnly startDateOfEvent = StartDate;
-        DateOnly endDateOfEvent = EndDate;
-
-        DateOnly startDateForSpecificWeekday = startDateOfWeek.AddDays(weekDay - 1);
-
-        int interval = Interval;
+        DateOnly startDateForSpecificWeekday = startDateOfWeek
+                                               .AddDays(weekDay - 1);
 
         int totalOccurrences = GetOccurrencesCount();
 
         return [..Enumerable.Range(0, totalOccurrences)
-                            .Select(weekOffset => startDateForSpecificWeekday.AddDays(7 * weekOffset * interval))
-                            .Where(date => date.IsDateInRange(startDateOfEvent,endDateOfEvent))];
+                            .Select(weekOffset => startDateForSpecificWeekday
+                                                  .AddDays(7 * weekOffset * Interval))
+                            .Where(date => date.IsDateInRange(StartDate,
+                                                              EndDate))];
     }
 }

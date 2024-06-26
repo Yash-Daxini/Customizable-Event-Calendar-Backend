@@ -55,7 +55,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         RecurringEventRequestDto recurringEventRequestDto = Substitute.For<RecurringEventRequestDto>();
 
-        _eventService.UpdateEvent(eventObj, 1).ThrowsAsyncForAnyArgs<NotFoundException>();
+        _eventService.UpdateEvent(eventObj, 1).ThrowsForAnyArgs(new NotFoundException(""));
 
         IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
 

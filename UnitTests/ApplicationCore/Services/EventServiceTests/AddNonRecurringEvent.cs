@@ -58,8 +58,6 @@ public class AddNonRecurringEvent
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsNullForAnyArgs();
-
         _eventRepository.Add(eventObj).Returns(1);
 
         int id = await _eventService.AddNonRecurringEvent(eventObj, 48);
@@ -68,7 +66,7 @@ public class AddNonRecurringEvent
 
         await _eventRepository.Received().Add(eventObj);
 
-        _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.ReceivedWithAnyArgs().CheckOverlap(eventObj, _events);
     }
 
     [Fact]
@@ -85,7 +83,8 @@ public class AddNonRecurringEvent
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
+        _overlappingEventService.WhenForAnyArgs(e => e.CheckOverlap(eventObj, _events))
+             .Do(e => { throw new EventOverlapException("Overlaps"); });
 
         _eventRepository.Add(eventObj).Throws(new EventOverlapException("Overlap"));
 
@@ -95,7 +94,7 @@ public class AddNonRecurringEvent
 
         await _eventRepository.DidNotReceive().Add(eventObj);
 
-        _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.ReceivedWithAnyArgs().CheckOverlap(eventObj, _events);
     }
 
     [Fact]
@@ -113,6 +112,6 @@ public class AddNonRecurringEvent
 
         await _eventRepository.DidNotReceive().Add(eventObj);
 
-        _overlappingEventService.DidNotReceive().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.DidNotReceive().CheckOverlap(eventObj, _events);
     }
 }

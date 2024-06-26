@@ -24,10 +24,12 @@ public class SharedCalendarService : ISharedCalendarService
         if (sharedCalendarId is <= 0)
             throw new ArgumentException($"Invalid shared calendar id");
 
-        SharedCalendar? sharedCalendar = await _sharedCalendarRepository.GetSharedCalendarById(sharedCalendarId);
+        SharedCalendar? sharedCalendar = await _sharedCalendarRepository
+                                               .GetSharedCalendarById(sharedCalendarId);
 
         return sharedCalendar is null
-               ? throw new NotFoundException($"SharedCalendar with id {sharedCalendarId} not found.")
+               ? throw new NotFoundException($"SharedCalendar with id" +
+                 $" {sharedCalendarId} not found.")
                : sharedCalendar;
     }
 

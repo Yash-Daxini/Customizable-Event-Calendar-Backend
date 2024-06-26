@@ -34,7 +34,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnNotFound_When_EventNotAvailableWithId()
     {
-        _eventService.DeleteEvent(1, 1).ThrowsAsyncForAnyArgs<NotFoundException>();
+        _eventService.DeleteEvent(1, 1).ThrowsAsyncForAnyArgs(new NotFoundException(""));
 
         IActionResult actionResult = await _eventController.DeleteEvent(1, 1);
 

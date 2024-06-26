@@ -1,9 +1,5 @@
 ﻿namespace Core.Exceptions;
 
-public class NullArgumentException : Exception
+public class NullArgumentException(string message) : Exception(message)
 {
-    public NullArgumentException(string message) : base(message)
-    {
-
-    }
 }

@@ -1,9 +1,5 @@
 ﻿namespace Core.Exceptions;
 
-public class EventOverlapException : Exception
+public class EventOverlapException(string message) : Exception(message)
 {
-    public EventOverlapException(string message) : base(message)
-    {
-        
-    }
 }

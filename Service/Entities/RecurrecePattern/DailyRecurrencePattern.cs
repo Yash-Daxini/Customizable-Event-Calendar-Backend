@@ -11,12 +11,11 @@ public class DailyRecurrencePattern : RecurrencePattern
         if (Interval == 0)
             return [];
 
-        int interval = Interval;
-
         int totalOccurrences = GetOccurrencesCount();
 
         return [..Enumerable.Range(0, totalOccurrences)
-                            .Select(weekOffset => StartDate.AddDays(weekOffset * interval))
+                            .Select(weekOffset => StartDate
+                                                  .AddDays(weekOffset * Interval))
                             .Where(date => IsValidDateForDailyEvent(date, days))];
     }
 

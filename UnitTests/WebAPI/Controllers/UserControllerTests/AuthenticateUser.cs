@@ -61,7 +61,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Password = "c",
         };
 
-        _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs<NotFoundException>();
+        _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs(new NotFoundException(""));
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 
@@ -78,7 +78,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
             Password = "c",
         };
 
-        _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs<AuthenticationFailedException>();
+        _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs(new AuthenticationFailedException(""));
 
         IActionResult actionResult = await _userController.LogIn(authenticateRequestDto);
 

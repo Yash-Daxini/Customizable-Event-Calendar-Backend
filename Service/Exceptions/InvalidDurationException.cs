@@ -1,9 +1,5 @@
 ﻿namespace Core.Exceptions;
 
-public class InvalidDurationException : Exception
+public class InvalidDurationException(string message) : Exception(message)
 {
-    public InvalidDurationException(string message) : base(message)
-    {
-        
-    }
 }

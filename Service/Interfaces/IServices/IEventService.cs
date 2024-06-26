@@ -18,7 +18,9 @@ public interface IEventService
 
     public Task DeleteEvent(int eventId, int userId);
 
-    public Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId, DateOnly startDate, DateOnly endDate);
+    public Task<List<Event>> GetEventsWithinGivenDatesByUserId(int userId,
+                                                               DateOnly startDate,
+                                                               DateOnly endDate);
 
     public Task<List<Event>> GetProposedEventsByUserId(int userId);
 

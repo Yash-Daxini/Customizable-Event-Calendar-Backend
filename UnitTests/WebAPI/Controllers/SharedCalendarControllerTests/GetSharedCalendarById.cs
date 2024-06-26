@@ -54,7 +54,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnBadRequest_When_SharedCalendarNotAvailableWithId()
     {
-        _sharedCalendarService.GetSharedCalendarById(1).Throws<NotFoundException>();
+        _sharedCalendarService.GetSharedCalendarById(1).Throws(new NotFoundException(""));
 
         IActionResult actionResult = await _sharedCalendarController.GetSharedCalendarById(1);
 

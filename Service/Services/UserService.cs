@@ -3,7 +3,6 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Identity;
-using ArgumentNullException = Core.Exceptions.NullArgumentException;
 
 namespace Core.Services;
 
@@ -31,7 +30,7 @@ public class UserService : IUserService
     public async Task<IdentityResult> SignUp(User user)
     {
         if (user is null)
-            throw new ArgumentNullException($" Event collaborator can't be null");
+            throw new NullArgumentException($" Event collaborator can't be null");
 
         return await _userRepository.SignUp(user);
     }
@@ -39,7 +38,7 @@ public class UserService : IUserService
     public async Task<IdentityResult> UpdateUser(User user)
     {
         if (user is null)
-            throw new ArgumentNullException($" Event collaborator can't be null");
+            throw new NullArgumentException($" Event collaborator can't be null");
 
         User? userById = await _userRepository.GetUserById(user.Id);
 

@@ -1,14 +1,5 @@
 ﻿namespace Core.Exceptions;
 
-public class UserAlreadyCollaboratedException : Exception
+public class UserAlreadyCollaboratedException(string message) : Exception(message)
 {
-    public UserAlreadyCollaboratedException(string message) : base(message)
-    {
-        
-    }
-
-    public UserAlreadyCollaboratedException() : base()
-    {
-        
-    }
 }

@@ -10,7 +10,7 @@ public class EventGetEventOrganizer
     [Fact]
     public void Should_ReturnOrganizerOfEvent_When_MultipleEventCollaboratorsPresent()
     {
-        User user1 =  new UserBuilder(48)
+        User user1 = new UserBuilder(48)
                      .WithName("a")
                      .WithEmail("a@gmail.com")
                      .WithPassword("a")
@@ -23,7 +23,7 @@ public class EventGetEventOrganizer
                      .Build();
 
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                      .WithOrganizer(user1,new DateOnly())
+                                                      .WithOrganizer(user1, new DateOnly())
                                                       .WithParticipant(user2,
                                                                        ConfirmationStatus.Accept,
                                                                        new DateOnly(),
@@ -59,6 +59,31 @@ public class EventGetEventOrganizer
         User? actualUser = eventObj.GetEventOrganizer();
 
         actualUser.Should().BeEquivalentTo(user1);
+    }
+
+    [Fact]
+    public void Should_ReturnNull_When_OrganizerNotPresent()
+    {
+        User user1 = new UserBuilder(48)
+                     .WithName("a")
+                     .WithEmail("a@gmail.com")
+                     .WithPassword("a")
+                     .Build();
+
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
+                                                      .WithParticipant(user1,
+                                                                       ConfirmationStatus.Accept,
+                                                                       new DateOnly(),
+                                                                       null)
+                                                      .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
+
+        User? actualUser = eventObj.GetEventOrganizer();
+
+        actualUser.Should().BeNull();
     }
 
     [Fact]

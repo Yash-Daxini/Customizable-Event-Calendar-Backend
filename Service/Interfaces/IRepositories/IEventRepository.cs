@@ -8,7 +8,9 @@ public interface IEventRepository : IRepository<Event>
 
     public Task<Event?> GetEventById(int eventId);
 
-    public Task<List<Event>> GetEventsWithinGivenDateByUserId(int userId, DateOnly startDate, DateOnly endDate);
+    public Task<List<Event>> GetEventsWithinGivenDateByUserId(int userId,
+                                                              DateOnly startDate, 
+                                                              DateOnly endDate);
 
     public Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar);
 }

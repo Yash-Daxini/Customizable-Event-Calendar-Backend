@@ -67,7 +67,8 @@ public class EventCollaboratorRepositoryDBContext
                 ConfirmationStatus = "Accept",
                 ProposedStartHour = null,
                 ProposedEndHour = null,
-                EventDate = new DateOnly(2024, 6, 7)
+                EventDate = new DateOnly(2024, 6, 7),
+                Event = null
             });
             dbContextEvent.EventCollaborators.Add(new()
             {

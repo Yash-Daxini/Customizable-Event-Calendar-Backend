@@ -38,7 +38,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteUserAndReturnActionResult_When_UserNotAvailableWithId()
     {
-        _userService.DeleteUser(1).Throws<NotFoundException>();
+        _userService.DeleteUser(1).Throws(new NotFoundException(""));
 
         IActionResult actionResult = await _userController.DeleteUser(1);
 

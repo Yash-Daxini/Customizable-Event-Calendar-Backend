@@ -24,23 +24,30 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
         bool isAlreadyCollaborated = await IsEventAlreadyCollaborated(eventCollaborator);
 
         if (isAlreadyCollaborated)
-            throw new UserAlreadyCollaboratedException("Already collaborated in this event");
+            throw new UserAlreadyCollaboratedException("Already collaborated" +
+                  " in this event");
 
         List<Event> overlapEvents = await GetCollaborationOverlaps(eventCollaborator);
 
+        string overlapMessage = GetOverlapMessage(eventCollaborator.EventDate,
+                                                  overlapEvents);
+
         if (overlapEvents.Count > 0)
-            throw new CollaborationOverlapException(GetOverlapMessage(eventCollaborator.EventDate, overlapEvents));
+            throw new CollaborationOverlapException(overlapMessage);
 
         await _eventCollaboratorService.AddEventCollaborator(eventCollaborator);
     }
 
     private static string GetOverlapMessage(DateOnly date, List<Event> overlapEvents)
     {
-        StringBuilder overlapMessage = new($"Collaboration overlaps with following events on {date} :- ");
+        StringBuilder overlapMessage = new($"Collaboration overlaps with " +
+                                           $"following events on {date} :- ");
 
         foreach (var eventObj in overlapEvents)
         {
-            overlapMessage.AppendLine($"Event Name :- {eventObj.Title} Time :- {eventObj.Duration.GetDurationInFormat()}");
+            overlapMessage.AppendLine($"Event Name :- {eventObj.Title} " +
+                                      $"Time :- {eventObj.Duration
+                                                 .GetDurationInFormat()}");
         }
 
         return overlapMessage.ToString();
@@ -48,7 +55,8 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
 
     private async Task<List<Event>> GetCollaborationOverlaps(EventCollaborator eventCollaborator)
     {
-        Event eventToCollaborate = await _eventService.GetEventById(eventCollaborator.EventId, eventCollaborator.User.Id);
+        Event eventToCollaborate = await _eventService.GetEventById(eventCollaborator.EventId,
+                                                                    eventCollaborator.User.Id);
 
         DateOnly selectedEventDate = eventCollaborator.EventDate;
 
@@ -56,16 +64,19 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
                                    .GetNonProposedEventsByUserId(eventCollaborator.User.Id);
 
         return [..events
-               .Where(eventModel => eventModel.IsUserCollaboratedOnGivenDate(eventCollaborator.User.Id,selectedEventDate)
+               .Where(eventModel => eventModel.IsUserCollaboratedOnGivenDate(eventCollaborator.User.Id,
+                                                                             selectedEventDate)
                                     && eventModel.Duration.IsOverlappingWith(eventToCollaborate.Duration))];
     }
 
     private async Task<bool> IsEventAlreadyCollaborated(EventCollaborator eventCollaborator)
     {
-        Event eventModelToCheckOverlap = await _eventService.GetEventById(eventCollaborator.EventId, eventCollaborator.User.Id);
+        Event eventModelToCheckOverlap = await _eventService.GetEventById(eventCollaborator.EventId,
+                                                                          eventCollaborator.User.Id);
 
         DateOnly selectedEventDate = eventCollaborator.EventDate;
 
-        return eventModelToCheckOverlap.IsUserCollaboratedOnGivenDate(eventCollaborator.User.Id, selectedEventDate);
+        return eventModelToCheckOverlap.IsUserCollaboratedOnGivenDate(eventCollaborator.User.Id,
+                                                                      selectedEventDate);
     }
 }

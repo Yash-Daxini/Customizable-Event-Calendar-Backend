@@ -4,7 +4,6 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders;
@@ -55,8 +54,6 @@ public class AddEvent
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsNullForAnyArgs();
-
         _eventRepository.Add(eventObj).Returns(1);
 
         int id = await _eventService.AddEvent(eventObj, 48);
@@ -65,7 +62,7 @@ public class AddEvent
 
         await _eventRepository.Received().Add(eventObj);
 
-        _overlappingEventService.ReceivedWithAnyArgs().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.ReceivedWithAnyArgs().CheckOverlap(eventObj, _events);
     }
 
     [Fact]
@@ -82,28 +79,8 @@ public class AddEvent
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
 
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("Overlaps");
-
-        var action = async () => await _eventService.AddEvent(eventObj, 48);
-
-        await action.Should().ThrowAsync<EventOverlapException>();
-    }
-
-    [Fact]
-    public async Task Should_ThrowException_When_EventOverlapsWithEmptyMessage()
-    {
-        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
-                                                     .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
-                                                     .Build();
-
-        Event eventObj = new EventBuilder()
-                         .WithRecurrencePattern(new DailyRecurrencePattern())
-                         .WithEventCollaborators(eventCollaborators)
-                         .Build();
-
-        _eventService.GetAllEventsByUserId(48).Returns(_events);
-
-        _overlappingEventService.GetOverlappedEventInformation(eventObj, _events).ReturnsForAnyArgs("");
+        _overlappingEventService.WhenForAnyArgs(e => e.CheckOverlap(eventObj, _events))
+                                .Do(e => { throw new EventOverlapException("Overlaps"); });
 
         var action = async () => await _eventService.AddEvent(eventObj, 48);
 
@@ -125,6 +102,6 @@ public class AddEvent
 
         await _eventRepository.DidNotReceive().Add(eventObj);
 
-        _overlappingEventService.DidNotReceive().GetOverlappedEventInformation(eventObj, _events);
+        _overlappingEventService.DidNotReceive().CheckOverlap(eventObj, _events);
     }
 }

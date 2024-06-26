@@ -27,12 +27,14 @@ public class EventCollaboratorService : IEventCollaboratorService
         if (eventCollaborator is null)
             throw new NullArgumentException($" Event collaborator can't be null");
 
-        EventCollaborator? eventCollaboratorById = await _eventCollaboratorRepository.GetEventCollaboratorById(eventCollaborator.Id);
+        EventCollaborator? eventCollaboratorById = await _eventCollaboratorRepository
+                                                         .GetEventCollaboratorById(eventCollaborator.Id);
 
         if (eventCollaboratorById is null)
             throw new NotFoundException($"Event collaborator with Id ${eventCollaborator.Id} not present!");
 
         eventCollaborator.SetEventCollaboratorRoleAsParticipant();
+
         await _eventCollaboratorRepository.Update(eventCollaborator);
     }
 
@@ -41,6 +43,7 @@ public class EventCollaboratorService : IEventCollaboratorService
         if (eventId is <= 0)
             throw new ArgumentException($"Invalid event id");
 
-        await _eventCollaboratorRepository.DeleteEventCollaboratorsByEventId(eventId);
+        await _eventCollaboratorRepository
+              .DeleteEventCollaboratorsByEventId(eventId);
     }
 }

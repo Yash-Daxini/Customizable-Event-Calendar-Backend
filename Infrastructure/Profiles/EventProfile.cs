@@ -31,7 +31,8 @@ public class EventProfile : Profile
 
     private int? MapMonthDay(dynamic recurrencePattern)
     {
-        if (recurrencePattern.Frequency == Frequency.Monthly || recurrencePattern.Frequency == Frequency.Yearly)
+        if (recurrencePattern.Frequency == Frequency.Monthly 
+            || recurrencePattern.Frequency == Frequency.Yearly)
             return recurrencePattern.ByMonthDay;
 
         return null;
@@ -39,7 +40,8 @@ public class EventProfile : Profile
 
     private int? MapWeekOrder(dynamic recurrencePattern)
     {
-        if (recurrencePattern.Frequency == Frequency.Monthly || recurrencePattern.Frequency == Frequency.Yearly)
+        if (recurrencePattern.Frequency == Frequency.Monthly 
+            || recurrencePattern.Frequency == Frequency.Yearly)
             return recurrencePattern.WeekOrder;
 
         return null;

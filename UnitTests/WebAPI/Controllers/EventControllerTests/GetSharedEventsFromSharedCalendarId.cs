@@ -33,7 +33,7 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
     [Fact]
     public async Task Should_ReturnNotFound_When_SharedCalendarNotAvailableWithId()
     {
-        _eventService.GetSharedEvents(1).Throws<NotFoundException>();
+        _eventService.GetSharedEvents(1).Throws(new NotFoundException(""));
 
         IActionResult actionResult = await _eventController.GetSharedEventsFromSharedCalendarId(1);
 

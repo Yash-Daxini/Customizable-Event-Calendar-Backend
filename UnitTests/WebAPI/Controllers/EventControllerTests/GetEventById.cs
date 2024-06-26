@@ -39,7 +39,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnNotFound_When_EventNotAvailableWithId()
     {
-        _eventService.GetEventById(1, 1).Throws<NotFoundException>();
+        _eventService.GetEventById(1, 1).Throws(new NotFoundException(""));
 
         IActionResult actionResult = await _eventController.GetEventById(1, 1);
 

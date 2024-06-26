@@ -53,7 +53,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         User userModel = Substitute.For<User>();
 
-        _userService.UpdateUser(userModel).ThrowsForAnyArgs<NotFoundException>();
+        _userService.UpdateUser(userModel).ThrowsForAnyArgs(new NotFoundException(""));
 
         IActionResult actionResult = await _userController.UpdateUser(userDto);
 

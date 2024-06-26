@@ -3,9 +3,9 @@ using Core.Entities;
 using Core.Entities.Enums;
 using Core.Interfaces.IServices;
 using Core.Services;
-using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders;
+using Core.Exceptions;
 
 namespace UnitTests.ApplicationCore.Services.OverlapEventServiceTests;
 
@@ -90,17 +90,16 @@ public class GetOverlapEventInformation
                                    .WithEventCollaborators(eventCollaborators)
                                    .Build();
 
-        StringBuilder expectedMessage = new($"2 overlaps with following events at {eventToCheckOverlap.Duration.GetDurationInFormat()} :-  ");
+        StringBuilder expectedMessage = new($" 2 overlaps with following events at {eventToCheckOverlap.Duration.GetDurationInFormat()} :-  ");
 
         expectedMessage.AppendLine($"Event Name : 1 , " +
                                    $"Date : {new DateOnly(2024, 6, 2)} , " +
                                    $"Duration : 5 AM - 6 AM");
 
-        string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
+        Action action = () => _overlappingEventService.CheckOverlap(eventToCheckOverlap, _events);
 
-        message.Should().NotBeNull();
-
-        message.Should().Be(expectedMessage.ToString());
+        action.Should().Throw<EventOverlapException>()
+              .WithMessage(expectedMessage.ToString());
     }
 
     [Fact]
@@ -120,7 +119,7 @@ public class GetOverlapEventInformation
                                    .WithEventCollaborators(eventCollaborators)
                                    .Build();
 
-        StringBuilder expectedMessage = new($"4 overlaps with following events at {eventToCheckOverlap.Duration.GetDurationInFormat()} :-  ");
+        StringBuilder expectedMessage = new($" 4 overlaps with following events at {eventToCheckOverlap.Duration.GetDurationInFormat()} :-  ");
 
         expectedMessage.AppendLine($"Event Name : 2 , " +
                                    $"Date : {new DateOnly(2024, 6, 2)} , " +
@@ -131,15 +130,14 @@ public class GetOverlapEventInformation
                                    $"Duration : 6 AM - 7 AM");
 
 
-        string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
+        Action action = () => _overlappingEventService.CheckOverlap(eventToCheckOverlap, _events);
 
-        message.Should().NotBeNull();
-
-        message.Should().Be(expectedMessage.ToString());
+        action.Should().Throw<EventOverlapException>()
+              .WithMessage(expectedMessage.ToString());
     }
 
     [Fact]
-    public void Should_ReturnNull_When_NonOverlapEvent()
+    public void Should_NotThrowException_When_NonOverlapEvent()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(2)
                                                       .WithOrganizer(new UserBuilder(1).Build(),
@@ -155,24 +153,24 @@ public class GetOverlapEventInformation
                                    .WithEventCollaborators(eventCollaborators)
                                    .Build();
 
-        string? message = _overlappingEventService.GetOverlappedEventInformation(eventToCheckOverlap, _events);
+        Action action = () => _overlappingEventService.CheckOverlap(eventToCheckOverlap, _events);
 
-        message.Should().BeNull();
+        action.Should().NotThrow<EventOverlapException>();
     }
 
     [Fact]
     public void Should_ReturnNull_When_EventToCheckOverlapIsNull()
     {
-        string? message = _overlappingEventService.GetOverlappedEventInformation(null, _events);
+        Action action = () => _overlappingEventService.CheckOverlap(null, _events);
 
-        message.Should().BeNull();
+        action.Should().NotThrow<EventOverlapException>();
     }
 
     [Fact]
     public void Should_ReturnNull_When_EventToCheckOverlapIsEmpty()
     {
-        string? message = _overlappingEventService.GetOverlappedEventInformation(null, []);
+        Action action = () => _overlappingEventService.CheckOverlap(null, []);
 
-        message.Should().BeNull();
+        action.Should().NotThrow<EventOverlapException>();
     }
 }
