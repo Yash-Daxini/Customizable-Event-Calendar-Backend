@@ -4,35 +4,42 @@ namespace Core.Services;
 
 public static class MutualTimeCalculatorService
 {
-    public static Duration FindMaximumMutualTimeBlock(int[] proposedHours,
+    public static Duration GetMaximumMutualTimeBlock(int[] proposedHours,
                                                       Event eventObj)
     {
         int max = proposedHours.Max();
         max = max > 1 ? max : -1;
-
-        int startHour = -1;
-        int endHour = -1;
-
         int timeBlock = eventObj.Duration.EndHour - eventObj.Duration.StartHour;
+
+
+        int prevStartHour = -1;
+        int prevEndHour = -1;
 
         for (int i = 0; i < proposedHours.Length; i++)
         {
-            if (proposedHours[i] == max && startHour == -1)
+            if (proposedHours[i] == max)
             {
-                GetTimeBlock(proposedHours, max, out startHour, out endHour, timeBlock, i);
+                GetTimeBlock(proposedHours, max, out int startHour, out int endHour, timeBlock, i);
+
+
+                if (prevEndHour - prevStartHour < endHour - startHour)
+                {
+                    prevStartHour = startHour;
+                    prevEndHour = endHour;
+                }
 
                 if ((endHour - startHour) == timeBlock)
                     break;
             }
         }
 
-        if (startHour == -1)
+        if (prevStartHour == -1)
         {
-            startHour = eventObj.Duration.StartHour;
-            endHour = eventObj.Duration.EndHour;
+            prevStartHour = eventObj.Duration.StartHour;
+            prevEndHour = eventObj.Duration.EndHour;
         }
 
-        return new Duration(startHour, endHour);
+        return new Duration(prevStartHour, prevEndHour);
 
     }
 

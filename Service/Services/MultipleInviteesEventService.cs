@@ -46,7 +46,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
     {
         int[] proposedHours = CalculateProposedHours(eventObj);
         Duration mutualTime = MutualTimeCalculatorService
-                              .FindMaximumMutualTimeBlock(proposedHours,
+                              .GetMaximumMutualTimeBlock(proposedHours,
                                                           eventObj);
         UpdateEventDurationToMutualDuration(eventObj, mutualTime, userId);
     }
