@@ -39,7 +39,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddEventAndReturnEventId_When_EventOccurSingleTime()
+    public async Task Should_Return_AddedEventId_When_EventOccurSingleTime()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
@@ -68,7 +68,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddEventAndReturnEventId_When_EventIsDailyRecurring()
+    public async Task Should_Return_AddedEventId_When_EventIsDailyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
@@ -98,7 +98,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddEventAndReturnEventId_When_EventIsDailyRecurringWithWeekDay()
+    public async Task Should_Return_AddedEventId_When_EventIsDailyRecurringWithWeekDay()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
@@ -128,7 +128,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddEventAndReturnEventId_When_EventIsWeeklyRecurring()
+    public async Task Should_Return_AddedEventId_When_EventIsWeeklyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
@@ -158,7 +158,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddEventAndReturnEventId_When_EventIsMonthlyRecurring()
+    public async Task Should_Return_AddedEventId_When_EventIsMonthlyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
@@ -190,7 +190,7 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddEventAndReturnEventId_When_EventIsYearlyRecurring()
+    public async Task Should_Return_AddedEventId_When_EventIsYearlyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 

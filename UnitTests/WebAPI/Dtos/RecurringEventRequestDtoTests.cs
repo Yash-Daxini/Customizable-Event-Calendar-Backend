@@ -14,7 +14,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidRecurringEventRequestDto()
+    public void Should_Return_False_When_InvalidRecurringEventRequestDto()
     {
         RecurringEventRequestDto recurringEventRequestDto = new();
 
@@ -24,7 +24,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_TitleIsEmpty()
+    public void Should_Return_False_When_TitleIsEmpty()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()
         {
@@ -45,7 +45,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_TitleIsNull()
+    public void Should_Return_False_When_TitleIsNull()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()
         {
@@ -66,7 +66,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_DescriptionIsEmpty()
+    public void Should_Return_False_When_DescriptionIsEmpty()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()
         {
@@ -87,7 +87,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_DescriptionIsNull()
+    public void Should_Return_False_When_DescriptionIsNull()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()
         {
@@ -108,7 +108,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_LocationIsEmpty()
+    public void Should_Return_False_When_LocationIsEmpty()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()
         {
@@ -129,7 +129,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_LocationIsNull()
+    public void Should_Return_False_When_LocationIsNull()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()
         {
@@ -150,7 +150,7 @@ public class RecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidRecurringEventRequestDto()
+    public void Should_Return_True_When_ValidRecurringEventRequestDto()
     {
         RecurringEventRequestDto recurringEventRequestDto = new()
         {

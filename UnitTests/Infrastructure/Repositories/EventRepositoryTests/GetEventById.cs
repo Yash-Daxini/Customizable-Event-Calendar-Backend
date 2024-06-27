@@ -19,7 +19,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnEvent_When_EventAvailableWithGivenId()
+    public async Task Should_Return_Event_When_EventAvailableWithGivenId()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
@@ -57,7 +57,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnNull_When_EventNotAvailableWithGivenId()
+    public async Task Should_Return_Null_When_EventNotAvailableWithGivenId()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 

@@ -14,7 +14,7 @@ public class RecurrencePatternDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidRecurrencePatternDto()
+    public void Should_Return_False_When_InvalidRecurrencePatternDto()
     {
         RecurrencePatternDto recurrencePatternDto = new();
 
@@ -24,7 +24,7 @@ public class RecurrencePatternDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_StartDateAndEndDateAreEmpty()
+    public void Should_Return_False_When_StartDateAndEndDateAreEmpty()
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -44,7 +44,7 @@ public class RecurrencePatternDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_StartDateGreaterThanEndDate()
+    public void Should_Return_False_When_StartDateGreaterThanEndDate()
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -71,7 +71,7 @@ public class RecurrencePatternDtoTests
     [InlineData("none")]
     [InlineData("")]
     [InlineData(null)]
-    public void Should_ReturnFalse_When_InvalidFrequency(string frequency)
+    public void Should_Return_False_When_InvalidFrequency(string frequency)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -96,7 +96,7 @@ public class RecurrencePatternDtoTests
     [InlineData("Monthly")]
     [InlineData("Yearly")]
     [InlineData("None")]
-    public void Should_ReturnTrue_When_ValidFrequency(string frequency)
+    public void Should_Return_True_When_ValidFrequency(string frequency)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -119,7 +119,7 @@ public class RecurrencePatternDtoTests
     [InlineData(-1)]
     [InlineData(13)]
     [InlineData(0)]
-    public void Should_ReturnFalse_When_InValidByMonth(int month)
+    public void Should_Return_False_When_InValidByMonth(int month)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -142,7 +142,7 @@ public class RecurrencePatternDtoTests
     [InlineData(1)]
     [InlineData(12)]
     [InlineData(5)]
-    public void Should_ReturnTrue_When_ValidByMonth(int month)
+    public void Should_Return_True_When_ValidByMonth(int month)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -165,7 +165,7 @@ public class RecurrencePatternDtoTests
     [InlineData(-1)]
     [InlineData(32)]
     [InlineData(0)]
-    public void Should_ReturnFalse_When_InValidByMonthDay(int monthDay)
+    public void Should_Return_False_When_InValidByMonthDay(int monthDay)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -189,7 +189,7 @@ public class RecurrencePatternDtoTests
     [InlineData(12)]
     [InlineData(31)]
     [InlineData(29)]
-    public void Should_ReturnTrue_When_ValidByMonthDay(int monthDay)
+    public void Should_Return_True_When_ValidByMonthDay(int monthDay)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -209,7 +209,7 @@ public class RecurrencePatternDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InValidByWeekDay()
+    public void Should_Return_False_When_InValidByWeekDay()
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -229,7 +229,7 @@ public class RecurrencePatternDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidByWeekDay()
+    public void Should_Return_True_When_ValidByWeekDay()
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -252,7 +252,7 @@ public class RecurrencePatternDtoTests
     [InlineData(-1)]
     [InlineData(6)]
     [InlineData(0)]
-    public void Should_ReturnFalse_When_InValidInterval(int interval)
+    public void Should_Return_False_When_InValidInterval(int interval)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -277,7 +277,7 @@ public class RecurrencePatternDtoTests
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public void Should_ReturnTrue_When_ValidInterval(int interval)
+    public void Should_Return_True_When_ValidInterval(int interval)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -300,7 +300,7 @@ public class RecurrencePatternDtoTests
     [InlineData(-1)]
     [InlineData(6)]
     [InlineData(0)]
-    public void Should_ReturnFalse_When_InValidWeekOrder(int weekOrder)
+    public void Should_Return_False_When_InValidWeekOrder(int weekOrder)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -325,7 +325,7 @@ public class RecurrencePatternDtoTests
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public void Should_ReturnTrue_When_ValidWeekOrder(int weekOrder)
+    public void Should_Return_True_When_ValidWeekOrder(int weekOrder)
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -345,7 +345,7 @@ public class RecurrencePatternDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidRecurrencePatternDto()
+    public void Should_Return_True_When_ValidRecurrencePatternDto()
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {

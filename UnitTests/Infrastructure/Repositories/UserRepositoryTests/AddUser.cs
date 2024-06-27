@@ -48,7 +48,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddUserAndReturnUserId_When_CallsTheRepositoryMethod()
+    public async Task Should_Return_AddedUserId_When_UserIsValid()
     {
         User user = new UserBuilder(2)
                     .WithName("b")

@@ -35,7 +35,7 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnAllSharedCalendar_When_CallsTheRepositoryMethod()
+    public async Task Should_Return_AllSharedCalendar_When_SharedCalendarIsAvailable()
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 

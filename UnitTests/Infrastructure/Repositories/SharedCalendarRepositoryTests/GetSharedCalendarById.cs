@@ -17,7 +17,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnSharedCalendar_When_SharedCalendarAvailableWithGivenId()
+    public async Task Should_Return_SharedCalendar_When_SharedCalendarAvailableWithGivenId()
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 
@@ -36,7 +36,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnNull_When_SharedCalendarNotAvailableWithGivenId()
+    public async Task Should_Return_Null_When_SharedCalendarNotAvailableWithGivenId()
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 

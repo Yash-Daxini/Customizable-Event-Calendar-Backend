@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Entities.DurationTests;
 public class DurationIsOverlappingWith
 {
     [Fact]
-    public void Should_ReturnFalse_When_DurationIsNull()
+    public void Should_Return_False_When_DurationIsNull()
     {
         Duration firstDuration = new(5, 6);
 
@@ -21,7 +21,7 @@ public class DurationIsOverlappingWith
     [InlineData(5, 6, 6, 7)]
     [InlineData(4, 5, 3, 4)]
     [InlineData(4, 8, 10, 12)]
-    public void Should_ReturnFalse_When_DurationNotOverlaps(int firstStartHour, int firstEndHour, int secondStartHour, int secondEndHour)
+    public void Should_Return_False_When_DurationNotOverlaps(int firstStartHour, int firstEndHour, int secondStartHour, int secondEndHour)
     {
         Duration firstDuration = new(firstStartHour, firstEndHour);
 

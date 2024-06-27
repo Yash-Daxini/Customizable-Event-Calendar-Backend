@@ -57,7 +57,7 @@ public class GetEventsWithinGivenDatesByUserId
 
     [Theory]
     [InlineData(2024, 2024, 5, 6, 30, 1)]
-    public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable(int startYear, int endYear, int startMonth, int endMonth, int startDay, int endDay)
+    public async Task Should_Return_ListOfEvent_When_UserAvailableWithId(int startYear, int endYear, int startMonth, int endMonth, int startDay, int endDay)
     {
         DateOnly startDate = new(startYear, startMonth, startDay);
         DateOnly endDate = new(endYear, endMonth, endDay);
@@ -73,7 +73,7 @@ public class GetEventsWithinGivenDatesByUserId
 
     [Theory]
     [InlineData(2024, 2024, 6, 5, 30, 1)]
-    public async Task Should_ThrowException_When_StartDateAndEndDateNotValid(int startYear, int endYear, int startMonth, int endMonth, int startDay, int endDay)
+    public async Task Should_Throw_ArgumentException_When_StartDateAndEndDateAreNotValid(int startYear, int endYear, int startMonth, int endMonth, int startDay, int endDay)
     {
         DateOnly startDate = new(startYear, startMonth, startDay);
         DateOnly endDate = new(endYear, endMonth, endDay);

@@ -8,7 +8,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
     {
 
         [Fact]
-        public void Should_ReturnEmptyList_When_ItIsWeeklyRecurringEventWithEmptyByWeekDay()
+        public void Should_Return_EmptyList_When_ItIsWeeklyRecurringEventWithEmptyWeekDay()
         {
             RecurrencePattern recurrencePattern = new WeeklyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -23,7 +23,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnEmptyList_When_ItIsWeeklyRecurringEventWithNullByWeekDay()
+        public void Should_Return_EmptyList_When_ItIsWeeklyRecurringEventWithNullWeekDay()
         {
             RecurrencePattern recurrencePattern = new WeeklyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -38,7 +38,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsWeeklyRecurringEvenAndIntervalIs0()
+        public void Should_Return_ListOfOccurrences_When_ItIsWeeklyRecurringEventAndIntervalIs0()
         {
             RecurrencePattern recurrencePattern = new WeeklyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -52,7 +52,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             actualResult.Should().BeEmpty();
         }
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsWeeklyRecurringEventWithNotNullByWeekDay()
+        public void Should_Return_ListOfOccurrences_When_ItIsWeeklyRecurringEventWithNotNullWeekDay()
         {
             RecurrencePattern recurrencePattern = new WeeklyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))

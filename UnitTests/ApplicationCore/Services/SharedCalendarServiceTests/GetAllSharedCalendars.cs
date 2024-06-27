@@ -36,7 +36,7 @@ public class GetAllSharedCalendars
     }
 
     [Fact]
-    public async Task Should_ReturnListOfSharedCalendars_When_SharedCalendarsAvailable()
+    public async Task Should_Return_ListOfSharedCalendars_When_SharedCalendarsAvailable()
     {
         _sharedCalendarRepository.GetAllSharedCalendars().Returns(_sharedCalendars);
 

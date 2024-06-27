@@ -14,7 +14,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidNonRecurringEventRequestDto()
+    public void Should_Return_False_When_InvalidNonRecurringEventRequestDto()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new();
 
@@ -24,7 +24,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_TitleIsEmpty()
+    public void Should_Return_False_When_TitleIsEmpty()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
         {
@@ -46,7 +46,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_TitleIsNull()
+    public void Should_Return_False_When_TitleIsNull()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
         {
@@ -68,7 +68,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_DescriptionIsEmpty()
+    public void Should_Return_False_When_DescriptionIsEmpty()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
         {
@@ -90,7 +90,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_DescriptionIsNull()
+    public void Should_Return_False_When_DescriptionIsNull()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
         {
@@ -112,7 +112,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_LocationIsEmpty()
+    public void Should_Return_False_When_LocationIsEmpty()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
         {
@@ -134,7 +134,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_LocationIsNull()
+    public void Should_Return_False_When_LocationIsNull()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
         {
@@ -156,7 +156,7 @@ public class NonRecurringEventRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidNonRecurringEventRequestDto()
+    public void Should_Return_True_When_ValidNonRecurringEventRequestDto()
     {
         NonRecurringEventRequestDto nonRecurringEventRequestDto = new()
         {

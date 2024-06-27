@@ -12,7 +12,7 @@ public class EventIsOverlappingWith
     public EventIsOverlappingWith()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 4, 1))
                                      .WithParticipant(new UserBuilder(49).Build(),
                                                       ConfirmationStatus.Proposed,
                                                       new DateOnly(),
@@ -26,10 +26,10 @@ public class EventIsOverlappingWith
     }
 
     [Fact]
-    public void Should_ReturnsFalse_When_EventOccurOnDifferentDates()
+    public void Should_Return_False_When_EventOccurOnDifferentDates()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 4, 2))
                                                      .Build();
 
         Event eventToCheckOverlap = new EventBuilder()
@@ -43,10 +43,10 @@ public class EventIsOverlappingWith
     }
 
     [Fact]
-    public void Should_ReturnsFalse_When_EventOccurOnDifferentDuration()
+    public void Should_Return_False_When_EventOccurOnSameDateAndDifferentDuration()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 4, 1))
                                                      .Build();
 
         Event eventToCheckOverlap = new EventBuilder()
@@ -54,16 +54,16 @@ public class EventIsOverlappingWith
                                     .WithEventCollaborators(eventCollaborators)
                                     .Build();
 
-        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly());
+        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 4, 1));
 
         result.Should().BeFalse();
     }
 
     [Fact]
-    public void Should_ReturnsTrue_When_EventOccurOnSameDuration()
+    public void Should_Return_True_When_EventOccurOnSameDateAndSameDuration()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 4, 1))
                                                      .Build();
 
         Event eventToCheckOverlap = new EventBuilder()
@@ -71,16 +71,16 @@ public class EventIsOverlappingWith
                                     .WithEventCollaborators(eventCollaborators)
                                     .Build(); ;
 
-        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 5, 31));
+        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 4, 1));
 
         result.Should().BeTrue();
     }
 
     [Fact]
-    public void Should_ReturnsTrue_When_EventOccurWithOverlapDuration()
+    public void Should_Return_True_When_EventOccurOnSameDateAndOverlapDuration()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
-                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
+                                                     .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 4, 1))
                                                      .Build();
 
         Event eventToCheckOverlap = new EventBuilder()
@@ -88,13 +88,13 @@ public class EventIsOverlappingWith
                                     .WithEventCollaborators(eventCollaborators)
                                     .Build();
 
-        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 5, 31));
+        bool result = _event.IsEventOverlappingWith(eventToCheckOverlap, new DateOnly(2024, 4, 1));
 
         result.Should().BeTrue();
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_MatchedDateAndEventAreNull()
+    public void Should_Return_False_When_EventIsNull()
     {
         bool result = _event.IsEventOverlappingWith(null, null);
 

@@ -8,7 +8,7 @@ namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 public class EventCollaboratorIsOrganizer
 {
     [Fact]
-    public void Should_ReturnsTrue_When_EventCollaboratorIsOrganizer()
+    public void Should_Returns_True_When_EventCollaboratorIsOrganizer()
     {
         EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
                                               .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
@@ -22,7 +22,7 @@ public class EventCollaboratorIsOrganizer
     [Theory]
     [InlineData(EventCollaboratorRole.Participant)]
     [InlineData(EventCollaboratorRole.Collaborator)]
-    public void Should_ReturnsFalse_When_EventCollaboratorIsNotOrganizer(EventCollaboratorRole eventCollaboratorRole)
+    public void Should_Returns_False_When_EventCollaboratorIsNotOrganizer(EventCollaboratorRole eventCollaboratorRole)
     {
         EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
                                               .WithEventCollaboratorRole(eventCollaboratorRole)

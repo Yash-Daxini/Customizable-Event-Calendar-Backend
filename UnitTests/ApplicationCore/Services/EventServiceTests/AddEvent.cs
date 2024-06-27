@@ -41,7 +41,7 @@ public class AddEvent
     }
 
     [Fact]
-    public async Task Should_ReturnAddedEventId_When_EventNotOverlaps()
+    public async Task Should_Return_AddedEventId_When_EventNotOverlaps()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
                                                      .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
@@ -66,7 +66,7 @@ public class AddEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventOverlaps()
+    public async Task Should_Throw_EventOverlapException_When_EventOverlaps()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
                                                      .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
@@ -88,13 +88,11 @@ public class AddEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventIsNull()
+    public async Task Should_Throw_NullArgumentException_When_EventIsNull()
     {
         Event eventObj = null;
 
         _eventService.GetAllEventsByUserId(48).Returns(_events);
-
-        _eventRepository.Add(eventObj).Returns(1);
 
         var action = async () => await _eventService.AddEvent(eventObj, 48);
 

@@ -8,6 +8,7 @@ using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using Core.Entities.Enums;
 using UnitTests.Builders;
+using Core.Exceptions;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -45,7 +46,7 @@ public class GetSharedEvents
     }
 
     [Fact]
-    public async Task Should_ReturnListOfEvent_When_SharedCalendarWithIdAvailable()
+    public async Task Should_Return_ListOfEvent_When_SharedCalendarAvailableWithId()
     {
         SharedCalendar sharedCalendar = new(1, new() { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
                                                new() { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
@@ -64,7 +65,7 @@ public class GetSharedEvents
     }
 
     [Fact]
-    public async Task Should_ReturnEmptyList_When_SharedCalendarWithIdNotAvailable()
+    public async Task Should_Return_EmptyList_When_SharedCalendarNotAvailableWithId()
     {
         SharedCalendar sharedCalendar = new(1, new() { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
                                                new() { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
@@ -83,7 +84,7 @@ public class GetSharedEvents
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_SharedCalendarWithIdNotValid()
+    public async Task Should_Throw_NotFoundException_When_SharedCalendarWithInValidId()
     {
         SharedCalendar sharedCalendar = new(1, new() { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
                                                new() { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
@@ -94,10 +95,8 @@ public class GetSharedEvents
 
         _eventRepository.GetSharedEvents(sharedCalendar).Returns([]);
 
-        var action = async () => await _eventService.GetSharedEvents(-1);
+        List<Event> events = await _eventService.GetSharedEvents(-1);
 
-        await action.Should().ThrowAsync<ArgumentException>();
-
-        await _eventRepository.DidNotReceive().GetSharedEvents(sharedCalendar);
+        events.Should().BeEmpty();
     }
 }

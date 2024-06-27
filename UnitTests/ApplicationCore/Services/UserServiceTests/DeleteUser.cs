@@ -23,7 +23,7 @@ public class DeleteUser
     }
 
     [Fact]
-    public async Task Should_DeleteUser_When_UserWithIdAvailable()
+    public async Task Should_DeleteUser_When_UserAvailableWithId()
     {
         User user = new UserBuilder(1)
                     .WithName("Test")
@@ -39,7 +39,7 @@ public class DeleteUser
     }
 
     [Fact]
-    public async Task Should_Throw_When_UserWithIdNotAvailable()
+    public async Task Should_Throw_NotFoundException_When_UserNotAvailableWithId()
     {
         User user = new UserBuilder(1)
                     .Build();
@@ -54,7 +54,7 @@ public class DeleteUser
     }
 
     [Fact]
-    public async Task Should_Throw_When_UserIdIsNotValid()
+    public async Task Should_Throw_NotFoundException_When_UserIdIsNotValid()
     {
         User user = null;
 
@@ -62,7 +62,7 @@ public class DeleteUser
 
         var action = async () => await _userService.DeleteUser(-1);
 
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _userRepository.DidNotReceive().Delete(user);
     }

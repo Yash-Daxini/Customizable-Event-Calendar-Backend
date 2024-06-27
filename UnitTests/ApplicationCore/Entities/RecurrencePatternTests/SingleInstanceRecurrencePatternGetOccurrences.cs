@@ -7,7 +7,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
     public class SingleInstanceRecurrencePatternGetOccurrences
     {
         [Fact]
-        public void Should_ReturnSingleOccurrence_When_ItIsNonRecurringEvent()
+        public void Should_Return_SingleOccurrence_When_ItIsNonRecurringEvent()
         {
             RecurrencePattern recurrencePattern = new SingleInstanceRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))

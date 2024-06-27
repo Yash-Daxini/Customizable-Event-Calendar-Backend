@@ -26,7 +26,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_DeleteUserAndReturnActionResult_When_UserAvailableWithId()
+    public async Task Should_Return_ActionResult_When_UserAvailableWithId()
     {
         _userService.DeleteUser(1).Returns(IdentityResult.Success);
 
@@ -36,7 +36,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_DeleteUserAndReturnActionResult_When_UserNotAvailableWithId()
+    public async Task Should_Return_ActionResult_When_UserNotAvailableWithId()
     {
         _userService.DeleteUser(1).Throws(new NotFoundException(""));
 
@@ -46,7 +46,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnBadRequest_When_DeleteOperationFailed()
+    public async Task Should_Return_BadRequest_When_DeleteOperationFailed()
     {
         _userService.DeleteUser(1).Returns(IdentityResult.Failed());
 
@@ -56,7 +56,7 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _userService.DeleteUser(1).Throws<Exception>();
 

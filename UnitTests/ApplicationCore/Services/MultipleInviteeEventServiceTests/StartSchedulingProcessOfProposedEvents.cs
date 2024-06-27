@@ -47,7 +47,7 @@ public class StartSchedulingProcessOfProposedEvents
     }
 
     [Fact]
-    public async Task Should_StartSchedulingProcess_When_UserWithIdAvailableAndUserWithPendingStatus()
+    public async Task Should_StartSchedulingProcess_When_UserAvailableWithIdAndUserWithPendingStatus()
     {
         EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
                                               .WithEventId(1)
@@ -66,7 +66,7 @@ public class StartSchedulingProcessOfProposedEvents
     }
 
     [Fact]
-    public async Task Should_StartSchedulingProcess_When_UserWithIdAvailableAndUserWithProposedStatus()
+    public async Task Should_StartSchedulingProcess_When_UserAvailableWithIdAndUserWithProposedStatus()
     {
         EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
                                               .WithEventId(1)
@@ -144,7 +144,7 @@ public class StartSchedulingProcessOfProposedEvents
     }
 
     [Fact]
-    public async Task Should_StartSchedulingProcess_When_UsersWithProposedStatusAndMutualTimeBlockRequiredAndEventTimeLessThanOneDay()
+    public async Task Should_StartSchedulingProcess_When_UsersWithProposedStatusAndMutualTimeBlockRequiredAndEventNeedToScheduleImmediately()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
                                                       .WithOrganizer(new UserBuilder(48).Build(),
@@ -191,7 +191,7 @@ public class StartSchedulingProcessOfProposedEvents
 
 
     [Fact]
-    public async Task Should_StartSchedulingProcess_When_UsersTimeBlockIsLarge()
+    public async Task Should_StartSchedulingProcess_When_ProposedTimeBlockIsLarge()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
                                                       .WithOrganizer(new UserBuilder(48).Build(),
@@ -241,7 +241,7 @@ public class StartSchedulingProcessOfProposedEvents
     }
 
     [Fact]
-    public async Task Should_StartSchedulingProcess_When_ProposedStartIs0AndProposedEndHourIs23()
+    public async Task Should_StartSchedulingProcess_When_ProposedStartHourIs0AndProposedEndHourIs23()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
                                                       .WithOrganizer(new UserBuilder(48).Build(),

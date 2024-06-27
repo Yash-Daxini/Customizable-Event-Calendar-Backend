@@ -56,7 +56,7 @@ public class GetEventsForWeeklyViewByUserId
     }
 
     [Fact]
-    public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
+    public async Task Should_Return_ListOfEvent_When_UserAvailableWithId()
     {
         DateOnly startDateOfWeek = DateTimeUtills.GetStartDateOfWeek(DateTime.Now);
         DateOnly endDateOfWeek = DateTimeUtills.GetEndDateOfWeek(DateTime.Now);

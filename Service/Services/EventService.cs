@@ -90,9 +90,6 @@ public class EventService : IEventService
 
     public async Task DeleteEvent(int eventId, int userId)
     {
-        if (eventId is <= 0)
-            throw new ArgumentException($"Invalid event id");
-
         Event? eventObj = await _eventRepository.GetEventById(eventId)
                           ?? throw new NotFoundException($"Event with " +
                                        $"id ${eventId} not present");
@@ -160,9 +157,6 @@ public class EventService : IEventService
 
     public async Task<List<Event>> GetSharedEvents(int sharedCalendarId)
     {
-        if (sharedCalendarId is <= 0)
-            throw new ArgumentException($"Invalid shared calendar id");
-
         SharedCalendar? sharedCalendar = await _sharedCalendarService
                                                .GetSharedCalendarById(sharedCalendarId);
 

@@ -23,7 +23,7 @@ public class AddUser
     }
 
     [Fact]
-    public async Task Should_ReturnUserIdAfterAddOperation_When_CallsRepositoryMethod()
+    public async Task Should_Return_UserIdAfterAddOperation_When_UserIsNotNull()
     {
         User user = new UserBuilder(1)
                     .WithName("Test")
@@ -41,7 +41,7 @@ public class AddUser
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_UserIsNull()
+    public async Task Should_Throw_NullArgumentException_When_UserIsNull()
     {
         User user = null;
 

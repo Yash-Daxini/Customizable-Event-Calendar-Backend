@@ -40,7 +40,7 @@ public class DeleteEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventWithIdNotAvailable()
+    public async Task Should_Throw_NotFoundException_When_EventWithUnavailableId()
     {
         Event eventObj = new();
 
@@ -54,7 +54,7 @@ public class DeleteEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventWithIdNotValid()
+    public async Task Should_Throw_NotFoundException_When_EventWithInValidId()
     {
         Event eventObj = new();
 
@@ -62,7 +62,7 @@ public class DeleteEvent
 
         var action = async () => await _eventService.DeleteEvent(-1, 48);
 
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _eventRepository.DidNotReceive().Delete(eventObj);
     }

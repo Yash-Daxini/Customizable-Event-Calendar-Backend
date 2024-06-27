@@ -4,12 +4,10 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using FluentAssertions;
 using Core.Entities.RecurrecePattern;
 using Core.Entities.Enums;
 using UnitTests.Builders;
-using NSubstitute.ExceptionExtensions;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -75,7 +73,7 @@ public class UpdateEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventOverlaps()
+    public async Task Should_Throw_EventOverlapException_When_EventOverlaps()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
                                              .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 31))
@@ -108,36 +106,7 @@ public class UpdateEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventOverlapsWithEmptyMessage()
-    {
-        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
-                                             .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 31))
-                                             .WithParticipant(new UserBuilder(49).Build(),
-                                                              ConfirmationStatus.Accept,
-                                                              new DateOnly(2024, 5, 31),
-                                                              null)
-                                             .Build();
-
-        Event eventObj = new EventBuilder()
-                         .WithId(1)
-                         .WithRecurrencePattern(new DailyRecurrencePattern())
-                         .WithEventCollaborators(eventCollaborators)
-                         .Build();
-
-        _eventService.GetEventById(1, 48).Returns(eventObj);
-
-        _eventService.GetAllEventsByUserId(48).Returns(_events);
-
-        _overlappingEventService.WhenForAnyArgs(e => e.CheckOverlap(eventObj, _events))
-                     .Do(e => { throw new EventOverlapException("Overlap"); });
-
-        var action = async () => await _eventService.UpdateEvent(eventObj, 48);
-
-        await action.Should().ThrowAsync<EventOverlapException>();
-    }
-
-    [Fact]
-    public async Task Should_ThrowException_When_EventIsNull()
+    public async Task Should_Throw_NullArgumentException_When_EventIsNull()
     {
         Event eventObj = null;
 

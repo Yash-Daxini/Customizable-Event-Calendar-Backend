@@ -54,7 +54,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnActionResultOk_When_CollaborationAddedSuccessfully()
+    public async Task Should_Return_ActionResultOk_When_CollaborationAddedSuccessfully()
     {
         IActionResult actionResult = await _eventCollaborationController.AddEventCollaboration(_collaborationRequestDto);
 
@@ -62,7 +62,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnBadRequest_When_CollaborationOverlaps()
+    public async Task Should_Return_BadRequest_When_CollaborationOverlaps()
     {
         _sharedEventCollaborationService.AddCollaborator(_eventCollaborator).ThrowsForAnyArgs(new CollaborationOverlapException(""));
 
@@ -72,7 +72,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnBadRequest_When_AlreadyCollaboratedOnEvent()
+    public async Task Should_Return_BadRequest_When_AlreadyCollaboratedOnEvent()
     {
         _sharedEventCollaborationService.AddCollaborator(_eventCollaborator).ThrowsForAnyArgs(new UserAlreadyCollaboratedException(""));
 
@@ -82,7 +82,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _sharedEventCollaborationService.AddCollaborator(_eventCollaborator).ThrowsForAnyArgs<Exception>();
 

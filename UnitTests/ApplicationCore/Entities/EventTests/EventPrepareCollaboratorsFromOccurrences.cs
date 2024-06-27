@@ -5,10 +5,10 @@ using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Entities.EventTests;
 
-public class EventCreateDateWiseEventCollaboratorsList
+public class EventPrepareCollaboratorsFromOccurrences
 {
     [Fact]
-    public void Should_PrepareEventCollaboratorsListFromOccurrences_When_EventCollaboratorsAvailable()
+    public void Should_PrepareEventCollaboratorsListFromOccurrences_When_EventCollaboratorListIsNotEmpty()
     {
         List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
                                                  .WithOrganizer(new UserBuilder(48).Build(),
@@ -24,7 +24,6 @@ public class EventCreateDateWiseEventCollaboratorsList
                                                                   new DateOnly(2024, 6, 1),
                                                                   null)
                                                  .Build();
-        ;
 
         List<DateOnly> occurrences = [new DateOnly(2024, 5, 31),
                                       new DateOnly(2024, 6, 1)];
@@ -48,7 +47,7 @@ public class EventCreateDateWiseEventCollaboratorsList
     }
 
     [Fact]
-    public void Should_BeEmptyList_When_EventCollaboratorsNotAvailable()
+    public void Should_BeEmptyList_When_EventCollaboratorListIsEmpty()
     {
         List<DateOnly> occurrences = [new DateOnly(2024, 5, 31),
                                       new DateOnly(2024, 6, 1)];
@@ -64,7 +63,7 @@ public class EventCreateDateWiseEventCollaboratorsList
     }
 
     [Fact]
-    public void Should_BeEmptyList_When_OccurrencesListIsEmpty()
+    public void Should_BeEmptyList_When_OccurrenceListIsEmpty()
     {
         List<DateOnly> occurrences = [];
 
@@ -87,9 +86,23 @@ public class EventCreateDateWiseEventCollaboratorsList
     }
 
     [Fact]
-    public void Should_BeEmptyList_When_EventCollaboratorsIsNull()
+    public void Should_BeEmptyList_When_EventCollaboratorListIsNull()
     {
         List<DateOnly> occurrences = [];
+
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(null)
+                         .Build();
+
+        eventObj.PrepareCollaboratorsFromOccurrences(occurrences);
+
+        eventObj.EventCollaborators.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Should_BeEmptyList_When_OccurrenceListIsNull()
+    {
+        List<DateOnly> occurrences = null;
 
         Event eventObj = new EventBuilder()
                          .WithEventCollaborators(null)

@@ -25,7 +25,7 @@ public class GetAllEventsByUserId
     }
 
     [Fact]
-    public async Task Should_ReturnListEventsByUserId_When_UserWithIdAvailable()
+    public async Task Should_Return_ListEventsByUserId_When_UserAvailableWithId()
     {
         List<Event> events = [];
 

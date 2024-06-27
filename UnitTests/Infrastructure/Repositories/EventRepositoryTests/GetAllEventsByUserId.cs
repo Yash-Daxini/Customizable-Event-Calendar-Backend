@@ -21,7 +21,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
     [Theory]
     [InlineData(1)]
-    public async Task Should_ReturnListEvents_When_EventAvailableWithGivenUserId(int userId)
+    public async Task Should_Return_EventList_When_EventAvailableWithGivenUserId(int userId)
     {
         //Arrange
 

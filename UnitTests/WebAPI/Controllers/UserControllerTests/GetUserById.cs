@@ -26,7 +26,7 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnActionResultNotFound_When_UserWithIdNotAvailable()
+    public async Task Should_Return_ActionResultNotFound_When_UserWithIdNotAvailable()
     {
         _userService.GetUserById(1).ThrowsForAnyArgs(new NotFoundException(""));
 
@@ -36,7 +36,7 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnActionResultOk_When_UserWithIdAvailable()
+    public async Task Should_Return_ActionResultOk_When_UserWithIdAvailable()
     {
         User user = Substitute.For<User>();
 
@@ -48,7 +48,7 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _userService.GetUserById(1).ThrowsForAnyArgs<Exception>();
 

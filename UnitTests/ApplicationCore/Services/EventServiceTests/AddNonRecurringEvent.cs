@@ -45,7 +45,7 @@ public class AddNonRecurringEvent
     }
 
     [Fact]
-    public async Task Should_ReturnAddedEventId_When_EventNotOverlaps()
+    public async Task Should_Return_AddedEventId_When_EventNotOverlaps()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
                                                      .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
@@ -70,7 +70,7 @@ public class AddNonRecurringEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventOverlaps()
+    public async Task Should_Throw_EventOverlapException_When_EventOverlaps()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
                                                      .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
@@ -86,8 +86,6 @@ public class AddNonRecurringEvent
         _overlappingEventService.WhenForAnyArgs(e => e.CheckOverlap(eventObj, _events))
              .Do(e => { throw new EventOverlapException("Overlaps"); });
 
-        _eventRepository.Add(eventObj).Throws(new EventOverlapException("Overlap"));
-
         var action = async () => await _eventService.AddNonRecurringEvent(eventObj, 48);
 
         await action.Should().ThrowAsync<EventOverlapException>();
@@ -98,7 +96,7 @@ public class AddNonRecurringEvent
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventIsNull()
+    public async Task Should_Throw_NullArgumentException_When_EventIsNull()
     {
         Event eventObj = null;
 

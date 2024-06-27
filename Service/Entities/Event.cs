@@ -64,13 +64,13 @@ public class Event : IEntity
             return null;
 
         List<DateOnly> eventDates = EventCollaborators
-                                    .Select(eventCollaborator => 
+                                    .Select(eventCollaborator =>
                                             eventCollaborator.EventDate)
                                     .ToList();
 
         List<DateOnly> currentEventDates = currentEvent
                                            .EventCollaborators
-                                           .Select(eventCollaboratorByDate => 
+                                           .Select(eventCollaboratorByDate =>
                                                    eventCollaboratorByDate.EventDate)
                                            .ToList();
 
@@ -103,21 +103,27 @@ public class Event : IEntity
 
     public void PrepareCollaboratorsFromOccurrences(List<DateOnly> occurrences)
     {
+        if (occurrences is null)
+        {
+            this.EventCollaborators = [];
+            return;
+        }
+
         List<EventCollaborator> eventCollaborators = [];
 
         foreach (var occurrence in occurrences)
         {
             eventCollaborators.AddRange(EventCollaborators
                               .Select(eventCollaborator => new EventCollaborator()
-            {
-                Id = eventCollaborator.Id,
-                EventId = eventCollaborator.EventId,
-                EventDate = occurrence,
-                User = eventCollaborator.User,
-                EventCollaboratorRole = eventCollaborator.EventCollaboratorRole,
-                ConfirmationStatus = eventCollaborator.ConfirmationStatus,
-                ProposedDuration = eventCollaborator.ProposedDuration,
-            }));
+                              {
+                                  Id = eventCollaborator.Id,
+                                  EventId = eventCollaborator.EventId,
+                                  EventDate = occurrence,
+                                  User = eventCollaborator.User,
+                                  EventCollaboratorRole = eventCollaborator.EventCollaboratorRole,
+                                  ConfirmationStatus = eventCollaborator.ConfirmationStatus,
+                                  ProposedDuration = eventCollaborator.ProposedDuration,
+                              }));
         }
 
         this.EventCollaborators = eventCollaborators;

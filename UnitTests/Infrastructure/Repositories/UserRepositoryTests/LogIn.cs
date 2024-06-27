@@ -56,7 +56,7 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnSuccessResult_When_UserWithValidCredentials()
+    public async Task Should_Return_SuccessResult_When_UserWithValidCredentials()
     {
         User user = new UserBuilder(1)
                     .WithName("a")

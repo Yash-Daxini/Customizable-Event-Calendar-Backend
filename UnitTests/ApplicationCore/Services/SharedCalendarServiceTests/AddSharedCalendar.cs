@@ -21,7 +21,7 @@ public class AddSharedCalendar
     }
 
     [Fact]
-    public async Task Should_ReturnsAddedSharedCalendarId_When_CallsTheMethod()
+    public async Task Should_Return_AddedSharedCalendarId_When_SharedCalendarIsValid()
     {
         SharedCalendar sharedCalendar = new(1, new User { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
                                                new User { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
@@ -38,7 +38,7 @@ public class AddSharedCalendar
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_SharedCalendarIsNull()
+    public async Task Should_Throw_NullArgumentException_When_SharedCalendarIsNull()
     {
         SharedCalendar sharedCalendar = null;
 

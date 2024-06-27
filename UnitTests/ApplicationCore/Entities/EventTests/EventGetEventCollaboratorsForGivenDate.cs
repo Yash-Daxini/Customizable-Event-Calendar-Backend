@@ -34,7 +34,7 @@ public class EventGetEventCollaboratorsForGivenDate
     [InlineData(2024, 6, 3)]
     [InlineData(2024, 6, 1)]
 
-    public void Should_ReturnsEmptyList_When_EventCollaboratorNotOccurOnGivenDate(int year, int month, int day)
+    public void Should_Returns_EmptyList_When_EventCollaboratorNotOccurOnGivenDate(int year, int month, int day)
     {
         DateOnly date = new(year, month, day);
 
@@ -45,7 +45,7 @@ public class EventGetEventCollaboratorsForGivenDate
 
     [Theory]
     [InlineData(2024, 5, 31)]
-    public void Should_ReturnsEventCollaboratorList_When_EventCollaboratorOccurOnGivenDate(int year, int month, int day)
+    public void Should_Returns_EventCollaboratorList_When_EventCollaboratorOccurOnGivenDate(int year, int month, int day)
     {
         List<EventCollaborator> expectedResult = new EventCollaboratorListBuilder(47)
                                                      .WithOrganizer(new UserBuilder(48).Build(),
@@ -65,7 +65,7 @@ public class EventGetEventCollaboratorsForGivenDate
     [Theory]
     [InlineData(2024, 5, 31)]
     [InlineData(2024, 6, 2)]
-    public void Should_ReturnsEmptyList_When_EventCollaboratorsIsNull(int year, int month, int day)
+    public void Should_Returns_EmptyList_When_EventCollaboratorsIsNull(int year, int month, int day)
     {
         _event.EventCollaborators = null;
 
@@ -78,7 +78,7 @@ public class EventGetEventCollaboratorsForGivenDate
     [Theory]
     [InlineData(2024, 5, 31)]
     [InlineData(2024, 6, 2)]
-    public void Should_ReturnsEmptyList_When_EventCollaboratorsIsEmpty(int year, int month, int day)
+    public void Should_Returns_EmptyList_When_EventCollaboratorsIsEmpty(int year, int month, int day)
     {
         _event.EventCollaborators = [];
 

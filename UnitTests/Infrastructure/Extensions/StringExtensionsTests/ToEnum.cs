@@ -79,6 +79,4 @@ public class ToEnum
 
         action.Should().Throw<ArgumentException>();
     }
-
-
 }

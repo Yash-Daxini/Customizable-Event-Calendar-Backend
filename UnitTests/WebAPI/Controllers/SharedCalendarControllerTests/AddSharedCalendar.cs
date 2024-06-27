@@ -39,7 +39,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnIActionResult_When_SharedCalendarAdded()
+    public async Task Should_Return_IActionResult_When_SharedCalendarAdded()
     {
         _sharedCalendarService.AddSharedCalendar(_sharedCalendar).ReturnsForAnyArgs(1);
 
@@ -51,7 +51,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _sharedCalendarService.AddSharedCalendar(_sharedCalendar).ThrowsAsyncForAnyArgs<Exception>();
 

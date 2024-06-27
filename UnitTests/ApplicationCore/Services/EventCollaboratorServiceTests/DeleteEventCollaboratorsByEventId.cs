@@ -26,7 +26,7 @@ public class DeleteEventCollaboratorsByEventId
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventIdNotValid()
+    public async Task Should_Throw_Exception_When_EventIdNotValid()
     {
         var action = async () => await _eventCollaboratorService.DeleteEventCollaboratorsByEventId(-1, 1);
 

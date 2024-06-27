@@ -20,7 +20,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_UpdateEvent_When_EventWithIdAvailable()
+    public async Task Should_UpdateEvent_When_EventAvailableWithId()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 

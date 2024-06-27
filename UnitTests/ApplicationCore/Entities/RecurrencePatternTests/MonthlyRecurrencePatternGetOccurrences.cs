@@ -8,7 +8,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
     {
 
         [Fact]
-        public void Should_ReturnEmptyList_When_ItIsMonthlyRecurringEventUsingMonthDayAndByMonthDayIsNull()
+        public void Should_Return_EmptyList_When_ItIsMonthlyRecurringEventWithNullMonthDayWeekDayAndWeekOrder()
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -25,7 +25,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnEmptyList_When_ItIsMonthlyRecurringEventUsingWeekOrderWithNullByWeekDay()
+        public void Should_Return_EmptyList_When_ItIsMonthlyRecurringEventUsingWeekOrderWithNullWeekDayAndNullMonthDay()
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -42,7 +42,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnEmptyList_When_ItIsMonthlyRecurringEventUsingWeekOrderWithNullWeekOrder()
+        public void Should_Return_EmptyList_When_ItIsMonthlyRecurringEventUsingWeekOrderWithNullWeekOrderAndNullMonthDay()
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -58,8 +58,28 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             actualResult.Should().BeEmpty();
         }
 
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(32)]
+        public void Should_Return_EmptyList_When_ItIsMonthlyRecurringEventUsingMonthDayWithInvalidMonthDay(int monthDay)
+        {
+            RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
+                                                  .WithStartDate(new DateOnly(2024, 5, 31))
+                                                  .WithEndDate(new DateOnly(2025, 5, 20))
+                                                  .WithInterval(2)
+                                                  .WithWeekOrder(null)
+                                                  .WithByMonthDay(monthDay)
+                                                  .WithByWeekDay(null)
+                                                  .Build();
+
+            List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
+
+            actualResult.Should().BeEmpty();
+        }
+
         [Fact]
-        public void Should_ReturnEmptyList_When_ItIsMonthlyRecurringEventUsingWeekOrderWithZeroValueOfWeekOrder()
+        public void Should_Return_EmptyList_When_ItIsMonthlyRecurringEventUsingWeekOrderWithZeroValueOfWeekOrder()
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -80,7 +100,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         [InlineData(21)]
         [InlineData(18)]
         [InlineData(1)]
-        public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDayAndNullWeekOrderAndNullByWeekDay(int monthDay)
+        public void Should_Return_ListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDayWithNullWeekOrderAndNullByWeekDay(int monthDay)
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -98,7 +118,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             actualResult.Should().BeEquivalentTo(expectedResult);
         }
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDayForLastDayOfMonth()
+        public void Should_Return_ListOfOccurrences_When_ItIsMonthlyRecurringEventUsingMonthDayForLastDayOfMonth()
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -117,7 +137,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsMonthlyRecurringEventUsingWeekOrder()
+        public void Should_Return_ListOfOccurrences_When_ItIsMonthlyRecurringEventUsingWeekOrder()
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -136,7 +156,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnListWithLastOccurrence_When_ItIsMonthlyRecurringEventUsingWeekOrderAndWeekOrderIsGreaterThan5()
+        public void Should_Return_ListWithLastOccurrence_When_ItIsMonthlyRecurringEventUsingWeekOrderWithWeekOrderIsGreaterThan5()
         {
             RecurrencePattern recurrencePattern = new MonthlyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))

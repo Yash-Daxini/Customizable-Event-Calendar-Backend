@@ -74,7 +74,7 @@ public class GetOverlapEventInformation
     }
 
     [Fact]
-    public void Should_ReturnStringMessage_When_EventOverlap()
+    public void Should_Throw_EventOverlapException_When_EventOverlapWithSingleEvent()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(2)
                                                       .WithOrganizer(new UserBuilder(1).Build(),
@@ -103,7 +103,7 @@ public class GetOverlapEventInformation
     }
 
     [Fact]
-    public void Should_ReturnStringMessage_When_EventOverlapWithMultipleEvents()
+    public void Should_Throw_EventOverlapException_When_EventOverlapWithMultipleEvents()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(2)
                                                       .WithOrganizer(new UserBuilder(1).Build(),
@@ -137,7 +137,7 @@ public class GetOverlapEventInformation
     }
 
     [Fact]
-    public void Should_NotThrowException_When_NonOverlapEvent()
+    public void Should_NotThrow_Exception_When_EventNotOverlap()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(2)
                                                       .WithOrganizer(new UserBuilder(1).Build(),
@@ -159,7 +159,7 @@ public class GetOverlapEventInformation
     }
 
     [Fact]
-    public void Should_ReturnNull_When_EventToCheckOverlapIsNull()
+    public void Should_NotThrow_Exception_When_EventToCheckOverlapIsNull()
     {
         Action action = () => _overlappingEventService.CheckOverlap(null, _events);
 
@@ -167,7 +167,7 @@ public class GetOverlapEventInformation
     }
 
     [Fact]
-    public void Should_ReturnNull_When_EventToCheckOverlapIsEmpty()
+    public void Should_NotThrow_Exception_When_EventListIsEmpty()
     {
         Action action = () => _overlappingEventService.CheckOverlap(null, []);
 

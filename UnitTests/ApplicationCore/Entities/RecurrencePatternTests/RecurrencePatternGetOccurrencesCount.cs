@@ -16,12 +16,12 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData(2024, 2028, 1, 6, 5, 11)]
     [InlineData(2024, 2028, 1, 6, 0, 0)]
     [InlineData(2024, 2028, 1, 6, -5, 0)]
-    public void Should_ReturnOccurrencesCountForMonthlyPattern_When_FrequencyIsMonthly(int startDateYear,
-                                                                                       int endDateYear,
-                                                                                       int startDateMonth,
-                                                                                       int endDateMonth,
-                                                                                       int interval,
-                                                                                       int expectedResult)
+    public void Should_Return_OccurrencesCount_When_FrequencyIsMonthly(int startDateYear,
+                                                                       int endDateYear,
+                                                                       int startDateMonth,
+                                                                       int endDateMonth,
+                                                                       int interval,
+                                                                       int expectedResult)
     {
         _recurrencePattern = new MonthlyRecurrencePatternBuilder()
                              .WithStartDate(new DateOnly(startDateYear, startDateMonth, 1))
@@ -47,7 +47,7 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData(2024, 2030, 5, 2)]
     [InlineData(2024, 2030, 0, 0)]
     [InlineData(2024, 2030, -4, 0)]
-    public void Should_ReturnOccurrencesCountForYearlyPattern_When_FrequencyIsYearly(int startDateYear,
+    public void Should_Return_OccurrencesCount_When_FrequencyIsYearly(int startDateYear,
                                                                                      int endDateYear,
                                                                                      int interval,
                                                                                      int expectedResult)
@@ -71,7 +71,7 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData("5-5-2024", "1-5-2028", 5, 42)]
     [InlineData("5-5-2024", "1-5-2028", 0, 0)]
     [InlineData("5-5-2024", "1-5-2028", -3, 0)]
-    public void Should_ReturnOccurrencesCountForWeeklyPattern_When_FrequencyIsWeekly(string startDate,
+    public void Should_Return_OccurrencesCount_When_FrequencyIsWeekly(string startDate,
                                                                                      string endDate,
                                                                                      int interval,
                                                                                      int expectedResult)
@@ -95,7 +95,7 @@ public class RecurrencePatternGetOccurrencesCount
     [InlineData("5-5-2024", "1-5-2028", 5, 292)]
     [InlineData("5-5-2024", "1-5-2028", 0, 0)]
     [InlineData("5-5-2024", "1-5-2028", -2, 0)]
-    public void Should_ReturnOccurrencesCountForDailyPattern_When_FrequencyIsDaily(string startDate,
+    public void Should_Return_OccurrencesCount_When_FrequencyIsDaily(string startDate,
                                                                                    string endDate,
                                                                                    int interval,
                                                                                    int expectedResult)
@@ -112,7 +112,7 @@ public class RecurrencePatternGetOccurrencesCount
     }
 
     [Fact]
-    public void Should_ReturnOccurrencesCountAsZero_When_FrequencyIsNone()
+    public void Should_Return_Occurrences_When_FrequencyIsNone()
     {
         _recurrencePattern = new SingleInstanceRecurrencePatternBuilder()
                              .WithStartDate(new DateOnly(2024, 4, 1))

@@ -60,7 +60,7 @@ public class GetAllEventsCreatedByUser
 
     [Theory]
     [InlineData(49)]
-    public async Task Should_ReturnListOfEvents_When_UserWithIdAvailable(int userId)
+    public async Task Should_Return_ListOfEvents_When_UserAvailableWithId(int userId)
     {
         _eventRepository.GetAllEventsByUserId(userId).Returns(_events);
 
@@ -85,7 +85,7 @@ public class GetAllEventsCreatedByUser
 
     [Theory]
     [InlineData(50)]
-    public async Task Should_ReturnEmptyList_When_UserWithIdNotAvailable(int userId)
+    public async Task Should_Return_EmptyList_When_UserNotAvailableWithId(int userId)
     {
         _eventRepository.GetAllEventsByUserId(userId).Returns(_events);
 
@@ -96,7 +96,7 @@ public class GetAllEventsCreatedByUser
 
     [Theory]
     [InlineData(50)]
-    public async Task Should_ReturnEmptyList_When_OrganizerNotPresentInEvent(int userId)
+    public async Task Should_Return_EmptyList_When_OrganizerNotPresentInEvent(int userId)
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
                                                      .WithParticipant(new UserBuilder(48).Build(),

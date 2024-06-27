@@ -55,7 +55,7 @@ public class LogIn
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_InValidUser()
+    public async Task Should_Throw_AuthenticationFailedException_When_InValidUser()
     {
         User user = new UserBuilder(1)
                     .WithName("Test")
@@ -75,7 +75,7 @@ public class LogIn
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_UserIsNull()
+    public async Task Should_Throw_NullArgumentException_When_UserIsNull()
     {
         User user = null;
 

@@ -7,7 +7,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests;
 public class YearlyRecurrencePatternGetOccurrences
 {
     [Fact]
-    public void Should_ReturnListOfOccurrences_When_ItIsYearlyRecurringEventUsingMonthDayForLastDayOfMonth()
+    public void Should_Return_ListOfOccurrences_When_ItIsYearlyRecurringEventUsingMonthDayForLastDayOfMonth()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -33,7 +33,7 @@ public class YearlyRecurrencePatternGetOccurrences
     [InlineData(19)]
     [InlineData(1)]
     [InlineData(5)]
-    public void Should_ReturnListOfOccurrences_When_ItIsYearlyRecurringEventUsingMonthDay(int monthDay)
+    public void Should_Return_ListOfOccurrences_When_ItIsYearlyRecurringEventUsingMonthDay(int monthDay)
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -53,7 +53,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithNullByMonthDay()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithNullMonthDayWeekDayAndWeekOrder()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -71,7 +71,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithNullByMonth()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithNullMonthWeekDayAndWeekOrder()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -89,7 +89,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithNullByMonthAndNullByMonthDay()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithNullMonthAndNullMonthDay()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -106,8 +106,51 @@ public class YearlyRecurrencePatternGetOccurrences
         actualResult.Should().BeEmpty();
     }
 
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(32)]
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithInvalidMonthDay(int monthDay)
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
+                                              .WithStartDate(new DateOnly(2024, 5, 31))
+                                              .WithEndDate(new DateOnly(2025, 5, 20))
+                                              .WithInterval(2)
+                                              .WithWeekOrder(null)
+                                              .WithByMonthDay(monthDay)
+                                              .WithByMonth(1)
+                                              .WithByWeekDay(null)
+                                              .Build();
+
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
+
+        actualResult.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(13)]
+    [InlineData(null)]
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingMonthDayWithInvalidMonth(int month)
+    {
+        RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
+                                              .WithStartDate(new DateOnly(2024, 5, 31))
+                                              .WithEndDate(new DateOnly(2025, 5, 20))
+                                              .WithInterval(2)
+                                              .WithWeekOrder(null)
+                                              .WithByMonthDay(5)
+                                              .WithByMonth(month)
+                                              .WithByWeekDay(null)
+                                              .Build();
+
+        List<DateOnly> actualResult = recurrencePattern.GetOccurrences();
+
+        actualResult.Should().BeEmpty();
+    }
+
     [Fact]
-    public void Should_ReturnListOfOccurrences_When_ItIsYearlyRecurringEventUsingWeekOrder()
+    public void Should_Return_ListOfOccurrences_When_ItIsYearlyRecurringEventUsingWeekOrder()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -127,7 +170,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithNullWeekOrder()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithNullWeekOrder()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -147,7 +190,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithZeroValueOfWeekOrder()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithZeroValueOfWeekOrder()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -165,7 +208,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnListWithLastOccurrence_When_ItIsYearlyRecurringEventUsingWeekOrderWithValueOfWeekOrderIsGreaterThan5()
+    public void Should_Return_ListWithLastOccurrence_When_ItIsYearlyRecurringEventUsingWeekOrderWithValueOfWeekOrderIsGreaterThan5()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -185,7 +228,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithNullByWeekDay()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithNullWeekDay()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -203,7 +246,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithNullByMonth()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithNullByMonth()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))
@@ -221,7 +264,7 @@ public class YearlyRecurrencePatternGetOccurrences
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithWeekOrderAndByMonthIsNull()
+    public void Should_Return_EmptyList_When_ItIsYearlyRecurringEventUsingWeekOrderWithWeekOrderAndByMonthIsNull()
     {
         RecurrencePattern recurrencePattern = new YearlyRecurrencePatternBuilder()
                                               .WithStartDate(new DateOnly(2024, 5, 31))

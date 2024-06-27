@@ -32,7 +32,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnNotFound_When_EventNotAvailableWithId()
+    public async Task Should_Return_NotFound_When_EventNotAvailableWithId()
     {
         _eventService.DeleteEvent(1, 1).ThrowsAsyncForAnyArgs(new NotFoundException(""));
 
@@ -42,7 +42,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.DeleteEvent(1, 1).ThrowsAsyncForAnyArgs<Exception>();
 

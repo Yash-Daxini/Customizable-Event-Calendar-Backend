@@ -13,7 +13,7 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidAuthenticateRequestDto()
+    public void Should_Return_False_When_InvalidAuthenticateRequestDto()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -29,7 +29,7 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_NameIsEmpty()
+    public void Should_Return_False_When_NameIsEmpty()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -43,7 +43,7 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_PasswordIsEmpty()
+    public void Should_Return_False_When_PasswordIsEmpty()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -57,7 +57,7 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_NameIsNull()
+    public void Should_Return_False_When_NameIsNull()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -71,7 +71,7 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_PasswordIsNull()
+    public void Should_Return_False_When_PasswordIsNull()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -85,7 +85,7 @@ public class AuthenticateRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidAuthenticateRequestDto()
+    public void Should_Return_True_When_ValidAuthenticateRequestDto()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {

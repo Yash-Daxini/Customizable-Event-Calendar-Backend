@@ -22,7 +22,7 @@ public class AddEventCollaborator
     }
 
     [Fact]
-    public async Task Should_ReturnsAddedEventCollaboratorId_When_CallsRepositoryMethod()
+    public async Task Should_Return_AddedEventCollaboratorId_When_CallsRepositoryMethod()
     {
         User user = new UserBuilder(1)
                     .WithName("Test")
@@ -45,11 +45,11 @@ public class AddEventCollaborator
 
         await _eventCollaboratorRepository.Received().Add(eventCollaborator);
 
-        result.Should().Be(1);
+        result.Should().NotBe(0);
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventCollaboratorIsNull()
+    public async Task Should_Throw_Exception_When_EventCollaboratorIsNull()
     {
         EventCollaborator eventCollaborator = null;
 

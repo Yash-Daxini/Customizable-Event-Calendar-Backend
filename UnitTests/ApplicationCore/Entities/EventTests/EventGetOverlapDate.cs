@@ -39,7 +39,7 @@ public class EventGetOverlapDate
     }
 
     [Fact]
-    public void Should_ReturnsNull_When_OverlapNotOccur()
+    public void Should_Return_Null_When_OverlapNotOccur()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                                      .WithOrganizer(_user1, new DateOnly(2024, 6, 1))
@@ -59,7 +59,7 @@ public class EventGetOverlapDate
     }
 
     [Fact]
-    public void Should_ReturnsOverlapDate_When_OverlapOccur()
+    public void Should_Return_OverlapDate_When_OverlapOccur()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                              .WithOrganizer(_user1, new DateOnly(2024, 5, 31))
@@ -84,7 +84,7 @@ public class EventGetOverlapDate
     }
 
     [Fact]
-    public void Should_ReturnsNull_When_PassedEventIsNull()
+    public void Should_Return_Null_When_EventIsNull()
     {
         DateOnly? overlapDate = _event.GetOverlapDate(null);
 

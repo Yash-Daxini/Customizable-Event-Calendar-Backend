@@ -53,7 +53,7 @@ public class AddCollaborator
     }
 
     [Fact]
-    public async Task Should_AddCollaborator_When_NotOverlapAndNotAlreadyCollaborated()
+    public async Task Should_AddCollaborator_When_CollaborationNotOverlapAndNotAlreadyCollaborated()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                                       .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
@@ -92,7 +92,7 @@ public class AddCollaborator
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_CollaborationOverlap()
+    public async Task Should_Throw_CollaborationOverlapException_When_CollaborationOverlap()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                               .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
@@ -136,7 +136,7 @@ public class AddCollaborator
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_AlreadyCollaborated()
+    public async Task Should_Throw_UserAlreadyCollaboratedException_When_AlreadyCollaborated()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                               .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))
@@ -177,7 +177,7 @@ public class AddCollaborator
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventCollaboratorIsNull()
+    public async Task Should_Throw_NullArgumentException_When_EventCollaboratorIsNull()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                               .WithOrganizer(new UserBuilder(49).Build(), new DateOnly(2024, 5, 31))

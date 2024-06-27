@@ -23,7 +23,7 @@ public class GetSharedCalendarById
     }
 
     [Fact]
-    public async Task Should_ReturnsSharedCalendar_When_IdWithSharedCalendarAvailable()
+    public async Task Should_Return_SharedCalendar_When_SharedCalendarAvailableWithId()
     {
         SharedCalendar expectedResult = new(1,
                     new User { Id = 1, Name = "1", Email = "x@gmail.com", Password = "1" },
@@ -41,7 +41,7 @@ public class GetSharedCalendarById
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_IdWithSharedCalendarNotAvailable()
+    public async Task Should_Throw_NotFoundException_When_SharedCalendarNotAvailableWithId()
     {
         _sharedCalendarRepository.GetSharedCalendarById(1).ReturnsNull();
 
@@ -53,13 +53,13 @@ public class GetSharedCalendarById
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_IdWithSharedCalendarNotValid()
+    public async Task Should_Throw_NotFoundException_When_IdWithSharedCalendarNotValid()
     {
         _sharedCalendarRepository.GetSharedCalendarById(-11).ReturnsNull();
 
         var action = async () => await _sharedCalendarService.GetSharedCalendarById(-11);
 
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _sharedCalendarRepository.DidNotReceive().GetSharedCalendarById(1);
     }

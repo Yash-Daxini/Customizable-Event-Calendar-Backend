@@ -8,7 +8,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
     {
 
         [Fact]
-        public void Should_ReturnEmptyList_When_ItIsDailyRecurringEventAndIntervalIs0()
+        public void Should_Return_EmptyList_When_ItIsDailyRecurringEventAndIntervalIs0()
         {
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -23,7 +23,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsDailyRecurringEventAndWeekDayIsEmpty()
+        public void Should_Return_ListOfOccurrences_When_ItIsDailyRecurringEventAndWeekDayIsEmpty()
         {
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -41,7 +41,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
             actualResult.Should().BeEquivalentTo(expectedResult);
         }
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsDailyRecurringEventAndWeekDayIsNull()
+        public void Should_Return_ListOfOccurrences_When_ItIsDailyRecurringEventAndWeekDayIsNull()
         {
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -60,7 +60,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsDailyRecurringEventWithIntervalValue3()
+        public void Should_Return_ListOfOccurrences_When_ItIsDailyRecurringEventWithIntervalValue3()
         {
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -79,7 +79,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsDailyRecurringEventWithSameStartDateAndEndDate()
+        public void Should_Return_ListOfOccurrences_When_ItIsDailyRecurringEventWithSameStartDateAndEndDate()
         {
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))
@@ -96,7 +96,7 @@ namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests
         }
 
         [Fact]
-        public void Should_ReturnListOfOccurrences_When_ItIsDailyRecurringEventWithWeekDays()
+        public void Should_Return_ListOfOccurrences_When_ItIsDailyRecurringEventWithWeekDays()
         {
             RecurrencePattern recurrencePattern = new DailyRecurrencePatternBuilder()
                                                   .WithStartDate(new DateOnly(2024, 5, 31))

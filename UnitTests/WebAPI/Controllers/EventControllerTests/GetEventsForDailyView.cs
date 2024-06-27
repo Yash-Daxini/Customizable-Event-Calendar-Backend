@@ -23,7 +23,7 @@ public class GetEventsForDailyView : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnEvents_When_EventOfCurrentDay()
+    public async Task Should_Return_Events_When_EventOfCurrentDay()
     {
         IActionResult actionResult = await _eventController.GetEventsForDailyView(1);
 
@@ -31,7 +31,7 @@ public class GetEventsForDailyView : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.GetEventsForDailyViewByUserId(1).Throws<Exception>();
 

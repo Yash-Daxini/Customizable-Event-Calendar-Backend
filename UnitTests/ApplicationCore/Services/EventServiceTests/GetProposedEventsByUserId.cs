@@ -55,7 +55,7 @@ public class GetProposedEventsByUserId
     }
 
     [Fact]
-    public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
+    public async Task Should_Return_ListOfEvent_When_UserAvailableWithId()
     {
         _eventRepository.GetAllEventsByUserId(48).Returns(_events);
 

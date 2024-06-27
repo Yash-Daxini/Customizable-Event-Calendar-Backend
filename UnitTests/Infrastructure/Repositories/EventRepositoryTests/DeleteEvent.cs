@@ -17,7 +17,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_DeleteEvent_When_EventWithIdAvailable()
+    public async Task Should_DeleteEvent_When_EventAvailableWithId()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 

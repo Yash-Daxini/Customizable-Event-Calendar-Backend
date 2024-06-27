@@ -23,7 +23,7 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
     }
 
     [Fact]
-    public async Task Should_ReturnEvents_When_SharedCalendarAvailableWithId()
+    public async Task Should_Return_Events_When_SharedCalendarAvailableWithId()
     {
         IActionResult actionResult = await _eventController.GetSharedEventsFromSharedCalendarId(1);
 
@@ -31,7 +31,7 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
     }
     
     [Fact]
-    public async Task Should_ReturnNotFound_When_SharedCalendarNotAvailableWithId()
+    public async Task Should_Return_NotFound_When_SharedCalendarNotAvailableWithId()
     {
         _eventService.GetSharedEvents(1).Throws(new NotFoundException(""));
 
@@ -41,7 +41,7 @@ public class GetSharedEventsFromSharedCalendarId : IClassFixture<AutoMapperFixtu
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.GetSharedEvents(1).Throws<Exception>();
 

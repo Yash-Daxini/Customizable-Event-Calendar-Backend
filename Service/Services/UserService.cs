@@ -17,9 +17,6 @@ public class UserService : IUserService
 
     public async Task<User> GetUserById(int userId)
     {
-        if (userId is <= 0)
-            throw new ArgumentException($"Invalid user id");
-
         User? user = await _userRepository.GetUserById(userId);
 
         return user == null
@@ -30,7 +27,7 @@ public class UserService : IUserService
     public async Task<IdentityResult> SignUp(User user)
     {
         if (user is null)
-            throw new NullArgumentException($" Event collaborator can't be null");
+            throw new NullArgumentException($" User can't be null");
 
         return await _userRepository.SignUp(user);
     }
@@ -38,7 +35,7 @@ public class UserService : IUserService
     public async Task<IdentityResult> UpdateUser(User user)
     {
         if (user is null)
-            throw new NullArgumentException($" Event collaborator can't be null");
+            throw new NullArgumentException($" User can't be null");
 
         User? userById = await _userRepository.GetUserById(user.Id);
 
@@ -50,9 +47,6 @@ public class UserService : IUserService
 
     public async Task<IdentityResult> DeleteUser(int userId)
     {
-        if (userId is <= 0)
-            throw new ArgumentException($"Invalid event id");
-
         User? user = await _userRepository.GetUserById(userId);
 
         if (user is null)

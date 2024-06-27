@@ -35,7 +35,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnAuthenticationResponse_When_UserWithValidCredentials()
+    public async Task Should_Return_AuthenticationResponse_When_UserWithValidCredentials()
     {
         AuthenticateResponse authenticateResponse = new(_user, "c");
 
@@ -53,7 +53,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnNotFoundResponse_When_UserNotAvailable()
+    public async Task Should_Return_NotFoundResponse_When_UserNotAvailable()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -70,7 +70,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     
     
     [Fact]
-    public async Task Should_ReturnAuthenticationFailedResponse_When_UserWithInvalidCredentials()
+    public async Task Should_Return_AuthenticationFailedResponse_When_UserWithInvalidCredentials()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {
@@ -86,7 +86,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         AuthenticateRequestDto authenticateRequestDto = new()
         {

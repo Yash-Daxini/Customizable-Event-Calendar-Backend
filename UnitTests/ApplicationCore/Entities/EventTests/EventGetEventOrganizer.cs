@@ -8,7 +8,7 @@ namespace UnitTests.ApplicationCore.Entities.EventTests;
 public class EventGetEventOrganizer
 {
     [Fact]
-    public void Should_ReturnOrganizerOfEvent_When_MultipleEventCollaboratorsPresent()
+    public void Should_Return_OrganizerOfEvent_When_MultipleEventCollaboratorsPresentInList()
     {
         User user1 = new UserBuilder(48)
                      .WithName("a")
@@ -40,7 +40,7 @@ public class EventGetEventOrganizer
     }
 
     [Fact]
-    public void Should_ReturnOrganizerOfEvent_When_OnlyOrganizerPresent()
+    public void Should_Return_OrganizerOfEvent_When_OnlyOrganizerPresentInEventCollaboratorList()
     {
         User user1 = new UserBuilder(48)
                      .WithName("a")
@@ -62,7 +62,7 @@ public class EventGetEventOrganizer
     }
 
     [Fact]
-    public void Should_ReturnNull_When_OrganizerNotPresent()
+    public void Should_Return_Null_When_OrganizerNotPresentInEventCollaboratorList()
     {
         User user1 = new UserBuilder(48)
                      .WithName("a")
@@ -87,7 +87,7 @@ public class EventGetEventOrganizer
     }
 
     [Fact]
-    public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsNull()
+    public void Should_Return_Null_When_EventCollaboratorListIsNull()
     {
         Event eventObj = new EventBuilder()
                          .WithEventCollaborators(null)
@@ -99,7 +99,7 @@ public class EventGetEventOrganizer
     }
 
     [Fact]
-    public void Should_ReturnOrganizerOfEventAsNull_When_EventCollaboratorsIsEmpty()
+    public void Should_Return_Null_When_EventCollaboratorListIsEmpty()
     {
         Event eventObj = new EventBuilder()
                          .WithEventCollaborators([])

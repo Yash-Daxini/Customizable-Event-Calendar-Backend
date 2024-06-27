@@ -23,7 +23,7 @@ public class UpdateUser
     }
 
     [Fact]
-    public async Task Should_UpdateUser_When_UserWithIdAvailable()
+    public async Task Should_UpdateUser_When_UserAvailableWithId()
     {
         User user = new UserBuilder(1)
                     .WithName("Test")
@@ -39,7 +39,7 @@ public class UpdateUser
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_UserWithIdNotAvailable()
+    public async Task Should_Throw_NotFoundException_When_UserNotAvailableWithId()
     {
         User user = new UserBuilder(1)
                     .Build();
@@ -54,7 +54,7 @@ public class UpdateUser
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_UserIsNull()
+    public async Task Should_Throw_NullArgumentException_When_UserIsNull()
     {
         User user = null;
 

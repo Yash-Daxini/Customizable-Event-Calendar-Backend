@@ -15,7 +15,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidUserDto()
+    public void Should_Return_False_When_InvalidUserDto()
     {
         UserDto userDto = new();
 
@@ -25,7 +25,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_NameIsEmpty()
+    public void Should_Return_False_When_NameIsEmpty()
     {
         UserDto userDto = new()
         {
@@ -40,7 +40,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_NameIsNull()
+    public void Should_Return_False_When_NameIsNull()
     {
         UserDto userDto = new()
         {
@@ -55,7 +55,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_EmailIsEmpty()
+    public void Should_Return_False_When_EmailIsEmpty()
     {
         UserDto userDto = new()
         {
@@ -70,7 +70,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_EmailIsNull()
+    public void Should_Return_False_When_EmailIsNull()
     {
         UserDto userDto = new()
         {
@@ -85,7 +85,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_EmailIsNotValid()
+    public void Should_Return_False_When_EmailIsNotValid()
     {
         UserDto userDto = new()
         {
@@ -100,7 +100,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_PasswordIsEmpty()
+    public void Should_Return_False_When_PasswordIsEmpty()
     {
         UserDto userDto = new()
         {
@@ -115,7 +115,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_PasswordIsNull()
+    public void Should_Return_False_When_PasswordIsNull()
     {
         UserDto userDto = new()
         {
@@ -130,7 +130,7 @@ public class UserDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidUserDto()
+    public void Should_Return_True_When_ValidUserDto()
     {
         UserDto userDto = new()
         {

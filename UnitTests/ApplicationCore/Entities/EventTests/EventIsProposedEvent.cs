@@ -9,7 +9,7 @@ public class EventIsProposedEvent
 {
 
     [Fact]
-    public void Should_ReturnsFalse_When_NotAnyEventCollaboratorWithProposedOrPendingStatus()
+    public void Should_Return_False_When_NoEventCollaboratorPresentWithProposedOrPendingStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                                      .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
@@ -28,7 +28,7 @@ public class EventIsProposedEvent
     }
 
     [Fact]
-    public void Should_ReturnsTrue_When_AnyEventCollaboratorWithProposedStatus()
+    public void Should_Return_True_When_EventCollaboratorPresentWithProposedStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                                      .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
@@ -48,7 +48,7 @@ public class EventIsProposedEvent
     }
 
     [Fact]
-    public void Should_ReturnsTrue_When_AnyEventCollaboratorWithPendingStatus()
+    public void Should_Return_True_When_EventCollaboratorPresentWithPendingStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                                      .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
@@ -67,7 +67,7 @@ public class EventIsProposedEvent
     }
 
     [Fact]
-    public void Should_ReturnsTrue_When_EventCollaboratorsWithPendingAndProposedStatus()
+    public void Should_Return_True_When_EventCollaboratorsPresentWithPendingAndProposedStatus()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                                      .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())

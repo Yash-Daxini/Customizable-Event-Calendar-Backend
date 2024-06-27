@@ -22,7 +22,7 @@ public class GetEventsForWeeklyView : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnEvents_When_EventOfCurrentWeek()
+    public async Task Should_Return_Events_When_EventOfCurrentWeek()
     {
         IActionResult actionResult = await _eventController.GetEventsForWeeklyView(1);
 
@@ -30,7 +30,7 @@ public class GetEventsForWeeklyView : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.GetEventsForWeeklyViewByUserId(1).Throws<Exception>();
 

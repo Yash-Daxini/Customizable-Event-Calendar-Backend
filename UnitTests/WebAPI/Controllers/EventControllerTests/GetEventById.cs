@@ -25,7 +25,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnEvent_When_EventAvailableWithId()
+    public async Task Should_Return_Event_When_EventAvailableWithId()
     {
         Event eventObj = Substitute.For<Event>();
 
@@ -37,7 +37,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnNotFound_When_EventNotAvailableWithId()
+    public async Task Should_Return_NotFound_When_EventNotAvailableWithId()
     {
         _eventService.GetEventById(1, 1).Throws(new NotFoundException(""));
 
@@ -47,7 +47,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.GetEventById(1, 1).Throws<Exception>();
 

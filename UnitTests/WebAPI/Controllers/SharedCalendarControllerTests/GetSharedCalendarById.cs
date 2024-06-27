@@ -24,7 +24,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnSharedCalendar_When_SharedCalendarAvailableWithId()
+    public async Task Should_Return_SharedCalendar_When_SharedCalendarAvailableWithId()
     {
         SharedCalendar sharedCalendar = new(1, 
                                             new User 
@@ -52,7 +52,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnBadRequest_When_SharedCalendarNotAvailableWithId()
+    public async Task Should_Return_BadRequest_When_SharedCalendarNotAvailableWithId()
     {
         _sharedCalendarService.GetSharedCalendarById(1).Throws(new NotFoundException(""));
 
@@ -62,7 +62,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _sharedCalendarService.GetSharedCalendarById(1).Throws<Exception>();
 

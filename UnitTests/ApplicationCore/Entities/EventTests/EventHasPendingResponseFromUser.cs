@@ -10,7 +10,7 @@ public class EventHasPendingResponseFromUser
     [Theory]
     [InlineData(50)]
     [InlineData(51)]
-    public void Should_ReturnsFalse_When_UserIsNotAvailableAsEventCollaborator(int userId)
+    public void Should_Return_False_When_UserIsNotPresentInEventCollaboratorList(int userId)
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                              .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
@@ -32,7 +32,7 @@ public class EventHasPendingResponseFromUser
     [Theory]
     [InlineData(48)]
     [InlineData(49)]
-    public void Should_ReturnsFalse_When_UserHasNotPendingResponse(int userId)
+    public void Should_Return_False_When_NoUserWithPendingResponsePresentInEventCollaboratorList(int userId)
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                              .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())
@@ -57,7 +57,7 @@ public class EventHasPendingResponseFromUser
 
     [Theory]
     [InlineData(50)]
-    public void Should_ReturnsTrue_When_UserHasPendingResponse(int userId)
+    public void Should_Return_True_When_UserWithPendingResponsePresentInEventCollaboratorList(int userId)
     {
 
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
@@ -84,7 +84,7 @@ public class EventHasPendingResponseFromUser
     [Theory]
     [InlineData(50)]
     [InlineData(51)]
-    public void Should_ReturnsTrue_When_MultipleUserHasPendingResponse(int userId)
+    public void Should_Return_True_When_MultipleUserWithPendingResponsePresentInEventCollaboratorList(int userId)
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                              .WithOrganizer(new UserBuilder(48).Build(), new DateOnly())

@@ -19,7 +19,7 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnEventCollaborators_When_EventCollaboratorAvailableWithGivenId()
+    public async Task Should_Return_EventCollaborators_When_EventCollaboratorAvailableWithGivenId()
     {
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
 
@@ -46,7 +46,7 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnNull_When_EventCollaboratorNotAvailableWithGivenId()
+    public async Task Should_Return_Null_When_EventCollaboratorNotAvailableWithGivenId()
     {
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
 

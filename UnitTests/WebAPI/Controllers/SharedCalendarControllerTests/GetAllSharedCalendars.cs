@@ -24,7 +24,7 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnIActionResult_When_SharedCalendarsAvailable()
+    public async Task Should_Return_IActionResult_When_SharedCalendarsAvailable()
     {
         List<SharedCalendar> sharedCalendars = Substitute.For<List<SharedCalendar>>();
 
@@ -36,7 +36,7 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _sharedCalendarService.GetAllSharedCalendars().Throws<Exception>();
 

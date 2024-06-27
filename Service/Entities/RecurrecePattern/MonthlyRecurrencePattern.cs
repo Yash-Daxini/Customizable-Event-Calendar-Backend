@@ -28,11 +28,20 @@ public class MonthlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay()
     {
+        if (!IsValidMonthDay())
+            return [];
+
         DateOnly currentDate = StartDate.GetMaxDate((int)ByMonthDay, null);
 
         int totalOccurrences = GetOccurrencesCount();
 
         return GetOccurrencesUsingMonthDay(currentDate, totalOccurrences);
+    }
+
+    private bool IsValidMonthDay()
+    {
+        return ByMonthDay >= 1
+               && ByMonthDay <= 31;
     }
 
     private List<DateOnly> GetOccurrencesUsingMonthDay(DateOnly currentDate,

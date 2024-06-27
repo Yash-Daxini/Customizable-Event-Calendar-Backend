@@ -20,7 +20,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnListOfEvents_When_SharedCalendarAvailableWithGivenId()
+    public async Task Should_Return_ListOfEvents_When_SharedCalendarAvailableWithGivenId()
     {
         //Arrange
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();

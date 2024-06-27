@@ -19,7 +19,7 @@ public class AddEventCollaborator : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddEventCollaboratorAndReturnId_When_CallsRepositoryMethod()
+    public async Task Should_Return_AddedEventCollaboratorId_When_EventCollaboratorIsValid()
     {
         //Arrange
         _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();

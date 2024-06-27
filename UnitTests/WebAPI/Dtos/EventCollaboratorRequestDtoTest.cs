@@ -14,7 +14,7 @@ public class EventCollaboratorRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidEventCollaboratorRequestDtoValidator()
+    public void Should_Return_False_When_InvalidEventCollaboratorRequestDtoValidator()
     {
         EventCollaboratorRequestDto eventCollaboratorRequestDto = new(); 
 
@@ -24,7 +24,7 @@ public class EventCollaboratorRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_UserIdLessThanZero()
+    public void Should_Return_False_When_UserIdLessThanZero()
     {
         EventCollaboratorRequestDto eventCollaboratorRequestDto = new()
         {
@@ -46,7 +46,7 @@ public class EventCollaboratorRequestDtoTest
     [InlineData("ddfd")]
     [InlineData("")]
     [InlineData(null)]
-    public void Should_ReturnFalse_When_InValidEventCollaboratorRole(string eventCollaboratorRole)
+    public void Should_Return_False_When_InValidEventCollaboratorRole(string eventCollaboratorRole)
     {
         EventCollaboratorRequestDto eventCollaboratorRequestDto = new()
         {
@@ -65,7 +65,7 @@ public class EventCollaboratorRequestDtoTest
     [InlineData("Organizer")]
     [InlineData("Participant")]
     [InlineData("Collaborator")]
-    public void Should_ReturnTrue_When_ValidEventCollaboratorRole(string eventCollaboratorRole)
+    public void Should_Return_True_When_ValidEventCollaboratorRole(string eventCollaboratorRole)
     {
         EventCollaboratorRequestDto eventCollaboratorRequestDto = new()
         {
@@ -88,7 +88,7 @@ public class EventCollaboratorRequestDtoTest
     [InlineData("proposed")]
     [InlineData("")]
     [InlineData(null)]
-    public void Should_ReturnFalse_When_InValidConfirmation(string confirmationStatus)
+    public void Should_Return_False_When_InValidConfirmation(string confirmationStatus)
     {
         EventCollaboratorRequestDto eventCollaboratorRequestDto = new()
         {
@@ -109,7 +109,7 @@ public class EventCollaboratorRequestDtoTest
     [InlineData("Maybe")]
     [InlineData("Pending")]
     [InlineData("Proposed")]
-    public void Should_ReturnTrue_When_ValidConfirmation(string confirmationStatus)
+    public void Should_Return_True_When_ValidConfirmation(string confirmationStatus)
     {
         EventCollaboratorRequestDto eventCollaboratorRequestDto = new()
         {
@@ -125,7 +125,7 @@ public class EventCollaboratorRequestDtoTest
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidEventCollaboratorRequestDtoValidator()
+    public void Should_Return_True_When_ValidEventCollaboratorRequestDtoValidator()
     {
         EventCollaboratorRequestDto eventCollaboratorRequestDto = new()
         {

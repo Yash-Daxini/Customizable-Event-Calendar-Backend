@@ -35,7 +35,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnBadRequest_When_EventOverlaps()
+    public async Task Should_Return_BadRequest_When_EventOverlaps()
     {
         Event eventObj = Substitute.For<Event>();
 
@@ -49,7 +49,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
     }
     
     [Fact]
-    public async Task Should_ReturnBadRequest_When_EventNotAvailableWithId()
+    public async Task Should_Return_BadRequest_When_EventNotAvailableWithId()
     {
         Event eventObj = Substitute.For<Event>();
 
@@ -63,7 +63,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         Event eventObj = Substitute.For<Event>();
 

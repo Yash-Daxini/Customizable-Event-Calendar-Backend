@@ -22,7 +22,7 @@ public class GetProposedEvents : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnEvents_When_ProposedEventsAvailable()
+    public async Task Should_Return_Events_When_ProposedEventsAvailable()
     {
         IActionResult actionResult = await _eventController.GetProposedEvents(1);
 
@@ -30,7 +30,7 @@ public class GetProposedEvents : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.GetProposedEventsByUserId(1).Throws<Exception>();
 

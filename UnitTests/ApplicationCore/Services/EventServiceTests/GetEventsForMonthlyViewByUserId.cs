@@ -47,7 +47,7 @@ public class GetEventsForMonthlyViewByUserId
     }
 
     [Fact]
-    public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
+    public async Task Should_Return_ListOfEvent_When_UserAvailableWithId()
     {
         DateOnly startDateOfMonth = DateTimeUtills.GetStartDateOfMonth(DateTime.Now);
         DateOnly endDateOfMonth = DateTimeUtills.GetEndDateOfMonth(DateTime.Now);

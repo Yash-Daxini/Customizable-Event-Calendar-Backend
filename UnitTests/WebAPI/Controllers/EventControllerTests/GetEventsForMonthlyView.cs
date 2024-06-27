@@ -22,7 +22,7 @@ public class GetEventsForMonthlyView : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnEvents_When_EventOfCurrentMonth()
+    public async Task Should_Return_Events_When_EventOfCurrentMonth()
     {
         IActionResult actionResult = await _eventController.GetEventsForMonthlyView(1);
 
@@ -30,7 +30,7 @@ public class GetEventsForMonthlyView : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.GetEventsForMonthlyViewByUserId(1).Throws<Exception>();
 

@@ -10,7 +10,7 @@ public class CreateDuration
     [InlineData(-5, 22)]
     [InlineData(25, 4)]
 
-    public void Should_ThrowException_When_StartHourIsNotInRange(int startHour, int endHour)
+    public void Should_Throw_Exception_When_StartHourIsNotInRange(int startHour, int endHour)
     {
         Action action = () =>
         {
@@ -24,7 +24,7 @@ public class CreateDuration
     [InlineData(5, -22)]
     [InlineData(2, 24)]
 
-    public void Should_ThrowException_When_EndHourIsNotInRange(int startHour, int endHour)
+    public void Should_Throw_Exception_When_EndHourIsNotInRange(int startHour, int endHour)
     {
         Action action = () =>
         {
@@ -40,7 +40,7 @@ public class CreateDuration
     [InlineData(5, 4)]
     [InlineData(23, 0)]
 
-    public void Should_ThrowException_When_StartHourAndEndHourAreNotInRange(int startHour, int endHour)
+    public void Should_Throw_Exception_When_StartHourAndEndHourAreNotInRange(int startHour, int endHour)
     {
         Action action = () =>
         {
@@ -56,7 +56,7 @@ public class CreateDuration
     [InlineData(22, 23)]
     [InlineData(0, 1)]
 
-    public void Should_NotThrowException_When_StartHourAndEndHourAreInRange(int startHour, int endHour)
+    public void Should_NotThrow_Exception_When_StartHourAndEndHourAreInRange(int startHour, int endHour)
     {
         Duration duration = new(startHour, endHour);
 

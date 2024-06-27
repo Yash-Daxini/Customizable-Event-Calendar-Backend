@@ -15,7 +15,7 @@ public class CollaborationRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidEventCollaborationRequestDto()
+    public void Should_Return_False_When_InvalidEventCollaborationRequestDto()
     {
         CollaborationRequestDto collaborationRequestDto = new();
 
@@ -25,7 +25,7 @@ public class CollaborationRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_EventDateIsEmpty()
+    public void Should_Return_False_When_EventDateIsEmpty()
     {
         CollaborationRequestDto collaborationRequestDto = new()
         {
@@ -41,7 +41,7 @@ public class CollaborationRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_EventIdIsLessThanZero()
+    public void Should_Return_False_When_EventIdIsLessThanZero()
     {
         CollaborationRequestDto collaborationRequestDto = new()
         {
@@ -57,7 +57,7 @@ public class CollaborationRequestDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidEventCollaborationRequestDto()
+    public void Should_Return_True_When_ValidEventCollaborationRequestDto()
     {
         CollaborationRequestDto collaborationRequestDto = new()
         {

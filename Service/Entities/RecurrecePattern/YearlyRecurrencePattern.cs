@@ -29,7 +29,7 @@ public class YearlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingMonthDay()
     {
-        if (ByMonth is null)
+        if (!IsValidMonth() || !IsValidMonthDay())
             return [];
 
         DateOnly currentDate = StartDate.GetMaxDate((int)ByMonthDay, (int)ByMonth);
@@ -37,6 +37,18 @@ public class YearlyRecurrencePattern : RecurrencePattern
         int totalOccurrences = GetOccurrencesCount();
 
         return GetOccurrencesUsingMonthDay(currentDate, totalOccurrences);
+    }
+
+    private bool IsValidMonth()
+    {
+        return ByMonth >= 1
+               && ByMonth <= 12;
+    }
+
+    private bool IsValidMonthDay()
+    {
+        return ByMonthDay >= 1
+               && ByMonthDay <= 31;
     }
 
     private List<DateOnly> GetOccurrencesUsingMonthDay(DateOnly currentDate,
@@ -51,9 +63,9 @@ public class YearlyRecurrencePattern : RecurrencePattern
 
     private List<DateOnly> GetOccurrencesOfEventsUsingWeekOrderAndWeekDay()
     {
-        if (ByWeekDay is null 
-            || ByMonth is null 
-            || WeekOrder is null 
+        if (ByWeekDay is null
+            || ByMonth is null
+            || WeekOrder is null
             || WeekOrder <= 0)
             return [];
 

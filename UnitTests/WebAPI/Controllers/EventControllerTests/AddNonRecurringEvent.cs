@@ -57,7 +57,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnBadRequest_When_EventOverlaps()
+    public async Task Should_Return_BadRequest_When_EventOverlaps()
     {
         _eventService.AddNonRecurringEvent(_eventObj, 1).ThrowsAsyncForAnyArgs(new EventOverlapException("Overlap"));
 
@@ -67,7 +67,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.AddNonRecurringEvent(_eventObj, 1).ThrowsAsyncForAnyArgs<Exception>();
 

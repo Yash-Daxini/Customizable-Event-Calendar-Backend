@@ -31,7 +31,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 29)]
     [InlineData(2024, 10, 1)]
-    public void Should_ReturnsFalse_When_DateIsNotPresentInEvent(int year, int month, int day)
+    public void Should_Return_False_When_DateIsNotPresentInEvent(int year, int month, int day)
     {
         DateOnly date = new(year, month, day);
 
@@ -43,7 +43,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 29, 50)]
     [InlineData(2024, 10, 1, 51)]
-    public void Should_ReturnsFalse_When_DateAndUserIsNotPresentInEvent(int year, int month, int day, int userId)
+    public void Should_Return_False_When_DateAndUserIsNotPresentInEvent(int year, int month, int day, int userId)
     {
         DateOnly date = new(year, month, day);
 
@@ -55,7 +55,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 30, 48)]
     [InlineData(2024, 5, 31, 48)]
-    public void Should_ReturnsTrue_When_DateAndUserIsPresentInEvent(int year, int month, int day, int userId)
+    public void Should_Return_True_When_DateAndUserIsPresentInEvent(int year, int month, int day, int userId)
     {
         DateOnly date = new(year, month, day);
 
@@ -67,7 +67,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 30, 48)]
     [InlineData(2024, 5, 31, 48)]
-    public void Should_ReturnsFalse_When_EventCollaboratorsIsNull(int year, int month, int day, int userId)
+    public void Should_Return_False_When_EventCollaboratorsIsNull(int year, int month, int day, int userId)
     {
         DateOnly date = new(year, month, day);
 
@@ -81,7 +81,7 @@ public class EventIsUserCollaboratedOnGivenDate
     [Theory]
     [InlineData(2024, 5, 30, 48)]
     [InlineData(2024, 5, 31, 48)]
-    public void Should_ReturnsFalse_When_EventCollaboratorsIsEmpty(int year, int month, int day, int userId)
+    public void Should_Return_False_When_EventCollaboratorsIsEmpty(int year, int month, int day, int userId)
     {
         DateOnly date = new(year, month, day);
 

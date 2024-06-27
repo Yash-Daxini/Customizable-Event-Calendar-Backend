@@ -59,7 +59,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddRecurringEvent_When_EventNotOverlapsAndOneTime()
+    public async Task Should_AddRecurringEvent_When_EventNotOverlapsAndEventIsOneTime()
     {
         _eventService.AddEvent(_eventObj, 1).ReturnsForAnyArgs(1);
 
@@ -151,7 +151,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
         _recurringEventRequestDto.RecurrencePattern.ByWeekDay = null;
         _recurringEventRequestDto.RecurrencePattern.WeekOrder = null;
         _recurringEventRequestDto.RecurrencePattern.ByMonthDay = null;
-        _recurringEventRequestDto.RecurrencePattern.ByMonth= 12;
+        _recurringEventRequestDto.RecurrencePattern.ByMonth = 12;
 
         _eventService.AddEvent(_eventObj, 1).ReturnsForAnyArgs(1);
 
@@ -161,7 +161,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnBadRequest_When_EventOverlaps()
+    public async Task Should_Return_BadRequest_When_EventOverlaps()
     {
         _eventService.AddEvent(_eventObj, 1).ThrowsAsyncForAnyArgs(new EventOverlapException("Overlap"));
 
@@ -171,7 +171,7 @@ public class AddRecurringEvent : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnServerError_When_SomeErrorOccurred()
+    public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
         _eventService.AddEvent(_eventObj, 1).ThrowsAsyncForAnyArgs<Exception>();
 

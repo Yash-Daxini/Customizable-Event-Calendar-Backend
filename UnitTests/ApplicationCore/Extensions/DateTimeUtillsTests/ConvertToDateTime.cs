@@ -6,7 +6,7 @@ namespace UnitTests.ApplicationCore.Extensions.DateTimeUtillsTests;
 public class ConvertToDateTime
 {
     [Fact]
-    public void Should_Return_DateTime_When_InputIsDateOnly()
+    public void Should_Return_DateTime_When_InputIsDateTime()
     {
         DateTime dateTime = DateTime.Now;
 

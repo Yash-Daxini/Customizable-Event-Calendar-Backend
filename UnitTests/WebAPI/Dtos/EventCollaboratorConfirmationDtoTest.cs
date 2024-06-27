@@ -14,7 +14,7 @@ public class EventCollaboratorConfirmationDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidEventCollaboratorConfirmationDto()
+    public void Should_Return_False_When_InvalidEventCollaboratorConfirmationDto()
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = new()
         {
@@ -27,7 +27,7 @@ public class EventCollaboratorConfirmationDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_EventIdLessThanZero()
+    public void Should_Return_False_When_EventIdLessThanZero()
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = new()
         {
@@ -53,7 +53,7 @@ public class EventCollaboratorConfirmationDtoTest
     [InlineData("sdad")]
     [InlineData("")]
     [InlineData(null)]
-    public void Should_ReturnFalse_When_InValidConfirmationStatus(string confirmationStatus)
+    public void Should_Return_False_When_InValidConfirmationStatus(string confirmationStatus)
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = new()
         {
@@ -74,7 +74,7 @@ public class EventCollaboratorConfirmationDtoTest
     [InlineData("Reject")]
     [InlineData("Maybe")]
     [InlineData("Pending")]
-    public void Should_ReturnTrue_When_ValidConfirmationStatus(string confirmationStatus)
+    public void Should_Return_True_When_ValidConfirmationStatus(string confirmationStatus)
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = new()
         {
@@ -95,7 +95,7 @@ public class EventCollaboratorConfirmationDtoTest
     [InlineData("reject")]
     [InlineData("maybe")]
     [InlineData("pending")]
-    public void Should_ReturnFalse_When_ProposedDurationNotNullWhenConfirmationStatusIsNotProposed(string confirmationStatus)
+    public void Should_Return_False_When_ProposedDurationNotNullWhenConfirmationStatusIsNotProposed(string confirmationStatus)
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = new()
         {
@@ -116,7 +116,7 @@ public class EventCollaboratorConfirmationDtoTest
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_ProposedDurationNullWhenConfirmationStatusIsProposed()
+    public void Should_Return_False_When_ProposedDurationNullWhenConfirmationStatusIsProposed()
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = new()
         {
@@ -133,7 +133,7 @@ public class EventCollaboratorConfirmationDtoTest
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidEventCollaboratorConfirmationDto()
+    public void Should_Return_True_When_ValidEventCollaboratorConfirmationDto()
     {
         EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto = new()
         {

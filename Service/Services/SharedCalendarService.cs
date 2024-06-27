@@ -21,9 +21,6 @@ public class SharedCalendarService : ISharedCalendarService
 
     public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
     {
-        if (sharedCalendarId is <= 0)
-            throw new ArgumentException($"Invalid shared calendar id");
-
         SharedCalendar? sharedCalendar = await _sharedCalendarRepository
                                                .GetSharedCalendarById(sharedCalendarId);
 

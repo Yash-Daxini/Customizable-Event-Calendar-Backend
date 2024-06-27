@@ -51,7 +51,7 @@ public class GetNonProposedEventsByUserId
     }
 
     [Fact]
-    public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
+    public async Task Should_Return_ListOfEvent_When_UserAvailableWithId()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
                                              .WithOrganizer(new UserBuilder(48).Build(), new DateOnly(2024, 5, 31))

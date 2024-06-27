@@ -19,7 +19,7 @@ public class GetJWTToken
     }
 
     [Fact]
-    public async Task Should_ReturnJWTToken_When_NotNullUser()
+    public async Task Should_Return_JWTToken_When_UserIsNotNull()
     {
         User user = new ()
         {

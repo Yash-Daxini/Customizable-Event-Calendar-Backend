@@ -14,7 +14,7 @@ public class SharedCalendarDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_InvalidSharedCalendarDto()
+    public void Should_Return_False_When_InvalidSharedCalendarDto()
     {
         SharedCalendarDto sharedCalendarDto = new();
 
@@ -24,7 +24,7 @@ public class SharedCalendarDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_FromDateAndToDateIsEmpty()
+    public void Should_Return_False_When_FromDateAndToDateIsEmpty()
     {
         SharedCalendarDto sharedCalendarDto = new()
         {
@@ -39,7 +39,7 @@ public class SharedCalendarDtoTests
     }
 
     [Fact]
-    public void Should_ReturnFalse_When_FromDateGreaterThanToDate()
+    public void Should_Return_False_When_FromDateGreaterThanToDate()
     {
         SharedCalendarDto sharedCalendarDto = new()
         {
@@ -56,7 +56,7 @@ public class SharedCalendarDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_SenderUserIdIsLessThatZero()
+    public void Should_Return_True_When_SenderUserIdIsLessThatZero()
     {
         SharedCalendarDto sharedCalendarDto = new()
         {
@@ -73,7 +73,7 @@ public class SharedCalendarDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ReceiverUserIdIsLessThatZero()
+    public void Should_Return_True_When_ReceiverUserIdIsLessThatZero()
     {
         SharedCalendarDto sharedCalendarDto = new()
         {
@@ -90,7 +90,7 @@ public class SharedCalendarDtoTests
     }
 
     [Fact]
-    public void Should_ReturnTrue_When_ValidSharedCalendarDto()
+    public void Should_Return_True_When_ValidSharedCalendarDto()
     {
         SharedCalendarDto sharedCalendarDto = new()
         {

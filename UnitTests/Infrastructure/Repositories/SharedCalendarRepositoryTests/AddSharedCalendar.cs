@@ -17,7 +17,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_AddSharedCalendarAndReturnSharedCalendarId_When_CallsTheRepositoryMethod()
+    public async Task Should_Return_AddedSharedCalendarId_When_SharedCalendarIsValid()
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 

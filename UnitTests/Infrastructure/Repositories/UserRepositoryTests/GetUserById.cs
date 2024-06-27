@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
@@ -44,7 +43,7 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     }
 
     [Fact]
-    public async Task Should_ReturnUser_When_UserWithIdAvailable()
+    public async Task Should_Return_User_When_UserAvailable()
     {
         User expectedResult = new UserBuilder(1)
                              .WithName("a")

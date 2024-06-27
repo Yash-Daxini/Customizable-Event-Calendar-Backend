@@ -29,7 +29,7 @@ public class UpdateEventCollaborator
                                               .WithId(1)
                                               .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
                                               .WithConfirmationStatus(ConfirmationStatus.Accept)
-                                              .WithEventDate(new DateOnly(2024,6,2))
+                                              .WithEventDate(new DateOnly(2024, 6, 2))
                                               .WithEventId(1)
                                               .WithProposedDuration(null)
                                               .WithUser(new UserBuilder(1).Build())
@@ -43,7 +43,7 @@ public class UpdateEventCollaborator
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventCollaboratorIdIsNotPresent()
+    public async Task Should_Throw_NotFoundException_When_EventCollaboratorIdIsNotPresent()
     {
         EventCollaborator eventCollaborator = new EventCollaboratorBuilder()
                                               .WithId(1)
@@ -65,7 +65,7 @@ public class UpdateEventCollaborator
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_EventCollaboratorIsNull()
+    public async Task Should_Throw_NullArgumentException_When_EventCollaboratorIsNull()
     {
         EventCollaborator eventCollaborator = null;
 

@@ -9,7 +9,7 @@ public class EventGetEventInvitees
 {
 
     [Fact]
-    public void Should_ReturnEmptyList_When_EventCollaboratorsIsNull()
+    public void Should_Return_EmptyList_When_EventCollaboratorsIsNull()
     {
         Event eventObj = new EventBuilder()
                          .WithEventCollaborators(null)
@@ -21,7 +21,7 @@ public class EventGetEventInvitees
     }
 
     [Fact]
-    public void Should_ReturnEmptyList_When_EventCollaboratorsIsEmpty()
+    public void Should_Return_EmptyList_When_EventCollaboratorsIsEmpty()
     {
         Event eventObj = new EventBuilder()
                          .WithEventCollaborators([])
@@ -33,7 +33,7 @@ public class EventGetEventInvitees
     }
 
     [Fact]
-    public void Should_ReturnListOfEventCollaborators_When_EventCollaboratorsAvailable()
+    public void Should_Return_ListOfEventCollaborators_When_EventCollaboratorsIsNotNullAndNotEmpty()
     {
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(47)
                                                       .WithOrganizer(new UserBuilder(48).Build(),

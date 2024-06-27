@@ -29,7 +29,7 @@ public class GetEventsForDailyViewByUserId
     }
 
     [Fact]
-    public async Task Should_ReturnListOfEvent_When_UserWithIdAvailable()
+    public async Task Should_Return_ListOfEvent_When_UserAvailableWithId()
     {
         DateOnly date = DateTime.Now.ConvertToDateOnly();
 

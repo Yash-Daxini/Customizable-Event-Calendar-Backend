@@ -22,7 +22,7 @@ public class GetUserById
     }
 
     [Fact]
-    public async Task Should_ReturnUserWithGivenId_When_UserWithGivenUserIdAvailable()
+    public async Task Should_Return_UserWithGivenId_When_UserAvailableWithGivenUserId()
     {
         User user = new UserBuilder(1)
                     .WithName("Test")
@@ -40,7 +40,7 @@ public class GetUserById
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_UserWithGivenUserIdNotAvailable()
+    public async Task Should_Throw_NotFoundException_When_UserNotAvailableWithGivenUserId()
     {
         _userRepository.GetUserById(1).ReturnsNull();
 
@@ -52,13 +52,13 @@ public class GetUserById
     }
 
     [Fact]
-    public async Task Should_ThrowException_When_UserWithGivenUserIdNotValid()
+    public async Task Should_Throw_NotFoundException_When_UserWithGivenUserIdNotValid()
     {
         _userRepository.GetUserById(-11).ReturnsNull();
 
         var action = async () => await _userService.GetUserById(-11);
 
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<NotFoundException>();
 
         await _userRepository.DidNotReceive().GetUserById(-1);
     }
