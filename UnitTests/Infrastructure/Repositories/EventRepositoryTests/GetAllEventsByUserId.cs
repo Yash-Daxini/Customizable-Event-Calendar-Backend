@@ -6,6 +6,8 @@ using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders.EntityBuilder;
 using Core.Entities.Enums;
+using Infrastructure.DataModels;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -27,6 +29,231 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                              .WithId(1)
+                              .WithUserName("a")
+                              .WithEmail("a@gmail.com")
+                              .Build();
+
+        UserDataModel userDataModel2 = new UserDataModelBuilder()
+                                      .WithId(2)
+                                      .WithUserName("b")
+                                      .WithEmail("b@gmail.com")
+                                      .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels1 = new EventCollaboratorDataModelListBuilder(1)
+                                                                       .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                                       .Build();
+
+        EventDataModel eventDataModel1 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("None")
+                                        .WithInterval(1)
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels1)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels2 = new EventCollaboratorDataModelListBuilder(2)
+                                                                       .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                                       .WithParticipant(2, "Pending", new DateOnly(2024, 6, 7), null, null)
+                                                                       .Build();
+
+        EventDataModel eventDataModel2 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Daily")
+                                        .WithInterval(1)
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels2)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels3 = new EventCollaboratorDataModelListBuilder(3)
+                                                                       .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                                       .Build();
+
+        EventDataModel eventDataModel3 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Daily")
+                                        .WithInterval(1)
+                                        .WithByWeekDay("1,2")
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels3)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels4 = new EventCollaboratorDataModelListBuilder(4)
+                                                                       .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                                       .Build();
+
+        EventDataModel eventDataModel4 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Weekly")
+                                        .WithInterval(1)
+                                        .WithByWeekDay("1,2")
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels4)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels5 = new EventCollaboratorDataModelListBuilder(5)
+                                                               .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                               .Build();
+
+        EventDataModel eventDataModel5 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Weekly")
+                                        .WithInterval(1)
+                                        .WithByWeekDay(null)
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels5)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels6 = new EventCollaboratorDataModelListBuilder(6)
+                                                               .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                               .Build();
+
+        EventDataModel eventDataModel6 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Monthly")
+                                        .WithInterval(1)
+                                        .WithByWeekDay(null)
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(31)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels6)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels7 = new EventCollaboratorDataModelListBuilder(7)
+                                                               .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                               .Build();
+
+        EventDataModel eventDataModel7 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Monthly")
+                                        .WithInterval(1)
+                                        .WithByWeekDay("7")
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(5)
+                                        .WithEventCollaborators(eventCollaboratorDataModels7)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels8 = new EventCollaboratorDataModelListBuilder(8)
+                                                               .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                               .Build();
+
+        EventDataModel eventDataModel8 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Yearly")
+                                        .WithInterval(1)
+                                        .WithByWeekDay(null)
+                                        .WithByMonth(12)
+                                        .WithByMonthDay(31)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels8)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels9 = new EventCollaboratorDataModelListBuilder(9)
+                                                                        .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                                        .WithParticipant(2, "Proposed", new DateOnly(2024, 6, 7), 3, 4)
+                                                               .Build();
+
+        EventDataModel eventDataModel9 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("Yearly")
+                                        .WithInterval(1)
+                                        .WithByWeekDay("7")
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(5)
+                                        .WithEventCollaborators(eventCollaboratorDataModels9)
+                                        .Build();
+
+
+        await new DatabaseBuilder(_dbContextEvent)
+                 .WithUser(userDataModel1)
+                 .WithUser(userDataModel2)
+                 .WithEvent(eventDataModel1)
+                 .WithEvent(eventDataModel2)
+                 .WithEvent(eventDataModel3)
+                 .WithEvent(eventDataModel4)
+                 .WithEvent(eventDataModel5)
+                 .WithEvent(eventDataModel6)
+                 .WithEvent(eventDataModel7)
+                 .WithEvent(eventDataModel8)
+                 .WithEvent(eventDataModel9)
+                 .Build();
+
         SingleInstanceRecurrencePattern singleInstanceRecurrencePattern = new SingleInstanceRecurrencePatternBuilder()
                                                                           .WithStartDate(new DateOnly(2024, 6, 7))
                                                                           .WithEndDate(new DateOnly(2024, 6, 7))
@@ -35,19 +262,19 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         User user1 = new UserBuilder(1)
                     .WithName("a")
-                    .WithEmail("a")
+                    .WithEmail("a@gmail.com")
                     .Build();
 
         User user2 = new UserBuilder(2)
                     .WithName("b")
-                    .WithEmail("b")
+                    .WithEmail("b@gmail.com")
                     .Build();
 
         Event event1 = new EventBuilder()
                        .WithId(1)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
                        .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(singleInstanceRecurrencePattern)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(1)
@@ -64,10 +291,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event2 = new EventBuilder()
                        .WithId(2)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(dailyRecurrencePattern1)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(2)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))
@@ -84,10 +311,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event3 = new EventBuilder()
                        .WithId(3)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(dailyRecurrencePattern2)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(3)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))
@@ -103,10 +330,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event4 = new EventBuilder()
                        .WithId(4)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(weeklyRecurrencePattern1)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(4)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))
@@ -122,10 +349,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event5 = new EventBuilder()
                        .WithId(5)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(weeklyRecurrencePattern2)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(5)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))
@@ -143,10 +370,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event6 = new EventBuilder()
                        .WithId(6)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(monthlyRecurrencePattern1)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(6)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))
@@ -164,10 +391,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event7 = new EventBuilder()
                        .WithId(7)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(monthlyRecurrencePattern2)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(7)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))
@@ -187,10 +414,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event8 = new EventBuilder()
                        .WithId(8)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(yearlyRecurrencePattern1)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(8)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))
@@ -209,10 +436,10 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         Event event9 = new EventBuilder()
                        .WithId(9)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
+                       .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(yearlyRecurrencePattern2)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(9)
                                                .WithOrganizer(user1, new DateOnly(2024, 6, 7))

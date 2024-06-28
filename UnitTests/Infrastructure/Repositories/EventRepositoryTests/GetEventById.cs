@@ -5,6 +5,8 @@ using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders.EntityBuilder;
+using Infrastructure.DataModels;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -23,6 +25,38 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                              .WithId(1)
+                              .WithUserName("a")
+                              .WithEmail("a@gmail.com")
+                              .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels1 = new EventCollaboratorDataModelListBuilder(1)
+                                                                       .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                                       .Build();
+
+        EventDataModel eventDataModel1 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("None")
+                                        .WithInterval(1)
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels1)
+                                        .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+             .WithUser(userDataModel1)
+             .WithEvent(eventDataModel1)
+             .Build();
+
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
         SingleInstanceRecurrencePattern singleInstanceRecurrencePattern = new SingleInstanceRecurrencePatternBuilder()
@@ -33,7 +67,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
 
         User user = new UserBuilder(1)
                     .WithName("a")
-                    .WithEmail("a")
+                    .WithEmail("a@gmail.com")
                     .Build();
 
         List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(1)
@@ -42,9 +76,9 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
 
         Event expectedResult = new EventBuilder()
                                .WithId(1)
-                               .WithTitle("Test1")
-                               .WithDescription("Test1")
-                               .WithLocation("Test1")
+                               .WithTitle("Test")
+                               .WithDescription("Test")
+                               .WithLocation("Test")
                                .WithDuration(new Duration(1, 2))
                                .WithRecurrencePattern(singleInstanceRecurrencePattern)
                                .WithEventCollaborators(eventCollaborators)

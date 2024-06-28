@@ -6,6 +6,8 @@ using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders.EntityBuilder;
 using Core.Entities.Enums;
+using Infrastructure.DataModels;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -25,17 +27,66 @@ public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                              .WithId(1)
+                              .WithUserName("a")
+                              .WithEmail("a@gmail.com")
+                              .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels1 = new EventCollaboratorDataModelListBuilder(1)
+                                                                       .WithOrganizer(1, new DateOnly(2024, 6, 7))
+                                                                       .Build();
+
+        EventDataModel eventDataModel1 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 7))
+                                        .WithEndDate(new DateOnly(2024, 6, 7))
+                                        .WithFrequency("None")
+                                        .WithInterval(1)
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels1)
+                                        .Build();
+
+        List<EventCollaboratorDataModel> eventCollaboratorDataModels2 = new EventCollaboratorDataModelListBuilder(1)
+                                                                       .WithOrganizer(1, new DateOnly(2024, 6, 5))
+                                                                       .Build();
+
+        EventDataModel eventDataModel2 = new EventDataModelBuilder()
+                                        .WithTitle("Test")
+                                        .WithDescription("Test")
+                                        .WithLocation("Test")
+                                        .WithUserId(1)
+                                        .WithStartHour(1)
+                                        .WithEndHour(2)
+                                        .WithStartDate(new DateOnly(2024, 6, 5))
+                                        .WithEndDate(new DateOnly(2024, 6, 5))
+                                        .WithFrequency("None")
+                                        .WithInterval(1)
+                                        .WithByMonth(null)
+                                        .WithByMonthDay(null)
+                                        .WithWeekOrder(null)
+                                        .WithEventCollaborators(eventCollaboratorDataModels2)
+                                        .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+             .WithUser(userDataModel1)
+             .WithEvent(eventDataModel1)
+             .WithEvent(eventDataModel2)
+             .Build();
+
         DateOnly start = DateOnly.Parse(startDate);
         DateOnly end = DateOnly.Parse(endDate);
 
         User user1 = new UserBuilder(1)
                     .WithName("a")
-                    .WithEmail("a")
-                    .Build();
-
-        User user2 = new UserBuilder(2)
-                    .WithName("b")
-                    .WithEmail("b")
+                    .WithEmail("a@gmail.com")
                     .Build();
 
         SingleInstanceRecurrencePattern singleInstanceRecurrencePattern = new SingleInstanceRecurrencePatternBuilder()
@@ -46,9 +97,9 @@ public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
 
         Event event1 = new EventBuilder()
                        .WithId(1)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
+                       .WithTitle("Test")
+                       .WithDescription("Test")
+                       .WithLocation("Test")
                        .WithDuration(new Duration(1, 2))
                        .WithRecurrencePattern(singleInstanceRecurrencePattern)
                        .WithEventCollaborators(new EventCollaboratorListBuilder(1)
@@ -56,173 +107,9 @@ public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
                                                .Build())
                        .Build();
 
-        DailyRecurrencePattern dailyRecurrencePattern1 = new DailyRecurrencePatternBuilder()
-                                                         .WithStartDate(new DateOnly(2024, 6, 7))
-                                                         .WithEndDate(new DateOnly(2024, 6, 7))
-                                                         .WithInterval(1)
-                                                         .WithByWeekDay([])
-                                                         .Build();
+        
 
-        Event event2 = new EventBuilder()
-                       .WithId(2)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(dailyRecurrencePattern1)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(2)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .WithParticipant(user2, ConfirmationStatus.Pending, new DateOnly(2024, 6, 7), null)
-                                               .Build())
-                       .Build();
-
-        DailyRecurrencePattern dailyRecurrencePattern2 = new DailyRecurrencePatternBuilder()
-                                                         .WithStartDate(new DateOnly(2024, 6, 7))
-                                                         .WithEndDate(new DateOnly(2024, 6, 7))
-                                                         .WithInterval(1)
-                                                         .WithByWeekDay([1, 2])
-                                                         .Build();
-
-        Event event3 = new EventBuilder()
-                       .WithId(3)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(dailyRecurrencePattern2)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(3)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .Build())
-                       .Build();
-
-        WeeklyRecurrencePattern weeklyRecurrencePattern1 = new WeeklyRecurrencePatternBuilder()
-                                                           .WithStartDate(new DateOnly(2024, 6, 7))
-                                                           .WithEndDate(new DateOnly(2024, 6, 7))
-                                                           .WithInterval(1)
-                                                           .WithByWeekDay([1, 2])
-                                                           .Build();
-
-        Event event4 = new EventBuilder()
-                       .WithId(4)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(weeklyRecurrencePattern1)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(4)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .Build())
-                       .Build();
-
-        WeeklyRecurrencePattern weeklyRecurrencePattern2 = new WeeklyRecurrencePatternBuilder()
-                                                           .WithStartDate(new DateOnly(2024, 6, 7))
-                                                           .WithEndDate(new DateOnly(2024, 6, 7))
-                                                           .WithInterval(1)
-                                                           .WithByWeekDay([])
-                                                           .Build();
-
-        Event event5 = new EventBuilder()
-                       .WithId(5)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(weeklyRecurrencePattern2)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(5)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .Build())
-                       .Build();
-
-        MonthlyRecurrencePattern monthlyRecurrencePattern1 = new MonthlyRecurrencePatternBuilder()
-                                                            .WithStartDate(new DateOnly(2024, 6, 7))
-                                                            .WithEndDate(new DateOnly(2024, 6, 7))
-                                                            .WithInterval(1)
-                                                            .WithByWeekDay(null)
-                                                            .WithByMonthDay(31)
-                                                            .WithByWeekDay([])
-                                                            .Build();
-
-        Event event6 = new EventBuilder()
-                       .WithId(6)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(monthlyRecurrencePattern1)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(6)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .Build())
-                       .Build();
-
-        MonthlyRecurrencePattern monthlyRecurrencePattern2 = new MonthlyRecurrencePatternBuilder()
-                                                            .WithStartDate(new DateOnly(2024, 6, 7))
-                                                            .WithEndDate(new DateOnly(2024, 6, 7))
-                                                            .WithInterval(1)
-                                                            .WithByWeekDay([7])
-                                                            .WithByMonthDay(null)
-                                                            .WithWeekOrder(5)
-                                                            .Build();
-
-        Event event7 = new EventBuilder()
-                       .WithId(7)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(monthlyRecurrencePattern2)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(7)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .Build())
-                       .Build();
-
-        YearlyRecurrencePattern yearlyRecurrencePattern1 = new YearlyRecurrencePatternBuilder()
-                                                           .WithStartDate(new DateOnly(2024, 6, 7))
-                                                           .WithEndDate(new DateOnly(2024, 6, 7))
-                                                           .WithInterval(1)
-                                                           .WithByWeekDay(null)
-                                                           .WithByMonthDay(31)
-                                                           .WithByMonth(12)
-                                                           .WithWeekOrder(5)
-                                                           .WithByWeekDay([])
-                                                           .Build();
-
-        Event event8 = new EventBuilder()
-                       .WithId(8)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(yearlyRecurrencePattern1)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(8)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .Build())
-                       .Build();
-
-        YearlyRecurrencePattern yearlyRecurrencePattern2 = new YearlyRecurrencePatternBuilder()
-                                                            .WithStartDate(new DateOnly(2024, 6, 7))
-                                                            .WithEndDate(new DateOnly(2024, 6, 7))
-                                                            .WithInterval(1)
-                                                            .WithByWeekDay([7])
-                                                            .WithByMonthDay(null)
-                                                            .WithByMonth(12)
-                                                            .WithWeekOrder(5)
-                                                            .Build();
-
-        Event event9 = new EventBuilder()
-                       .WithId(9)
-                       .WithTitle("Test1")
-                       .WithDescription("Test1")
-                       .WithLocation("Test1")
-                       .WithDuration(new Duration(2, 3))
-                       .WithRecurrencePattern(yearlyRecurrencePattern2)
-                       .WithEventCollaborators(new EventCollaboratorListBuilder(9)
-                                               .WithOrganizer(user1, new DateOnly(2024, 6, 7))
-                                               .WithParticipant(user2, ConfirmationStatus.Proposed, new DateOnly(2024, 6, 7), new Duration(3, 4))
-                                               .Build())
-                       .Build();
-
-        List<Event> expectedResult = [event1, event2, event3, event4, event5, event6, event7, event8, event9];
-
+        List<Event> expectedResult = [event1];
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 

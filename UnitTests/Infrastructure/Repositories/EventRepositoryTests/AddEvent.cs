@@ -6,6 +6,8 @@ using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders.EntityBuilder;
 using Core.Entities.Enums;
+using Infrastructure.DataModels;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
@@ -20,15 +22,15 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     public AddEvent(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _user1 = new UserBuilder(3)
-                     .WithName("c")
-                     .WithEmail("c")
+        _user1 = new UserBuilder(1)
+                     .WithName("a")
+                     .WithEmail("a@gmail.com")
                      .WithPassword("c")
                      .Build();
 
         _user2 = new UserBuilder(2)
                      .WithName("b")
-                     .WithEmail("b")
+                     .WithEmail("b@gmail.com")
                      .WithPassword("b")
                      .Build();
 
@@ -42,6 +44,23 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_AddedEventId_When_EventOccurSingleTime()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                                      .WithId(1)
+                                      .WithUserName("a")
+                                      .WithEmail("a@gmail.com")
+                                      .Build();
+
+        UserDataModel userDataModel2 = new UserDataModelBuilder()
+                                      .WithId(2)
+                                      .WithUserName("b")
+                                      .WithEmail("b@gmail.com")
+                                      .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+                 .WithUser(userDataModel1)
+                 .WithUser(userDataModel2)
+                 .Build();
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
@@ -71,6 +90,23 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_AddedEventId_When_EventIsDailyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                                      .WithId(1)
+                                      .WithUserName("a")
+                                      .WithEmail("a@gmail.com")
+                                      .Build();
+
+        UserDataModel userDataModel2 = new UserDataModelBuilder()
+                                      .WithId(2)
+                                      .WithUserName("b")
+                                      .WithEmail("b@gmail.com")
+                                      .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+                 .WithUser(userDataModel1)
+                 .WithUser(userDataModel2)
+                 .Build();
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
@@ -102,13 +138,30 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
 
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                                      .WithId(1)
+                                      .WithUserName("a")
+                                      .WithEmail("a@gmail.com")
+                                      .Build();
+
+        UserDataModel userDataModel2 = new UserDataModelBuilder()
+                                      .WithId(2)
+                                      .WithUserName("b")
+                                      .WithEmail("b@gmail.com")
+                                      .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+                 .WithUser(userDataModel1)
+                 .WithUser(userDataModel2)
+                 .Build();
+
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
         DailyRecurrencePattern dailyRecurrencePattern = new DailyRecurrencePatternBuilder()
                                                         .WithStartDate(new DateOnly(2024, 6, 8))
                                                         .WithEndDate(new DateOnly(2024, 6, 8))
                                                         .WithInterval(1)
-                                                        .WithByWeekDay([1,2])
+                                                        .WithByWeekDay([1, 2])
                                                         .Build();
 
         Event eventToAdd = new EventBuilder()
@@ -131,6 +184,23 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_AddedEventId_When_EventIsWeeklyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                                      .WithId(1)
+                                      .WithUserName("a")
+                                      .WithEmail("a@gmail.com")
+                                      .Build();
+
+        UserDataModel userDataModel2 = new UserDataModelBuilder()
+                                      .WithId(2)
+                                      .WithUserName("b")
+                                      .WithEmail("b@gmail.com")
+                                      .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+                 .WithUser(userDataModel1)
+                 .WithUser(userDataModel2)
+                 .Build();
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
@@ -161,6 +231,23 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_AddedEventId_When_EventIsMonthlyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                                      .WithId(1)
+                                      .WithUserName("a")
+                                      .WithEmail("a@gmail.com")
+                                      .Build();
+
+        UserDataModel userDataModel2 = new UserDataModelBuilder()
+                                      .WithId(2)
+                                      .WithUserName("b")
+                                      .WithEmail("b@gmail.com")
+                                      .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+                 .WithUser(userDataModel1)
+                 .WithUser(userDataModel2)
+                 .Build();
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 
@@ -193,6 +280,23 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_AddedEventId_When_EventIsYearlyRecurring()
     {
         _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+
+        UserDataModel userDataModel1 = new UserDataModelBuilder()
+                                      .WithId(1)
+                                      .WithUserName("a")
+                                      .WithEmail("a@gmail.com")
+                                      .Build();
+
+        UserDataModel userDataModel2 = new UserDataModelBuilder()
+                                      .WithId(2)
+                                      .WithUserName("b")
+                                      .WithEmail("b@gmail.com")
+                                      .Build();
+
+        await new DatabaseBuilder(_dbContextEvent)
+                 .WithUser(userDataModel1)
+                 .WithUser(userDataModel2)
+                 .Build();
 
         EventRepository eventRepository = new(_dbContextEvent, _mapper);
 

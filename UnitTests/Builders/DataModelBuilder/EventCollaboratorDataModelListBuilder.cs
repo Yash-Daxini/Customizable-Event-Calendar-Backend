@@ -33,7 +33,7 @@ public class EventCollaboratorDataModelListBuilder
                                                                  int? proposedEndHour)
     {
         _eventCollaboratorDataModels.Add(new EventCollaboratorDataModelBuilder()
-                                         .WithEventCollaboratorRole("Organizer")
+                                         .WithEventCollaboratorRole("Participant")
                                          .WithConfirmationStatus(confirmationStatus)
                                          .WithEventId(EventId)
                                          .WithUserId(userId)
