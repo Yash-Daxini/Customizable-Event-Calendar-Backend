@@ -28,7 +28,7 @@ public static class MutualTimeCalculatorService
                     prevEndHour = endHour;
                 }
 
-                if ((endHour - startHour) == timeBlock)
+                if ((endHour - startHour) >= timeBlock)
                     break;
             }
         }
@@ -38,6 +38,9 @@ public static class MutualTimeCalculatorService
             prevStartHour = eventObj.Duration.StartHour;
             prevEndHour = eventObj.Duration.EndHour;
         }
+
+        if (prevEndHour - prevStartHour > timeBlock)
+            prevEndHour = timeBlock + prevStartHour;
 
         return new Duration(prevStartHour, prevEndHour);
 

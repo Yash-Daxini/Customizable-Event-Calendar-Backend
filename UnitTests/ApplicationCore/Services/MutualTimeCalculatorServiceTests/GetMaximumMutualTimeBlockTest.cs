@@ -1,56 +1,79 @@
 ﻿using Core.Entities;
 using Core.Services;
 using FluentAssertions;
+using UnitTests.Builders;
 
 namespace UnitTests.ApplicationCore.Services.MutualTimeCalculatorServiceTests;
 
 public class GetMaximumMutualTimeBlockTest
 {
-    [Fact]
-    public void Should_Return_MutualDuration_WhenMaxValueIsPresent()
+    public static IEnumerable<object[]> Data1 =>
+        [
+            [new List<Duration>{ new(1, 2), new(1, 2), new(1, 2) }, new Duration(1,2)],
+            [new List<Duration>{ new(10, 12), new(12, 14), new(14, 16) }, new Duration(1,2)],
+            [new List<Duration>{ new(10, 13), new(11, 14), new(10, 16) }, new Duration(11,12)],
+            [new List<Duration>{ new(10, 12), new(11, 14), new(10, 16) }, new Duration(11,12)],
+            [new List<Duration>{ new(10, 12), new(11, 12), new(10, 11) }, new Duration(10,11)]
+        ];
+
+    [Theory, MemberData(nameof(Data1))]
+    public void Should_Return_MutualDuration_WhenTimeBlockIs1HourLong(List<Duration> durations, Duration expectedResult)
     {
-        var proposedHours = new[] { 0, 2, 2, 1, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        var eventObj = new Event { Duration = new Duration(0, 3) };
+        var proposedHours = new ProposedHourArrayBuilder()
+                                .WithDurations(durations);
+
+        var eventObj = new Event { Duration = new Duration(1, 2) };
 
         var result = MutualTimeCalculatorService.GetMaximumMutualTimeBlock(proposedHours, eventObj);
 
-        result.StartHour.Should().Be(5);
-        result.EndHour.Should().Be(8);
+        result.StartHour.Should().Be(expectedResult.StartHour);
+        result.EndHour.Should().Be(expectedResult.EndHour);
     }
 
-    [Fact]
-    public void Should_Return_MutualDuration_WhenMaxValueIsOneOrLess()
+    public static IEnumerable<object[]> Data2 =>
+        [
+            [new List<Duration>{new (1, 3), new (1, 3), new (1, 3) }, new Duration(1,3)]  ,
+            [new List<Duration>{ new (10, 12), new (12, 14), new (14, 16) }, new Duration(1,3)],
+            [new List<Duration>{ new (10, 13), new (11, 14), new (10, 16) }, new Duration(11,13)],
+            [new List<Duration>{ new(10, 12), new(11, 14), new(10, 16) }, new Duration(11,12)],
+            [new List<Duration>{ new(10, 12), new(11, 12), new(10, 11) }, new Duration(10,12)]
+        ];
+
+    [Theory, MemberData(nameof(Data2))]
+    public void Should_Return_MutualDuration_WhenTimeBlockIs2HourLong(List<Duration> durations, Duration expectedResult)
     {
-        var proposedHours = new[] { 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; ;
-        var eventObj = new Event { Duration = new Duration(2, 5) };
+        var proposedHours = new ProposedHourArrayBuilder()
+                                .WithDurations(durations);
+
+        var eventObj = new Event { Duration = new Duration(1, 3) };
 
         var result = MutualTimeCalculatorService.GetMaximumMutualTimeBlock(proposedHours, eventObj);
 
-        result.StartHour.Should().Be(2);
-        result.EndHour.Should().Be(5);
+        result.StartHour.Should().Be(expectedResult.StartHour);
+        result.EndHour.Should().Be(expectedResult.EndHour);
     }
 
-    [Fact]
-    public void Should_Return_MutualDuration_WhenMaxValueIsNotPresent()
+    public static IEnumerable<object[]> Data3 =>
+        [
+            [new List<Duration>{new (1, 3), new (1, 3), new (1, 3) }, new Duration(1,3)]  ,
+            [new List<Duration>{ new (10, 12), new (12, 14), new (14, 16) }, new Duration(1,4)],
+            [new List<Duration>{ new (10, 13), new (11, 14), new (10, 16) }, new Duration(11,13)],
+            [new List<Duration>{ new (10, 14), new (11, 14), new (10, 16) }, new Duration(11,14)],
+            [new List<Duration>{ new(10, 12), new(11, 14), new(10, 16) }, new Duration(11,12)],
+            [new List<Duration>{ new(10, 12), new(11, 12), new(10, 11) }, new Duration(10,12)]
+        ];
+
+    [Theory, MemberData(nameof(Data3))]
+    public void Should_Return_MutualDuration_WhenTimeBlockIs3HourLong(List<Duration> durations, Duration expectedResult)
     {
-        var proposedHours = new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        var proposedHours = new ProposedHourArrayBuilder()
+                                .WithDurations(durations);
+
         var eventObj = new Event { Duration = new Duration(1, 4) };
 
         var result = MutualTimeCalculatorService.GetMaximumMutualTimeBlock(proposedHours, eventObj);
 
-        result.StartHour.Should().Be(1);
-        result.EndHour.Should().Be(4);
-    }
-
-    [Fact]
-    public void Should_Return_MutualDuration_WhenMaxBlockIsShorterThanEventDuration()
-    {
-        var proposedHours = new[] { 2, 2, 2, 1, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; ;
-        var eventObj = new Event { Duration = new Duration(1, 5) };
-
-        var result = MutualTimeCalculatorService.GetMaximumMutualTimeBlock(proposedHours, eventObj);
-
-        result.StartHour.Should().Be(0);
-        result.EndHour.Should().Be(3);
+        result.StartHour.Should().Be(expectedResult.StartHour);
+        result.EndHour.Should().Be(expectedResult.EndHour);
     }
 }

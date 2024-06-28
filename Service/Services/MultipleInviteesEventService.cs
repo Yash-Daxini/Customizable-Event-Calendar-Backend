@@ -66,7 +66,7 @@ public class MultipleInviteesEventService : IMultipleInviteesEventService
 
     private int[] CalculateProposedHours(Event eventObj)
     {
-        int[] proposedHours = new int[23];
+        int[] proposedHours = new int[24];
 
         foreach (var eventCollaborator in GetInviteesWithProposedStatus(eventObj))
         {
