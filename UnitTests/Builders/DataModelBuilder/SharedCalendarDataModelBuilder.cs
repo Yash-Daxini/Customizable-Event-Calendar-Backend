@@ -14,7 +14,7 @@ public class SharedCalendarDataModelBuilder
 
     public SharedCalendarDataModelBuilder WithSenderId(int senderId)
     {
-        _sharedCalendarDataModel.SenderId = senderId;   
+        _sharedCalendarDataModel.SenderId = senderId;
         return this;
     }
 
@@ -37,6 +37,4 @@ public class SharedCalendarDataModelBuilder
     }
 
     public SharedCalendarDataModel Build() => _sharedCalendarDataModel;
-
-
 }

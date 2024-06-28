@@ -1,7 +1,7 @@
 ﻿using Core.Entities;
 using Core.Services;
 using FluentAssertions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.MutualTimeCalculatorServiceTests;
 

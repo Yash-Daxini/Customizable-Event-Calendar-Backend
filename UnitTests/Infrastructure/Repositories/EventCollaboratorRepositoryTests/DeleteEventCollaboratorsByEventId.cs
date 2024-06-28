@@ -4,7 +4,7 @@ using Core.Entities.Enums;
 using FluentAssertions;
 using Infrastructure;
 using Infrastructure.Repositories;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 

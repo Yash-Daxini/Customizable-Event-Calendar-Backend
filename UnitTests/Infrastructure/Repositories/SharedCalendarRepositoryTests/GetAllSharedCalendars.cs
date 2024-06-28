@@ -2,7 +2,9 @@
 using Core.Entities;
 using FluentAssertions;
 using Infrastructure;
+using Infrastructure.DataModels;
 using Infrastructure.Repositories;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -21,16 +23,16 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
             {
                 Id = 1,
                 Name = "a",
-                Email = "a"
+                Email = "a@gmail.com"
             },
             new User
             {
                 Id = 2,
                 Name = "b",
-                Email = "b"
+                Email = "b@gmail.com"
             },
-            new DateOnly(2024,6,7),
-            new DateOnly(2024,6,7))
+            new DateOnly(),
+            new DateOnly())
             ];
     }
 
@@ -38,6 +40,30 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_AllSharedCalendar_When_SharedCalendarIsAvailable()
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
+
+        UserDataModel user1 = new UserDataModelBuilder()
+                              .WithUserName("a")
+                              .WithEmail("a@gmail.com")
+                              .Build();
+
+        UserDataModel user2 = new UserDataModelBuilder()
+                              .WithUserName("b")
+                              .WithEmail("b@gmail.com")
+                              .Build();
+
+        SharedCalendarDataModel sharedCalendarDataModel = new SharedCalendarDataModelBuilder()
+                                                          .WithSenderId(1)
+                                                          .WithReceiverId(2)
+                                                          .WithFromDate(new DateOnly())
+                                                          .WithToDate(new DateOnly())
+                                                          .Build();
+
+        await new DatabaseBuilder(_dbContext)
+            .WithUser(user1)
+            .WithUser(user2)
+            .WithSharedCalendar(sharedCalendarDataModel)
+            .Build();
+
 
         SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 

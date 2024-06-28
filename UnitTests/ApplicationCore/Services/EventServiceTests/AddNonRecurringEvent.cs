@@ -8,7 +8,7 @@ using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 

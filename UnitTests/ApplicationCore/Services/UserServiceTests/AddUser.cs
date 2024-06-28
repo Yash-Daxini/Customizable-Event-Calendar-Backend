@@ -6,7 +6,7 @@ using Core.Services;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.UserServiceTests;
 

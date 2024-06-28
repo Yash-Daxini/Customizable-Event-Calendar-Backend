@@ -5,7 +5,7 @@ using Core.Extensions;
 using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.MultipleInviteeEventServiceTests;
 

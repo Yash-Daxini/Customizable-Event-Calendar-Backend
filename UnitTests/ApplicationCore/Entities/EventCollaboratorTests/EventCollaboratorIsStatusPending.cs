@@ -1,7 +1,7 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
 using FluentAssertions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Entities.EventCollaboratorTests;
 

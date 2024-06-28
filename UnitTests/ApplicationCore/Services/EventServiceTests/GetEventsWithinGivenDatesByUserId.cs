@@ -6,7 +6,7 @@ using NSubstitute;
 using Core.Extensions;
 using FluentAssertions;
 using Core.Entities.Enums;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 

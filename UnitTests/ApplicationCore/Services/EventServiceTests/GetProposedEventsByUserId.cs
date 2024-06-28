@@ -5,7 +5,7 @@ using Core.Services;
 using NSubstitute;
 using Core.Entities.RecurrecePattern;
 using Core.Entities.Enums;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 

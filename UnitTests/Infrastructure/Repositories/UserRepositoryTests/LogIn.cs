@@ -9,7 +9,7 @@ using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 

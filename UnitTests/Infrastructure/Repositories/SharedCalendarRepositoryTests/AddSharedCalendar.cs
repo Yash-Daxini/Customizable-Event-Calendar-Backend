@@ -3,6 +3,8 @@ using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
 using FluentAssertions;
+using Infrastructure.DataModels;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -21,10 +23,25 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 
+        UserDataModel user1 = new UserDataModelBuilder()
+                              .WithUserName("a")
+                              .WithEmail("a@gmail.com")
+                              .Build();
+
+        UserDataModel user2 = new UserDataModelBuilder()
+                              .WithUserName("b")
+                              .WithEmail("b@gmail.com")
+                              .Build();
+
+        await new DatabaseBuilder(_dbContext)
+            .WithUser(user1)
+            .WithUser(user2)
+            .Build();
+
         SharedCalendar sharedCalendar = new(
             0,
-            new User { Id = 1, Name = "a", Email = "a" },
-            new User { Id = 2, Name = "b", Email = "b" },
+            new User { Id = 1, Name = "a", Email = "a@gmail.com" },
+            new User { Id = 2, Name = "b", Email = "b@gmail.com" },
             new DateOnly(2024, 6, 7),
             new DateOnly(2024, 6, 7));
 

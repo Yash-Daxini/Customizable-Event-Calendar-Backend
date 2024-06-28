@@ -4,7 +4,7 @@ using Infrastructure;
 using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 using Core.Entities.Enums;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;

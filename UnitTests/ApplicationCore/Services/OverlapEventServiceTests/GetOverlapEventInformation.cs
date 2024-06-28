@@ -4,7 +4,7 @@ using Core.Entities.Enums;
 using Core.Interfaces.IServices;
 using Core.Services;
 using FluentAssertions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 using Core.Exceptions;
 
 namespace UnitTests.ApplicationCore.Services.OverlapEventServiceTests;

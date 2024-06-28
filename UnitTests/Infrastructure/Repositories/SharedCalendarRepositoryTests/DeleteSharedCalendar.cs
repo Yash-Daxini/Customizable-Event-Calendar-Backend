@@ -3,6 +3,8 @@ using Core.Entities;
 using Infrastructure.Repositories;
 using Infrastructure;
 using FluentAssertions;
+using Infrastructure.DataModels;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.SharedCalendarRepositoryTests;
 
@@ -21,10 +23,33 @@ public class DeleteSharedCalendar : IClassFixture<AutoMapperFixture>
     {
         _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
 
+        UserDataModel user1 = new UserDataModelBuilder()
+                              .WithUserName("a")
+                              .WithEmail("a@gmail.com")
+                              .Build();
+
+        UserDataModel user2 = new UserDataModelBuilder()
+                              .WithUserName("b")
+                              .WithEmail("b@gmail.com")
+                              .Build();
+
+        SharedCalendarDataModel sharedCalendarDataModel = new SharedCalendarDataModelBuilder()
+                                                          .WithSenderId(1)
+                                                          .WithReceiverId(2)
+                                                          .WithFromDate(new DateOnly())
+                                                          .WithToDate(new DateOnly())
+                                                          .Build();
+
+        await new DatabaseBuilder(_dbContext)
+            .WithUser(user1)
+            .WithUser(user2)
+            .WithSharedCalendar(sharedCalendarDataModel)
+            .Build();
+
         SharedCalendar sharedCalendar = new(
             1,
-            new User { Id = 1, Name = "a", Email = "a", Password = "a" },
-            new User { Id = 2, Name = "b", Email = "b", Password = "b" },
+            new User { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
+            new User { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
             new DateOnly(2024, 6, 7),
             new DateOnly(2024, 6, 7));
 
@@ -32,8 +57,8 @@ public class DeleteSharedCalendar : IClassFixture<AutoMapperFixture>
 
         await sharedCalendarRepository.Delete(sharedCalendar);
 
-        SharedCalendar? updatedSharedCalendar = await sharedCalendarRepository.GetSharedCalendarById(1);
+        SharedCalendar? sharedCalendarFromGetById = await sharedCalendarRepository.GetSharedCalendarById(1);
 
-        updatedSharedCalendar.Should().BeNull();
+        sharedCalendarFromGetById.Should().BeNull();
     }
 }

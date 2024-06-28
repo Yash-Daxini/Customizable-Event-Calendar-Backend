@@ -7,7 +7,7 @@ using Core.Services;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 

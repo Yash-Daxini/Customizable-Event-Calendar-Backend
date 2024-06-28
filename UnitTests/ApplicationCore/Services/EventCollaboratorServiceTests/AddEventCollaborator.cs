@@ -6,7 +6,7 @@ using Core.Services;
 using NSubstitute;
 using Core.Exceptions;
 using FluentAssertions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Services.EventCollaboratorServiceTests;
 

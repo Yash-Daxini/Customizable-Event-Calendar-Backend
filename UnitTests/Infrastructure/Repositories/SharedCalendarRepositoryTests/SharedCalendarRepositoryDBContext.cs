@@ -23,38 +23,6 @@ public class SharedCalendarRepositoryDBContext
 
         var dbContextEvent = new DbContextEventCalendar(options);
         dbContextEvent.Database.EnsureCreated();
-        if (await dbContextEvent.Events.CountAsync() <= 0)
-        {
-            dbContextEvent.Users.Add(new()
-            {
-                Id = 1,
-                UserName = "a",
-                Email = "a"
-            });
-            dbContextEvent.Users.Add(new()
-            {
-                Id = 2,
-                UserName = "b",
-                Email = "b"
-            });
-            dbContextEvent.Users.Add(new()
-            {
-                Id = 3,
-                UserName = "c",
-                Email = "c"
-            });
-            dbContextEvent.SharedCalendars.Add(new()
-            {
-                Id = 1,
-                SenderId = 1,
-                ReceiverId = 2,
-                FromDate = new DateOnly(2024, 6, 7),
-                ToDate = new DateOnly(2024, 6, 7)
-            });
-            dbContextEvent.SaveChanges();
-        }
-
-        dbContextEvent.ChangeTracker.Clear();
 
         return dbContextEvent;
     }

@@ -9,7 +9,7 @@ using NSubstitute.ReturnsExtensions;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 

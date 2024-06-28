@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
 

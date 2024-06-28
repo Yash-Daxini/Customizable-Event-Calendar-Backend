@@ -5,7 +5,7 @@ using Infrastructure;
 using FluentAssertions;
 using Core.Entities.Enums;
 using Microsoft.AspNet.Identity;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.EventCollaboratorRepositoryTests;
 

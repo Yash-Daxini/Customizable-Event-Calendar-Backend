@@ -1,6 +1,6 @@
 ﻿using Core.Entities.RecurrecePattern;
 using FluentAssertions;
-using UnitTests.Builders;
+using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.ApplicationCore.Entities.RecurrencePatternTests;
 
