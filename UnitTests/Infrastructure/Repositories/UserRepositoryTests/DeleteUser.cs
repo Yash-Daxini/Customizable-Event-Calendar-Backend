@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
-using NSubstitute.ReturnsExtensions;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using UnitTests.Builders.EntityBuilder;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -21,15 +20,17 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
 
     private readonly SignInManager<UserDataModel> _signInManager;
 
+    private readonly DbContextEventCalendar _dbContext;
+
     public DeleteUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
 
-        var dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
 
         var services = new ServiceCollection();
 
-        services.AddSingleton(dbContext);
+        services.AddSingleton(_dbContext);
 
         services.AddIdentity<UserDataModel, IdentityRole<int>>()
             .AddEntityFrameworkStores<DbContextEventCalendar>()
@@ -49,10 +50,20 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteUser_When_UserWithIdAvailable()
     {
+        UserDataModel userDataModel = new UserDataModelBuilder()
+                                     .WithId(1)
+                                     .WithUserName("a")
+                                     .WithEmail("abc@gmail.com")
+                                     .Build();
+
+        await new DatabaseBuilder(_dbContext)
+            .WithUser(userDataModel)
+            .Build();
+
         User user = new UserBuilder(1)
                     .WithName("a")
                     .WithPassword("a")
-                    .WithEmail("a")
+                    .WithEmail("a@gmail.com")
                     .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);

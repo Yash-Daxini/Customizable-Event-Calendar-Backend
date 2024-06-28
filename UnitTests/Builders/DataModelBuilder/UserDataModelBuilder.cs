@@ -18,9 +18,27 @@ public class UserDataModelBuilder
         return this;
     }
 
+    public UserDataModelBuilder WithNormalizeUserName(string normalizeUserName)
+    {
+        _userDataModel.NormalizedUserName = normalizeUserName;
+        return this;
+    }
+
     public UserDataModelBuilder WithEmail(string email)
     {
         _userDataModel.Email = email;
+        return this;
+    }
+
+    public UserDataModelBuilder WithPasswordHash(string passwordHash)
+    {
+        _userDataModel.PasswordHash = passwordHash;
+        return this;
+    }
+
+    public UserDataModelBuilder WithSecurityStamp(string securityStamp)
+    {
+        _userDataModel.SecurityStamp = securityStamp;
         return this;
     }
 

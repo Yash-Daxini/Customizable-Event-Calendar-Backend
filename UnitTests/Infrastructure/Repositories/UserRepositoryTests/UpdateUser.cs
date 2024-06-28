@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using NSubstitute;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Http;
-using NSubstitute.ReturnsExtensions;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using UnitTests.Builders.EntityBuilder;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -20,15 +19,17 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     private readonly UserManager<UserDataModel> _userManager;
     private readonly SignInManager<UserDataModel> _signInManager;
 
+    private readonly DbContextEventCalendar _dbContext;
+
     public UpdateUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
 
-        var dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
 
         var services = new ServiceCollection();
 
-        services.AddSingleton(dbContext);
+        services.AddSingleton(_dbContext);
 
         services.AddIdentity<UserDataModel, IdentityRole<int>>()
             .AddEntityFrameworkStores<DbContextEventCalendar>()
@@ -48,9 +49,20 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_Success_When_UserAvailableWithId()
     {
+        UserDataModel userDataModel = new UserDataModelBuilder()
+                             .WithId(1)
+                             .WithUserName("a")
+                             .WithEmail("abc@gmail.com")
+                             .WithSecurityStamp(Guid.NewGuid().ToString())
+                             .Build();
+
+        await new DatabaseBuilder(_dbContext)
+            .WithUser(userDataModel)
+            .Build();
+
         User expectedResult = new UserBuilder(1)
                               .WithName("a")
-                              .WithEmail("a")
+                              .WithEmail("abc@gmail.com")
                               .Build();
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);

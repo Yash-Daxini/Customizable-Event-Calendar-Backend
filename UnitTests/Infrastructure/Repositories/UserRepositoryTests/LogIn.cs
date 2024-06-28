@@ -10,6 +10,7 @@ using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication;
 using UnitTests.Builders.EntityBuilder;
+using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
@@ -20,15 +21,17 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     private readonly UserManager<UserDataModel> _userManager;
     private readonly SignInManager<UserDataModel> _signInManager;
 
+    private readonly DbContextEventCalendar _dbContext;
+
     public LogIn(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
 
-        var dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
 
         var services = new ServiceCollection();
 
-        services.AddSingleton(dbContext);
+        services.AddSingleton(_dbContext);
 
         services.AddIdentity<UserDataModel, IdentityRole<int>>()
             .AddEntityFrameworkStores<DbContextEventCalendar>()
@@ -58,6 +61,19 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_SuccessResult_When_UserWithValidCredentials()
     {
+        UserDataModel userDataModel = new UserDataModelBuilder()
+                                     .WithId(1)
+                                     .WithUserName("a")
+                                     .WithNormalizeUserName("A")
+                                     .WithPasswordHash("AQAAAAIAAYagAAAAEFVo/8EEd6wiXBAHoU2ZdzjgEzJRnLm0PaXPO1q41Ns09QyF/L+BMTafbFxAALlKKg==")
+                                     .WithEmail("abc@gmail.com")
+                                     .WithSecurityStamp(Guid.NewGuid().ToString())
+                                     .Build();
+
+        await new DatabaseBuilder(_dbContext)
+            .WithUser(userDataModel)
+            .Build();
+
         User user = new UserBuilder(1)
                     .WithName("a")
                     .WithPassword("aaAA@1")

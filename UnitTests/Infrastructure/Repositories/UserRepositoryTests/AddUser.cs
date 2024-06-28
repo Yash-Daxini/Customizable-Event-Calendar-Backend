@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using System.Configuration;
-using System;
 using UnitTests.Builders.EntityBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
@@ -22,15 +18,17 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     private readonly UserManager<UserDataModel> _userManager;
     private readonly SignInManager<UserDataModel> _signInManager;
 
+    private readonly DbContextEventCalendar _dbContext;
+
     public AddUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
 
-        var dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
 
         var services = new ServiceCollection();
 
-        services.AddSingleton(dbContext);
+        services.AddSingleton(_dbContext);
 
         services.AddIdentity<UserDataModel, IdentityRole<int>>()
             .AddEntityFrameworkStores<DbContextEventCalendar>()
