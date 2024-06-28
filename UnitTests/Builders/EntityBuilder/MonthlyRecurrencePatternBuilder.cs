@@ -1,7 +1,7 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities.RecurrecePattern;
 
-namespace UnitTests.Builders;
+namespace UnitTests.Builders.EntityBuilder;
 
 public class MonthlyRecurrencePatternBuilder
 {
@@ -9,7 +9,7 @@ public class MonthlyRecurrencePatternBuilder
 
     public MonthlyRecurrencePatternBuilder()
     {
-        _recurrencePattern.Frequency = Frequency.Monthly;    
+        _recurrencePattern.Frequency = Frequency.Monthly;
     }
 
 
@@ -36,7 +36,7 @@ public class MonthlyRecurrencePatternBuilder
         _recurrencePattern.ByWeekDay = byWeekDay;
         return this;
     }
-    
+
     public MonthlyRecurrencePatternBuilder WithByMonthDay(int? byMonthDay)
     {
         _recurrencePattern.ByMonthDay = byMonthDay;

@@ -1,7 +1,7 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
 
-namespace UnitTests.Builders;
+namespace UnitTests.Builders.EntityBuilder;
 
 public class EventCollaboratorBuilder
 {

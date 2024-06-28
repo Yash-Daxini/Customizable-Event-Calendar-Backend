@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 
-namespace UnitTests.Builders;
+namespace UnitTests.Builders.EntityBuilder;
 
 public class UserBuilder
 {

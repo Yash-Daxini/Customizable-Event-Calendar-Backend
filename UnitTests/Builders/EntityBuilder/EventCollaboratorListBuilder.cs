@@ -1,11 +1,11 @@
 ﻿using Core.Entities;
 using Core.Entities.Enums;
 
-namespace UnitTests.Builders;
+namespace UnitTests.Builders.EntityBuilder;
 
 public class EventCollaboratorListBuilder
 {
-    private int EventId {  get; set; }
+    private int EventId { get; set; }
 
     public EventCollaboratorListBuilder(int eventId)
     {

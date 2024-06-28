@@ -1,11 +1,11 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities.RecurrecePattern;
 
-namespace UnitTests.Builders;
+namespace UnitTests.Builders.EntityBuilder;
 
 public class WeeklyRecurrencePatternBuilder
 {
-    private readonly WeeklyRecurrencePattern _recurrencePattern = new ();
+    private readonly WeeklyRecurrencePattern _recurrencePattern = new();
 
     public WeeklyRecurrencePatternBuilder()
     {

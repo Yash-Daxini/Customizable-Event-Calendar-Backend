@@ -1,7 +1,7 @@
 ﻿using Core.Entities;
 using Core.Entities.RecurrecePattern;
 
-namespace UnitTests.Builders;
+namespace UnitTests.Builders.EntityBuilder;
 
 public class EventBuilder
 {
@@ -45,7 +45,7 @@ public class EventBuilder
 
     public EventBuilder WithEventCollaborators(List<EventCollaborator> eventCollaborators)
     {
-        _eventObj.EventCollaborators= eventCollaborators;
+        _eventObj.EventCollaborators = eventCollaborators;
         return this;
     }
 

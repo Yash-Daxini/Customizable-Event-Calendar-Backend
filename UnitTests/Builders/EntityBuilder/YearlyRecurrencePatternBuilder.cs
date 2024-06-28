@@ -1,7 +1,7 @@
 ﻿using Core.Entities.Enums;
 using Core.Entities.RecurrecePattern;
 
-namespace UnitTests.Builders;
+namespace UnitTests.Builders.EntityBuilder;
 
 public class YearlyRecurrencePatternBuilder
 {
