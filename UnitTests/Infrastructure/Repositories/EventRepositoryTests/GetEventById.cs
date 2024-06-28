@@ -12,7 +12,7 @@ namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
 public class GetEventById : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContextEvent;
+    private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
     public GetEventById(AutoMapperFixture autoMapperFixture)
@@ -23,7 +23,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_Event_When_EventAvailableWithGivenId()
     {
-        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
 
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                               .WithId(1)
@@ -52,12 +52,12 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
                                         .WithEventCollaborators(eventCollaboratorDataModels1)
                                         .Build();
 
-        await new DatabaseBuilder(_dbContextEvent)
+        _dbContext = new DatabaseBuilder()
              .WithUser(userDataModel1)
              .WithEvent(eventDataModel1)
              .Build();
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventRepository eventRepository = new(_dbContext, _mapper);
 
         SingleInstanceRecurrencePattern singleInstanceRecurrencePattern = new SingleInstanceRecurrencePatternBuilder()
                                                                           .WithStartDate(new DateOnly(2024, 6, 7))
@@ -93,9 +93,9 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_Null_When_EventNotAvailableWithGivenId()
     {
-        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventRepository eventRepository = new(_dbContext, _mapper);
 
         Event? actualResult = await eventRepository.GetEventById(10);
 

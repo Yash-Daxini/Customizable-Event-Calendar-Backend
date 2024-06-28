@@ -13,7 +13,7 @@ namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
 public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContextEvent;
+    private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
     public GetAllEventsByUserId(AutoMapperFixture autoMapperFixture)
@@ -27,7 +27,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
     {
         //Arrange
 
-        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
 
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                               .WithId(1)
@@ -240,7 +240,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
                                         .Build();
 
 
-        await new DatabaseBuilder(_dbContextEvent)
+        _dbContext = new DatabaseBuilder()
                  .WithUser(userDataModel1)
                  .WithUser(userDataModel2)
                  .WithEvent(eventDataModel1)
@@ -449,7 +449,7 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
 
         List<Event> expectedResult = [event1, event2, event3, event4, event5, event6, event7, event8, event9];
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventRepository eventRepository = new(_dbContext, _mapper);
 
         //Act
         List<Event> actualResult = await eventRepository.GetAllEventsByUserId(userId);

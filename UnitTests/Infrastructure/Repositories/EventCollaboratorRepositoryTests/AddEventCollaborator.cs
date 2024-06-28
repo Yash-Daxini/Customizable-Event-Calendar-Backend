@@ -48,7 +48,7 @@ public class AddEventCollaborator : IClassFixture<AutoMapperFixture>
                                         .WithWeekOrder(null)
                                         .Build();
 
-        await new DatabaseBuilder(_dbContext)
+        _dbContext = new DatabaseBuilder()
              .WithUser(userDataModel)
              .WithEvent(eventDataModel)
              .Build();

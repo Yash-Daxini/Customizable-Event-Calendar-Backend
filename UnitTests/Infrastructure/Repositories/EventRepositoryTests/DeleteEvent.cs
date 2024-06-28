@@ -11,7 +11,7 @@ namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
 public class DeleteEvent : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContextEvent;
+    private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
     public DeleteEvent(AutoMapperFixture autoMapperFixture)
@@ -22,7 +22,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteEvent_When_EventAvailableWithId()
     {
-        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
 
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                                       .WithId(1)
@@ -46,7 +46,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
                                         .WithWeekOrder(null)
                                         .Build();
 
-        await new DatabaseBuilder(_dbContextEvent)
+        _dbContext = new DatabaseBuilder()
                  .WithUser(userDataModel1)
                  .WithEvent(eventDataModel)
                  .Build();
@@ -64,7 +64,7 @@ public class DeleteEvent : IClassFixture<AutoMapperFixture>
                                                 .Build())
                          .Build();
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventRepository eventRepository = new(_dbContext, _mapper);
 
         await eventRepository.Delete(eventObj);
 

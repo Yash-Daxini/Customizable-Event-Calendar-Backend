@@ -1,20 +1,33 @@
-﻿using Infrastructure;
+﻿using System.Data.Common;
+using Infrastructure;
 using Infrastructure.DataModels;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace UnitTests.Infrastructure.Repositories;
 
 public class DatabaseBuilder
 {
+    private readonly DbConnection _connection;
+
     private readonly DbContextEventCalendar _dbContext;
 
-    public DatabaseBuilder(DbContextEventCalendar dbContext)
+    public DatabaseBuilder()
     {
-        _dbContext = dbContext;
+        _connection = new SqliteConnection("Filename=:memory:");
+        _connection.Open();
+
+        var options = new DbContextOptionsBuilder<DbContextEventCalendar>()
+            .UseSqlite(_connection)
+            .Options;
+
+        _dbContext = new DbContextEventCalendar(options);
+        _dbContext.Database.EnsureCreated();
     }
 
     public DatabaseBuilder WithUser(UserDataModel userDataModel)
     {
-        _dbContext.Users.Add(userDataModel);    
+        _dbContext.Users.Add(userDataModel);
         return this;
     }
 
@@ -24,22 +37,17 @@ public class DatabaseBuilder
         return this;
     }
 
-    public DatabaseBuilder WithEventCollaborator(EventCollaboratorDataModel eventCollaboratorDataModel)
-    {
-        _dbContext.EventCollaborators.Add(eventCollaboratorDataModel);
-        return this;
-    }
-
     public DatabaseBuilder WithSharedCalendar(SharedCalendarDataModel sharedCalendarDataModel)
     {
         _dbContext.SharedCalendars.Add(sharedCalendarDataModel);
         return this;
     }
 
-    public async Task Build()
+    public DbContextEventCalendar Build()
     {
-        await _dbContext.SaveChangesAsync();
+        _dbContext.SaveChanges();
         _dbContext.ChangeTracker.Clear();
+        return _dbContext;
     }
 }
 

@@ -21,8 +21,6 @@ public class UpdateSharedCalendar : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateSharedCalendar_When_SharedCalendarAvailableWithId()
     {
-        _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel user1 = new UserDataModelBuilder()
                               .WithUserName("a")
                               .WithEmail("a@gmail.com")
@@ -40,11 +38,13 @@ public class UpdateSharedCalendar : IClassFixture<AutoMapperFixture>
                                                           .WithToDate(new DateOnly())
                                                           .Build();
 
-        await new DatabaseBuilder(_dbContext)
+        _dbContext = new DatabaseBuilder()
             .WithUser(user1)
             .WithUser(user2)
             .WithSharedCalendar(sharedCalendarDataModel)
             .Build();
+
+
 
         SharedCalendar sharedCalendar = new(
             1,

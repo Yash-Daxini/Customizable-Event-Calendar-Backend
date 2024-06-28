@@ -7,12 +7,13 @@ using FluentAssertions;
 using UnitTests.Builders.EntityBuilder;
 using Infrastructure.DataModels;
 using UnitTests.Builders.DataModelBuilder;
+using Microsoft.EntityFrameworkCore;
 
 namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
 public class GetSharedEvents : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContextEvent;
+    private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
     public GetSharedEvents(AutoMapperFixture autoMapperFixture)
@@ -24,7 +25,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_ListOfEvents_When_SharedCalendarAvailableWithGivenId()
     {
         //Arrange
-        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
 
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                       .WithId(1)
@@ -65,9 +66,9 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
                                                           .WithReceiverId(2)
                                                           .WithFromDate(new DateOnly(2024, 6, 7))
                                                           .WithToDate(new DateOnly(2024, 6, 7))
-                                                          .Build();
+        .Build();
 
-        await new DatabaseBuilder(_dbContextEvent)
+        _dbContext = new DatabaseBuilder()
              .WithUser(userDataModel1)
              .WithUser(userDataModel2)
              .WithSharedCalendar(sharedCalendarDataModel)
@@ -112,7 +113,7 @@ public class GetSharedEvents : IClassFixture<AutoMapperFixture>
             new DateOnly(2024, 6, 7),
             new DateOnly(2024, 6, 7));
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventRepository eventRepository = new(_dbContext, _mapper);
 
         //Act
         List<Event> actualResult = await eventRepository.GetSharedEvents(sharedCalendar);

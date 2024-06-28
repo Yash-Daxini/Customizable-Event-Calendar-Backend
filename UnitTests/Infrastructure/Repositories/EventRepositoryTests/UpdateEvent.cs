@@ -5,7 +5,6 @@ using Infrastructure.Repositories;
 using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using UnitTests.Builders.EntityBuilder;
-using Core.Entities.Enums;
 using Infrastructure.DataModels;
 using UnitTests.Builders.DataModelBuilder;
 
@@ -13,7 +12,7 @@ namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
 public class UpdateEvent : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContextEvent;
+    private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
     public UpdateEvent(AutoMapperFixture autoMapperFixture)
@@ -24,7 +23,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateEvent_When_EventAvailableWithId()
     {
-        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
 
         UserDataModel userDataModel1 = new UserDataModelBuilder()
               .WithId(1)
@@ -53,16 +52,16 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
                                         .WithEventCollaborators(eventCollaboratorDataModels1)
                                         .Build();
 
-        await new DatabaseBuilder(_dbContextEvent)
+        _dbContext = new DatabaseBuilder()
               .WithUser(userDataModel1)
               .WithEvent(eventDataModel1)
               .Build();
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventRepository eventRepository = new(_dbContext, _mapper);
 
-        EventCollaboratorRepository eventCollaboratorRepository = new(_dbContextEvent, _mapper);
+        EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
-        _dbContextEvent.ChangeTracker.Clear();
+        _dbContext.ChangeTracker.Clear();
 
         User user1 = new UserBuilder(1)
                      .WithName("a")

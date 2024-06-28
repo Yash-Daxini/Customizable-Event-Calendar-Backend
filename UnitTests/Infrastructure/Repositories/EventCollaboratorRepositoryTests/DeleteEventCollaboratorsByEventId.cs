@@ -59,7 +59,7 @@ public class DeleteEventCollaboratorsByEventId : IClassFixture<AutoMapperFixture
                                         .WithEventCollaborators(eventCollaborators)
                                         .Build();
 
-        await new DatabaseBuilder(_dbContext)
+        _dbContext = new DatabaseBuilder()
              .WithUser(userDataModel1)
              .WithUser(userDataModel2)
              .WithEvent(eventDataModel)

@@ -26,7 +26,15 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     {
         _mapper = autoMapperFixture.Mapper;
 
-        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        UserDataModel userDataModel = new UserDataModelBuilder()
+                                     .WithId(1)
+                                     .WithUserName("a")
+                                     .WithEmail("abc@gmail.com")
+                                     .Build();
+
+        _dbContext = new DatabaseBuilder()
+           .WithUser(userDataModel)
+           .Build();
 
         var services = new ServiceCollection();
 
@@ -50,16 +58,6 @@ public class DeleteUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteUser_When_UserWithIdAvailable()
     {
-        UserDataModel userDataModel = new UserDataModelBuilder()
-                                     .WithId(1)
-                                     .WithUserName("a")
-                                     .WithEmail("abc@gmail.com")
-                                     .Build();
-
-        await new DatabaseBuilder(_dbContext)
-            .WithUser(userDataModel)
-            .Build();
-
         User user = new UserBuilder(1)
                     .WithName("a")
                     .WithPassword("a")

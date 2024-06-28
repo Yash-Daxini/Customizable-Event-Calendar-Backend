@@ -25,7 +25,14 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     {
         _mapper = autoMapperFixture.Mapper;
 
-        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        UserDataModel userDataModel = new UserDataModelBuilder()
+                             .WithId(1)
+                             .WithUserName("a")
+                             .WithEmail("abc@gmail.com")
+                             .WithSecurityStamp(Guid.NewGuid().ToString())
+                             .Build();
+
+        _dbContext = new DatabaseBuilder().WithUser(userDataModel).Build();
 
         var services = new ServiceCollection();
 
@@ -49,17 +56,6 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_Success_When_UserAvailableWithId()
     {
-        UserDataModel userDataModel = new UserDataModelBuilder()
-                             .WithId(1)
-                             .WithUserName("a")
-                             .WithEmail("abc@gmail.com")
-                             .WithSecurityStamp(Guid.NewGuid().ToString())
-                             .Build();
-
-        await new DatabaseBuilder(_dbContext)
-            .WithUser(userDataModel)
-            .Build();
-
         User expectedResult = new UserBuilder(1)
                               .WithName("a")
                               .WithEmail("abc@gmail.com")

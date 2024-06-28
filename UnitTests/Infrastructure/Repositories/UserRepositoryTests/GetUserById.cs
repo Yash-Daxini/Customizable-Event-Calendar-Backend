@@ -24,7 +24,16 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     public GetUserById(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
-        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+
+        UserDataModel userDataModel = new UserDataModelBuilder()
+                                     .WithId(1)
+                                     .WithUserName("a")
+                                     .WithEmail("abc@gmail.com")
+                                     .Build();
+
+        _dbContext = new DatabaseBuilder()
+            .WithUser(userDataModel)
+            .Build();
 
         var services = new ServiceCollection();
 
@@ -48,16 +57,6 @@ public class GetUserById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_User_When_UserAvailable()
     {
-        UserDataModel userDataModel = new UserDataModelBuilder()
-                                     .WithId(1)
-                                     .WithUserName("a")
-                                     .WithEmail("abc@gmail.com")
-                                     .Build();
-
-        await new DatabaseBuilder(_dbContext)
-            .WithUser(userDataModel)
-            .Build();
-
         User expectedResult = new UserBuilder(1)
                              .WithName("a")
                              .WithEmail("abc@gmail.com")

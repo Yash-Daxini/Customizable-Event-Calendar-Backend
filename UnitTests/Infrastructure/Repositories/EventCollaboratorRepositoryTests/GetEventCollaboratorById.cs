@@ -52,10 +52,10 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
                                         .WithEventCollaborators(eventCollaborators)
                                         .Build();
 
-        await new DatabaseBuilder(_dbContext)
-             .WithUser(userDataModel)
-             .WithEvent(eventDataModel)
-             .Build();
+        _dbContext = new DatabaseBuilder()
+                    .WithUser(userDataModel)
+                    .WithEvent(eventDataModel)
+                    .Build();
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 

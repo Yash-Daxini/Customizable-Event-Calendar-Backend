@@ -13,7 +13,7 @@ namespace UnitTests.Infrastructure.Repositories.EventRepositoryTests;
 
 public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
 {
-    private DbContextEventCalendar _dbContextEvent;
+    private DbContextEventCalendar _dbContext;
     private readonly IMapper _mapper;
 
     public GetEventsWithinGivenDate(AutoMapperFixture autoMapperFixture)
@@ -25,7 +25,7 @@ public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
     [InlineData("6-6-24", "10-6-24", 1)]
     public async Task Should_Return_ListOfEvents_When_EventOccurWithInGivenDate(string startDate, string endDate, int userId)
     {
-        _dbContextEvent = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
 
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                               .WithId(1)
@@ -75,7 +75,7 @@ public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
                                         .WithEventCollaborators(eventCollaboratorDataModels2)
                                         .Build();
 
-        await new DatabaseBuilder(_dbContextEvent)
+        _dbContext = new DatabaseBuilder()
              .WithUser(userDataModel1)
              .WithEvent(eventDataModel1)
              .WithEvent(eventDataModel2)
@@ -107,11 +107,11 @@ public class GetEventsWithinGivenDate : IClassFixture<AutoMapperFixture>
                                                .Build())
                        .Build();
 
-        
+
 
         List<Event> expectedResult = [event1];
 
-        EventRepository eventRepository = new(_dbContextEvent, _mapper);
+        EventRepository eventRepository = new(_dbContext, _mapper);
 
         List<Event> actualResult = await eventRepository.GetEventsWithinGivenDateByUserId(userId, start, end);
 

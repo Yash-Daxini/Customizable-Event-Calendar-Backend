@@ -21,8 +21,6 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AddedSharedCalendarId_When_SharedCalendarIsValid()
     {
-        _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel user1 = new UserDataModelBuilder()
                               .WithUserName("a")
                               .WithEmail("a@gmail.com")
@@ -33,7 +31,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
                               .WithEmail("b@gmail.com")
                               .Build();
 
-        await new DatabaseBuilder(_dbContext)
+        _dbContext = new DatabaseBuilder()
             .WithUser(user1)
             .WithUser(user2)
             .Build();

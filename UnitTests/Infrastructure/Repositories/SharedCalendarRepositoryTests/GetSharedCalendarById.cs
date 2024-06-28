@@ -40,7 +40,7 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
                                                           .WithToDate(new DateOnly())
                                                           .Build();
 
-        await new DatabaseBuilder(_dbContext)
+        _dbContext = new DatabaseBuilder()
             .WithUser(user1)
             .WithUser(user2)
             .WithSharedCalendar(sharedCalendarDataModel)

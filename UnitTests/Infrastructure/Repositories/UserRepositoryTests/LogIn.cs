@@ -27,7 +27,18 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     {
         _mapper = autoMapperFixture.Mapper;
 
-        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        UserDataModel userDataModel = new UserDataModelBuilder()
+                                     .WithId(1)
+                                     .WithUserName("a")
+                                     .WithNormalizeUserName("A")
+                                     .WithPasswordHash("AQAAAAIAAYagAAAAEFVo/8EEd6wiXBAHoU2ZdzjgEzJRnLm0PaXPO1q41Ns09QyF/L+BMTafbFxAALlKKg==")
+                                     .WithEmail("abc@gmail.com")
+                                     .WithSecurityStamp(Guid.NewGuid().ToString())
+                                     .Build();
+
+        _dbContext = new DatabaseBuilder()
+            .WithUser(userDataModel)
+            .Build();
 
         var services = new ServiceCollection();
 
@@ -61,19 +72,6 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_SuccessResult_When_UserWithValidCredentials()
     {
-        UserDataModel userDataModel = new UserDataModelBuilder()
-                                     .WithId(1)
-                                     .WithUserName("a")
-                                     .WithNormalizeUserName("A")
-                                     .WithPasswordHash("AQAAAAIAAYagAAAAEFVo/8EEd6wiXBAHoU2ZdzjgEzJRnLm0PaXPO1q41Ns09QyF/L+BMTafbFxAALlKKg==")
-                                     .WithEmail("abc@gmail.com")
-                                     .WithSecurityStamp(Guid.NewGuid().ToString())
-                                     .Build();
-
-        await new DatabaseBuilder(_dbContext)
-            .WithUser(userDataModel)
-            .Build();
-
         User user = new UserBuilder(1)
                     .WithName("a")
                     .WithPassword("aaAA@1")
@@ -92,7 +90,7 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     {
         User user = new UserBuilder(5)
                     .WithName("a")
-                    .WithPassword("b")   
+                    .WithPassword("b")
                     .WithEmail("b")
                     .Build();
 
