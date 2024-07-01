@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Infrastructure.Profiles;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace UnitTests.Infrastructure.Repositories;
 
@@ -10,18 +9,17 @@ public class AutoMapperFixture
 
     public AutoMapperFixture()
     {
-        var services = new ServiceCollection();
-
-        services.AddAutoMapper(cfg =>
+        Mapper = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<EventProfile>();
             cfg.AddProfile<EventCollaboratorProfile>();
             cfg.AddProfile<SharedCalendarProfile>();
             cfg.AddProfile<UserProfile>();
-        },typeof(RecurrencePatternResolver).Assembly);
-
-        var serviceProvider = services.BuildServiceProvider();
-
-        Mapper = serviceProvider.GetService<IMapper>();
+            cfg.AddProfile<SingleInstanceRecurrencePatternProfile>();
+            cfg.AddProfile<DailyRecurrencePatternProfile>();
+            cfg.AddProfile<WeeklyRecurrencePatternProfile>();
+            cfg.AddProfile<MonthlyRecurrencePatternProfile>();
+            cfg.AddProfile<YearlyRecurrencePatternProfile>();
+        }).CreateMapper();
     }
 }

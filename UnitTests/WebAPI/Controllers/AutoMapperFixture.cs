@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using WebAPI.Profiles;
 
 namespace UnitTests.WebAPI.Controllers;
@@ -10,9 +9,7 @@ public class AutoMapperFixture
 
     public AutoMapperFixture()
     {
-        var services = new ServiceCollection();
-
-        services.AddAutoMapper(cfg =>
+        Mapper = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<DurationDtoProfile>();
             cfg.AddProfile<CollaborationRequestDtoProfile>();
@@ -26,10 +23,6 @@ public class AutoMapperFixture
             cfg.AddProfile<UserDtoProfile>();
             cfg.AddProfile<AuthenticateRequestDtoProfile>();
             cfg.AddProfile<AuthenticateResponseDtoProfile>();
-        });
-
-        var serviceProvider = services.BuildServiceProvider();
-
-        Mapper = serviceProvider.GetService<IMapper>();
+        }).CreateMapper();
     }
 }

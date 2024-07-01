@@ -2,6 +2,7 @@
 using Core.Entities.Enums;
 using Infrastructure.DataModels;
 using Core.Entities;
+using Core.Entities.RecurrecePattern;
 
 namespace Infrastructure.Profiles;
 
@@ -11,7 +12,17 @@ public class EventProfile : Profile
     {
         CreateMap<EventDataModel, Event>()
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => new Duration(src.StartHour, src.EndHour)))
-                .ForMember(dest => dest.RecurrencePattern, opt => opt.MapFrom<RecurrencePatternResolver>())
+                .AfterMap((src, dest, context) =>
+                {
+                    dest.RecurrencePattern = src.Frequency switch
+                    {
+                        "Daily" => context.Mapper.Map<DailyRecurrencePattern>(src),
+                        "Weekly" => context.Mapper.Map<WeeklyRecurrencePattern>(src),
+                        "Monthly" => context.Mapper.Map<MonthlyRecurrencePattern>(src),
+                        "Yearly" => context.Mapper.Map<YearlyRecurrencePattern>(src),
+                        _ => context.Mapper.Map<SingleInstanceRecurrencePattern>(src),
+                    };
+                })
                 .ForMember(dest => dest.EventCollaborators, opt => opt.MapFrom(src => src.EventCollaborators));
 
         CreateMap<Event, EventDataModel>()
@@ -31,7 +42,7 @@ public class EventProfile : Profile
 
     private int? MapMonthDay(dynamic recurrencePattern)
     {
-        if (recurrencePattern.Frequency == Frequency.Monthly 
+        if (recurrencePattern.Frequency == Frequency.Monthly
             || recurrencePattern.Frequency == Frequency.Yearly)
             return recurrencePattern.ByMonthDay;
 
@@ -40,7 +51,7 @@ public class EventProfile : Profile
 
     private int? MapWeekOrder(dynamic recurrencePattern)
     {
-        if (recurrencePattern.Frequency == Frequency.Monthly 
+        if (recurrencePattern.Frequency == Frequency.Monthly
             || recurrencePattern.Frequency == Frequency.Yearly)
             return recurrencePattern.WeekOrder;
 
