@@ -23,13 +23,11 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_EventCollaborators_When_EventCollaboratorAvailableWithGivenId()
     {
-        _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel = new UserDataModelBuilder()
-                              .WithId(1)
-                              .WithUserName("a")
-                              .WithEmail("a@gmail.com")
-                              .Build();
+                                      .WithId(1)
+                                      .WithUserName("a")
+                                      .WithEmail("a@gmail.com")
+                                      .Build();
 
         List<EventCollaboratorDataModel> eventCollaborators = new EventCollaboratorDataModelListBuilder(1)
                                                               .WithOrganizer(1, new DateOnly(2024, 6, 7))
@@ -68,25 +66,25 @@ public class GetEventCollaboratorById : IClassFixture<AutoMapperFixture>
                                               .WithId(1)
                                               .WithEventCollaboratorRole(EventCollaboratorRole.Organizer)
                                               .WithConfirmationStatus(ConfirmationStatus.Accept)
-                                              .WithEventDate(new DateOnly(2024,6,7))
+                                              .WithEventDate(new DateOnly(2024, 6, 7))
                                               .WithProposedDuration(null)
                                               .WithUser(user)
                                               .WithEventId(1)
                                               .Build();
 
-        EventCollaborator? eventCollaboratorById =  await eventCollaboratorRepository.GetEventCollaboratorById(1);
+        EventCollaborator? eventCollaboratorById = await eventCollaboratorRepository.GetEventCollaboratorById(1);
 
         eventCollaboratorById.Should().BeEquivalentTo(expectedResult);
     }
-    
+
     [Fact]
     public async Task Should_Return_Null_When_EventCollaboratorNotAvailableWithGivenId()
     {
-        _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
+        _dbContext = new DatabaseBuilder().Build();
 
         EventCollaboratorRepository eventCollaboratorRepository = new(_dbContext, _mapper);
 
-        EventCollaborator? eventCollaborator =  await eventCollaboratorRepository.GetEventCollaboratorById(5);
+        EventCollaborator? eventCollaborator = await eventCollaboratorRepository.GetEventCollaboratorById(5);
 
         eventCollaborator.Should().BeNull();
     }

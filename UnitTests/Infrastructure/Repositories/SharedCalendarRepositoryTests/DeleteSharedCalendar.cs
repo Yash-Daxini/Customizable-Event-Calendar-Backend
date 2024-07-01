@@ -21,8 +21,6 @@ public class DeleteSharedCalendar : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_DeleteSharedCalendar_When_SharedCalendarAvailableWithId()
     {
-        _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel user1 = new UserDataModelBuilder()
                               .WithUserName("a")
                               .WithEmail("a@gmail.com")

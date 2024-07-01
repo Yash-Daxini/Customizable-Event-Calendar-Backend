@@ -23,8 +23,6 @@ public class UpdateEventCollaborator : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_UpdateEventCollaborator_When_EventCollaboratorAvailableWithGivenId()
     {
-        _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel = new UserDataModelBuilder()
                               .WithId(1)
                               .WithUserName("a")

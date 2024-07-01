@@ -43,8 +43,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AddedEventId_When_EventOccurSingleTime()
     {
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                                       .WithId(1)
                                       .WithUserName("a")
@@ -58,9 +56,9 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
                                       .Build();
 
         _dbContext = new DatabaseBuilder()
-                 .WithUser(userDataModel1)
-                 .WithUser(userDataModel2)
-                 .Build();
+                     .WithUser(userDataModel1)
+                     .WithUser(userDataModel2)
+                     .Build();
 
         EventRepository eventRepository = new(_dbContext, _mapper);
 
@@ -89,8 +87,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AddedEventId_When_EventIsDailyRecurring()
     {
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                                       .WithId(1)
                                       .WithUserName("a")
@@ -136,8 +132,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AddedEventId_When_EventIsDailyRecurringWithWeekDay()
     {
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                                       .WithId(1)
                                       .WithUserName("a")
@@ -228,8 +222,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AddedEventId_When_EventIsMonthlyRecurring()
     {
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                                       .WithId(1)
                                       .WithUserName("a")
@@ -277,8 +269,6 @@ public class AddEvent : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AddedEventId_When_EventIsYearlyRecurring()
     {
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                                       .WithId(1)
                                       .WithUserName("a")

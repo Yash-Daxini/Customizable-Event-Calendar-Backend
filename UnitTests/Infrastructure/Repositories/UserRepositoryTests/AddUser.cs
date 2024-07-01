@@ -24,7 +24,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     {
         _mapper = autoMapperFixture.Mapper;
 
-        _dbContext = new UserRepositoryDBContext().GetDatabaseContext();
+        _dbContext = new DatabaseBuilder().Build();
 
         var services = new ServiceCollection();
 

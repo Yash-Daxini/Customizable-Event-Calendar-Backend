@@ -24,7 +24,6 @@ public class AddEventCollaborator : IClassFixture<AutoMapperFixture>
     public async Task Should_Return_AddedEventCollaboratorId_When_EventCollaboratorIsValid()
     {
         //Arrange
-        _dbContext = await new EventCollaboratorRepositoryDBContext().GetDatabaseContext();
 
         UserDataModel userDataModel = new UserDataModelBuilder()
                                       .WithId(1)
@@ -49,9 +48,9 @@ public class AddEventCollaborator : IClassFixture<AutoMapperFixture>
                                         .Build();
 
         _dbContext = new DatabaseBuilder()
-             .WithUser(userDataModel)
-             .WithEvent(eventDataModel)
-             .Build();
+                     .WithUser(userDataModel)
+                     .WithEvent(eventDataModel)
+                     .Build();
 
 
         User user = new UserBuilder(1)

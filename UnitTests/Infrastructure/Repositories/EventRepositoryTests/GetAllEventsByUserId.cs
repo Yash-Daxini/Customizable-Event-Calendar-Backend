@@ -27,8 +27,6 @@ public class GetAllEventsByUserId : IClassFixture<AutoMapperFixture>
     {
         //Arrange
 
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                               .WithId(1)
                               .WithUserName("a")

@@ -39,8 +39,6 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AllSharedCalendar_When_SharedCalendarIsAvailable()
     {
-        _dbContext = await new SharedCalendarRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel user1 = new UserDataModelBuilder()
                               .WithUserName("a")
                               .WithEmail("a@gmail.com")

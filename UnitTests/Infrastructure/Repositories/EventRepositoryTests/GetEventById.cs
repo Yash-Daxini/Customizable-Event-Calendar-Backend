@@ -23,8 +23,6 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_Event_When_EventAvailableWithGivenId()
     {
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
-
         UserDataModel userDataModel1 = new UserDataModelBuilder()
                               .WithId(1)
                               .WithUserName("a")
@@ -93,7 +91,7 @@ public class GetEventById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_Null_When_EventNotAvailableWithGivenId()
     {
-        _dbContext = await new EventRepositoryDBContext().GetDatabaseContext();
+        _dbContext = new DatabaseBuilder().Build();
 
         EventRepository eventRepository = new(_dbContext, _mapper);
 
