@@ -33,7 +33,7 @@ public class GetUserById : UserRepositorySetup, IClassFixture<AutoMapperFixture>
             .WithUser(userDataModel)
             .Build();
 
-        SetUpIndentityObjects(_dbContext);
+        SetUpIdentityObjects(_dbContext);
 
         User expectedResult = new UserBuilder(1)
                              .WithName("a")
@@ -52,7 +52,7 @@ public class GetUserById : UserRepositorySetup, IClassFixture<AutoMapperFixture>
     {
         _dbContext = new DatabaseBuilder().Build();
 
-        SetUpIndentityObjects(_dbContext);
+        SetUpIdentityObjects(_dbContext);
 
         UserRepository userRepository = new(_mapper, _userManager, _signInManager);
 

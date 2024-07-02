@@ -37,7 +37,7 @@ public class LogIn : UserRepositorySetup, IClassFixture<AutoMapperFixture>
                     .WithUser(userDataModel)
                     .Build();
 
-        SetUpIndentityObjects(_dbContext);
+        SetUpIdentityObjects(_dbContext);
 
         User user = new UserBuilder(1)
                     .WithName("a")
@@ -58,7 +58,7 @@ public class LogIn : UserRepositorySetup, IClassFixture<AutoMapperFixture>
         _dbContext = new DatabaseBuilder()
                     .Build();
 
-        SetUpIndentityObjects(_dbContext);
+        SetUpIdentityObjects(_dbContext);
 
         User user = new UserBuilder(5)
                     .WithName("a")

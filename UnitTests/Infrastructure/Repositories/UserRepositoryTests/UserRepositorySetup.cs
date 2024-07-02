@@ -13,7 +13,7 @@ namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests
         protected UserManager<UserDataModel> _userManager;
         protected SignInManager<UserDataModel> _signInManager;
 
-        public void SetUpIndentityObjects(DbContextEventCalendar dbContext)
+        public void SetUpIdentityObjects(DbContextEventCalendar dbContext)
         {
             var services = new ServiceCollection();
 

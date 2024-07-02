@@ -34,7 +34,7 @@ public class DeleteUser : UserRepositorySetup, IClassFixture<AutoMapperFixture>
                     .WithUser(userDataModel)
                     .Build();
 
-        SetUpIndentityObjects(_dbContext);
+        SetUpIdentityObjects(_dbContext);
 
         User user = new UserBuilder(1)
                     .WithName("a")

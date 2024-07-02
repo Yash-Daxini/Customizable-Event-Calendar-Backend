@@ -23,7 +23,7 @@ public class AddUser : UserRepositorySetup, IClassFixture<AutoMapperFixture>
     {
         _dbContext = new DatabaseBuilder().Build();
 
-        SetUpIndentityObjects(_dbContext);
+        SetUpIdentityObjects(_dbContext);
 
         User user = new UserBuilder(2)
                     .WithName("b")
