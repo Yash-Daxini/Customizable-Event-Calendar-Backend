@@ -1,30 +1,28 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
 using Infrastructure.DataModels;
-using Microsoft.AspNetCore.Http;
 using FluentAssertions;
 using Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 using UnitTests.Builders.EntityBuilder;
 using UnitTests.Builders.DataModelBuilder;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
-public class UpdateUser : IClassFixture<AutoMapperFixture>
+public class UpdateUser : UserRepositorySetup, IClassFixture<AutoMapperFixture>
 {
     private readonly IMapper _mapper;
 
-    private readonly UserManager<UserDataModel> _userManager;
-    private readonly SignInManager<UserDataModel> _signInManager;
-
-    private readonly DbContextEventCalendar _dbContext;
+    private DbContextEventCalendar _dbContext;
 
     public UpdateUser(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
+    }
 
+    [Fact]
+    public async Task Should_Return_Success_When_UserAvailableWithId()
+    {
         UserDataModel userDataModel = new UserDataModelBuilder()
                              .WithId(1)
                              .WithUserName("a")
@@ -34,28 +32,8 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
 
         _dbContext = new DatabaseBuilder().WithUser(userDataModel).Build();
 
-        var services = new ServiceCollection();
+        SetUpIndentityObjects(_dbContext);
 
-        services.AddSingleton(_dbContext);
-
-        services.AddIdentity<UserDataModel, IdentityRole<int>>()
-            .AddEntityFrameworkStores<DbContextEventCalendar>()
-            .AddDefaultTokenProviders();
-
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-        services.AddLogging();
-
-        var serviceProvider = services.BuildServiceProvider();
-
-        _userManager = serviceProvider.GetRequiredService<UserManager<UserDataModel>>();
-
-        _signInManager = serviceProvider.GetRequiredService<SignInManager<UserDataModel>>();
-    }
-
-    [Fact]
-    public async Task Should_Return_Success_When_UserAvailableWithId()
-    {
         User expectedResult = new UserBuilder(1)
                               .WithName("a")
                               .WithEmail("abc@gmail.com")
@@ -73,6 +51,10 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_Failed_When_UserWithIdNotAvailable()
     {
+        _dbContext = new DatabaseBuilder().Build();
+
+        SetUpIndentityObjects(_dbContext);
+
         User user = new UserBuilder(2)
                     .WithName("b")
                     .WithEmail("b")

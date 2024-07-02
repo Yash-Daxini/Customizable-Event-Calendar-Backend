@@ -60,12 +60,6 @@ public class EventDataModelBuilder
         return this;
     }
 
-    public EventDataModelBuilder WithByWeekDay(string byWeekDay)
-    {
-        _eventDataModel.ByWeekDay = byWeekDay;
-        return this;
-    }
-
     public EventDataModelBuilder WithWeekOrder(int? weekOrder)
     {
         _eventDataModel.WeekOrder = weekOrder;

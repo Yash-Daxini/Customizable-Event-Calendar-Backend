@@ -6,10 +6,9 @@ public class EventCollaboratorDataModelBuilder
 {
     private readonly EventCollaboratorDataModel _eventCollaboratorDataModel = new();
 
-    public EventCollaboratorDataModelBuilder WithId(int id)
+    public EventCollaboratorDataModelBuilder()
     {
-        _eventCollaboratorDataModel.Id = id;
-        return this;
+        _eventCollaboratorDataModel.Event = null;
     }
 
     public EventCollaboratorDataModelBuilder WithEventId(int eventId)

@@ -1,32 +1,29 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Infrastructure.Repositories;
-using NSubstitute;
 using Infrastructure.DataModels;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
 using FluentAssertions;
-using Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication;
 using UnitTests.Builders.EntityBuilder;
 using UnitTests.Builders.DataModelBuilder;
+using Infrastructure;
 
 namespace UnitTests.Infrastructure.Repositories.UserRepositoryTests;
 
-public class LogIn : IClassFixture<AutoMapperFixture>
+public class LogIn : UserRepositorySetup, IClassFixture<AutoMapperFixture>
 {
     private readonly IMapper _mapper;
 
-    private readonly UserManager<UserDataModel> _userManager;
-    private readonly SignInManager<UserDataModel> _signInManager;
-
-    private readonly DbContextEventCalendar _dbContext;
+    private DbContextEventCalendar _dbContext;
 
     public LogIn(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
+    }
 
+    [Fact]
+    public async Task Should_Return_SuccessResult_When_UserWithValidCredentials()
+    {
         UserDataModel userDataModel = new UserDataModelBuilder()
                                      .WithId(1)
                                      .WithUserName("a")
@@ -37,41 +34,11 @@ public class LogIn : IClassFixture<AutoMapperFixture>
                                      .Build();
 
         _dbContext = new DatabaseBuilder()
-            .WithUser(userDataModel)
-            .Build();
+                    .WithUser(userDataModel)
+                    .Build();
 
-        var services = new ServiceCollection();
+        SetUpIndentityObjects(_dbContext);
 
-        services.AddSingleton(_dbContext);
-
-        services.AddIdentity<UserDataModel, IdentityRole<int>>()
-            .AddEntityFrameworkStores<DbContextEventCalendar>()
-            .AddDefaultTokenProviders();
-
-        var httpContext = Substitute.For<HttpContext>();
-
-        httpContext.RequestServices.GetService(typeof(IAuthenticationService))
-                   .Returns(Substitute.For<IAuthenticationService>());
-
-        var httpContextAccessor = new HttpContextAccessor
-        {
-            HttpContext = httpContext
-        };
-
-        services.AddSingleton<IHttpContextAccessor>(httpContextAccessor);
-
-        services.AddLogging();
-
-        var serviceProvider = services.BuildServiceProvider();
-
-        _userManager = serviceProvider.GetRequiredService<UserManager<UserDataModel>>();
-
-        _signInManager = serviceProvider.GetRequiredService<SignInManager<UserDataModel>>();
-    }
-
-    [Fact]
-    public async Task Should_Return_SuccessResult_When_UserWithValidCredentials()
-    {
         User user = new UserBuilder(1)
                     .WithName("a")
                     .WithPassword("aaAA@1")
@@ -88,6 +55,11 @@ public class LogIn : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_ReturnFailedResult_When_UserWithInValidCredentials()
     {
+        _dbContext = new DatabaseBuilder()
+                    .Build();
+
+        SetUpIndentityObjects(_dbContext);
+
         User user = new UserBuilder(5)
                     .WithName("a")
                     .WithPassword("b")
