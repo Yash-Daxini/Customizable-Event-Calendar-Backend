@@ -22,7 +22,8 @@ namespace WebAPI.Validators
                 .NotEmpty();
 
             RuleFor(e => e)
-                .Must(e => e.FromDate <= e.ToDate);
+                .Must(e => e.FromDate <= e.ToDate)
+                .WithMessage("FromDate must be greater than equal to Todate");
         }
     }
 }

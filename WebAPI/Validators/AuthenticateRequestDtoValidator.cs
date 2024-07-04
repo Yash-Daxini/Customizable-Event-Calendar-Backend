@@ -9,10 +9,12 @@ public class AuthenticateRequestDtoValidator : AbstractValidator<AuthenticateReq
     {
         RuleFor(e => e.Name)
             .NotNull()
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage("Enter valid name");
 
         RuleFor(e => e.Password)
             .NotEmpty()
-            .NotNull();
+            .NotNull()
+            .WithMessage("Enter not null and not empty password");
     }
 }

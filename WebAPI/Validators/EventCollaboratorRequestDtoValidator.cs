@@ -14,12 +14,14 @@ namespace WebAPI.Validators
             RuleFor(e => e.EventCollaboratorRole)
                 .NotEmpty()
                 .NotNull()
-                .IsEnumName(typeof(EventCollaboratorRole));
+                .IsEnumName(typeof(EventCollaboratorRole))
+                .WithMessage("Enter valid values for event collaborator role");
 
             RuleFor(e => e.ConfirmationStatus)
                 .NotEmpty()
                 .NotNull()
-                .IsEnumName(typeof(ConfirmationStatus));
+                .IsEnumName(typeof(ConfirmationStatus))
+                .WithMessage("Enter valid values for confirmation status"); ;
         }
     }
 }

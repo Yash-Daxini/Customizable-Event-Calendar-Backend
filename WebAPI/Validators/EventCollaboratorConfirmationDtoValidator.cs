@@ -14,7 +14,8 @@ public class EventCollaboratorConfirmationDtoValidator : AbstractValidator<Event
         RuleFor(e => e.ConfirmationStatus)
             .NotEmpty()
             .NotNull()
-            .IsEnumName(typeof(ConfirmationStatus));
+            .IsEnumName(typeof(ConfirmationStatus))
+            .WithMessage("Enter valid values for confirmation status");
 
         When(e => e.ConfirmationStatus is not null && !e.ConfirmationStatus.Equals("Proposed"), () =>
         {

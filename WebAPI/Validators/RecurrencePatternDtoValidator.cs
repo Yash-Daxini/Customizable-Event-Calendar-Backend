@@ -13,11 +13,12 @@ public class RecurrencePatternDtoValidator : AbstractValidator<RecurrencePattern
             .NotEmpty();
 
         RuleFor(e => e.StartDate)
-          .NotEmpty()
-          .NotEmpty();
+            .NotNull()
+            .NotEmpty();
 
         RuleFor(e => e)
-            .Must(e => e.StartDate <= e.EndDate);
+            .Must(e => e.StartDate <= e.EndDate)
+            .WithMessage("Start date must greater than end date");
 
         RuleFor(e => e.Frequency)
             .NotEmpty()

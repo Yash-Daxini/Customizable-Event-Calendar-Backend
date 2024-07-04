@@ -18,7 +18,6 @@ public class UserRequestDtoValidator : AbstractValidator<UserRequestDto>
 
         RuleFor(e => e.Password)
             .NotNull()
-            .NotEmpty()
-            .EmailAddress();
+            .NotEmpty();
     }
 }

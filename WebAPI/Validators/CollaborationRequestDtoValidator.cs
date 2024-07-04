@@ -11,6 +11,7 @@ public class CollaborationRequestDtoValidator : AbstractValidator<CollaborationR
             .GreaterThan(0);
 
         RuleFor(e => e.EventDate)
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage("Enter valid event date");
     }
 }
