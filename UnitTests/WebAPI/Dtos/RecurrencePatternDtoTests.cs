@@ -90,19 +90,114 @@ public class RecurrencePatternDtoTests
         result.IsValid.Should().BeFalse();
     }
 
-    [Theory]
-    [InlineData("Daily")]
-    [InlineData("Weekly")]
-    [InlineData("Monthly")]
-    [InlineData("Yearly")]
-    [InlineData("None")]
-    public void Should_Return_True_When_ValidFrequency(string frequency)
+    [Fact]
+    public void Should_Return_True_When_ValidFrequencyWithValidDailyRecurrencePattern()
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
-            Frequency = frequency,
+            Frequency = "Daily",
+            ByMonth = null,
+            ByMonthDay = null,
+            ByWeekDay = null,
+            Interval = 1,
+            WeekOrder = null,
+        };
+
+        var result = _validator.Validate(recurrencePatternDto);
+
+        result.IsValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Should_Return_True_When_InValidFrequencyWithValidDailyRecurrencePattern()
+    {
+        RecurrencePatternDto recurrencePatternDto = new()
+        {
+            StartDate = new DateOnly(2024, 1, 1),
+            EndDate = new DateOnly(2024, 1, 2),
+            Frequency = "Daily",
+            ByMonth = null,
+            ByMonthDay = 1,
+            ByWeekDay = null,
+            Interval = 1,
+            WeekOrder = null,
+        };
+
+        var result = _validator.Validate(recurrencePatternDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_Return_True_When_ValidFrequencyWithValidWeeklyRecurrencePattern()
+    {
+        RecurrencePatternDto recurrencePatternDto = new()
+        {
+            StartDate = new DateOnly(2024, 1, 1),
+            EndDate = new DateOnly(2024, 1, 2),
+            Frequency = "Weekly",
+            ByMonth = null,
+            ByMonthDay = null,
+            ByWeekDay = [1,2,3],
+            Interval = 1,
+            WeekOrder = null,
+        };
+
+        var result = _validator.Validate(recurrencePatternDto);
+
+        result.IsValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Should_Return_False_When_InValidFrequencyWithInValidWeeklyRecurrencePattern()
+    {
+        RecurrencePatternDto recurrencePatternDto = new()
+        {
+            StartDate = new DateOnly(2024, 1, 1),
+            EndDate = new DateOnly(2024, 1, 2),
+            Frequency = "Weekly",
+            ByMonth = 1,
+            ByMonthDay = 1,
+            ByWeekDay = [1, 2, 3],
+            Interval = 1,
+            WeekOrder = 5,
+        };
+
+        var result = _validator.Validate(recurrencePatternDto);
+
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_Return_True_When_ValidFrequencyWithValidMonthlyRecurrencePattern()
+    {
+        RecurrencePatternDto recurrencePatternDto = new()
+        {
+            StartDate = new DateOnly(2024, 1, 1),
+            EndDate = new DateOnly(2024, 1, 2),
+            Frequency = "Monthly",
+            ByMonth = null,
+            ByMonthDay = 1,
+            ByWeekDay = [1],
+            Interval = 1,
+            WeekOrder = 1,
+        };
+
+        var result = _validator.Validate(recurrencePatternDto);
+
+        result.IsValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Should_Return_False_When_InValidFrequencyWithInValidMonthlyRecurrencePattern()
+    {
+        RecurrencePatternDto recurrencePatternDto = new()
+        {
+            StartDate = new DateOnly(2024, 1, 1),
+            EndDate = new DateOnly(2024, 1, 2),
+            Frequency = "Monthly",
             ByMonth = 1,
             ByMonthDay = 1,
             ByWeekDay = [1, 2, 3],
@@ -112,7 +207,47 @@ public class RecurrencePatternDtoTests
 
         var result = _validator.Validate(recurrencePatternDto);
 
+        result.IsValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_Return_True_When_ValidFrequencyWithValidYearlyRecurrencePattern()
+    {
+        RecurrencePatternDto recurrencePatternDto = new()
+        {
+            StartDate = new DateOnly(2024, 1, 1),
+            EndDate = new DateOnly(2024, 1, 2),
+            Frequency = "Yearly",
+            ByMonth = 1,
+            ByMonthDay = 31,
+            ByWeekDay = [1,2],
+            Interval = 1,
+            WeekOrder = 1,
+        };
+
+        var result = _validator.Validate(recurrencePatternDto);
+
         result.IsValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Should_Return_False_When_InValidFrequencyWithInValidYearlyRecurrencePattern()
+    {
+        RecurrencePatternDto recurrencePatternDto = new()
+        {
+            StartDate = new DateOnly(2024, 1, 1),
+            EndDate = new DateOnly(2024, 1, 2),
+            Frequency = "Yearly",
+            ByMonth = -1,
+            ByMonthDay = null,
+            ByWeekDay = [1, 2, 3],
+            Interval = 1,
+            WeekOrder = null,
+        };
+
+        var result = _validator.Validate(recurrencePatternDto);
+
+        result.IsValid.Should().BeFalse();
     }
 
     [Theory]
@@ -125,12 +260,12 @@ public class RecurrencePatternDtoTests
         {
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
-            Frequency = "Daily",
+            Frequency = "Yearly",
             ByMonth = month,
             ByMonthDay = 1,
             ByWeekDay = [1, 2, 3],
             Interval = 1,
-            WeekOrder = 1,
+            WeekOrder = null,
         };
 
         var result = _validator.Validate(recurrencePatternDto);
@@ -148,9 +283,9 @@ public class RecurrencePatternDtoTests
         {
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
-            Frequency = "Daily",
+            Frequency = "Yearly",
             ByMonth = month,
-            ByMonthDay = 1,
+            ByMonthDay = null,
             ByWeekDay = [1, 2, 3],
             Interval = 1,
             WeekOrder = 1,
@@ -195,8 +330,8 @@ public class RecurrencePatternDtoTests
         {
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
-            Frequency = "Daily",
-            ByMonth = 1,
+            Frequency = "Monthly",
+            ByMonth = null,
             ByMonthDay = monthDay,
             ByWeekDay = [1, 2, 3],
             Interval = 1,
@@ -236,11 +371,11 @@ public class RecurrencePatternDtoTests
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
             Frequency = "Daily",
-            ByMonth = 1,
-            ByMonthDay = 1,
+            ByMonth = null,
+            ByMonthDay = null,
             ByWeekDay = [1, 2, 3],
             Interval = 1,
-            WeekOrder = 1,
+            WeekOrder = null,
         };
 
         var result = _validator.Validate(recurrencePatternDto);
@@ -284,11 +419,11 @@ public class RecurrencePatternDtoTests
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
             Frequency = "Daily",
-            ByMonth = 1,
-            ByMonthDay = 1,
+            ByMonth = null,
+            ByMonthDay = null,
             ByWeekDay = [1, 2, 3],
             Interval = interval,
-            WeekOrder = 1,
+            WeekOrder = null,
         };
 
         var result = _validator.Validate(recurrencePatternDto);
@@ -331,8 +466,8 @@ public class RecurrencePatternDtoTests
         {
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
-            Frequency = "Daily",
-            ByMonth = 1,
+            Frequency = "Monthly",
+            ByMonth = null,
             ByMonthDay = 1,
             ByWeekDay = [1, 2, 3],
             Interval = 1,

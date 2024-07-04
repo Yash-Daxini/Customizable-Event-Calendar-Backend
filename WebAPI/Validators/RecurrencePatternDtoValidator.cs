@@ -21,6 +21,7 @@ public class RecurrencePatternDtoValidator : AbstractValidator<RecurrencePattern
             .WithMessage("Start date must greater than end date");
 
         RuleFor(e => e.Frequency)
+            .NotNull()
             .NotEmpty()
             .IsEnumName(typeof(Frequency));
 
@@ -31,16 +32,48 @@ public class RecurrencePatternDtoValidator : AbstractValidator<RecurrencePattern
             .GreaterThanOrEqualTo(1)
             .LessThanOrEqualTo(7);
 
-        RuleFor(e => e.WeekOrder)
+        When(e => e.Frequency != null && (e.Frequency.Equals("Daily") || e.Frequency.Equals("Weekly") || e.Frequency.Equals("None")), () =>
+        {
+            RuleFor(e => e.ByMonth)
+                .Null()
+                .WithMessage("For daily and weekly event ByMonth must be null");
+
+            RuleFor(e => e.ByMonthDay)
+                .Null()
+                .WithMessage("For daily and weekly event ByMonthDay must be null");
+
+            RuleFor(e => e.WeekOrder)
+                .Null()
+                .WithMessage("For daily and weekly event WeekOrder must be null");
+        });
+
+        When(e => e.Frequency != null && e.Frequency.Equals("Monthly"), () =>
+        {
+            RuleFor(e => e.WeekOrder)
             .GreaterThanOrEqualTo(1)
             .LessThanOrEqualTo(5);
 
-        RuleFor(e => e.ByMonthDay)
-            .GreaterThanOrEqualTo(1)
-            .LessThanOrEqualTo(31);
+            RuleFor(e => e.ByMonthDay)
+                .GreaterThanOrEqualTo(1)
+                .LessThanOrEqualTo(31);
 
-        RuleFor(e => e.ByMonth)
+            RuleFor(e => e.ByMonth)
+                .Null();
+        });
+        
+        When(e => e.Frequency != null && e.Frequency.Equals("Yearly"), () =>
+        {
+            RuleFor(e => e.WeekOrder)
             .GreaterThanOrEqualTo(1)
-            .LessThanOrEqualTo(12);
+            .LessThanOrEqualTo(5);
+
+            RuleFor(e => e.ByMonthDay)
+                .GreaterThanOrEqualTo(1)
+                .LessThanOrEqualTo(31);
+
+            RuleFor(e => e.ByMonth)
+                .GreaterThanOrEqualTo(1)
+                .LessThanOrEqualTo(12);
+        });
     }
 }
