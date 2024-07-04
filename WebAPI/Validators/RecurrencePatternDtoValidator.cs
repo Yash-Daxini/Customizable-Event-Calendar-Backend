@@ -25,12 +25,13 @@ public class RecurrencePatternDtoValidator : AbstractValidator<RecurrencePattern
             .NotEmpty()
             .IsEnumName(typeof(Frequency));
 
-        RuleFor(e => e.Interval)
-            .GreaterThanOrEqualTo(1);
+        When(e => e.ByWeekDay != null, () =>
+        {
+            RuleForEach(e => e.ByWeekDay)
+                .GreaterThanOrEqualTo(1)
+                .LessThanOrEqualTo(7);
+        });
 
-        RuleForEach(e => e.ByWeekDay)
-            .GreaterThanOrEqualTo(1)
-            .LessThanOrEqualTo(7);
 
         When(e => e.Frequency != null && (e.Frequency.Equals("Daily") || e.Frequency.Equals("Weekly") || e.Frequency.Equals("None")), () =>
         {
@@ -60,7 +61,7 @@ public class RecurrencePatternDtoValidator : AbstractValidator<RecurrencePattern
             RuleFor(e => e.ByMonth)
                 .Null();
         });
-        
+
         When(e => e.Frequency != null && e.Frequency.Equals("Yearly"), () =>
         {
             RuleFor(e => e.WeekOrder)

@@ -6,7 +6,7 @@ namespace UnitTests.WebAPI.Dtos;
 
 public class RecurrencePatternDtoTests
 {
-    RecurrencePatternDtoValidator _validator;
+    private readonly RecurrencePatternDtoValidator _validator;
 
     public RecurrencePatternDtoTests()
     {
@@ -33,7 +33,7 @@ public class RecurrencePatternDtoTests
             Frequency = "Daily",
             ByMonth = 1,
             ByMonthDay = 1,
-            ByWeekDay = [1, 2, 3],
+            ByWeekDay = null,
             Interval = 1,
             WeekOrder = 1,
         };
@@ -111,7 +111,7 @@ public class RecurrencePatternDtoTests
     }
 
     [Fact]
-    public void Should_Return_True_When_InValidFrequencyWithValidDailyRecurrencePattern()
+    public void Should_Return_False_When_InValidFrequencyWithValidDailyRecurrencePattern()
     {
         RecurrencePatternDto recurrencePatternDto = new()
         {
@@ -180,7 +180,7 @@ public class RecurrencePatternDtoTests
             Frequency = "Monthly",
             ByMonth = null,
             ByMonthDay = 1,
-            ByWeekDay = [1],
+            ByWeekDay = null,
             Interval = 1,
             WeekOrder = 1,
         };
@@ -220,9 +220,9 @@ public class RecurrencePatternDtoTests
             Frequency = "Yearly",
             ByMonth = 1,
             ByMonthDay = 31,
-            ByWeekDay = [1,2],
+            ByWeekDay = null,
             Interval = 1,
-            WeekOrder = 1,
+            WeekOrder = null,
         };
 
         var result = _validator.Validate(recurrencePatternDto);
@@ -263,7 +263,7 @@ public class RecurrencePatternDtoTests
             Frequency = "Yearly",
             ByMonth = month,
             ByMonthDay = 1,
-            ByWeekDay = [1, 2, 3],
+            ByWeekDay = null,
             Interval = 1,
             WeekOrder = null,
         };
@@ -286,7 +286,7 @@ public class RecurrencePatternDtoTests
             Frequency = "Yearly",
             ByMonth = month,
             ByMonthDay = null,
-            ByWeekDay = [1, 2, 3],
+            ByWeekDay = null,
             Interval = 1,
             WeekOrder = 1,
         };
@@ -306,10 +306,10 @@ public class RecurrencePatternDtoTests
         {
             StartDate = new DateOnly(2024, 1, 1),
             EndDate = new DateOnly(2024, 1, 2),
-            Frequency = "Daily",
+            Frequency = "Monthly",
             ByMonth = 1,
             ByMonthDay = monthDay,
-            ByWeekDay = [1, 2, 3],
+            ByWeekDay = null,
             Interval = 1,
             WeekOrder = 1,
         };
@@ -333,7 +333,7 @@ public class RecurrencePatternDtoTests
             Frequency = "Monthly",
             ByMonth = null,
             ByMonthDay = monthDay,
-            ByWeekDay = [1, 2, 3],
+            ByWeekDay = null,
             Interval = 1,
             WeekOrder = 1,
         };
