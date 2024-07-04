@@ -30,7 +30,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_ActionResult_When_CallsTheMethod()
     {
-        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
+        UserRequestDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com" };
 
         User user = new UserBuilder(49)
                     .WithName("b")
@@ -48,7 +48,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_BadRequest_When_AddOperationFailed()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        UserRequestDto userDto = Substitute.For<UserRequestDto>();
 
         User user = Substitute.For<User>();
 
@@ -62,7 +62,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        UserRequestDto userDto = Substitute.For<UserRequestDto>();
 
         User user = Substitute.For<User>();
 

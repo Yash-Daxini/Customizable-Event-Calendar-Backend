@@ -31,7 +31,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_ActionResult_When_CallsTheMethod()
     {
-        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com" };
+        UserRequestDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com" };
 
         User user = new UserBuilder(49)
             .WithName("b")
@@ -49,7 +49,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_BadRequest_When_UserNotAvailableWithId()
     {
-        UserDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" };
+        UserRequestDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com" };
 
         User userModel = Substitute.For<User>();
 
@@ -63,7 +63,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_BadRequest_When_UpdateOperationFailed()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        UserRequestDto userDto = Substitute.For<UserRequestDto>();
 
         User user = Substitute.For<User>();
 
@@ -77,7 +77,7 @@ public class UpdateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
-        UserDto userDto = Substitute.For<UserDto>();
+        UserRequestDto userDto = Substitute.For<UserRequestDto>();
 
         User user = Substitute.For<User>();
 

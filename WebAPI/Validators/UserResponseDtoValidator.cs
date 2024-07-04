@@ -3,9 +3,9 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Validators;
 
-public class UserDtoValidator : AbstractValidator<UserDto>
+public class UserResponseDtoValidator : AbstractValidator<UserResponseDto>
 {
-    public UserDtoValidator()
+    public UserResponseDtoValidator()
     {
         RuleFor(e => e.Name)
             .NotNull()
@@ -15,10 +15,5 @@ public class UserDtoValidator : AbstractValidator<UserDto>
             .NotNull()    
             .NotEmpty()
             .EmailAddress();
-
-        RuleFor(e => e.Password)
-            .NotEmpty()
-            .NotNull();
-            //.MinimumLength(8);
     }
 }

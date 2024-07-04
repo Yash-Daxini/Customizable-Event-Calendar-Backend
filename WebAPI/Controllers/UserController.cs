@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         {
             User? user = await _userService.GetUserById(userId);
 
-            return Ok(_mapper.Map<UserDto>(user));
+            return Ok(_mapper.Map<UserResponseDto>(user));
         }
         catch (NotFoundException ex)
         {
@@ -45,11 +45,11 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> AddUser([FromBody] UserDto userDto)
+    public async Task<ActionResult> AddUser([FromBody] UserRequestDto userRequestDto)
     {
         try
         {
-            User user = _mapper.Map<User>(userDto);
+            User user = _mapper.Map<User>(userRequestDto);
 
             var result = await _userService.SignUp(user);
             if (result.Succeeded)
@@ -64,8 +64,8 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
-    [HttpPatch]
-    public async Task<ActionResult> UpdateUser([FromBody] UserDto userDto)
+    [HttpPut]
+    public async Task<ActionResult> UpdateUser([FromBody] UserRequestDto userDto)
     {
         try
         {

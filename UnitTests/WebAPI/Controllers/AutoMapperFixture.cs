@@ -20,9 +20,10 @@ public class AutoMapperFixture
             cfg.AddProfile<RecurringEventRequestDtoProfile>();
             cfg.AddProfile<RecurrencePatternDtoProfile>();
             cfg.AddProfile<SharedCalendarDtoProfile>();
-            cfg.AddProfile<UserDtoProfile>();
+            cfg.AddProfile<UserResponseDtoProfile>();
             cfg.AddProfile<AuthenticateRequestDtoProfile>();
             cfg.AddProfile<AuthenticateResponseDtoProfile>();
+            cfg.AddProfile<UserRequestDtoProfile>();
         }).CreateMapper();
     }
 }
