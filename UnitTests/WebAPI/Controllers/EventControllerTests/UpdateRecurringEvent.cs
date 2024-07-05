@@ -11,13 +11,13 @@ using WebAPI.Dtos;
 
 namespace UnitTests.WebAPI.Controllers.EventControllerTests;
 
-public class UpdateEvent : IClassFixture<AutoMapperFixture>
+public class UpdateRecurringEvent : IClassFixture<AutoMapperFixture>
 {
     private readonly IEventService _eventService;
     private readonly IMapper _mapper;
     private readonly EventController _eventController;
 
-    public UpdateEvent(AutoMapperFixture autoMapperFixture)
+    public UpdateRecurringEvent(AutoMapperFixture autoMapperFixture)
     {
         _mapper = autoMapperFixture.Mapper;
         _eventService = Substitute.For<IEventService>();
@@ -29,7 +29,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
     {
         RecurringEventRequestDto recurringEventRequestDto = Substitute.For<RecurringEventRequestDto>();
 
-        IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
+        IActionResult actionResult = await _eventController.UpdateRecurringEvent(1, recurringEventRequestDto);
 
         actionResult.Should().BeOfType<CreatedAtActionResult>();
     }
@@ -43,7 +43,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         _eventService.UpdateEvent(eventObj, 1).ThrowsAsyncForAnyArgs(new EventOverlapException("Overlap"));
 
-        IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
+        IActionResult actionResult = await _eventController.UpdateRecurringEvent(1, recurringEventRequestDto);
 
         actionResult.Should().BeOfType<BadRequestObjectResult>();
     }
@@ -57,7 +57,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         _eventService.UpdateEvent(eventObj, 1).ThrowsForAnyArgs(new NotFoundException(""));
 
-        IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
+        IActionResult actionResult = await _eventController.UpdateRecurringEvent(1, recurringEventRequestDto);
 
         actionResult.Should().BeOfType<NotFoundObjectResult>();
     }
@@ -71,7 +71,7 @@ public class UpdateEvent : IClassFixture<AutoMapperFixture>
 
         _eventService.UpdateEvent(eventObj, 1).ThrowsAsyncForAnyArgs<Exception>();
 
-        IActionResult actionResult = await _eventController.UpdateEvent(1, recurringEventRequestDto);
+        IActionResult actionResult = await _eventController.UpdateRecurringEvent(1, recurringEventRequestDto);
 
         actionResult.Should().BeOfType<ObjectResult>();
     }
