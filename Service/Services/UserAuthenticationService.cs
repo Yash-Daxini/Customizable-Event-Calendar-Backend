@@ -28,8 +28,6 @@ public class UserAuthenticationService : IUserAuthenticationService
         if (user is null)
             throw new NullArgumentException($"User can't be null");
 
-        await _userRepository.GetUserById(user.Id);
-
         var result = await _userRepository.LogIn(user);
 
         if (result == SignInResult.Failed)

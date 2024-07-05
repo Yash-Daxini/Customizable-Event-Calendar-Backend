@@ -2,7 +2,7 @@
 
 namespace Core.Entities.RecurrecePattern;
 
-abstract public class RecurrencePattern
+public abstract class RecurrencePattern
 {
     public DateOnly StartDate { get; set; }
 
@@ -14,7 +14,7 @@ abstract public class RecurrencePattern
 
     public List<int>? ByWeekDay { get; set; }
 
-    abstract public int GetOccurrencesCount();
+    public abstract int GetOccurrencesCount();
 
-    abstract public List<DateOnly> GetOccurrences();
+    public abstract List<DateOnly> GetOccurrences();
 }

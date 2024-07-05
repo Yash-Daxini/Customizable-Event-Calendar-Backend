@@ -38,7 +38,6 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
                                                    .Where(eventObj => eventObj.Id == eventId)
                                                    .Include(eventObj => eventObj.EventCollaborators)
                                                      .ThenInclude(eventCollaborator => eventCollaborator.User)
-                                                   .AsNoTracking()
                                                    .FirstOrDefaultAsync();
 
         return _mapper.Map<Event>(eventObj);
