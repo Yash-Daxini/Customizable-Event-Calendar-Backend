@@ -161,7 +161,7 @@ public class EventController : ControllerBase
         }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { ErrorMessage = ex.Message});
+            return BadRequest(new { ErrorMessage = ex.Message });
         }
         catch (Exception ex)
         {
@@ -190,7 +190,31 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("{eventId}")]
-    public async Task<ActionResult> UpdateEvent([FromRoute] int userId, [FromBody] RecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateNonRecurringEvent([FromRoute] int userId, [FromBody] NonRecurringEventRequestDto eventRequestDto)
+    {
+        try
+        {
+            Event eventObj = _mapper.Map<Event>(eventRequestDto);
+            await _eventService.UpdateEvent(eventObj, userId);
+            return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, new { eventObj.Id });
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { ErrorMessage = ex.Message });
+        }
+        catch (EventOverlapException ex)
+        {
+            return BadRequest(new { ErrorMessage = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+
+    }
+
+    [HttpPut("recurring-events/{eventId}")]
+    public async Task<ActionResult> UpdateRecurringEvent([FromRoute] int userId, [FromBody] RecurringEventRequestDto eventRequestDto)
     {
         try
         {
