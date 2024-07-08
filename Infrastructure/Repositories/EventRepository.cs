@@ -35,10 +35,9 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
     public async Task<Event?> GetEventById(int eventId)
     {
         EventDataModel? eventObj = await _dbContext.Events
-                                                   .Where(eventObj => eventObj.Id == eventId)
                                                    .Include(eventObj => eventObj.EventCollaborators)
                                                      .ThenInclude(eventCollaborator => eventCollaborator.User)
-                                                   .FirstOrDefaultAsync();
+                                                   .FirstOrDefaultAsync(eventObj => eventObj.Id == eventId);
 
         return _mapper.Map<Event>(eventObj);
     }
@@ -57,14 +56,5 @@ public class EventRepository : BaseRepository<Event, EventDataModel>, IEventRepo
                                                       .ToListAsync();
 
         return _mapper.Map<List<Event>>(events);
-    }
-
-    public async Task<List<Event>> GetSharedEvents(SharedCalendar sharedCalendar)
-    {
-        List<Event> events = await GetEventsWithinGivenDateByUserId(sharedCalendar.Sender.Id, sharedCalendar.FromDate, sharedCalendar.ToDate);
-
-        return events
-               .Where(eventModel => eventModel.GetEventOrganizer().Id == sharedCalendar.Sender.Id)
-               .ToList();
     }
 }

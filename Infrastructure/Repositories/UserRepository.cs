@@ -23,12 +23,14 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserById(int userId)
     {
-        return _mapper.Map<User>(await _userManager.FindByIdAsync(userId.ToString()));
+        return _mapper.Map<User>(await _userManager
+                                       .FindByIdAsync(userId.ToString()));
     }
 
     public async Task<IdentityResult> Update(User user)
     {
-        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id.ToString());
+        UserDataModel? userDataModel = await _userManager
+                                            .FindByIdAsync(user.Id.ToString());
 
         if (userDataModel is null)
             return IdentityResult.Failed();
@@ -41,7 +43,8 @@ public class UserRepository : IUserRepository
 
     public async Task<IdentityResult> Delete(User user)
     {
-        UserDataModel? userDataModel = await _userManager.FindByIdAsync(user.Id.ToString());
+        UserDataModel? userDataModel = await _userManager
+                                             .FindByIdAsync(user.Id.ToString());
 
         return await _userManager.DeleteAsync(userDataModel);
     }
@@ -55,6 +58,9 @@ public class UserRepository : IUserRepository
 
     public async Task<SignInResult> LogIn(User user)
     {
-        return await _signInManager.PasswordSignInAsync(user.Name, user.Password, false, false);
+        return await _signInManager.PasswordSignInAsync(user.Name, 
+                                                        user.Password,
+                                                        false,
+                                                        false);
     }
 }

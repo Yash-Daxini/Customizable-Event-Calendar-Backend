@@ -1,5 +1,0 @@
-{
-    "excludes": [
-        "**/Program.cs"
-    ]
-}

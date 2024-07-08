@@ -10,7 +10,8 @@ public class SharedEventCollaborationService : ISharedEventCollaborationService
     private readonly IEventCollaboratorService _eventCollaboratorService;
     private readonly IEventService _eventService;
 
-    public SharedEventCollaborationService(IEventCollaboratorService eventCollaboratorService, IEventService eventService)
+    public SharedEventCollaborationService(IEventCollaboratorService eventCollaboratorService,
+                                           IEventService eventService)
     {
         _eventCollaboratorService = eventCollaboratorService;
         _eventService = eventService;

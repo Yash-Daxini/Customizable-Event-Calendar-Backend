@@ -15,7 +15,8 @@ namespace WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IEventCollaboratorService _eventCollaboratorService;
 
-        public EventCollaboratorController(IMapper mapper, IEventCollaboratorService eventCollaboratorService)
+        public EventCollaboratorController(IMapper mapper, 
+                                           IEventCollaboratorService eventCollaboratorService)
         {
             _mapper = mapper;
             _eventCollaboratorService = eventCollaboratorService;

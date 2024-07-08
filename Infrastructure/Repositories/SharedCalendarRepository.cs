@@ -30,10 +30,10 @@ public class SharedCalendarRepository : BaseRepository<SharedCalendar, SharedCal
     public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
     {
         return _mapper.Map<SharedCalendar>(await _dbContext.SharedCalendars
-                               .Where(sharedCalendar => sharedCalendar.Id == sharedCalendarId)
                                .Include(sharedCalendar => sharedCalendar.Sender)
                                .Include(sharedCalendar => sharedCalendar.Receiver)
-                               .FirstOrDefaultAsync());
+                               .FirstOrDefaultAsync(sharedCalendar => sharedCalendar.Id 
+                                                                    == sharedCalendarId));
 
 
     }

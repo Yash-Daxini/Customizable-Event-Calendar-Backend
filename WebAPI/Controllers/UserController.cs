@@ -118,7 +118,9 @@ public class UserController : ControllerBase
         {
             User user = _mapper.Map<User>(authenticateRequestDto);
 
-            AuthenticateResponseDto authenticateResponseDto = _mapper.Map<AuthenticateResponseDto>(await _userAuthenticationService.LogIn(user));
+            AuthenticateResponse? authenticateResponse = await _userAuthenticationService.LogIn(user);
+
+            AuthenticateResponseDto authenticateResponseDto = _mapper.Map<AuthenticateResponseDto>(authenticateResponse);
 
             return Ok(authenticateResponseDto);
         }

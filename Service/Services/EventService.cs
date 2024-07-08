@@ -162,7 +162,15 @@ public class EventService : IEventService
 
         if (sharedCalendar == null) return [];
 
-        return await _eventRepository.GetSharedEvents(sharedCalendar);
+        List<Event> events = await _eventRepository
+                            .GetEventsWithinGivenDateByUserId(sharedCalendar.Sender.Id,
+                                                              sharedCalendar.FromDate,
+                                                              sharedCalendar.ToDate);
+
+        return events
+               .Where(eventModel => eventModel.GetEventOrganizer().Id
+                                    == sharedCalendar.Sender.Id)
+               .ToList();
     }
 
     private async Task HandleEventOverlap(Event eventModel, int userId)

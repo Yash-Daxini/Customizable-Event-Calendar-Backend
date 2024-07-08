@@ -56,7 +56,9 @@ public class EventController : ControllerBase
 
 
     [HttpGet("eventsBetweenDates")]
-    public async Task<ActionResult> GetEventsWithInGivenDates([FromRoute] int userId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+    public async Task<ActionResult> GetEventsWithInGivenDates([FromRoute] int userId,
+                                                              [FromQuery] DateOnly startDate,
+                                                              [FromQuery] DateOnly endDate)
     {
         try
         {
@@ -131,7 +133,8 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("~/api/events/{eventId}")]
-    public async Task<ActionResult> GetEventById([FromRoute] int eventId, [FromRoute] int userId)
+    public async Task<ActionResult> GetEventById([FromRoute] int eventId,
+                                                 [FromRoute] int userId)
     {
         try
         {
@@ -150,7 +153,8 @@ public class EventController : ControllerBase
     }
 
     [HttpPost("recurring-events")]
-    public async Task<ActionResult> AddRecurringEvent([FromRoute] int userId, [FromBody] RecurringEventRequestDto recurringEventRequestDto)
+    public async Task<ActionResult> AddRecurringEvent([FromRoute] int userId, 
+                                                      [FromBody] RecurringEventRequestDto recurringEventRequestDto)
     {
         try
         {
@@ -170,7 +174,8 @@ public class EventController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> AddNonRecurringEvent([FromRoute] int userId, [FromBody] NonRecurringEventRequestDto nonRecurringEventRequestDto)
+    public async Task<ActionResult> AddNonRecurringEvent([FromRoute] int userId,
+                                                         [FromBody] NonRecurringEventRequestDto nonRecurringEventRequestDto)
     {
         try
         {
@@ -190,7 +195,8 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("{eventId}")]
-    public async Task<ActionResult> UpdateNonRecurringEvent([FromRoute] int userId, [FromBody] NonRecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateNonRecurringEvent([FromRoute] int userId,
+                                                            [FromBody] NonRecurringEventRequestDto eventRequestDto)
     {
         try
         {
@@ -214,7 +220,8 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("recurring-events/{eventId}")]
-    public async Task<ActionResult> UpdateRecurringEvent([FromRoute] int userId, [FromBody] RecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateRecurringEvent([FromRoute] int userId,
+                                                         [FromBody] RecurringEventRequestDto eventRequestDto)
     {
         try
         {
@@ -238,7 +245,8 @@ public class EventController : ControllerBase
     }
 
     [HttpDelete("{eventId}")]
-    public async Task<ActionResult> DeleteEvent([FromRoute] int eventId, [FromRoute] int userId)
+    public async Task<ActionResult> DeleteEvent([FromRoute] int eventId,
+                                                [FromRoute] int userId)
     {
         try
         {

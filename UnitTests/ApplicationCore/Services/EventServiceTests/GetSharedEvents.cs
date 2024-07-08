@@ -4,11 +4,9 @@ using Core.Interfaces.IServices;
 using Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using Core.Entities.RecurrecePattern;
 using FluentAssertions;
 using Core.Entities.Enums;
 using UnitTests.Builders.EntityBuilder;
-using Core.Exceptions;
 
 namespace UnitTests.ApplicationCore.Services.EventServiceTests;
 
@@ -48,20 +46,20 @@ public class GetSharedEvents
     [Fact]
     public async Task Should_Return_ListOfEvent_When_SharedCalendarAvailableWithId()
     {
-        SharedCalendar sharedCalendar = new(1, new() { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
-                                               new() { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
+        SharedCalendar sharedCalendar = new(1, new() { Id = 48, Name = "a", Email = "a@gmail.com", Password = "a" },
+                                               new() { Id = 49, Name = "b", Email = "b@gmail.com", Password = "b" },
                                                new DateOnly(),
                                                new DateOnly());
 
         _sharedCalendarService.GetSharedCalendarById(48).Returns(sharedCalendar);
 
-        _eventRepository.GetSharedEvents(sharedCalendar).Returns(_events);
+        _eventRepository.GetEventsWithinGivenDateByUserId(48, sharedCalendar.FromDate, sharedCalendar.ToDate).Returns(_events);
 
         List<Event> events = await _eventService.GetSharedEvents(48);
 
         events.Should().BeEquivalentTo(_events);
 
-        await _eventRepository.Received().GetSharedEvents(sharedCalendar);
+        await _eventRepository.Received().GetEventsWithinGivenDateByUserId(48, sharedCalendar.FromDate, sharedCalendar.ToDate);
     }
 
     [Fact]
@@ -74,13 +72,45 @@ public class GetSharedEvents
 
         _sharedCalendarService.GetSharedCalendarById(48).ReturnsNull();
 
-        _eventRepository.GetSharedEvents(sharedCalendar).Returns([]);
+        _eventRepository.GetEventsWithinGivenDateByUserId(48, sharedCalendar.FromDate, sharedCalendar.ToDate).Returns(_events);
 
         List<Event> events = await _eventService.GetSharedEvents(48);
 
         events.Should().BeEmpty();
 
-        await _eventRepository.DidNotReceive().GetSharedEvents(sharedCalendar);
+        await _eventRepository.DidNotReceive().GetEventsWithinGivenDateByUserId(48, sharedCalendar.FromDate, sharedCalendar.ToDate);
+    }
+
+    [Fact]
+    public async Task Should_Throw_Exception_When_OrganizerOfEventIsNull()
+    {
+        List<EventCollaborator> eventCollaborators = new EventCollaboratorListBuilder(0)
+                                             .WithParticipant(new UserBuilder(49).Build(),
+                                                              ConfirmationStatus.Accept,
+                                                              new DateOnly(2024, 5, 31),
+                                                              null)
+                                             .Build();
+
+        Event eventObj = new EventBuilder()
+                         .WithEventCollaborators(eventCollaborators)
+                         .Build();
+
+        List<Event> events = [eventObj];
+
+        SharedCalendar sharedCalendar = new(1, new() { Id = 1, Name = "a", Email = "a@gmail.com", Password = "a" },
+                                               new() { Id = 2, Name = "b", Email = "b@gmail.com", Password = "b" },
+                                               new DateOnly(),
+                                               new DateOnly());
+
+        _sharedCalendarService.GetSharedCalendarById(48).Returns(sharedCalendar);
+
+        _eventRepository.GetEventsWithinGivenDateByUserId(48, sharedCalendar.FromDate, sharedCalendar.ToDate).Returns(events);
+
+        var action = async () => await _eventService.GetSharedEvents(48);
+
+        await action.Should().ThrowAsync<Exception>();
+
+        await _eventRepository.DidNotReceive().GetEventsWithinGivenDateByUserId(48, sharedCalendar.FromDate, sharedCalendar.ToDate);
     }
 
     [Fact]
@@ -93,7 +123,7 @@ public class GetSharedEvents
 
         _sharedCalendarService.GetSharedCalendarById(-1).ReturnsNull();
 
-        _eventRepository.GetSharedEvents(sharedCalendar).Returns([]);
+        _eventRepository.GetEventsWithinGivenDateByUserId(48, sharedCalendar.FromDate, sharedCalendar.ToDate).Returns([]);
 
         List<Event> events = await _eventService.GetSharedEvents(-1);
 

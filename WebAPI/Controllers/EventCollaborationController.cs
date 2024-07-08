@@ -16,7 +16,8 @@ public class EventCollaborationController : ControllerBase
     private readonly ISharedEventCollaborationService _sharedEventCollaborationService;
     private readonly IMapper _mapper;
 
-    public EventCollaborationController(ISharedEventCollaborationService sharedEventCollaborationService, IMapper mapper)
+    public EventCollaborationController(ISharedEventCollaborationService sharedEventCollaborationService,
+                                        IMapper mapper)
     {
         _sharedEventCollaborationService = sharedEventCollaborationService;
         _mapper = mapper;

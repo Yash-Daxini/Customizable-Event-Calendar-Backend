@@ -16,7 +16,8 @@ public class SharedCalendarController : ControllerBase
     private readonly ISharedCalendarService _sharedCalendarService;
     private readonly IMapper _mapper;
 
-    public SharedCalendarController(ISharedCalendarService sharedCalendarService, IMapper mapper)
+    public SharedCalendarController(ISharedCalendarService sharedCalendarService,
+                                    IMapper mapper)
     {
         _sharedCalendarService = sharedCalendarService;
         _mapper = mapper;
@@ -27,7 +28,8 @@ public class SharedCalendarController : ControllerBase
     {
         try
         {
-            List<SharedCalendar> sharedCalendars = await _sharedCalendarService.GetAllSharedCalendars();
+            List<SharedCalendar> sharedCalendars = await _sharedCalendarService
+                                                         .GetAllSharedCalendars();
 
             return Ok(_mapper.Map<List<SharedCalendarDto>>(sharedCalendars));
         }
@@ -42,7 +44,8 @@ public class SharedCalendarController : ControllerBase
     {
         try
         {
-            SharedCalendar? sharedCalendarModel = await _sharedCalendarService.GetSharedCalendarById(sharedCalendarId);
+            SharedCalendar? sharedCalendarModel = await _sharedCalendarService
+                                                        .GetSharedCalendarById(sharedCalendarId);
 
             return Ok(_mapper.Map<SharedCalendarDto>(sharedCalendarModel));
         }
@@ -64,6 +67,7 @@ public class SharedCalendarController : ControllerBase
             SharedCalendar sharedCalendar = _mapper.Map<SharedCalendar>(sharedCalendarDto);
 
             int addedSharedCalendarId = await _sharedCalendarService.AddSharedCalendar(sharedCalendar);
+
             return CreatedAtAction(nameof(GetSharedCalendarById),
                                    new { sharedCalendarId = addedSharedCalendarId, controller = "sharedcalendar" },
                                    new { addedSharedCalendarId });
