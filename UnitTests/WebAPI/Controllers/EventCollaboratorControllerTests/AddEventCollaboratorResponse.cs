@@ -22,14 +22,7 @@ public class AddEventCollaboratorResponse : IClassFixture<AutoMapperFixture>
         _mapper = autoMapperFixture.Mapper;
         _eventCollaboratorService = Substitute.For<IEventCollaboratorService>();
         _eventCollaboratorController = new EventCollaboratorController(_mapper, _eventCollaboratorService); 
-        _eventCollaboratorConfirmationDto = new EventCollaboratorConfirmationDto()
-        {
-            Id = 1,
-            EventId = 1,
-            UserId = 1,
-            ConfirmationStatus = "Accept",
-            ProposedDuration = null
-        };
+        _eventCollaboratorConfirmationDto = Substitute.For<EventCollaboratorConfirmationDto>();
     }
 
     [Fact]

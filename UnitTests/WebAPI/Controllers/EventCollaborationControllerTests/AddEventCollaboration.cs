@@ -29,12 +29,7 @@ public class AddEventCollaboration : IClassFixture<AutoMapperFixture>
         _mapper = autoMapperFixture.Mapper;
         _eventCollaborationController = new EventCollaborationController(_sharedEventCollaborationService, _mapper);
 
-        _collaborationRequestDto = new CollaborationRequestDto()
-        {
-            Id = 1,
-            EventId = 1,
-            EventDate = new DateOnly()
-        };
+        _collaborationRequestDto = Substitute.For<CollaborationRequestDto>();
 
         User user = new UserBuilder(1)
                     .WithName("Test")

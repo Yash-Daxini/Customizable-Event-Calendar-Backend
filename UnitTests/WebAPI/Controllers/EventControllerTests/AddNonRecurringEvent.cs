@@ -25,25 +25,7 @@ public class AddNonRecurringEvent : IClassFixture<AutoMapperFixture>
         _eventService = Substitute.For<IEventService>();
         _eventController = new(_eventService, _mapper);
         _eventObj = Substitute.For<Event>();
-        _nonRecurringEventRequestDto = new NonRecurringEventRequestDto()
-        {
-            Title = "Test",
-            Location = "Test",
-            Description = "Test",
-            Duration = new()
-            {
-                StartHour = 1,
-                EndHour = 2,
-            },
-            EventDate = new DateOnly(2024,4,1),
-            EventCollaborators = [
-                new() {
-                    Id = 1,
-                    UserId = 1,
-                    EventCollaboratorRole = "Organizer",
-                    ConfirmationStatus = "Accept"
-            }]
-        };
+        _nonRecurringEventRequestDto = Substitute.For<NonRecurringEventRequestDto>();   
     }
 
     [Fact]

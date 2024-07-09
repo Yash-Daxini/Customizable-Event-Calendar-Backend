@@ -39,8 +39,8 @@ public class EventIsProposedEvent
                                                      .Build();
 
         Event eventObj = new EventBuilder()
-                 .WithEventCollaborators(eventCollaborators)
-                 .Build();
+                        .WithEventCollaborators(eventCollaborators)
+                        .Build();
 
         bool result = eventObj.IsProposedEvent();
 

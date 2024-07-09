@@ -30,7 +30,7 @@ public class AddUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_ActionResult_When_CallsTheMethod()
     {
-        UserRequestDto userDto = new() { Id = 49, Name = "b", Email = "b@gmail.com" };
+        UserRequestDto userDto = Substitute.For<UserRequestDto>();
 
         User user = new UserBuilder(49)
                     .WithName("b")

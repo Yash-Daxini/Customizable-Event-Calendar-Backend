@@ -23,19 +23,7 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
         _mapper = autoMapperFixture.Mapper;
         _sharedCalendarController = new SharedCalendarController(_sharedCalendarService, _mapper);
-        _sharedCalendar = new(1, new User
-        {
-            Id = 48,
-            Name = "a",
-            Email = "a@gmail.com",
-            Password = "a"
-        }, new User
-        {
-            Id = 49,
-            Name = "b",
-            Email = "b@gmail.com",
-            Password = "b"
-        }, new DateOnly(), new DateOnly());
+        _sharedCalendar = Substitute.For<SharedCalendar>();
     }
 
     [Fact]

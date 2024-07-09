@@ -39,11 +39,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     {
         AuthenticateResponse authenticateResponse = new(_user, "c");
 
-        AuthenticateRequestDto authenticateRequestDto = new()
-        {
-            Name = "a",
-            Password = "c",
-        };
+        AuthenticateRequestDto authenticateRequestDto = Substitute.For<AuthenticateRequestDto>();
 
         _userAuthenticationService.LogIn(_user).ReturnsForAnyArgs(authenticateResponse);
 
@@ -55,11 +51,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_NotFoundResponse_When_UserNotAvailable()
     {
-        AuthenticateRequestDto authenticateRequestDto = new()
-        {
-            Name = "a",
-            Password = "c",
-        };
+        AuthenticateRequestDto authenticateRequestDto = Substitute.For<AuthenticateRequestDto>();
 
         _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs(new NotFoundException(""));
 
@@ -72,11 +64,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_AuthenticationFailedResponse_When_UserWithInvalidCredentials()
     {
-        AuthenticateRequestDto authenticateRequestDto = new()
-        {
-            Name = "a",
-            Password = "c",
-        };
+        AuthenticateRequestDto authenticateRequestDto = Substitute.For<AuthenticateRequestDto>();
 
         _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs(new AuthenticationFailedException(""));
 
@@ -88,11 +76,7 @@ public class AuthenticateUser : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_ServerError_When_SomeErrorOccurred()
     {
-        AuthenticateRequestDto authenticateRequestDto = new()
-        {
-            Name = "a",
-            Password = "c",
-        };
+        AuthenticateRequestDto authenticateRequestDto = Substitute.For<AuthenticateRequestDto>();
 
         _userAuthenticationService.LogIn(_user).ThrowsForAnyArgs<Exception>();
 
