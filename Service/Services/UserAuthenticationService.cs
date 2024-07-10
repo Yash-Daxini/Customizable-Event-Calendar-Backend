@@ -30,14 +30,16 @@ public class UserAuthenticationService : IUserAuthenticationService
 
         var result = await _userRepository.LogIn(user);
 
+        User? loggedInUser = await _userRepository.GetUserByUserName(user.Name);  
+
         if (result == SignInResult.Failed)
             throw new AuthenticationFailedException("Invalid user name or password!");
 
-        await ScheduleProposedEventsForLoggedInUser(user.Id);
+        await ScheduleProposedEventsForLoggedInUser(loggedInUser.Id);
 
-        string token = await _tokenClaimService.GetJWToken(user);
+        string token = await _tokenClaimService.GetJWToken(loggedInUser);
 
-        return new AuthenticateResponse(user, token);
+        return new AuthenticateResponse(loggedInUser, token);
     }
 
     private async Task ScheduleProposedEventsForLoggedInUser(int userId)

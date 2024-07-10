@@ -7,6 +7,8 @@ namespace Core.Interfaces.IRepositories
     {
         public Task<User?> GetUserById(int userId);
 
+        public Task<User?> GetUserByUserName(string userName);
+
         public Task<IdentityResult> SignUp(User user);
 
         public Task<SignInResult> LogIn(User user);

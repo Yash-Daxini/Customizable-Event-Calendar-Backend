@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using UnitTests.Builders.EntityBuilder;
 using WebAPI.Controllers;
 using WebAPI.Dtos;
 
@@ -23,7 +24,11 @@ public class AddSharedCalendar : IClassFixture<AutoMapperFixture>
         _sharedCalendarService = Substitute.For<ISharedCalendarService>();
         _mapper = autoMapperFixture.Mapper;
         _sharedCalendarController = new SharedCalendarController(_sharedCalendarService, _mapper);
-        _sharedCalendar = Substitute.For<SharedCalendar>();
+        _sharedCalendar = new(1,
+                              new UserBuilder(48).Build(),
+                              new UserBuilder(49).Build(),
+                              new DateOnly(),
+                              new DateOnly());
     }
 
     [Fact]

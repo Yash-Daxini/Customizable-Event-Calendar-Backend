@@ -27,6 +27,13 @@ public class UserRepository : IUserRepository
                                        .FindByIdAsync(userId.ToString()));
     }
 
+    public async Task<User?> GetUserByUserName(string userName)
+    {
+        UserDataModel userDataModel = await _userManager.FindByNameAsync(userName);
+
+        return _mapper.Map<User>(userDataModel);
+    }
+
     public async Task<IdentityResult> Update(User user)
     {
         UserDataModel? userDataModel = await _userManager
@@ -58,7 +65,7 @@ public class UserRepository : IUserRepository
 
     public async Task<SignInResult> LogIn(User user)
     {
-        return await _signInManager.PasswordSignInAsync(user.Name, 
+        return await _signInManager.PasswordSignInAsync(user.Name,
                                                         user.Password,
                                                         false,
                                                         false);

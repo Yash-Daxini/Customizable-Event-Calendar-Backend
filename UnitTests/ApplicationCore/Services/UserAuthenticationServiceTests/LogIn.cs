@@ -43,6 +43,8 @@ public class LogIn
 
         _userRepository.LogIn(user).Returns(SignInResult.Success);
 
+        _userRepository.GetUserByUserName("Test").Returns(user);    
+
         _tokenClaimService.GetJWToken(user).Returns("auth");
 
         AuthenticateResponse? auth = await _userAuthenticationService.LogIn(user);

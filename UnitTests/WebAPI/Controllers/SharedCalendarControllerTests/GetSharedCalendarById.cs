@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using UnitTests.Builders.EntityBuilder;
 using WebAPI.Controllers;
 
 namespace UnitTests.WebAPI.Controllers.SharedCalendarControllerTests;
@@ -26,7 +27,11 @@ public class GetSharedCalendarById : IClassFixture<AutoMapperFixture>
     [Fact]
     public async Task Should_Return_SharedCalendar_When_SharedCalendarAvailableWithId()
     {
-        SharedCalendar sharedCalendar = Substitute.For<SharedCalendar>();
+        SharedCalendar sharedCalendar = new(1,
+                                            new UserBuilder(48).Build(),
+                                            new UserBuilder(49).Build(),
+                                            new DateOnly(),
+                                            new DateOnly());
 
         _sharedCalendarService.GetSharedCalendarById(1).Returns(sharedCalendar);
 
