@@ -134,13 +134,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("corspolicy");
 
-app.UseMiddleware<UserContextMiddleware>();
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<UserContextMiddleware>();
 
 app.MapControllers();
 
