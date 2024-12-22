@@ -19,7 +19,8 @@ public class TokenClaimService : ITokenClaimService
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("userName", user.Name.ToString()) }),
+                Subject = new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
+                                              new Claim(ClaimTypes.Name, user.Name)]),
                 Expires = DateTime.UtcNow.AddDays(15),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };
