@@ -65,7 +65,7 @@ public class GetAllSharedCalendars : IClassFixture<AutoMapperFixture>
 
         SharedCalendarRepository sharedCalendarRepository = new(_dbContext, _mapper);
 
-        List<SharedCalendar> sharedCalendars = await sharedCalendarRepository.GetAllSharedCalendars();
+        List<SharedCalendar> sharedCalendars = await sharedCalendarRepository.GetAllSharedCalendars(1);
 
         sharedCalendars.Should().BeEquivalentTo(_expectedResult);
     }

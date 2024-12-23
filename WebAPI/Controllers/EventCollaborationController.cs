@@ -28,6 +28,9 @@ public class EventCollaborationController : ControllerBase
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+            eventCollaborationRequestDto.UserId = userId;
+
             EventCollaborator eventCollaborator = _mapper.Map<EventCollaborator>(eventCollaborationRequestDto);
 
             await _sharedEventCollaborationService.AddCollaborator(eventCollaborator);

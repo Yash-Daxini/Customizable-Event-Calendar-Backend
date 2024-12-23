@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IEventCollaboratorService _eventCollaboratorService;
 
-        public EventCollaboratorController(IMapper mapper, 
+        public EventCollaboratorController(IMapper mapper,
                                            IEventCollaboratorService eventCollaboratorService)
         {
             _mapper = mapper;
@@ -27,6 +27,9 @@ namespace WebAPI.Controllers
         {
             try
             {
+                int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+                eventCollaboratorConfirmationDto.UserId = userId;
+
                 EventCollaborator eventCollaborator = _mapper.Map<EventCollaborator>(eventCollaboratorConfirmationDto);
 
                 await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);

@@ -14,9 +14,9 @@ public class SharedCalendarService : ISharedCalendarService
         _sharedCalendarRepository = sharedCalendarRepository;
     }
 
-    public async Task<List<SharedCalendar>> GetAllSharedCalendars()
+    public async Task<List<SharedCalendar>> GetAllSharedCalendars(int userId)
     {
-        return await _sharedCalendarRepository.GetAllSharedCalendars();
+        return await _sharedCalendarRepository.GetAllSharedCalendars(userId);
     }
 
     public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)

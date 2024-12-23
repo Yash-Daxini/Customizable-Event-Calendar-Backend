@@ -25,11 +25,13 @@ public class UserController : ControllerBase
 
 
     [Authorize]
-    [HttpGet("{userId}")]
-    public async Task<ActionResult> GetUserById([FromRoute] int userId)
+    [HttpGet("")]
+    public async Task<ActionResult> GetUserById()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             User? user = await _userService.GetUserById(userId);
 
             return Ok(_mapper.Map<UserResponseDto>(user));
@@ -89,11 +91,13 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("{userId}")]
-    public async Task<ActionResult> DeleteUser([FromRoute] int userId)
+    [HttpDelete("")]
+    public async Task<ActionResult> DeleteUser()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             var result = await _userService.DeleteUser(userId);
 
             if (result.Succeeded)

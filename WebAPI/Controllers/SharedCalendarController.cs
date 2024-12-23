@@ -28,8 +28,10 @@ public class SharedCalendarController : ControllerBase
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<SharedCalendar> sharedCalendars = await _sharedCalendarService
-                                                         .GetAllSharedCalendars();
+                                                         .GetAllSharedCalendars(userId);
 
             return Ok(_mapper.Map<List<SharedCalendarDto>>(sharedCalendars));
         }

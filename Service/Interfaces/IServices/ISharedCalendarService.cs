@@ -4,7 +4,7 @@ namespace Core.Interfaces.IServices
 {
     public interface ISharedCalendarService
     {
-        public Task<List<SharedCalendar>> GetAllSharedCalendars();
+        public Task<List<SharedCalendar>> GetAllSharedCalendars(int userId);
 
         public Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId);
 
