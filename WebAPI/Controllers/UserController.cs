@@ -5,6 +5,7 @@ using WebAPI.Dtos;
 using Core.Exceptions;
 using Core.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNet.Identity;
 
 namespace WebAPI.Controllers;
 
@@ -23,6 +24,21 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
+    [Authorize]
+    [HttpGet("/usersForInvite")]
+    public async Task<ActionResult> GetUsersForInvite()
+    {
+        try
+        {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+            List<User> users = await _userService.GetUsersForInvite(userId);
+            return Ok(_mapper.Map<List<UserResponseDto>>(users));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+    }
 
     [Authorize]
     [HttpGet("")]

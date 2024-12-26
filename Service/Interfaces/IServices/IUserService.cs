@@ -5,6 +5,8 @@ namespace Core.Interfaces.IServices;
 
 public interface IUserService
 {
+    public Task<List<User>> GetUsersForInvite(int userId);
+
     public Task<User> GetUserById(int userId);
 
     public Task<IdentityResult> SignUp(User user);

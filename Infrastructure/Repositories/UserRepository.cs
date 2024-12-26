@@ -3,6 +3,7 @@ using AutoMapper;
 using Core.Interfaces.IRepositories;
 using Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace Infrastructure.Repositories;
 
@@ -19,6 +20,12 @@ public class UserRepository : IUserRepository
         _mapper = mapper;
         _userManager = userManager;
         _signInManager = signInManager;
+    }
+
+    public async Task<List<User>> GetUsersForInvite(int userId)
+    {
+        List<UserDataModel> users = _userManager.Users.Where(user => user.Id != userId).ToList();
+        return _mapper.Map<List<User>>(users);
     }
 
     public async Task<User?> GetUserById(int userId)

@@ -5,6 +5,8 @@ namespace Core.Interfaces.IRepositories
 {
     public interface IUserRepository
     {
+        public Task<List<User>> GetUsersForInvite(int userId);
+
         public Task<User?> GetUserById(int userId);
 
         public Task<User?> GetUserByUserName(string userName);
