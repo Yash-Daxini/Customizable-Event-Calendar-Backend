@@ -28,6 +28,24 @@ public class SharedCalendarRepository : BaseRepository<SharedCalendar, SharedCal
                                .ToListAsync());
     }
 
+    public async Task<List<SharedCalendar>> GetSentSharedCalendars(int userId)
+    {
+        return _mapper.Map<List<SharedCalendar>>(await _dbContext.SharedCalendars
+                               .Where(sharedCalendar => sharedCalendar.SenderId == userId)
+                               .Include(sharedCalendar => sharedCalendar.Sender)
+                               .Include(sharedCalendar => sharedCalendar.Receiver)
+                               .ToListAsync());
+    }
+
+    public async Task<List<SharedCalendar>> GetReceivedSharedCalendars(int userId)
+    {
+        return _mapper.Map<List<SharedCalendar>>(await _dbContext.SharedCalendars
+                               .Where(sharedCalendar => sharedCalendar.ReceiverId == userId)
+                               .Include(sharedCalendar => sharedCalendar.Sender)
+                               .Include(sharedCalendar => sharedCalendar.Receiver)
+                               .ToListAsync());
+    }
+
     public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
     {
         return _mapper.Map<SharedCalendar>(await _dbContext.SharedCalendars

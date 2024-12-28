@@ -41,6 +41,42 @@ public class SharedCalendarController : ControllerBase
         }
     }
 
+    [HttpGet("sentSharedCalendars")]
+    public async Task<IActionResult> GetSentSharedCalendars()
+    {
+        try
+        {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
+            List<SharedCalendar> sharedCalendars = await _sharedCalendarService
+                                                         .GetSentSharedCalendars(userId);
+
+            return Ok(_mapper.Map<List<SharedCalendarDto>>(sharedCalendars));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+    }
+
+    [HttpGet("receivedSharedCalendars")]
+    public async Task<IActionResult> GetReceivedSharedCalendars()
+    {
+        try
+        {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
+            List<SharedCalendar> sharedCalendars = await _sharedCalendarService
+                                                         .GetReceivedSharedCalendars(userId);
+
+            return Ok(_mapper.Map<List<SharedCalendarDto>>(sharedCalendars));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+    }
+
     [HttpGet("{sharedCalendarId}")]
     public async Task<ActionResult> GetSharedCalendarById([FromRoute] int sharedCalendarId)
     {

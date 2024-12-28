@@ -25,7 +25,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("~/api/usersForInvite")]
+    [HttpGet("usersForInvite")]
     public async Task<ActionResult> GetUsersForInvite()
     {
         try

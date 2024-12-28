@@ -19,6 +19,16 @@ public class SharedCalendarService : ISharedCalendarService
         return await _sharedCalendarRepository.GetAllSharedCalendars(userId);
     }
 
+    public async Task<List<SharedCalendar>> GetSentSharedCalendars(int userId)
+    {
+        return await _sharedCalendarRepository.GetSentSharedCalendars(userId);
+    }
+
+    public async Task<List<SharedCalendar>> GetReceivedSharedCalendars(int userId)
+    {
+        return await _sharedCalendarRepository.GetReceivedSharedCalendars(userId);
+    }
+
     public async Task<SharedCalendar?> GetSharedCalendarById(int sharedCalendarId)
     {
         SharedCalendar? sharedCalendar = await _sharedCalendarRepository
