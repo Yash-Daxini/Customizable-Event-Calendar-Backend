@@ -112,10 +112,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("weekly")]
-    public async Task<ActionResult> GetEventsForWeeklyView([FromRoute] int userId)
+    public async Task<ActionResult> GetEventsForWeeklyView()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetEventsForWeeklyViewByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
