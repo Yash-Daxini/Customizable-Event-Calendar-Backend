@@ -211,7 +211,7 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("{eventId}")]
-    public async Task<ActionResult> UpdateNonRecurringEvent([FromBody] NonRecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateNonRecurringEvent([FromBody] NonRecurringEventRequestDto eventRequestDto, [FromRoute] int eventId)
     {
         try
         {
@@ -237,7 +237,7 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("recurring-events/{eventId}")]
-    public async Task<ActionResult> UpdateRecurringEvent([FromBody] RecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateRecurringEvent([FromBody] RecurringEventRequestDto eventRequestDto, [FromRoute] int eventId)
     {
         try
         {

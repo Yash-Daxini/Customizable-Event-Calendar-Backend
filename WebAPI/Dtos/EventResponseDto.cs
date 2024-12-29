@@ -14,5 +14,7 @@ public class EventResponseDto
 
     public RecurrencePatternDto RecurrencePattern { get; set; }
 
-    public List<DateOnly> Occurrences { get; set; }    
+    public List<DateOnly> Occurrences { get; set; }
+
+    public List<EventCollaboratorResponseDto> EventCollaborators { get; set; }
 }
