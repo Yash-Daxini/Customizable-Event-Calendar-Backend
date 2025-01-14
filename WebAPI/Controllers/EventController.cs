@@ -8,7 +8,7 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Controllers;
 
-[Route("api/users/{userId}/events")]
+[Route("api/events")]
 [ApiController]
 [Authorize]
 public class EventController : ControllerBase
@@ -23,10 +23,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllEvents([FromRoute] int userId)
+    public async Task<IActionResult> GetAllEvents()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetAllEventsByUserId(userId);
 
             var e = _mapper.Map<List<EventResponseDto>>(events);
@@ -40,10 +42,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("organizer-events")]
-    public async Task<IActionResult> GetAllEventsCreatedByUser([FromRoute] int userId)
+    public async Task<IActionResult> GetAllEventsCreatedByUser()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetAllEventCreatedByUser(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
@@ -56,12 +60,13 @@ public class EventController : ControllerBase
 
 
     [HttpGet("eventsBetweenDates")]
-    public async Task<ActionResult> GetEventsWithInGivenDates([FromRoute] int userId,
-                                                              [FromQuery] DateOnly startDate,
+    public async Task<ActionResult> GetEventsWithInGivenDates([FromQuery] DateOnly startDate,
                                                               [FromQuery] DateOnly endDate)
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetEventsWithinGivenDatesByUserId(userId, startDate, endDate);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
@@ -73,10 +78,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("proposed")]
-    public async Task<ActionResult> GetProposedEvents([FromRoute] int userId)
+    public async Task<ActionResult> GetProposedEvents()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetProposedEventsByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
@@ -88,10 +95,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("daily")]
-    public async Task<ActionResult> GetEventsForDailyView([FromRoute] int userId)
+    public async Task<ActionResult> GetEventsForDailyView()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetEventsForDailyViewByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
@@ -103,10 +112,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("weekly")]
-    public async Task<ActionResult> GetEventsForWeeklyView([FromRoute] int userId)
+    public async Task<ActionResult> GetEventsForWeeklyView()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetEventsForWeeklyViewByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
@@ -118,10 +129,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("monthly")]
-    public async Task<ActionResult> GetEventsForMonthlyView([FromRoute] int userId)
+    public async Task<ActionResult> GetEventsForMonthlyView()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetEventsForMonthlyViewByUserId(userId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));
@@ -133,11 +146,12 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("~/api/events/{eventId}")]
-    public async Task<ActionResult> GetEventById([FromRoute] int eventId,
-                                                 [FromRoute] int userId)
+    public async Task<ActionResult> GetEventById([FromRoute] int eventId)
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             Event? eventModel = await _eventService.GetEventById(eventId, userId);
 
             return Ok(_mapper.Map<EventResponseDto>(eventModel));
@@ -153,11 +167,12 @@ public class EventController : ControllerBase
     }
 
     [HttpPost("recurring-events")]
-    public async Task<ActionResult> AddRecurringEvent([FromRoute] int userId, 
-                                                      [FromBody] RecurringEventRequestDto recurringEventRequestDto)
+    public async Task<ActionResult> AddRecurringEvent([FromBody] RecurringEventRequestDto recurringEventRequestDto)
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             Event eventObj = _mapper.Map<Event>(recurringEventRequestDto);
 
             int addedEventId = await _eventService.AddEvent(eventObj, userId);
@@ -174,11 +189,12 @@ public class EventController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<ActionResult> AddNonRecurringEvent([FromRoute] int userId,
-                                                         [FromBody] NonRecurringEventRequestDto nonRecurringEventRequestDto)
+    public async Task<ActionResult> AddNonRecurringEvent([FromBody] NonRecurringEventRequestDto nonRecurringEventRequestDto)
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             Event eventObj = _mapper.Map<Event>(nonRecurringEventRequestDto);
 
             int addedEventId = await _eventService.AddNonRecurringEvent(eventObj, userId);
@@ -195,11 +211,12 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("{eventId}")]
-    public async Task<ActionResult> UpdateNonRecurringEvent([FromRoute] int userId,
-                                                            [FromBody] NonRecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateNonRecurringEvent([FromBody] NonRecurringEventRequestDto eventRequestDto, [FromRoute] int eventId)
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             Event eventObj = _mapper.Map<Event>(eventRequestDto);
             await _eventService.UpdateEvent(eventObj, userId);
             return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, new { eventObj.Id });
@@ -220,11 +237,12 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("recurring-events/{eventId}")]
-    public async Task<ActionResult> UpdateRecurringEvent([FromRoute] int userId,
-                                                         [FromBody] RecurringEventRequestDto eventRequestDto)
+    public async Task<ActionResult> UpdateRecurringEvent([FromBody] RecurringEventRequestDto eventRequestDto, [FromRoute] int eventId)
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             Event eventObj = _mapper.Map<Event>(eventRequestDto);
             await _eventService.UpdateEvent(eventObj, userId);
             return CreatedAtAction(nameof(GetEventById), new { eventId = eventObj.Id, controller = "event" }, new { eventObj.Id });
@@ -245,11 +263,12 @@ public class EventController : ControllerBase
     }
 
     [HttpDelete("{eventId}")]
-    public async Task<ActionResult> DeleteEvent([FromRoute] int eventId,
-                                                [FromRoute] int userId)
+    public async Task<ActionResult> DeleteEvent([FromRoute] int eventId)
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             await _eventService.DeleteEvent(eventId, userId);
             return Ok();
         }
@@ -268,6 +287,9 @@ public class EventController : ControllerBase
     {
         try
         {
+            //TODO:- Get only given user's shared calendars
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             List<Event> events = await _eventService.GetSharedEvents(sharedCalendarId);
 
             return Ok(_mapper.Map<List<EventResponseDto>>(events));

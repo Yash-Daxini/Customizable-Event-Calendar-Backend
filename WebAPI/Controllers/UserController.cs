@@ -5,6 +5,7 @@ using WebAPI.Dtos;
 using Core.Exceptions;
 using Core.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNet.Identity;
 
 namespace WebAPI.Controllers;
 
@@ -23,13 +24,30 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
-
     [Authorize]
-    [HttpGet("{userId}")]
-    public async Task<ActionResult> GetUserById([FromRoute] int userId)
+    [HttpGet("usersForInvite")]
+    public async Task<ActionResult> GetUsersForInvite()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+            List<User> users = await _userService.GetUsersForInvite(userId);
+            return Ok(_mapper.Map<List<UserResponseDto>>(users));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { ErrorMessage = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpGet("")]
+    public async Task<ActionResult> GetUserById()
+    {
+        try
+        {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             User? user = await _userService.GetUserById(userId);
 
             return Ok(_mapper.Map<UserResponseDto>(user));
@@ -89,11 +107,13 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("{userId}")]
-    public async Task<ActionResult> DeleteUser([FromRoute] int userId)
+    [HttpDelete("")]
+    public async Task<ActionResult> DeleteUser()
     {
         try
         {
+            int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
+
             var result = await _userService.DeleteUser(userId);
 
             if (result.Succeeded)

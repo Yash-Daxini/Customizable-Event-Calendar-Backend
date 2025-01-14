@@ -13,6 +13,10 @@ public class EventResponseDtoProfile : Profile
             .ForMember(dest => dest.Occurrences,
                        opt => opt.MapFrom(src => src.EventCollaborators
                                                     .Select(eventCollaboratorByDate => eventCollaboratorByDate.EventDate)
-                                                    .Distinct()));
+                                                    .Distinct()))
+            .ForMember(dest => dest.EventCollaborators,
+                       opt => opt.MapFrom(src => src.EventCollaborators
+                                                    .GroupBy(u => u.User.Id)
+                                                    .Select(g => g.First())));
     }
 }

@@ -15,6 +15,11 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
+    public async Task<List<User>> GetUsersForInvite(int userId)
+    {
+        return await _userRepository.GetUsersForInvite(userId);
+    }
+
     public async Task<User> GetUserById(int userId)
     {
         User? user = await _userRepository.GetUserById(userId);

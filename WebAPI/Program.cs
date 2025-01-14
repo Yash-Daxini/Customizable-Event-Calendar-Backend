@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebAPI.Dtos;
+using WebAPI.Middlewares;
 using WebAPI.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -138,6 +139,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<UserContextMiddleware>();
 
 app.MapControllers();
 

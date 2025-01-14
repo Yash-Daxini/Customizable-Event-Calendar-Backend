@@ -38,12 +38,12 @@ public class GetAllSharedCalendars
     [Fact]
     public async Task Should_Return_ListOfSharedCalendars_When_SharedCalendarsAvailable()
     {
-        _sharedCalendarRepository.GetAllSharedCalendars().Returns(_sharedCalendars);
+        _sharedCalendarRepository.GetAllSharedCalendars(1).Returns(_sharedCalendars);
 
-        List<SharedCalendar> sharedCalendars = await _sharedCalendarService.GetAllSharedCalendars();
+        List<SharedCalendar> sharedCalendars = await _sharedCalendarService.GetAllSharedCalendars(1);
 
-        await _sharedCalendarRepository.Received().GetAllSharedCalendars();
+        await _sharedCalendarRepository.Received().GetAllSharedCalendars(1);
 
-        sharedCalendars.Should().BeEquivalentTo(_sharedCalendars);
+        sharedCalendars.Should().BeEquivalentTo([_sharedCalendars[0]]);
     }
 }

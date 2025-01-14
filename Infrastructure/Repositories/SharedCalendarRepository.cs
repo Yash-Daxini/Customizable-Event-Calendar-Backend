@@ -19,9 +19,28 @@ public class SharedCalendarRepository : BaseRepository<SharedCalendar, SharedCal
         _mapper = mapper;
     }
 
-    public async Task<List<SharedCalendar>> GetAllSharedCalendars()
+    public async Task<List<SharedCalendar>> GetAllSharedCalendars(int userId)
     {
         return _mapper.Map<List<SharedCalendar>>(await _dbContext.SharedCalendars
+                               .Where(sharedCalendar => sharedCalendar.ReceiverId == userId || sharedCalendar.SenderId == userId)
+                               .Include(sharedCalendar => sharedCalendar.Sender)
+                               .Include(sharedCalendar => sharedCalendar.Receiver)
+                               .ToListAsync());
+    }
+
+    public async Task<List<SharedCalendar>> GetSentSharedCalendars(int userId)
+    {
+        return _mapper.Map<List<SharedCalendar>>(await _dbContext.SharedCalendars
+                               .Where(sharedCalendar => sharedCalendar.SenderId == userId)
+                               .Include(sharedCalendar => sharedCalendar.Sender)
+                               .Include(sharedCalendar => sharedCalendar.Receiver)
+                               .ToListAsync());
+    }
+
+    public async Task<List<SharedCalendar>> GetReceivedSharedCalendars(int userId)
+    {
+        return _mapper.Map<List<SharedCalendar>>(await _dbContext.SharedCalendars
+                               .Where(sharedCalendar => sharedCalendar.ReceiverId == userId)
                                .Include(sharedCalendar => sharedCalendar.Sender)
                                .Include(sharedCalendar => sharedCalendar.Receiver)
                                .ToListAsync());
@@ -32,7 +51,7 @@ public class SharedCalendarRepository : BaseRepository<SharedCalendar, SharedCal
         return _mapper.Map<SharedCalendar>(await _dbContext.SharedCalendars
                                .Include(sharedCalendar => sharedCalendar.Sender)
                                .Include(sharedCalendar => sharedCalendar.Receiver)
-                               .FirstOrDefaultAsync(sharedCalendar => sharedCalendar.Id 
+                               .FirstOrDefaultAsync(sharedCalendar => sharedCalendar.Id
                                                                     == sharedCalendarId));
 
 

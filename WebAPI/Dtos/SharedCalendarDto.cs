@@ -8,6 +8,10 @@ public class SharedCalendarDto
 
     public int ReceiverUserId { get; set; }
 
+    public UserResponseDto Sender{ get; set; }
+
+    public UserResponseDto Receiver { get; set; }
+
     public DateOnly FromDate { get; set; }
 
     public DateOnly ToDate { get; set; }
