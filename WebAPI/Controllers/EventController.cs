@@ -178,9 +178,13 @@ public class EventController : ControllerBase
             int addedEventId = await _eventService.AddEvent(eventObj, userId);
             return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, new { addedEventId });
         }
+        catch (EventWithoutOccurrencesException ex)
+        {
+            return BadRequest(new { NoEventOccurrenceMessage = ex.Message });
+        }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { ErrorMessage = ex.Message });
+            return BadRequest(new { OverlapMessage = ex.Message });
         }
         catch (Exception ex)
         {
@@ -200,9 +204,13 @@ public class EventController : ControllerBase
             int addedEventId = await _eventService.AddNonRecurringEvent(eventObj, userId);
             return CreatedAtAction(nameof(GetEventById), new { eventId = addedEventId, controller = "event" }, new { addedEventId });
         }
+        catch (EventWithoutOccurrencesException ex)
+        {
+            return BadRequest(new { NoEventOccurrenceMessage = ex.Message });
+        }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { ErrorMessage = ex.Message });
+            return BadRequest(new { OverlapMessage = ex.Message });
         }
         catch (Exception ex)
         {
@@ -225,9 +233,13 @@ public class EventController : ControllerBase
         {
             return NotFound(new { ErrorMessage = ex.Message });
         }
+        catch (EventWithoutOccurrencesException ex)
+        {
+            return BadRequest(new { NoEventOccurrenceMessage = ex.Message });
+        }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { ErrorMessage = ex.Message });
+            return BadRequest(new { OverlapMessage = ex.Message });
         }
         catch (Exception ex)
         {
@@ -251,9 +263,13 @@ public class EventController : ControllerBase
         {
             return NotFound(new { ErrorMessage = ex.Message });
         }
+        catch (EventWithoutOccurrencesException ex)
+        {
+            return BadRequest(new { noEventOccurrenceMessage = ex.Message });
+        }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { ErrorMessage = ex.Message });
+            return BadRequest(new { overlapMessage = ex.Message });
         }
         catch (Exception ex)
         {
