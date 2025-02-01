@@ -187,6 +187,9 @@ public class EventService : IEventService
     {
         List<DateOnly> occurrences = eventModel.RecurrencePattern.GetOccurrences();
 
+        if(occurrences.Count == 0) 
+            throw new EventWithoutOccurrencesException("This event has no scheduled dates.You can change repeating schedule.");
+
         eventModel.PrepareCollaboratorsFromOccurrences(occurrences);
     }
 }

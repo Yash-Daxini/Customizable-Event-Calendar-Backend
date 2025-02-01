@@ -1,7 +1,10 @@
 ﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
+using Core.Models;
 
 namespace Core.Services;
 
@@ -24,24 +27,33 @@ public class OverlapEventService : IOverlappingEventService
                 overlapEventByDate.Add(existingEvent, (DateOnly)matchedDate);
         }
 
-        string overlapInformation = GetOverlapMessage(eventForVerify, overlapEventByDate);
+        OverlapResponseModel overlapResponseModel = GetOverlapMessage(eventForVerify, overlapEventByDate);
 
         if (overlapEventByDate.Count is not 0)
-            throw new EventOverlapException($" {overlapInformation}");
+            throw new EventOverlapException(overlapResponseModel);
     }
 
-    private string GetOverlapMessage(Event CheckingEvent, Dictionary<Event, DateOnly> OverlappingEventsByDate)
+    private OverlapResponseModel GetOverlapMessage(Event CheckingEvent, Dictionary<Event, DateOnly> OverlappingEventsByDate)
     {
         StringBuilder overlapMessage = new($"{CheckingEvent.Title} overlaps with following events at " +
                                            $"{CheckingEvent.Duration.GetDurationInFormat()} :-  ");
 
+        OverlapResponseModel overlapResponseModel = new OverlapResponseModel()
+        {
+            Title = CheckingEvent.Title,
+            OverlapEvents = []
+        };
+
         foreach (var (overlapEvent, matchedDate) in OverlappingEventsByDate.Select(e => (e.Key, e.Value)))
         {
-            overlapMessage.AppendLine($"Event Name : {overlapEvent.Title} , " +
-                                      $"Date : {matchedDate} , " +
-                                      $"Duration : {overlapEvent.Duration.GetDurationInFormat()}");
+            overlapResponseModel.OverlapEvents.Add(new OverlapEventModel()
+            {
+                Title = overlapEvent.Title,
+                Date = matchedDate,
+                Duration = overlapEvent.Duration,
+            });
         }
 
-        return overlapMessage.ToString();
+        return overlapResponseModel;
     }
 }
