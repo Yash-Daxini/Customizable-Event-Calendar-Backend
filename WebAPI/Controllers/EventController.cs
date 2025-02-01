@@ -184,7 +184,7 @@ public class EventController : ControllerBase
         }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { OverlapMessage = ex.Message });
+            return BadRequest(new { OverlapMessage = ex.OverlapResponseModel });
         }
         catch (Exception ex)
         {
@@ -210,7 +210,7 @@ public class EventController : ControllerBase
         }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { OverlapMessage = ex.Message });
+            return BadRequest(new { OverlapMessage = ex.OverlapResponseModel });
         }
         catch (Exception ex)
         {
@@ -239,7 +239,7 @@ public class EventController : ControllerBase
         }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { OverlapMessage = ex.Message });
+            return BadRequest(new { OverlapMessage = ex.OverlapResponseModel });
         }
         catch (Exception ex)
         {
@@ -269,7 +269,7 @@ public class EventController : ControllerBase
         }
         catch (EventOverlapException ex)
         {
-            return BadRequest(new { overlapMessage = ex.Message });
+            return BadRequest(new { overlapMessage = ex.OverlapResponseModel });
         }
         catch (Exception ex)
         {
