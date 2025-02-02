@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.IServices;
