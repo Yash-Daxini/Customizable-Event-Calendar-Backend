@@ -8,7 +8,7 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/eventCollaboration")]
 [ApiController]
 [Authorize]
 public class EventCollaborationController : ControllerBase

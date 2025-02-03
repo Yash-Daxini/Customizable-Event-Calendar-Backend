@@ -11,7 +11,6 @@ public class EventCollaboratorConfirmationDtoProfile : Profile
     public EventCollaboratorConfirmationDtoProfile()
     {
         CreateMap<EventCollaboratorConfirmationDto, EventCollaborator>()
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => new User { Id = src.UserId }))
             .ForMember(dest => dest.ConfirmationStatus, opt => opt.MapFrom(src => src.ConfirmationStatus.ToEnum<ConfirmationStatus>()));
     }
 }

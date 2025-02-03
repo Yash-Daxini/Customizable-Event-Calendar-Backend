@@ -7,7 +7,7 @@ using WebAPI.Dtos;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/eventCollaborator")]
     [ApiController]
     [Authorize]
     public class EventCollaboratorController : ControllerBase
@@ -22,15 +22,18 @@ namespace WebAPI.Controllers
             _eventCollaboratorService = eventCollaboratorService;
         }
 
-        [HttpPut("{eventCollaboratorId}/response")]
+        [HttpPut("response")]
         public async Task<ActionResult> AddEventCollaboratorResponse([FromBody] EventCollaboratorConfirmationDto eventCollaboratorConfirmationDto)
         {
             try
             {
                 int userId = int.Parse(HttpContext.Items["UserId"]?.ToString());
-                eventCollaboratorConfirmationDto.UserId = userId;
 
                 EventCollaborator eventCollaborator = _mapper.Map<EventCollaborator>(eventCollaboratorConfirmationDto);
+                eventCollaborator.User = new User()
+                {
+                    Id = userId
+                };
 
                 await _eventCollaboratorService.UpdateEventCollaborator(eventCollaborator);
 
