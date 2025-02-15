@@ -1,5 +1,10 @@
-﻿namespace Core.Exceptions;
+﻿using Core.Models;
 
-public class EventOverlapException(string message) : Exception(message)
+namespace Core.Exceptions;
+
+public class EventOverlapException: Exception
 {
+    public OverlapResponseModel OverlapResponseModel { get; }
+
+    public EventOverlapException(OverlapResponseModel overlapResponseModel) => OverlapResponseModel = overlapResponseModel;
 }
